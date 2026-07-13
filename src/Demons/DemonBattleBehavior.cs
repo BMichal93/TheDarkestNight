@@ -64,6 +64,23 @@ namespace AshAndEmber
 
         public static bool IsDemon(Agent agent) => agent != null && _tierOf.ContainsKey(agent);
 
+        // Every demon currently alive and registered in this mission — the
+        // Spellbook's Banish Demons (src/Spellbook/) reads this to find its
+        // targets; nothing else in the codebase needs a full enumeration, so
+        // this is a thin, defensive copy rather than exposing _beings itself.
+        public static List<Agent> GetActiveDemons()
+        {
+            var result = new List<Agent>();
+            for (int i = 0; i < _beings.Count; i++)
+            {
+                Agent a = _beings[i]?.Agent;
+                bool alive = false;
+                try { alive = a != null && a.IsActive() && a.Health > 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                if (alive) result.Add(a);
+            }
+            return result;
+        }
+
         public static bool TryGetTier(Agent agent, out DemonMath.DemonTier tier)
         {
             if (agent != null && _tierOf.TryGetValue(agent, out tier)) return true;
