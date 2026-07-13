@@ -54,7 +54,10 @@ namespace AshAndEmber
                     try
                     {
                         if (s == null) continue;
-                        if (s.IsTown && s.Town != null) ThinTownMarket(s.Town);
+                        // Town class backs both towns and castles (Fief), so a
+                        // castle's food stores get the same Requirement 31 cap
+                        // and its (usually thin) stalls the same thinning.
+                        if ((s.IsTown || s.IsCastle) && s.Town != null) ThinTownMarket(s.Town);
                         else if (s.IsVillage && s.Village != null) BoostVillageFood(s.Village);
                     }
                     catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
