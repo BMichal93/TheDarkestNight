@@ -123,6 +123,9 @@
     <Compile Include="Spellbook\SpellcasterTroopMath.cs"/>
     <Compile Include="Spellbook\SpellcasterTroopBehavior.cs"/>
     <Compile Include="Spellbook\SpellcasterTroops.cs"/>
+    <Compile Include="Relics\RelicMath.cs"/>
+    <Compile Include="Relics\RelicNaming.cs"/>
+    <Compile Include="Relics\RelicCatalog.cs"/>
     <Compile Include="Economy\EconomyMath.cs"/>
     <Compile Include="Economy\ScarcityModels.cs"/>
     <Compile Include="Economy\MarketScarcityCampaignBehavior.cs"/>
