@@ -158,6 +158,11 @@ namespace AshAndEmber
             try { AshenCitySystem.ApplyNorthmenCultureTexts();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { AshenCitySystem.ApplyDunebornCultureTexts();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { AshenCitySystem.ApplyForestClansCultureTexts();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // Phase 3 — Requirement 30a: tier 3-4 troop trees (every culture) are
+            // re-equipped with the cheapest real armour of the same slot type;
+            // Requirement 29: lords are stripped of gold/ornate/rich gear.
+            try { GearWeathering.ApplyShabbyGearToTroopTrees(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { LordGearWeathering.ApplyToAllLords();         } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
         // Re-applies the Templar culture text while still in the menu / intro-video /

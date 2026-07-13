@@ -118,6 +118,8 @@
     <Compile Include="Units\PromotionToll.cs"/>
     <Compile Include="Units\PromotionCampaignBehavior.cs"/>
     <Compile Include="Units\RecruitToll.cs"/>
+    <Compile Include="Units\GearWeathering.cs"/>
+    <Compile Include="Units\LordGearWeathering.cs"/>
     <Compile Include="MagicSystem.cs"/>
     <Compile Include="Magic\ElementMagicMath.cs"/>
     <Compile Include="Magic\ElementUltimateMath.cs"/>
