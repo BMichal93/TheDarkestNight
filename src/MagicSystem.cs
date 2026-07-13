@@ -121,12 +121,17 @@ namespace AshAndEmber
                 campaignStarter.AddBehavior(new NorthmenStonesCampaignBehavior());
                 campaignStarter.AddBehavior(new SpellbookCampaignBehavior());
                 campaignStarter.AddBehavior(new SpellcasterTroopBehavior());
+                // Phase 7, Faction A — the Wolf Brothers (Sturgia).
+                campaignStarter.AddBehavior(new WolfBrothersCampaignBehavior());
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { TempleDialogue.Register(campaignStarter);   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { TribesDialogue.Register(campaignStarter);   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { NorthmenDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Sturgia is now the Wolf Brothers, not the (retired) Northmen —
+                // see Factions/WolfBrothers/WolfBrothersDialogue.cs. NorthmenDialogue.cs
+                // is left in place, unreferenced, for save compatibility.
+                try { WolfBrothersDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { DunebornDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SchemeSystem.Initialize();              } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Drop the previous campaign's Ashen rolls before this one's data loads.
@@ -165,7 +170,8 @@ namespace AshAndEmber
             base.OnGameInitializationFinished(game);
             try { AshenCitySystem.ApplyTempleCultureTexts();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { AshenCitySystem.ApplyTribalCultureTexts();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { AshenCitySystem.ApplyNorthmenCultureTexts();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // Sturgia is now the Wolf Brothers, not the (retired) Northmen.
+            try { WolfBrothersCulture.ApplyWolfBrothersCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { AshenCitySystem.ApplyDunebornCultureTexts();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { AshenCitySystem.ApplyForestClansCultureTexts();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Phase 3 — Requirement 30a: tier 3-4 troop trees (every culture) are
@@ -189,7 +195,8 @@ namespace AshAndEmber
             {
                 try { AshenCitySystem.ApplyTempleCultureTexts();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { AshenCitySystem.ApplyTribalCultureTexts();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AshenCitySystem.ApplyNorthmenCultureTexts();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Sturgia is now the Wolf Brothers, not the (retired) Northmen.
+            try { WolfBrothersCulture.ApplyWolfBrothersCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { AshenCitySystem.ApplyDunebornCultureTexts();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { AshenCitySystem.ApplyForestClansCultureTexts();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // The character-creation culture cards cache their name when built, so
