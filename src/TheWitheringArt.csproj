@@ -139,6 +139,13 @@
     <Compile Include="Factions\Tower\TowerDialogue.cs"/>
     <Compile Include="Factions\Tower\TowerCampaignBehavior.cs"/>
     <Compile Include="Factions\Tower\TowerCampaignBehavior.Menus.cs"/>
+    <Compile Include="Factions\Hive\HiveMath.cs"/>
+    <Compile Include="Factions\Hive\HiveCulture.cs"/>
+    <Compile Include="Factions\Hive\HiveSettlements.cs"/>
+    <Compile Include="Factions\Hive\HiveDialogue.cs"/>
+    <Compile Include="Factions\Hive\HiveBattleEffects.cs"/>
+    <Compile Include="Factions\Hive\HiveCampaignBehavior.cs"/>
+    <Compile Include="Factions\Hive\HiveCampaignBehavior.Menus.cs"/>
     <Compile Include="Economy\EconomyMath.cs"/>
     <Compile Include="Economy\ScarcityModels.cs"/>
     <Compile Include="Economy\MarketScarcityCampaignBehavior.cs"/>

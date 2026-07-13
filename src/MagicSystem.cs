@@ -76,6 +76,7 @@ namespace AshAndEmber
             try { BattleWhispers.Reset();                } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { AshenVisuals.Reset();                  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { GreatOtherParty.ClearMissionLatch();    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { HiveBattleEffects.Reset();              } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
             if (game.GameType is Campaign &&
                 gameStarterObject is CampaignGameStarter campaignStarter)
@@ -125,6 +126,8 @@ namespace AshAndEmber
                 campaignStarter.AddBehavior(new WolfBrothersCampaignBehavior());
                 // Phase 7, Faction B — the Tower (Aserai).
                 campaignStarter.AddBehavior(new TowerCampaignBehavior());
+                // Phase 7, Faction C — the Hive (Battania).
+                campaignStarter.AddBehavior(new HiveCampaignBehavior());
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -138,6 +141,11 @@ namespace AshAndEmber
                 // Factions/Tower/TowerDialogue.cs. DunebornDialogue.cs is left in
                 // place, unreferenced, for save compatibility.
                 try { TowerDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Battania is now the Hive, not the (retired) Forest Clans — see
+                // Factions/Hive/HiveDialogue.cs. ForestClansCulture-adjacent
+                // registrations are left in place, unreferenced, for save
+                // compatibility.
+                try { HiveDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SchemeSystem.Initialize();              } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Drop the previous campaign's Ashen rolls before this one's data loads.
                 // A save reload repopulates them in SyncData, which runs before
@@ -159,6 +167,7 @@ namespace AshAndEmber
                 try { SpellcasterLords.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SpellcasterTroopBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SpellbookCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { HiveCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
                 // player hits Save — long after the quest triggered. Audit at boot instead.
@@ -179,7 +188,11 @@ namespace AshAndEmber
             try { WolfBrothersCulture.ApplyWolfBrothersCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Aserai is now the Tower, not the (retired) Duneborn.
             try { TowerCulture.ApplyTowerCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { AshenCitySystem.ApplyForestClansCultureTexts();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // Battania is now the Hive, not the (retired) Forest Clans — see
+            // Factions/Hive/HiveCulture.cs. AshenCitySystem.ApplyForestClansCultureTexts
+            // (and the Forest Clans rename helpers behind it) are left in place,
+            // unreferenced, for save compatibility — only the call site moves.
+            try { HiveCulture.ApplyHiveCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Phase 3 — Requirement 30a: tier 3-4 troop trees (every culture) are
             // re-equipped with the cheapest real armour of the same slot type;
             // Requirement 29: lords are stripped of gold/ornate/rich gear.
@@ -205,7 +218,8 @@ namespace AshAndEmber
             try { WolfBrothersCulture.ApplyWolfBrothersCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Aserai is now the Tower, not the (retired) Duneborn.
                 try { TowerCulture.ApplyTowerCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AshenCitySystem.ApplyForestClansCultureTexts();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Battania is now the Hive, not the (retired) Forest Clans.
+                try { HiveCulture.ApplyHiveCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // The character-creation culture cards cache their name when built, so
                 // the text override above never reaches them — rename the card directly.
                 try { TempleCultureCardFixer.TickTryFix(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -532,6 +546,7 @@ namespace AshAndEmber
             BattleEvents.MissionTick(dt);
             AshenSceneTone.MissionTick(dt);
             BattleWhispers.MissionTick(dt);
+            HiveBattleEffects.MissionTick(dt);
         }
 
         protected override void OnEndMission()
@@ -584,6 +599,7 @@ namespace AshAndEmber
             try { AshenSceneTone.Reset();                    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { BattleWhispers.Reset();                    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { GreatOtherParty.ClearMissionLatch();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { HiveBattleEffects.Reset();                 } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
         public override void OnAgentBuild(Agent agent, Banner banner)
