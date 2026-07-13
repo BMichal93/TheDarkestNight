@@ -94,6 +94,7 @@ namespace AshAndEmber
             "Your fire reaches me before your name does. What is it you want?",
             "The march will not wait. Neither do I. Speak.",
             "You have been watched. The Order remembers every face that comes twice. What brings you here?",
+            "Every Brother Templar keeps the same watch, whatever face wears the title today. What brings you to mine?",
         };
 
         private static readonly string[] _barters =

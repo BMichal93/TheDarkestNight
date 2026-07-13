@@ -130,6 +130,11 @@ namespace AshAndEmber
                 campaignStarter.AddBehavior(new HiveCampaignBehavior());
                 // Phase 7, Faction D — the Bloodbound (Khuzait).
                 campaignStarter.AddBehavior(new BloodboundCampaignBehavior());
+                // Phase 7, Faction E — the Temple (Vlandia). The Vlandia -> Temple
+                // rename/dialogue already exist in the baseline (TempleCulture.cs,
+                // TempleDialogue.cs); this behavior only owns what Phase 7 adds:
+                // town-scoping, the join gate, the Holy Sigil and its town menus.
+                campaignStarter.AddBehavior(new TempleCampaignBehavior());
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -174,6 +179,7 @@ namespace AshAndEmber
                 try { SpellbookCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { HiveCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { BloodboundCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { TempleCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
                 // player hits Save — long after the quest triggered. Audit at boot instead.
@@ -670,6 +676,9 @@ namespace AshAndEmber
             // Relics: Dark-Gift-sourced relic on-hit procs (weaker, per-item).
             try { RelicEffects.OnAgentHitAttack(affectedAgent, affectorAgent, blow.InflictedDamage, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { RelicEffects.OnAgentHitDefense(affectedAgent, affectorAgent, blow.InflictedDamage, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // Phase 7, Faction E — the Holy Sigil: small damage to nearby demons
+            // on a landed blow, slight morale restore on a block/parry.
+            try { TempleSigilEffects.OnAgentHit(affectedAgent, affectorAgent, affectorWeapon, blow, attackCollisionData, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Nature resistance (reserved for future barrier talents): OnAgentHit fires after
             // damage is applied; heal back the mitigated portion against real weapon hits.
             try

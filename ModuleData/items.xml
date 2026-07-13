@@ -686,4 +686,55 @@
     <Flags Civilian="true" />
   </Item>
 
+  <!-- ======================================================================
+       THE DARKEST NIGHT — Holy Sigil (Phase 7, Faction E, "The Temple").
+
+       A real one-handed weapon, not an effect trigger — built on the SAME
+       verified-safe template the Crystal weapons above use, unchanged in
+       every field that matters for stability (body_name="bo_mace_a",
+       mesh="throwing_stone" — "a rough held mineral", the closest stock mesh
+       to a hand-worked stone head; weapon_class="OneHandedSword",
+       physics_material="wood_weapon", item_usage="onehanded_block_shield_swing"
+       — the exact vanilla "horse_whip" combination this file's header already
+       documents as known-good; a Mace weapon_class / metal_weapon physics
+       pairing was NOT found paired with this item_usage anywhere in the
+       shipped XML, so this deliberately keeps the proven combination rather
+       than guess at an unverified one). Only weight/value/damage are raised
+       above the crystals' token 3/3, since the Sigil is meant to be carried
+       and swung, not merely equipped to trigger a spell. Granted on joining
+       the Temple and purchasable in Temple towns — see
+       Factions/Temple/TempleCampaignBehavior(.Menus).cs. Battle effect (small
+       damage to nearby demons on hit, slight morale restore on block) lives
+       in Factions/Temple/TempleSigilEffects.cs.
+       ====================================================================== -->
+
+  <Item id="aae_holy_sigil"
+        name="Holy Sigil"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="throwing_stone"
+        Type="OneHandedWeapon"
+        weight="1.4"
+        value="350"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="22"
+              thrust_damage_type="Blunt"
+              swing_damage="28"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags Civilian="false" />
+  </Item>
+
 </Items>

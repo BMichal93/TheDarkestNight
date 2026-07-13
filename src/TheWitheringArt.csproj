@@ -153,6 +153,12 @@
     <Compile Include="Factions\Bloodbound\BloodboundCatalog.cs"/>
     <Compile Include="Factions\Bloodbound\BloodboundCampaignBehavior.cs"/>
     <Compile Include="Factions\Bloodbound\BloodboundCampaignBehavior.Menus.cs"/>
+    <Compile Include="Factions\Temple\TempleMath.cs"/>
+    <Compile Include="Factions\Temple\TempleSettlements.cs"/>
+    <Compile Include="Factions\Temple\TempleSigilCatalog.cs"/>
+    <Compile Include="Factions\Temple\TempleSigilEffects.cs"/>
+    <Compile Include="Factions\Temple\TempleCampaignBehavior.cs"/>
+    <Compile Include="Factions\Temple\TempleCampaignBehavior.Menus.cs"/>
     <Compile Include="Economy\EconomyMath.cs"/>
     <Compile Include="Economy\ScarcityModels.cs"/>
     <Compile Include="Economy\MarketScarcityCampaignBehavior.cs"/>

@@ -25,10 +25,28 @@ namespace AshAndEmber
 {
     internal static class TempleCulture
     {
+        // Phase 7, Faction E of The Darkest Night: the vassal rank within the
+        // Temple. The baseline mod already gives the KINGDOM's ruler the title
+        // "High Templar" (see AshenCitySystem.Renaming.cs, SetKingdomField on
+        // EncyclopediaRulerTitle / str_faction_ruler*); ordinary members had no
+        // rank word before this — "Brother Templar" fills that gap. Woven
+        // through TempleDialogue.cs and used by TempleCampaignBehavior's join
+        // message.
+        internal const string VassalTitle = "Brother Templar";
+
         // The player chose the Templar (Vlandian) culture at character creation.
         public static bool IsPlayerTemplar
         {
             get { try { return Hero.MainHero?.Culture?.StringId == "vlandia"; } catch { return false; } }
+        }
+
+        // Mirrors HiveCulture.IsHiveLord / BloodboundCulture.IsBloodboundLord —
+        // used by TempleCampaignBehavior so Temple bonuses (the pray menu) can
+        // apply to Temple lords, not only the player.
+        internal static bool IsTempleLord(Hero hero)
+        {
+            if (hero == null) return false;
+            try { return hero.MapFaction?.StringId == "vlandia"; } catch { return false; }
         }
 
         // ── The Order's Price (penalties) ──────────────────────────────────────
