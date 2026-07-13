@@ -2944,5 +2944,141 @@ namespace AshAndEmber.Tests
             Assert.IsTrue(UnitsMath.IsOrnateLordGear(50, true)); // cheap but "fine"/masterwork — still ornate
             Assert.IsFalse(UnitsMath.IsOrnateLordGear(UnitsMath.WearyLordValueCap, false)); // exactly at cap is not "over"
         }
+
+        // ── Spellbook — SpellbookCatalog (Requirement 16/17) ────────────────────
+
+        [Test]
+        public void SpellbookCatalog_HasBetween30And50Spells()
+        {
+            int count = SpellbookCatalog.All.Count;
+            Assert.GreaterOrEqual(count, 30);
+            Assert.LessOrEqual(count, 50);
+        }
+
+        [Test]
+        public void SpellbookCatalog_EveryFormula_WithinLengthBounds()
+        {
+            foreach (var d in SpellbookCatalog.All)
+            {
+                Assert.GreaterOrEqual(d.Formula.Length, SpellbookCatalog.MinFormulaLength,
+                    $"{d.Name} formula '{d.Formula}' is shorter than the minimum.");
+                Assert.LessOrEqual(d.Formula.Length, SpellbookCatalog.MaxFormulaLength,
+                    $"{d.Name} formula '{d.Formula}' is longer than the maximum.");
+            }
+        }
+
+        [Test]
+        public void SpellbookCatalog_EveryFormula_OnlyUDLRCharacters()
+        {
+            foreach (var d in SpellbookCatalog.All)
+                foreach (char c in d.Formula)
+                    Assert.IsTrue(c == 'U' || c == 'D' || c == 'L' || c == 'R',
+                        $"{d.Name} formula '{d.Formula}' contains a non-U/D/L/R character.");
+        }
+
+        [Test]
+        public void SpellbookCatalog_NoTwoSpells_ShareAFormula()
+        {
+            var formulas = SpellbookCatalog.All.Select(d => d.Formula).ToList();
+            var distinct = new HashSet<string>(formulas);
+            Assert.AreEqual(formulas.Count, distinct.Count,
+                "Two or more spells in the catalog share the exact same formula.");
+        }
+
+        [Test]
+        public void SpellbookCatalog_MandatorySpells_ArePresent()
+        {
+            var names = new HashSet<SpellId>(SpellbookCatalog.All.Select(d => d.Id));
+            Assert.IsTrue(names.Contains(SpellId.Fireball));
+            Assert.IsTrue(names.Contains(SpellId.Firewall));
+            Assert.IsTrue(names.Contains(SpellId.SummonDemon));
+            Assert.IsTrue(names.Contains(SpellId.BanishDemons));
+            Assert.IsTrue(names.Contains(SpellId.Light));
+            Assert.AreEqual(20, SpellbookCatalog.Get(SpellId.SummonDemon).Length);
+            Assert.AreEqual(20, SpellbookCatalog.Get(SpellId.BanishDemons).Length);
+            Assert.AreEqual(5, SpellbookCatalog.Get(SpellId.Fireball).Length);
+            Assert.AreEqual(5, SpellbookCatalog.Get(SpellId.Firewall).Length);
+        }
+
+        [Test]
+        public void SpellbookCatalog_TryGetByFormula_RoundTripsEveryEntry()
+        {
+            foreach (var d in SpellbookCatalog.All)
+            {
+                Assert.IsTrue(SpellbookCatalog.TryGetByFormula(d.Formula, out var found));
+                Assert.AreEqual(d.Id, found.Id);
+            }
+            Assert.IsFalse(SpellbookCatalog.TryGetByFormula("UUUUU", out _)); // not a real spell
+            Assert.IsFalse(SpellbookCatalog.TryGetByFormula("", out _));
+            Assert.IsFalse(SpellbookCatalog.TryGetByFormula(null, out _));
+        }
+
+        // Requirement 16: "the space must stay sparse — a fizzle chance must
+        // exist at every length." Explicit coverage assertion: at every length
+        // actually used by a spell, the fraction of the 4^N possible U/D/L/R
+        // strings that answer to a real spell must stay far below saturation.
+        [Test]
+        public void SpellbookCatalog_FormulaSpaceCoverage_StaysSparsePerLength()
+        {
+            const double maxFraction = 0.05; // 5% — "a small fraction" per Requirement 16
+            var byLength = SpellbookCatalog.All.GroupBy(d => d.Formula.Length);
+            foreach (var group in byLength)
+            {
+                double space = Math.Pow(4, group.Key);
+                double coverage = group.Count() / space;
+                Assert.Less(coverage, maxFraction,
+                    $"Length {group.Key}: {group.Count()} spells cover {coverage:P3} of the formula space — too dense.");
+            }
+        }
+
+        // ── Spellbook — SpellbookMath (Requirement 18) ──────────────────────────
+
+        [Test]
+        public void SpellbookMath_SpellburnChance_AtZeroIntellect_IsBase()
+        {
+            Assert.AreEqual(SpellbookMath.BaseSpellburnChance, SpellbookMath.SpellburnChance(0), 1e-6f);
+        }
+
+        [Test]
+        public void SpellbookMath_SpellburnChance_DecreasesWithIntellect()
+        {
+            float low  = SpellbookMath.SpellburnChance(2);
+            float high = SpellbookMath.SpellburnChance(10);
+            Assert.Less(high, low);
+        }
+
+        [Test]
+        public void SpellbookMath_SpellburnChance_NeverBelowFloor()
+        {
+            Assert.AreEqual(SpellbookMath.MinSpellburnChance, SpellbookMath.SpellburnChance(1000), 1e-6f);
+        }
+
+        [Test]
+        public void SpellbookMath_SpellburnChance_NegativeIntellect_TreatedAsZero()
+        {
+            Assert.AreEqual(SpellbookMath.SpellburnChance(0), SpellbookMath.SpellburnChance(-5), 1e-6f);
+        }
+
+        [Test]
+        public void SpellbookMath_RollSpellburn_RespectsChanceBoundary()
+        {
+            float chance = SpellbookMath.SpellburnChance(0);
+            Assert.IsTrue(SpellbookMath.RollSpellburn(chance - 0.01, 0));
+            Assert.IsFalse(SpellbookMath.RollSpellburn(chance + 0.01, 0));
+        }
+
+        [Test]
+        public void SpellbookMath_RollKind_CoversAllEightKinds()
+        {
+            var seen = new HashSet<SpellbookMath.SpellburnKind>();
+            for (int i = 0; i < 8; i++) seen.Add(SpellbookMath.RollKind(i));
+            Assert.AreEqual(8, seen.Count);
+        }
+
+        [Test]
+        public void SpellbookMath_UnlockFocusCost_IsOnePoint()
+        {
+            Assert.AreEqual(1, SpellbookMath.UnlockFocusCost);
+        }
     }
 }
