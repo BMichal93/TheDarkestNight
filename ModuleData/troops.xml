@@ -785,13 +785,20 @@
   <!-- ═══════════════════════════════════════════════════════════════════
        THE DARKEST NIGHT — demon troops (src/Demons/).
        Same construction as "elemental_being" above: no custom mesh/texture
-       exists anywhere in this project. A demon is an ordinary human body
-       (or, for the Hellsteed, an ordinary horse under a rider) re-dressed in
-       existing crude gear and re-tinted at runtime by DemonVisuals (bone-
-       bound smoke/ember particles, a follower light, a red-black contour) —
-       the exact technique ElementalVisuals proved for the Kindled. The XML
-       below only supplies the "before" body: a plain, torn, weaponed human
-       (or horse) for the runtime treatment to wreathe.
+       exists anywhere in this project. REVISION (see DemonFactory.cs header
+       for the full research writeup): the mod author rejected the original
+       "human body in torn bandit clothes" look as reading like a person, not
+       a monster. A riderless horse-skeleton "beast" tier was investigated
+       and rejected as infeasible (the shipped "horse" Monster's action set
+       carries no melee-attack animations and is hard-flagged
+       RunsAwayWhenHit — see DemonFactory.cs) — the Hellsteed therefore stays
+       a mounted pair. The fix instead lands entirely in the dressing: bare-
+       chested "wildling"/fur hides (no full body armor reading as clothing),
+       tinted near-black via ClothingColor1/2 (DemonFactory.HideTint), no
+       boots (bare, clawed feet), body properties pushed toward inhuman
+       build/weight extremes per tier, and DemonVisuals swapping the
+       translucent "ghost" alpha for a near-solid dark hide plus a small,
+       tightly-scoped red eye-light distinct from the body-wide ember glow.
 
        CULTURE MUST BE "Culture.looters" (plural) — see the elemental_being
        comment above for the heroless-party conversation crash this avoids.
@@ -799,14 +806,22 @@
 
        Item ids used below are verified against the shipped game data
        (SandBoxCore/ModuleData/items/*.xml):
-         Item.rough_tied_armor, Item.strapped_leather_boots — already used
-           by elemental_being above.
-         Item.torn_bandit_clothes — SandBoxCore items/body_armors.xml.
+         Item.tattered_rags   — body_armors.xml; covers_body="false",
+           DoesNotHideChest="true" — bare-chested ragged waist-cloth, no
+           team-colour flag (already grubby/dark by its own appearance).
+         Item.fur_skirt       — body_armors.xml ("Kaunakes"); covers_body=
+           "false", DoesNotHideChest="true", UseTeamColor="true" — bare
+           chest and arms, a leather leg-wrap we can tint near-black.
+         Item.bandit_fur_a    — body_armors.xml ("Old Fur Armor");
+           covers_body="false", UseTeamColor="true" — a thick pelt read
+           (hulking silhouette) rather than a person's coat, tintable dark.
          Item.cleaver_sword_t3    — SandBoxCore items/weapons.xml (a crude
            butcher's cleaver — reads as a claw-like weapon at demon scale).
          Item.old_horse           — SandBoxCore items/horses_and_others.xml,
            monster="Monster.horse" — the literal horse skeleton the Hellsteed
            rides; is_mountable="true".
+       No Leg-slot boots are equipped below any more — bare, clawed feet
+       read closer to "beast" than a person's laced leather boots.
        ═══════════════════════════════════════════════════════════════════ -->
 
   <NPCCharacter id="demon_fiend"
@@ -818,14 +833,16 @@
                 occupation="Bandit"
                 is_basic_troop="false"
                 is_hidden_in_encyclopedia="true">
+    <!-- Gaunt, wiry, undersized — the weak, common tide-fodder. weight/build
+         pushed low and spread (Min..Max) so a knot of Fiends reads as
+         starved and uneven, not a squad of identical soldiers. -->
     <face>
-      <BodyPropertiesMin version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
-      <BodyPropertiesMax version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMin version="4" age="34.0" weight="0.15" build="0.35" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMax version="4" age="46.0" weight="0.35" build="0.60" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
     </face>
     <Equipments>
       <EquipmentRoster>
-        <equipment slot="Body" id="Item.torn_bandit_clothes"/>
-        <equipment slot="Leg"  id="Item.strapped_leather_boots"/>
+        <equipment slot="Body" id="Item.tattered_rags"/>
         <equipment slot="Item0" id="Item.cleaver_sword_t3"/>
       </EquipmentRoster>
     </Equipments>
@@ -844,14 +861,16 @@
                 occupation="Bandit"
                 is_basic_troop="false"
                 is_hidden_in_encyclopedia="true">
+    <!-- Lean and sinewy rather than bulky — a taller, tightly-muscled build
+         (low weight, higher build) so it reads as something that stalks
+         rather than a heavyset man. -->
     <face>
-      <BodyPropertiesMin version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
-      <BodyPropertiesMax version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMin version="4" age="30.0" weight="0.20" build="0.55" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMax version="4" age="42.0" weight="0.35" build="0.80" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
     </face>
     <Equipments>
       <EquipmentRoster>
-        <equipment slot="Body" id="Item.torn_bandit_clothes"/>
-        <equipment slot="Leg"  id="Item.strapped_leather_boots"/>
+        <equipment slot="Body" id="Item.fur_skirt"/>
         <equipment slot="Item0" id="Item.cleaver_sword_t3"/>
       </EquipmentRoster>
     </Equipments>
@@ -870,14 +889,15 @@
                 occupation="Bandit"
                 is_basic_troop="false"
                 is_hidden_in_encyclopedia="true">
+    <!-- Hulking and distorted — both sliders pushed high so the silhouette
+         reads as something too broad and too heavy to be a man in armour. -->
     <face>
-      <BodyPropertiesMin version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
-      <BodyPropertiesMax version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMin version="4" age="30.0" weight="0.85" build="0.90" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMax version="4" age="45.0" weight="1.00" build="1.00" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
     </face>
     <Equipments>
       <EquipmentRoster>
-        <equipment slot="Body" id="Item.torn_bandit_clothes"/>
-        <equipment slot="Leg"  id="Item.strapped_leather_boots"/>
+        <equipment slot="Body" id="Item.bandit_fur_a"/>
         <equipment slot="Item0" id="Item.cleaver_sword_t3"/>
       </EquipmentRoster>
     </Equipments>
@@ -896,14 +916,17 @@
                 occupation="Bandit"
                 is_basic_troop="false"
                 is_hidden_in_encyclopedia="true">
+    <!-- The rider: lean, bare-chested, low to the saddle. Still an ordinary
+         horse skeleton underneath (see the header note — a riderless beast
+         tier was investigated and found infeasible), but the rider itself
+         gets the same bare-hide treatment as the other tiers. -->
     <face>
-      <BodyPropertiesMin version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
-      <BodyPropertiesMax version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMin version="4" age="30.0" weight="0.20" build="0.55" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMax version="4" age="40.0" weight="0.35" build="0.75" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
     </face>
     <Equipments>
       <EquipmentRoster>
-        <equipment slot="Body" id="Item.torn_bandit_clothes"/>
-        <equipment slot="Leg"  id="Item.strapped_leather_boots"/>
+        <equipment slot="Body" id="Item.fur_skirt"/>
         <equipment slot="Item0" id="Item.cleaver_sword_t3"/>
         <equipment slot="Horse" id="Item.old_horse"/>
       </EquipmentRoster>
