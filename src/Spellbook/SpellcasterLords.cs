@@ -55,6 +55,30 @@ namespace AshAndEmber
 
         public static void ClearCooldowns() => _cooldowns.Clear();
 
+        // Grants a specific hero caster status outside the 7% random seeding —
+        // used by TowerCampaignBehavior so a joining lord who is not already a
+        // recognised spellcaster gets the Tower's equivalent of the player's
+        // free spellbook unlock (SpellbookCampaignBehavior's unlock flag is
+        // player-only state, so eligibility here is the lord-facing analogue).
+        // Idempotent: re-granting a hero who is already eligible only tops up
+        // spells they do not yet know.
+        public static void GrantToHero(Hero hero, IReadOnlyList<SpellId> spells)
+        {
+            if (hero == null || spells == null || spells.Count == 0) return;
+            try
+            {
+                _eligibleIds.Add(hero.StringId);
+                if (!_knownSpells.TryGetValue(hero.StringId, out var list))
+                {
+                    list = new List<SpellId>();
+                    _knownSpells[hero.StringId] = list;
+                }
+                foreach (var s in spells)
+                    if (!list.Contains(s)) list.Add(s);
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
         private static void SeedIfNeeded()
         {
             if (_seeded) return;

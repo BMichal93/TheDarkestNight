@@ -123,6 +123,8 @@ namespace AshAndEmber
                 campaignStarter.AddBehavior(new SpellcasterTroopBehavior());
                 // Phase 7, Faction A — the Wolf Brothers (Sturgia).
                 campaignStarter.AddBehavior(new WolfBrothersCampaignBehavior());
+                // Phase 7, Faction B — the Tower (Aserai).
+                campaignStarter.AddBehavior(new TowerCampaignBehavior());
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -132,7 +134,10 @@ namespace AshAndEmber
                 // see Factions/WolfBrothers/WolfBrothersDialogue.cs. NorthmenDialogue.cs
                 // is left in place, unreferenced, for save compatibility.
                 try { WolfBrothersDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { DunebornDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Aserai is now the Tower, not the (retired) Duneborn — see
+                // Factions/Tower/TowerDialogue.cs. DunebornDialogue.cs is left in
+                // place, unreferenced, for save compatibility.
+                try { TowerDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SchemeSystem.Initialize();              } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Drop the previous campaign's Ashen rolls before this one's data loads.
                 // A save reload repopulates them in SyncData, which runs before
@@ -172,7 +177,8 @@ namespace AshAndEmber
             try { AshenCitySystem.ApplyTribalCultureTexts();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Sturgia is now the Wolf Brothers, not the (retired) Northmen.
             try { WolfBrothersCulture.ApplyWolfBrothersCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { AshenCitySystem.ApplyDunebornCultureTexts();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // Aserai is now the Tower, not the (retired) Duneborn.
+            try { TowerCulture.ApplyTowerCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { AshenCitySystem.ApplyForestClansCultureTexts();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Phase 3 — Requirement 30a: tier 3-4 troop trees (every culture) are
             // re-equipped with the cheapest real armour of the same slot type;
@@ -197,7 +203,8 @@ namespace AshAndEmber
                 try { AshenCitySystem.ApplyTribalCultureTexts();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Sturgia is now the Wolf Brothers, not the (retired) Northmen.
             try { WolfBrothersCulture.ApplyWolfBrothersCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AshenCitySystem.ApplyDunebornCultureTexts();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Aserai is now the Tower, not the (retired) Duneborn.
+                try { TowerCulture.ApplyTowerCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { AshenCitySystem.ApplyForestClansCultureTexts();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // The character-creation culture cards cache their name when built, so
                 // the text override above never reaches them — rename the card directly.

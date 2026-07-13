@@ -66,7 +66,13 @@ namespace AshAndEmber
             // only this call site moved. See Factions/WolfBrothers/WolfBrothersCulture.cs.
             try { WolfBrothersCulture.RenameWolfBrothersKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { RenameSturgianTroops();             } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { RenameDunebornKingdom();            } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // Faction B of The Darkest Night's Phase 7: Aserai is now the Tower,
+            // not the (retired) Duneborn — both target the same "aserai"
+            // StringId, and a kingdom can only wear one name. The old
+            // RenameDunebornKingdom()/ApplyDunebornCultureTexts() helpers are left
+            // in AshenCitySystem.Renaming.cs, unreferenced, for save compatibility;
+            // only this call site moved. See Factions/Tower/TowerCulture.cs.
+            try { TowerCulture.RenameTowerKingdom();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { RenameAseraiTroops();               } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { RenameForestClansKingdom();         } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { RenameBattanianTroops();            } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }

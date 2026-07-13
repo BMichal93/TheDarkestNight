@@ -133,6 +133,12 @@
     <Compile Include="Factions\WolfBrothers\WolfBrothersDialogue.cs"/>
     <Compile Include="Factions\WolfBrothers\WolfBrothersCampaignBehavior.cs"/>
     <Compile Include="Factions\WolfBrothers\WolfBrothersCampaignBehavior.Menus.cs"/>
+    <Compile Include="Factions\Tower\TowerMath.cs"/>
+    <Compile Include="Factions\Tower\TowerCulture.cs"/>
+    <Compile Include="Factions\Tower\TowerSettlements.cs"/>
+    <Compile Include="Factions\Tower\TowerDialogue.cs"/>
+    <Compile Include="Factions\Tower\TowerCampaignBehavior.cs"/>
+    <Compile Include="Factions\Tower\TowerCampaignBehavior.Menus.cs"/>
     <Compile Include="Economy\EconomyMath.cs"/>
     <Compile Include="Economy\ScarcityModels.cs"/>
     <Compile Include="Economy\MarketScarcityCampaignBehavior.cs"/>
