@@ -963,5 +963,178 @@
     </skills>
   </NPCCharacter>
 
+  <!-- ═══════════════════════════════════════════════════════════════════
+       THE HOLLOW CHOIR — Requirement 15: a full spellcaster troop tree,
+       recruit to tier 5, one linear line (no branch — a caster is made by
+       years alone, not a battlefield choice). Each tier knows 2-3 spoken
+       formulas from the Phase 4 Spellbook (src/Spellbook/
+       SpellcasterTroopCatalog.cs is the source of truth for which); battle
+       casting is driven by SpellcasterTroops.MissionTick, which sheathes
+       the troop's weapon before every cast the same way ColourLordAI does
+       for lords (SpellEffects.TryFreeHandForCast).
+
+       hollow_apprentice (T1) -> hollow_adept (T2) -> hollow_invoker (T3)
+         -> hollow_warden (T4) -> hollow_magus (T5)
+
+       Deliberately is_basic_troop="false": vanilla village/notable
+       recruiting never generates them on its own. The ONLY way to meet or
+       recruit one is SpellcasterTroopBehavior's sparse weekly seeding
+       (src/Spellbook/SpellcasterTroopBehavior.cs) — this is what makes the
+       tree "very rare to encounter/recruit" per the requirement, rather
+       than a probability dressed up as flavour text.
+
+       Equipment reuses only items already verified elsewhere in this file:
+       Item.wrapped_stick (a walking staff, already used by fire_devotee/
+       ember_caller above as this mod's established "caster with a stick"
+       silhouette), Item.leather_cap, Item.rough_tied_armor/leather_coat/
+       bandit_armor, Item.strapped_leather_boots, Item.short_sword (T4-5
+       carry a blade too — a Hollow does not go to its final years
+       unarmed).
+       ═══════════════════════════════════════════════════════════════════ -->
+
+  <NPCCharacter id="hollow_apprentice"
+                name="{=hollow_apprentice_name}Hollow Apprentice"
+                age="22"
+                level="10"
+                culture="Culture.empire"
+                default_group="Infantry"
+                occupation="Soldier"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.fighter_empire_veteran" />
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.wrapped_stick"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.leather_coat"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="40"/>
+      <skill id="OneHanded"  value="30"/>
+    </skills>
+    <upgrade_targets>
+      <upgrade_target id="NPCCharacter.hollow_adept"/>
+    </upgrade_targets>
+  </NPCCharacter>
+
+  <NPCCharacter id="hollow_adept"
+                name="{=hollow_adept_name}Hollow Adept"
+                age="26"
+                level="18"
+                culture="Culture.empire"
+                default_group="Infantry"
+                occupation="Soldier"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.fighter_empire_veteran" />
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.wrapped_stick"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.rough_tied_armor"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="55"/>
+      <skill id="OneHanded"  value="45"/>
+    </skills>
+    <upgrade_targets>
+      <upgrade_target id="NPCCharacter.hollow_invoker"/>
+    </upgrade_targets>
+  </NPCCharacter>
+
+  <NPCCharacter id="hollow_invoker"
+                name="{=hollow_invoker_name}Hollow Invoker"
+                age="30"
+                level="26"
+                culture="Culture.empire"
+                default_group="Infantry"
+                occupation="Soldier"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.fighter_empire_veteran" />
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.wrapped_stick"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.bandit_armor"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="70"/>
+      <skill id="OneHanded"  value="60"/>
+    </skills>
+    <upgrade_targets>
+      <upgrade_target id="NPCCharacter.hollow_warden"/>
+    </upgrade_targets>
+  </NPCCharacter>
+
+  <NPCCharacter id="hollow_warden"
+                name="{=hollow_warden_name}Hollow Warden"
+                age="35"
+                level="34"
+                culture="Culture.empire"
+                default_group="Infantry"
+                occupation="Soldier"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.fighter_empire_veteran" />
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.short_sword"/>
+        <equipment slot="Item1" id="Item.wrapped_stick"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.bandit_armor"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="85"/>
+      <skill id="OneHanded"  value="75"/>
+    </skills>
+    <upgrade_targets>
+      <upgrade_target id="NPCCharacter.hollow_magus"/>
+    </upgrade_targets>
+  </NPCCharacter>
+
+  <NPCCharacter id="hollow_magus"
+                name="{=hollow_magus_name}Hollow Magus"
+                age="42"
+                level="42"
+                culture="Culture.empire"
+                default_group="Infantry"
+                occupation="Soldier"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.fighter_empire_veteran" />
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.short_sword"/>
+        <equipment slot="Item1" id="Item.wrapped_stick"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.bandit_armor"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="100"/>
+      <skill id="OneHanded"  value="90"/>
+    </skills>
+  </NPCCharacter>
+
 </NPCCharacters>
 

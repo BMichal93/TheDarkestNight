@@ -69,6 +69,7 @@ namespace AshAndEmber
             try { ColourLordAI.ClearCooldowns();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { ColourLordAI.FlushBattleCasts();      } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { SpellcasterLords.ClearCooldowns();    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellcasterTroops.ClearBattleState();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { BanditMageAI.OnMissionEnd();           } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { AshenSceneTone.Reset();                } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { BattleWhispers.Reset();                } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -118,6 +119,7 @@ namespace AshAndEmber
                 campaignStarter.AddBehavior(new GreatAwakeningCampaignBehavior());
                 campaignStarter.AddBehavior(new NorthmenStonesCampaignBehavior());
                 campaignStarter.AddBehavior(new SpellbookCampaignBehavior());
+                campaignStarter.AddBehavior(new SpellcasterTroopBehavior());
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -144,6 +146,7 @@ namespace AshAndEmber
                 try { NorthmenStonesCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SandboxOnlyGate.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SpellcasterLords.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellcasterTroopBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SpellbookCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
@@ -486,6 +489,7 @@ namespace AshAndEmber
             ActiveEffectManager.MissionTick(dt);
             ColourLordAI.MissionTick(dt);
             SpellcasterLords.MissionTick(dt);
+            SpellcasterTroops.MissionTick(dt);
             SpellEffects.TickGlows(dt);
             SpellEffects.TickFocusVisuals(dt);
             SpellEffects.TickColourCooldown(dt);

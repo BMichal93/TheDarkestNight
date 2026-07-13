@@ -119,6 +119,10 @@
     <Compile Include="Spellbook\SpellbookCampaignBehavior.cs"/>
     <Compile Include="Spellbook\SpellcasterLordMath.cs"/>
     <Compile Include="Spellbook\SpellcasterLords.cs"/>
+    <Compile Include="Spellbook\SpellcasterTroopCatalog.cs"/>
+    <Compile Include="Spellbook\SpellcasterTroopMath.cs"/>
+    <Compile Include="Spellbook\SpellcasterTroopBehavior.cs"/>
+    <Compile Include="Spellbook\SpellcasterTroops.cs"/>
     <Compile Include="Economy\EconomyMath.cs"/>
     <Compile Include="Economy\ScarcityModels.cs"/>
     <Compile Include="Economy\MarketScarcityCampaignBehavior.cs"/>

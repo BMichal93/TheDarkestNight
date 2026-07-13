@@ -3117,5 +3117,49 @@ namespace AshAndEmber.Tests
                     && count <= SpellcasterLordMath.MaxKnownSpells);
             }
         }
+
+        // ── SpellcasterTroopCatalog / Math (Requirement 15 — the Hollow Choir) ──
+        [Test]
+        public void SpellcasterTroopCatalog_HasFiveTiers_RecruitToTierFive()
+        {
+            Assert.AreEqual(5, SpellcasterTroopCatalog.Tiers.Count);
+            Assert.AreEqual(1, SpellcasterTroopCatalog.Tiers[0].Rank);
+            Assert.AreEqual(5, SpellcasterTroopCatalog.Tiers[4].Rank);
+        }
+
+        [Test]
+        public void SpellcasterTroopCatalog_EveryTier_Knows2To3Spells()
+        {
+            foreach (var tier in SpellcasterTroopCatalog.Tiers)
+                Assert.IsTrue(tier.Spells.Length >= 2 && tier.Spells.Length <= 3);
+        }
+
+        [Test]
+        public void SpellcasterTroopCatalog_TryGetTier_FindsKnownTroopAndRejectsUnknown()
+        {
+            Assert.IsTrue(SpellcasterTroopCatalog.TryGetTier("hollow_magus", out var tier));
+            Assert.AreEqual(5, tier.Rank);
+            Assert.IsFalse(SpellcasterTroopCatalog.TryGetTier("looter", out _));
+        }
+
+        [Test]
+        public void SpellcasterTroopCatalog_IsHollowChoirTroop_MatchesOnlyTheTree()
+        {
+            Assert.IsTrue(SpellcasterTroopCatalog.IsHollowChoirTroop("hollow_apprentice"));
+            Assert.IsFalse(SpellcasterTroopCatalog.IsHollowChoirTroop("mountain_bandit"));
+        }
+
+        [Test]
+        public void SpellcasterTroopMath_RollSeeds_RespectsChanceBoundary()
+        {
+            Assert.IsTrue(SpellcasterTroopMath.RollSeeds(SpellcasterTroopMath.WeeklySeedChance - 0.001));
+            Assert.IsFalse(SpellcasterTroopMath.RollSeeds(SpellcasterTroopMath.WeeklySeedChance + 0.001));
+        }
+
+        [Test]
+        public void SpellcasterTroopMath_WeeklySeedChance_IsRare()
+        {
+            Assert.IsTrue(SpellcasterTroopMath.WeeklySeedChance < 0.05f);
+        }
     }
 }
