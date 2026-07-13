@@ -1,0 +1,1090 @@
+// =============================================================================
+// ASH AND EMBER — Magic/ElementUltimates.cs
+//
+// Runtime layer of THE UNBINDING — each element's cooldown-gated ultimate
+// (all numbers and names live in the pure ElementUltimateMath). Eleven
+// workings — the base five, plus one for each non-Spirit fusion:
+//
+//   Fire   — nova around the caster (damage, ignition, bolting horses,
+//            charred siege timber, a burning ring left behind).
+//   Wind   — FLIGHT for the player (any hit drops you — a real fall); a
+//            straight wind-LEAP for NPC lords, who cannot pilot free flight.
+//   Earth  — the Sundering: a radial earthquake around the caster (heavy
+//            damage, foes hurled back, churned rubble left to bog the field).
+//   Water  — a standing rain zone (quenches burns, halves fire, mires horses,
+//            soaks bowstrings). Only ONE sky can stand — a recast replaces it.
+//   Spirit — seizes a random enemy will nearby: they fight at the caster's
+//            side for a short while, then the working lets go and they
+//            stagger back to their own line, dazed.
+//   Lightning/Fog/Magma/Ice/Sandstorm/Mire — v0.37 fusion Ultimates, each an
+//            instant, battlefield-scale version of the fusion's own effect
+//            (see the FUSION ULTIMATES section below). Spirit fusions are
+//            battle COMMANDS (ElementSpellEffects.IssueCommand), not workings,
+//            and carry no Ultimate of their own — Spirit's Unbinding already is
+//            the seizure at full strength.
+//
+// WIRING (all of it already done — listed so a fix knows where to look):
+//   • MagicMissionBehavior.OnMissionTick   → Tick(dt)
+//   • MagicMissionBehavior.OnAgentHit      → OnAgentHit(...)   (flight knock-out,
+//     NPC windup interruption, rain archery damp)
+//   • MagicMissionBehavior.OnEndMission and MainSubModule.OnGameStart
+//                                          → ClearBattleState()
+//   • ElementSpellEffects.CastAttack/Wall  → FireDampAt(...)       (rain vs fire)
+//   • ElementMagicInput (the chord)        → PlayerCanUnbind / CastPlayerUltimate
+//   • ColourLordAI.TryCast                 → TryQueueNpcUltimate(...)
+//
+// Nothing here is serialized: all state is mission-scoped and cleared with the
+// rest of the battle state, so saves are untouched (fully backward compatible).
+// =============================================================================
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
+using TaleWorlds.Engine;
+using TaleWorlds.Library;
+using TaleWorlds.MountAndBlade;
+using TaleWorlds.ObjectSystem;
+
+namespace AshAndEmber
+{
+    public static class ElementUltimates
+    {
+        private static readonly Random _rng = new Random();
+
+        // ── Cooldown bookkeeping ────────────────────────────────────────────────
+        // The once-per-battle cap is retired (v0.46+): the player carries one
+        // shared cooldown across all elements; each lord carries his own (marked
+        // at windup start — an interrupted working still spends it). Times are
+        // Mission.CurrentTime moments at which the next Unbinding is allowed.
+        private static float _playerNextUnbind = 0f;
+        private static readonly Dictionary<string, float> _npcNextUnbind = new Dictionary<string, float>();
+
+        private static float Now()
+        {
+            try { return Mission.Current?.CurrentTime ?? 0f; } catch { return 0f; }
+        }
+        // How often a lord's Unbinding answers as a fusion instead of the plain
+        // element it was picked for (see TryQueueNpcUltimate) — a flourish on an
+        // already-rare, cooldown-gated working, not a redesign of the AI.
+        private const double ComboUltimateUpgradeChance = 0.4;
+
+        // ── Flight (Wind) ───────────────────────────────────────────────────────
+        private class Flight
+        {
+            public Agent Flyer;
+            public float Remaining;
+            public Vec3? FixedDir;     // null = steer by look direction (player);
+                                       // set  = the NPC wind-leap's straight line
+            public bool  Ashen;
+            public float VisualTimer;
+        }
+        private static readonly List<Flight> _flights = new List<Flight>();
+
+        // ── The one sky (Water) ─────────────────────────────────────────────────
+        private class RainZone
+        {
+            public Vec3  Centre;
+            public float Remaining;
+            public float TickTimer;
+            public Team  CasterTeam;   // only the Ashen morale bleed reads this —
+                                       // every other effect of the rain is impartial
+            public bool  Ashen;
+        }
+        private static RainZone _rain;   // a single slot — there is only one sky
+
+        // ── The seized will (Spirit's Unbinding) ─────────────────────────────────
+        private class Thrall
+        {
+            public Agent Agent;
+            public Team  OriginalTeam;   // who they revert to when the working lets go
+            public Agent Caster;         // only used to credit the Ashen parting bite
+            public float Remaining;
+            public bool  Ashen;
+            public bool  Player;   // true = the PLAYER's seizure (gates the one-at-a-time cap)
+        }
+        private static readonly List<Thrall> _thralls = new List<Thrall>();
+
+        // ── Pending NPC windups ─────────────────────────────────────────────────
+        // NPC ultimates channel visibly for NpcWindupSeconds; ANY hit on the
+        // caster during the channel breaks the working. Kept here (not in
+        // SpellEffects._pendingNpcCasts) precisely so a hit can find and cancel it.
+        private class NpcWindup
+        {
+            public Agent Caster;
+            public MagicElement Element;
+            public float Remaining;
+            public bool  Ashen;
+            public float VisualTimer;
+        }
+        private static readonly List<NpcWindup> _npcWindups = new List<NpcWindup>();
+
+        public static void ClearBattleState()
+        {
+            _playerNextUnbind = 0f;
+            _npcNextUnbind.Clear();
+            _flights.Clear();
+            _rain = null;
+            _thralls.Clear();
+            _npcWindups.Clear();
+        }
+
+        // =====================================================================
+        // PLAYER ENTRY (called by ElementMagicInput on the Attack+Block chord)
+        // =====================================================================
+
+        // Most Unbindings share one player cooldown. SPIRIT is the exception:
+        // it is gated on whether the player's seized thrall is still held, so you
+        // may seize another only once the first has fallen or been let go — never
+        // two at once. This stops the working being spammed across an army.
+        public static bool PlayerCanUnbind(MagicElement el)
+            => el == MagicElement.Spirit ? !PlayerHasLiveThrall() : Now() >= _playerNextUnbind;
+
+        // True while a player-seized thrall is still held (alive and not yet released).
+        private static bool PlayerHasLiveThrall()
+        {
+            for (int i = 0; i < _thralls.Count; i++)
+            {
+                var t = _thralls[i];
+                if (t == null || !t.Player) continue;
+                try { if (t.Agent != null && t.Agent.IsActive() && t.Agent.Health > 0f) return true; }
+                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            }
+            return false;
+        }
+
+        // Executes the loaded element's Unbinding for the player. Returns true
+        // when the working actually fired (the caller then applies the aging
+        // cost); false leaves the drawn charge intact.
+        public static bool CastPlayerUltimate(MagicElement el, Agent caster)
+        {
+            if (caster == null || !caster.IsActive()) return false;
+            if (!PlayerCanUnbind(el)) return false;
+            // The wind will not carry horse and rider — and teleporting a mounted
+            // RIDER out of the saddle is the desync class this mod never risks.
+            // Refused BEFORE the cooldown is spent; the charge stays drawn.
+            if (el == MagicElement.Wind && IsMounted(caster))
+            {
+                Msg("The wind will not carry horse and rider — take wing on your own feet.");
+                return false;
+            }
+            // Spirit is gated on its thrall being held (see PlayerCanUnbind), not
+            // the shared cooldown — so the player may seize again after this one lets go.
+            if (el != MagicElement.Spirit)
+                _playerNextUnbind = Now() + ElementUltimateMath.UltimateCooldownSeconds;
+            bool ashen = false; try { ashen = MageKnowledge.IsAshen; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            Msg($"{ElementUltimateMath.UltimateName(el, ashen)} — the " +
+                $"{(ashen ? ElementMagicMath.AshenElementName(el) : ElementMagicMath.ElementName(el))} is unbound!");
+            Execute(el, caster, ashen);
+            return true;
+        }
+
+        // =====================================================================
+        // NPC ENTRY (called by ColourLordAI.TryCast, before its normal ladder)
+        // =====================================================================
+
+        // A lord reads the same tactical picture his normal casts use and, once
+        // per battle in battles of NpcMinCombatants+, queues the Unbinding that
+        // answers it. Returns true when a windup was queued (the caller sets his
+        // cooldown and records the cost). Priority is survival-first:
+        //   stone when wounded → the wind out when desperate → the nova when
+        //   swarmed → the sky against cavalry or an enemy fire-mage → the
+        //   seized will as a calculating lord's opener.
+        public static bool TryQueueNpcUltimate(Agent agent, Hero hero, float hpPct,
+            int closeEnemies, int nearEnemies, int mountedNear,
+            bool isAshen, List<MagicElement> known, CasterTemper temper)
+        {
+            if (agent == null || hero == null || Mission.Current == null) return false;
+            if (_npcNextUnbind.TryGetValue(hero.StringId, out float next) && Now() < next) return false;
+            if (!BattleBigEnough()) return false;
+            if (_npcWindups.Any(w => w.Caster == agent)) return false;
+
+            MagicElement? pick = null;
+            if (hpPct < ElementUltimateMath.QuakeHpFrac && closeEnemies >= 1
+                && known.Contains(MagicElement.Earth))
+                pick = MagicElement.Earth;   // wounded and pressed → heave them off him
+            else if (hpPct < ElementUltimateMath.LeapHpFrac
+                && closeEnemies >= ElementUltimateMath.LeapCloseEnemies
+                && known.Contains(MagicElement.Wind)
+                && !IsMounted(agent))   // the leap teleports the caster — never a rider
+                pick = MagicElement.Wind;
+            else if (closeEnemies >= ElementUltimateMath.NovaCloseEnemies)
+                pick = MagicElement.Fire;   // Fire is innate — always known
+            else if (known.Contains(MagicElement.Water) && _rain == null
+                && (mountedNear >= ElementUltimateMath.RainMountedNear
+                    || LastHostileWasFire(agent)))
+                pick = MagicElement.Water;
+            else if (known.Contains(MagicElement.Spirit) && temper == CasterTemper.Calculating
+                && nearEnemies >= 2 && hpPct > 0.8f)
+                pick = MagicElement.Spirit;
+
+            if (pick == null) return false;
+
+            // A studied lord's Unbinding sometimes answers as a blended working
+            // instead — the same fusion the player commands by chord, applied to
+            // the Unbinding itself. WIND is exempt: it was picked specifically to
+            // carry the caster OUT of danger, and a fusion has no such escape.
+            // Summons never come out of this — Spirit's own Unbinding already IS
+            // the seizure at full strength (ElementComboMath.TryFuse never
+            // returns a Fusion for a Spirit pick, so this loop is naturally a
+            // no-op whenever Spirit was chosen).
+            if (pick.Value != MagicElement.Wind && _rng.NextDouble() < ComboUltimateUpgradeChance)
+            {
+                foreach (var partner in known)
+                {
+                    if (partner == pick.Value) continue;
+                    var fused = ElementComboMath.TryFuse(pick.Value, partner);
+                    if (fused == null || !ElementComboMath.IsFusion(fused.Value)) continue;
+                    pick = fused.Value;
+                    break;
+                }
+            }
+
+            // Marked SPENT at windup start: an interrupted Unbinding is gone for
+            // the battle — that is the player's reward for riding the caster down.
+            _npcNextUnbind[hero.StringId] = Now() + ElementUltimateMath.NpcUltimateCooldownSeconds;
+            try { SpellEffects.BeginCastLoop(agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            _npcWindups.Add(new NpcWindup
+            {
+                Caster = agent, Element = pick.Value,
+                Remaining = ElementUltimateMath.NpcWindupSeconds,
+                Ashen = isAshen, VisualTimer = 0f,
+            });
+            AnnounceNpc(agent, hero,
+                $"begins the Unbinding — {ElementUltimateMath.UltimateName(pick.Value, isAshen)}! Break the working!");
+            return true;
+        }
+
+        private static bool IsMounted(Agent agent)
+        {
+            try { return agent?.MountAgent != null; } catch { return false; }
+        }
+
+        private static bool LastHostileWasFire(Agent agent)
+        {
+            try { return ElementWallWards.LastHostileElement(agent.Team) == MagicElement.Fire; }
+            catch { return false; }
+        }
+
+        private static bool BattleBigEnough()
+        {
+            try
+            {
+                int men = 0;
+                foreach (Agent a in Mission.Current.Agents)
+                    if (a != null && !a.IsMount && a.IsActive()) men++;
+                return men >= ElementUltimateMath.NpcMinCombatants;
+            }
+            catch { return false; }
+        }
+
+        // =====================================================================
+        // HOOKS (wired in MagicSystem / SpellEffects — see the header)
+        // =====================================================================
+
+        // Fire magic loosed from inside the rain works at half strength (checked
+        // at the CASTER's position — a cone thrown from dry ground into the rain
+        // is judged where it was born; the burns it sets are quenched by the
+        // zone's own tick either way). The Ashen cold is fire-in-truth here and
+        // is damped the same — the White Silence and the Long Winter contest the
+        // same sky.
+        public static float FireDampAt(Vec3 pos)
+        {
+            var r = _rain;
+            if (r == null) return 1f;
+            float dx = pos.x - r.Centre.x, dy = pos.y - r.Centre.y;
+            return dx * dx + dy * dy <= ElementUltimateMath.RainRadius * ElementUltimateMath.RainRadius
+                ? ElementUltimateMath.RainFireDamp : 1f;
+        }
+
+        // One entry point for everything the Unbinding must know about a landed
+        // hit. OnAgentHit fires AFTER damage is applied, so mitigation here is
+        // the established heal-back pattern (see the Nature resist in
+        // MagicSystem.OnAgentHit / TryApplyAttackWeakening).
+        public static void OnAgentHit(Agent victim, Agent attacker, int inflictedDamage, bool isMeleeHit)
+        {
+            if (victim == null) return;
+
+            // 1. A flyer struck is a flyer FALLING — remove them from the tick and
+            //    let gravity and real falling damage finish the sentence.
+            if (inflictedDamage > 0 && _flights.Count > 0)
+            {
+                for (int i = _flights.Count - 1; i >= 0; i--)
+                {
+                    if (_flights[i].Flyer != victim) continue;
+                    _flights.RemoveAt(i);
+                    if (victim == Agent.Main)
+                        Msg("The wind is struck from you — you fall!");
+                    try { SpellEffects.SpawnNatureBurst(victim.Position, NatureElement.Wind, 0.8f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                }
+            }
+
+            // 2. Any hit on a channelling NPC breaks the Unbinding (and it stays
+            //    spent — see TryQueueNpcUltimate).
+            if (inflictedDamage > 0 && _npcWindups.Count > 0)
+            {
+                for (int i = _npcWindups.Count - 1; i >= 0; i--)
+                {
+                    if (_npcWindups[i].Caster != victim) continue;
+                    var w = _npcWindups[i];
+                    _npcWindups.RemoveAt(i);
+                    try { SpellEffects.EndCastLoop(victim); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpellEffects.SpawnTempSmokeParticle(victim.Position + new Vec3(0f, 0f, 0.8f), 1.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    if (Agent.Main != null && victim.Team != null && Agent.Main.Team != null
+                        && victim.Team != Agent.Main.Team)
+                        Msg($"The Unbinding is broken — {ElementUltimateMath.UltimateName(w.Element, w.Ashen)} dies unspoken.");
+                }
+            }
+
+            // 3. Wet bowstrings: a RANGED hit loosed from inside the rain loses
+            //    part of its bite (heal-back — OnAgentHit fires after damage lands).
+            if (inflictedDamage > 0 && !isMeleeHit && attacker != null && _rain != null)
+            {
+                try
+                {
+                    if (FireDampAt(attacker.Position) < 1f)
+                    {
+                        float healBack = inflictedDamage * ElementUltimateMath.RainArcheryDamp;
+                        if (healBack >= 1f) SpellEffects.HealAgent(victim, healBack);
+                    }
+                }
+                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            }
+        }
+
+        // =====================================================================
+        // MISSION TICK
+        // =====================================================================
+
+        public static void Tick(float dt)
+        {
+            if (Mission.Current == null) return;
+            try { TickNpcWindups(dt); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TickFlights(dt); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TickRain(dt); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TickThralls(dt); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        private static void TickNpcWindups(float dt)
+        {
+            for (int i = _npcWindups.Count - 1; i >= 0; i--)
+            {
+                var w = _npcWindups[i];
+                bool alive = false;
+                try { alive = w.Caster != null && w.Caster.IsActive() && w.Caster.Health > 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                if (!alive) { _npcWindups.RemoveAt(i); continue; }
+
+                // The channel is LOUD: a swelling glow and the element's charge
+                // particles, refreshed on a short interval, so the player can see
+                // whom to ride down.
+                w.VisualTimer -= dt;
+                if (w.VisualTimer <= 0f)
+                {
+                    w.VisualTimer = 0.5f;
+                    try
+                    {
+                        SpellEffects.BeginAgentGlow(w.Caster,
+                            w.Ashen ? ColorSchool.Ashen
+                                    : w.Element == MagicElement.Fire ? ColorSchool.Red : ColorSchool.Nature, 0.8f);
+                        SpellEffects.SpawnTempLightRgb(w.Caster.Position + new Vec3(0f, 0f, 1f),
+                            ElementSpellEffects.ElementLightRgb(w.Element, w.Ashen), 9f, 0.7f);
+                    }
+                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                }
+
+                w.Remaining -= dt;
+                if (w.Remaining > 0f) continue;
+                _npcWindups.RemoveAt(i);
+                try { SpellEffects.EndCastLoop(w.Caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { Execute(w.Element, w.Caster, w.Ashen); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            }
+        }
+
+        // =====================================================================
+        // DISPATCH
+        // =====================================================================
+
+        private static void Execute(MagicElement el, Agent caster, bool ashen)
+        {
+            switch (el)
+            {
+                case MagicElement.Fire:      FireNova(caster, ashen);        break;
+                case MagicElement.Wind:      BeginFlight(caster, ashen);     break;
+                case MagicElement.Earth:     EarthquakeSunder(caster, ashen); break;
+                case MagicElement.Water:     BeginRain(caster, ashen);       break;
+                case MagicElement.Spirit:    SummonThrall(caster, ashen);    break;
+                case MagicElement.Lightning: LightningJudgment(caster, ashen); break;
+                case MagicElement.Fog:       FogDevour(caster, ashen);        break;
+                case MagicElement.Magma:     MagmaIgnite(caster, ashen);      break;
+                case MagicElement.Ice:       IceStillness(caster, ashen);     break;
+                case MagicElement.Sandstorm: SandstormDevour(caster, ashen);  break;
+                case MagicElement.Mire:      MireSwallow(caster, ashen);      break;
+            }
+            try { SpellEffects.TryCastSound(caster.Position,
+                    ashen ? ColorSchool.Ashen : el == MagicElement.Fire ? ColorSchool.Red : ColorSchool.Nature); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.RecordMagicCast(caster.Position); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ElementWallWards.NoteCast(el, caster.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // ── FIRE — The First Flame Remembered / The Long Winter ─────────────────
+        // A nova centred on the caster: heavy damage and full ignition on every
+        // foe in the ring, horses bolt in panic, siege timber chars, and a
+        // burning ring is left where the world remembers the caster stood.
+        // Cast inside someone's rain, the nova itself is damped like any fire.
+        private static void FireNova(Agent caster, bool ashen)
+        {
+            Vec3 pos; try { pos = caster.Position; } catch { return; }
+            float power = FireDampAt(pos);   // 1.0 dry, 0.5 under the weeping sky
+            Vec3 rgb = ElementSpellEffects.ElementLightRgb(MagicElement.Fire, ashen);
+
+            foreach (Agent a in EnemiesNear(caster, ElementUltimateMath.NovaRadius))
+            {
+                if (SpellEffects.IsWarded(a)) continue;
+                // The nova is fire like any other — a standing mist wall between
+                // the caster and a foe drinks the working before it reaches him.
+                try { if (ElementWallWards.BlocksPath(MagicElement.Fire, pos, a.Position, out _)) continue; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.DamageAgent(a, ElementUltimateMath.NovaDamage * power, ColorSchool.Red, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Full ignition on everything the nova touches (the Ashen cold
+                // grips as deep frost instead of a burn — same dread, colder face).
+                if (!ashen) try { ElementSpellEffects.IgniteTarget(a, caster, 1f * power, ashen); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                else        try { NatureEffects.ApplySpeedToken(a, ElementUltimateMath.NovaAshenSlowMult,
+                                                                   ElementUltimateMath.NovaAshenSlowSec); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Horses panic and bolt away from the eruption.
+                try
+                {
+                    if (a.MountAgent != null && a.MountAgent.IsActive())
+                    {
+                        Vec3 dir = a.Position - pos; dir.z = 0f;
+                        if (dir.Length > 0.1f) dir.Normalize(); else dir = new Vec3(1f, 0f, 0f);
+                        a.MountAgent.TeleportToPosition(a.MountAgent.Position + dir * ElementUltimateMath.NovaHorseBolt);
+                        a.MountAgent.MakeVoice(SkinVoiceManager.VoiceType.Fear,
+                            SkinVoiceManager.CombatVoiceNetworkPredictionType.NoPrediction);
+                    }
+                }
+                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try
+                {
+                    if (ashen) SpellEffects.SpawnTempSnowParticle(a.Position + new Vec3(0f, 0f, 0.4f), 1.2f);
+                    else       SpellEffects.SpawnTempFireParticle(a.Position + new Vec3(0f, 0f, 0.4f), 1.2f);
+                }
+                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            }
+
+            // The survivors visibly flee the eruption; timber in the ring chars.
+            try { SpellEffects.ScatterEnemies(pos, ElementUltimateMath.NovaRadius, caster.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.DamageBurnableStructures(pos, ElementUltimateMath.NovaRadius,
+                    ElementUltimateMath.NovaSiegeDamage * power, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
+            // The burning ring: eight tangent bands around the caster (the living
+            // fire smoulders and scorches; the cold leaves standing frost that
+            // wards like any fire wall — its updraft/steam devours crossing gales).
+            for (int k = 0; k < 8; k++)
+            {
+                double ang = k * Math.PI / 4.0;
+                Vec3 outDir  = new Vec3((float)Math.Cos(ang), (float)Math.Sin(ang), 0f);
+                Vec3 tangent = new Vec3(-outDir.y, outDir.x, 0f);
+                Vec3 node = pos + outDir * ElementUltimateMath.NovaRingRadius;
+                try
+                {
+                    if (ashen) SpellEffects.SpawnTempSnowParticle(node + new Vec3(0f, 0f, 0.4f), ElementUltimateMath.NovaRingBurnSec);
+                    else       SpellEffects.SpawnTempFireParticle(node + new Vec3(0f, 0f, 0.4f), ElementUltimateMath.NovaRingBurnSec);
+                }
+                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementWallWards.RegisterNode(MagicElement.Fire, node, 1.6f,
+                        ElementUltimateMath.NovaRingBurnSec, caster.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                if (!ashen)
+                    try { SpellEffects.SpawnFireWallPatches(node, tangent, 2.2f,
+                            ElementUltimateMath.NovaRingBurnDps * power,
+                            ElementUltimateMath.NovaRingBurnSec, caster.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            }
+
+            // The eruption itself.
+            try
+            {
+                if (ashen)
+                {
+                    SpellEffects.SpawnTempSnowParticle(pos + new Vec3(0f, 0f, 0.5f), 2.5f);
+                    if (SpellEffects.SceneIsSnowy())
+                        SpellEffects.SpawnTempSnowWisp(pos + new Vec3(0.6f, 0.3f, 0.8f), 3f);
+                }
+                else
+                {
+                    SpellEffects.SpawnBurstExplosion(pos, ColorSchool.Red, ElementUltimateMath.NovaRadius * 0.5f, 1.6f);
+                    if (SpellEffects.SceneIsSnowy())
+                        SpellEffects.SpawnTempSmokeParticle(pos + new Vec3(0f, 0f, 0.5f), 3f);
+                }
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempLightRgb(pos + new Vec3(0f, 0f, 1.5f), rgb, 22f, 1.4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ashen ? ColorSchool.Ashen : ColorSchool.Red, 2.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // ── WIND — On the Wings of the Gale / Carried by the Howl ───────────────
+        // The player steers by gaze at FlightSpeed, FlightHeight above the ground.
+        // NPC lords get the wind-LEAP instead: a fixed straight glide away from
+        // the enemies pressing them (AI cannot pilot free flight).
+        private static void BeginFlight(Agent caster, bool ashen)
+        {
+            _flights.RemoveAll(f => f.Flyer == caster);
+            Vec3? fixedDir = null;
+            float seconds = ElementUltimateMath.FlightSeconds;
+            if (caster != Agent.Main)
+            {
+                // Leap AWAY from the local enemy centroid (or backwards if none).
+                seconds = ElementUltimateMath.NpcLeapSeconds;
+                Vec3 away = default(Vec3);
+                int n = 0;
+                foreach (Agent e in EnemiesNear(caster, 12f))
+                { away += caster.Position - e.Position; n++; }
+                if (n > 0) { away.z = 0f; if (away.Length > 0.1f) away.Normalize(); }
+                if (n == 0 || away.Length < 0.1f)
+                { try { away = caster.LookDirection * -1f; away.z = 0f; away.Normalize(); } catch { away = new Vec3(1f, 0f, 0f); } }
+                fixedDir = away;
+            }
+            _flights.Add(new Flight { Flyer = caster, Remaining = seconds, FixedDir = fixedDir, Ashen = ashen });
+            if (caster == Agent.Main)
+                Msg("The wind bears you — steer with your gaze. One arrow ends it.");
+            try { SpellEffects.SpawnNatureBurst(caster.Position, NatureElement.Wind, 1.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        private static void TickFlights(float dt)
+        {
+            if (_flights.Count == 0) return;
+            var scene = Mission.Current?.Scene;
+            for (int i = _flights.Count - 1; i >= 0; i--)
+            {
+                var f = _flights[i];
+                bool alive = false;
+                try { alive = f.Flyer != null && f.Flyer.IsActive() && f.Flyer.Health > 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                if (!alive) { _flights.RemoveAt(i); continue; }
+
+                f.Remaining -= dt;
+                if (f.Remaining <= 0f)
+                {
+                    // Natural expiry: FlightHeightAt has already eased them to the
+                    // ground over the final seconds — a gentle step-off, no fall.
+                    _flights.RemoveAt(i);
+                    if (f.Flyer == Agent.Main) Msg("The wind sets you down.");
+                    continue;
+                }
+
+                try
+                {
+                    // Direction: the flyer's gaze (player) or the fixed leap line
+                    // (NPC), flattened — height is the curve's business, not the gaze's.
+                    Vec3 dir = f.FixedDir ?? f.Flyer.LookDirection;
+                    dir.z = 0f;
+                    if (dir.Length > 0.05f) dir.Normalize(); else dir = new Vec3(0f, 1f, 0f);
+                    float speed = f.FixedDir == null ? ElementUltimateMath.FlightSpeed
+                                                     : ElementUltimateMath.NpcLeapSpeed;
+                    Vec3 next = f.Flyer.Position + dir * (speed * dt);
+
+                    // Never carried off the battlefield — hover at the boundary.
+                    // LOCAL-VERIFY: Mission.IsPositionInsideBoundaries(Vec2) — if the
+                    // signature has drifted, the catch below simply skips the clamp.
+                    try
+                    {
+                        if (!Mission.Current.IsPositionInsideBoundaries(next.AsVec2))
+                            next = f.Flyer.Position;
+                    }
+                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
+                    // Terrain-following: ground height + the flight/landing curve.
+                    float ground = next.z;
+                    try
+                    {
+                        scene.GetHeightAtPoint(next.AsVec2,
+                            BodyFlags.CommonCollisionExcludeFlagsForAgent, ref ground);
+                    }
+                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    next.z = ground + ElementUltimateMath.FlightHeightAt(f.Remaining);
+
+                    // LOCAL-VERIFY (in-game): a per-tick TeleportToPosition is the
+                    // established way to move an agent off-navmesh (mount bolts use
+                    // it), but sustained airborne repositioning is NEW here — if the
+                    // agent ragdolls, slides, or plays a falling animation the whole
+                    // flight, the fix is to reposition on a coarser interval (e.g.
+                    // accumulate and teleport every 0.1 s) or to zero the agent's
+                    // movement input while aloft. The mechanic itself stays as is.
+                    f.Flyer.TeleportToPosition(next);
+                }
+                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
+                // A trail of gusts marks the carried caster.
+                f.VisualTimer -= dt;
+                if (f.VisualTimer <= 0f)
+                {
+                    f.VisualTimer = 0.35f;
+                    try { SpellEffects.SpawnNatureBurst(f.Flyer.Position, NatureElement.Wind, 0.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpellEffects.BeginAgentGlow(f.Flyer,
+                            f.Ashen ? ColorSchool.Ashen : ColorSchool.Nature, 0.6f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                }
+            }
+        }
+
+        // ── EARTH — The Mountain's Wrath / The Barrow Wakes ─────────────────────
+        // The Sundering: the ground erupts in a ring around the caster. Every foe
+        // caught is struck hard and HURLED off his feet (mount-safe — the horse is
+        // thrown, never the rider out of the saddle), left staggering on broken
+        // footing, and the churned earth is left as rings of rubble that bog anyone
+        // crossing them (impartial, like the mud a broken wave leaves). Wooden siege
+        // engines and gates in the ring are shaken apart; stone walls stand.
+        // Instantaneous — nothing to tick, no lingering buff on the caster.
+        private static void EarthquakeSunder(Agent caster, bool ashen)
+        {
+            Vec3 pos; try { pos = caster.Position; } catch { return; }
+            float radius = ElementUltimateMath.QuakeRadius;
+
+            foreach (Agent a in EnemiesNear(caster, radius))
+            {
+                if (SpellEffects.IsWarded(a)) continue;
+                try { SpellEffects.DamageAgent(a, ElementUltimateMath.QuakeDamage, ColorSchool.Nature, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
+                // Hurled outward off the heaving ground — mount-safe knockback.
+                Vec3 away = a.Position - pos; away.z = 0f;
+                if (away.Length > 0.1f) away.Normalize(); else away = new Vec3(1f, 0f, 0f);
+                Vec3 dest = a.Position + away * ElementUltimateMath.QuakeKnockback;
+                dest.z = a.Position.z;
+                try { NatureEffects.KnockbackAgent(a, dest); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
+                // Broken footing: a short slow (deep frost for the Ashen barrow-cold).
+                try { NatureEffects.ApplySpeedToken(a, ElementUltimateMath.QuakeSlowMult,
+                                                       ElementUltimateMath.QuakeSlowSec); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.SpawnNatureBurst(a.Position,
+                        ashen ? NatureElement.Water : NatureElement.Earth, 0.6f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            }
+
+            // The survivors scatter; wooden machines in the ring are shaken apart.
+            try { SpellEffects.ScatterEnemies(pos, radius, caster.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.DamageBurnableStructures(pos, radius,
+                    ElementUltimateMath.QuakeSiegeDamage, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
+            // A ring of churned rubble is left to bog the ground the quake tore up.
+            int rubble = ElementUltimateMath.QuakeRubblePatches;
+            for (int k = 0; k < rubble; k++)
+            {
+                double ang = (Math.PI * 2.0 / rubble) * k + _rng.NextDouble() * 0.4;
+                Vec3 p = pos + new Vec3((float)Math.Cos(ang) * ElementUltimateMath.QuakeRubbleRing,
+                                        (float)Math.Sin(ang) * ElementUltimateMath.QuakeRubbleRing, 0f);
+                p.z = pos.z;
+                try { SpellEffects.SpawnMudPatch(p); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            }
+
+            // The eruption itself — a stone shockwave ring and a heave at the centre.
+            try { SpellEffects.SpawnNatureRing(pos, NatureElement.Earth, radius * 0.55f, 1.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnNatureBurst(pos, NatureElement.Earth, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try
+            {
+                Vec3 rgb = ElementSpellEffects.ElementLightRgb(MagicElement.Earth, ashen);
+                SpellEffects.SpawnTempLightRgb(pos + new Vec3(0f, 0f, 1f), rgb, 18f, 1.1f);
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ashen ? ColorSchool.Ashen : ColorSchool.Nature, 1.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
+            if (caster == Agent.Main)
+                Msg(ashen ? "The barrow wakes — the frozen ground splits, and the cold throws them down."
+                          : "The mountain's wrath breaks loose — the earth heaves, and they are thrown like chaff.");
+        }
+
+        // ── WATER — The Weeping Sky / The White Silence ──────────────────────────
+        // A standing rain zone. IMPARTIAL, like the wall wards: horses mire and
+        // strings soak on both sides — choosing WHEN to raise the sky is the
+        // tactic. Only the Ashen blizzard picks a side: it gnaws at the morale of
+        // the caster's FOES while it howls. There is only one sky: a new casting
+        // tears the standing one down and replaces it.
+        private static void BeginRain(Agent caster, bool ashen)
+        {
+            bool replaced = _rain != null;
+            _rain = new RainZone
+            {
+                Centre = caster.Position,
+                Remaining = ElementUltimateMath.RainSeconds,
+                TickTimer = 0f,
+                CasterTeam = caster.Team,
+                Ashen = ashen,
+            };
+            if (replaced) Msg("A new will takes the sky — the old rain is torn away.");
+            try { SpellEffects.SpawnNatureBurst(caster.Position, NatureElement.Water, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        private static void TickRain(float dt)
+        {
+            var r = _rain;
+            if (r == null) return;
+            r.Remaining -= dt;
+            if (r.Remaining <= 0f)
+            {
+                _rain = null;
+                Msg(r.Ashen ? "The White Silence lifts." : "The weeping sky clears.");
+                return;
+            }
+            r.TickTimer -= dt;
+            if (r.TickTimer > 0f) return;
+            r.TickTimer = ElementUltimateMath.RainTickSeconds;
+
+            float radius2 = ElementUltimateMath.RainRadius * ElementUltimateMath.RainRadius;
+            try
+            {
+                foreach (Agent a in Mission.Current.Agents.ToList())
+                {
+                    if (a == null || !a.IsActive() || a.IsMount) continue;
+                    float dx = a.Position.x - r.Centre.x, dy = a.Position.y - r.Centre.y;
+                    if (dx * dx + dy * dy > radius2) continue;
+
+                    // The rain puts out every burning man inside it.
+                    try { ElementSpellEffects.QuenchIgnition(a); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    // Slow tokens are short and re-applied each tick, so they end
+                    // with the rain (or the moment someone walks out of it).
+                    try { NatureEffects.ApplySpeedToken(a, ElementUltimateMath.RainFootSlowMult,
+                            ElementUltimateMath.RainTickSeconds + 0.3f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try
+                    {
+                        if (a.MountAgent != null && a.MountAgent.IsActive())
+                            NatureEffects.ApplySpeedToken(a.MountAgent, ElementUltimateMath.RainMountSlowMult,
+                                ElementUltimateMath.RainTickSeconds + 0.3f);
+                    }
+                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    // The blizzard gnaws at the caster's foes.
+                    if (r.Ashen)
+                        try
+                        {
+                            if (r.CasterTeam != null && a.Team != null && a.Team.IsEnemyOf(r.CasterTeam))
+                                a.SetMorale(a.GetMorale() - ElementUltimateMath.RainAshenMoraleDrainPerTick);
+                        }
+                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                }
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
+            // Standing fire dies under the rain — the burning GROUND itself, not
+            // just its warding (QuenchFireAt sweeps both, patches to steam) — and
+            // a scatter of spray/snow keeps the zone readable on screen.
+            try { SpellEffects.QuenchFireAt(r.Centre, ElementUltimateMath.RainRadius); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try
+            {
+                for (int k = 0; k < 4; k++)
+                {
+                    double ang = _rng.NextDouble() * Math.PI * 2.0;
+                    float dist = (float)(_rng.NextDouble()) * ElementUltimateMath.RainRadius;
+                    Vec3 p = r.Centre + new Vec3((float)Math.Cos(ang) * dist, (float)Math.Sin(ang) * dist, 0f);
+                    if (r.Ashen) SpellEffects.SpawnTempSnowParticle(p + new Vec3(0f, 0f, 1.2f), 1.2f);
+                    else         SpellEffects.SpawnNatureBurst(p, NatureElement.Water, 0.8f);
+                }
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // ── SPIRIT — The Bent Knee / The Hollow Oath ─────────────────────────────
+        // Seizes a random living will within reach and turns it to the caster's
+        // side for a short while — no new body is raised, an existing enemy
+        // simply stops being one for a time. It is never the surest hand you
+        // could have picked (the working does not reach for power, only for
+        // whoever answers), so the borrowed will runs out fast. When it does,
+        // the thrall staggers back to their own line, dazed (the Ashen face
+        // leaves a parting frost-bite besides).
+        private static void SummonThrall(Agent caster, bool ashen)
+        {
+            try
+            {
+                if (Mission.Current == null || caster.Team == null) return;
+
+                // A random living will within reach — not the strongest, just
+                // whoever the working happens to catch.
+                var candidates = EnemiesNear(caster, ElementUltimateMath.ThrallRangeMetres).ToList();
+                if (candidates.Count == 0)
+                {
+                    Msg("Your reach finds no will worth taking.");
+                    return;
+                }
+                Agent best = candidates[_rng.Next(candidates.Count)];
+
+                Team originalTeam = best.Team;
+                if (!TryChangeAgentTeam(best, caster.Team))
+                {
+                    Msg("Their will holds — the working slips off them, unspent.");
+                    return;
+                }
+
+                // Rouse and, if this is not the player's own line, fold the seized
+                // body into the caster's formation and set it marching — the exact
+                // treatment the Spirit champion always used (ElementalFactory), so
+                // an NPC lord's thrall advances with his line like any reinforcement.
+                try { ElementalFactory.SetAggressive(best, caster.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
+                _thralls.Add(new Thrall
+                {
+                    Agent = best, OriginalTeam = originalTeam, Caster = caster,
+                    Remaining = ElementUltimateMath.ThrallSeconds,
+                    Ashen = ashen, Player = caster == Agent.Main,
+                });
+
+                string name = SafeAgentName(best);
+                Vec3 at; try { at = best.Position; } catch { at = default(Vec3); }
+                EmitThrallBurst(at, ashen, 1.6f);
+                Msg(ashen
+                    ? $"The frost grips {name}'s will — hollow-eyed, they turn to your command."
+                    : $"Something in {name} bends — for a time, they are yours.");
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // =====================================================================
+        // FUSION ULTIMATES — v0.37. Each mirrors the base five: an instant,
+        // battlefield-scale version of the fusion's own signature effect.
+        // Summons carry none of their own — Spirit's Unbinding already IS the
+        // seizure at full strength, and a second one would just be confusing.
+        // =====================================================================
+
+        // ── LIGHTNING — The Storm's Judgment / The Silent Thunder ────────────────
+        // Every foe within reach struck and stunned at once — the mass version
+        // of the fusion's chain, with no need to actually hop between them.
+        private static void LightningJudgment(Agent caster, bool ashen)
+        {
+            Vec3 pos; try { pos = caster.Position; } catch { return; }
+            foreach (Agent a in EnemiesNear(caster, ElementUltimateMath.LightningRadius))
+            {
+                if (SpellEffects.IsWarded(a)) continue;
+                try { SpellEffects.DamageAgent(a, ElementUltimateMath.LightningDamage, ColorSchool.White, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { a.SetMaximumSpeedLimit(0f, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { NatureEffects.ApplySpeedToken(a, 0f, ElementUltimateMath.LightningStunSec); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.SpawnTempLightWhite(a.Position + new Vec3(0f, 0f, 1f), 10f, 0.3f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.SpawnNatureBurst(a.Position + new Vec3(0f, 0f, 1f), NatureElement.Storm, 1.0f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            }
+            try { SpellEffects.SpawnTempLightWhite(pos + new Vec3(0f, 0f, 2f), 22f, 0.4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.White, 1.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            if (caster == Agent.Main)
+                Msg(ashen ? "The silent thunder answers — every foe in reach falls still."
+                          : "The storm's judgment falls — every foe in reach is struck as one.");
+        }
+
+        // ── FOG — The Devouring Mist / The White Blindness ───────────────────────
+        // One massive, long-lived fog bank swallows the field around the caster
+        // — the fusion's own denial (slow, dampened shots, scrambled orders;
+        // see ElementSpellEffects.OnRangedHitThroughFog and spell_fogpatch) at
+        // a scale that can decide a battle rather than one skirmish.
+        private static void FogDevour(Agent caster, bool ashen)
+        {
+            Vec3 pos; try { pos = caster.Position; } catch { return; }
+            try { SpellEffects.SpawnFogPatch(pos, ElementUltimateMath.FogUltimateRadius, ElementUltimateMath.FogUltimateSeconds, caster.Team); }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempLightRgb(pos + new Vec3(0f, 0f, 1.5f), ElementSpellEffects.ElementLightRgb(MagicElement.Fog, ashen), 20f, 1.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Nature, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            if (caster == Agent.Main)
+                Msg(ashen ? "The white blindness rolls out — the field itself disappears."
+                          : "The devouring mist rolls out over the field.");
+        }
+
+        // ── MAGMA — The Ground Ignites / The Ashen Maw ───────────────────────────
+        // An eruption at the caster's feet (the Sundering's damage and knockback,
+        // Fire's ignition) that leaves a huge, long-burning magma field behind it.
+        private static void MagmaIgnite(Agent caster, bool ashen)
+        {
+            Vec3 pos; try { pos = caster.Position; } catch { return; }
+            foreach (Agent a in EnemiesNear(caster, ElementUltimateMath.MagmaUltimateRadius))
+            {
+                if (SpellEffects.IsWarded(a)) continue;
+                try { SpellEffects.DamageAgent(a, ElementUltimateMath.MagmaUltimateDamage, ColorSchool.Red, caster, MagicElement.Fire); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                if (!ashen) try { ElementSpellEffects.IgniteTarget(a, caster, 1f, ashen); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                Vec3 away = a.Position - pos; away.z = 0f;
+                away = away.Length > 0.1f ? away.NormalizedCopy() : new Vec3(1f, 0f, 0f);
+                try { NatureEffects.KnockbackAgent(a, a.Position + away * 4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            }
+            try { SpellEffects.ScatterEnemies(pos, ElementUltimateMath.MagmaUltimateRadius, caster.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.DamageBurnableStructures(pos, ElementUltimateMath.MagmaUltimateRadius,
+                    ElementUltimateMath.MagmaUltimateDamage * 3f, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnMagmaPatch(pos, ElementUltimateMath.MagmaPatchTickDamage,
+                    ElementUltimateMath.MagmaPatchSeconds, caster.Team, ElementUltimateMath.MagmaPatchRadius); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnBurstExplosion(pos, ColorSchool.Red, ElementUltimateMath.MagmaUltimateRadius * 0.5f, 1.6f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ashen ? ColorSchool.Ashen : ColorSchool.Red, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            if (caster == Agent.Main)
+                Msg(ashen ? "The ashen maw opens — the ground itself turns against them."
+                          : "The ground ignites — the earth erupts into open flame.");
+        }
+
+        // ── ICE — The Absolute Stillness / The Endless Winter ────────────────────
+        // Zero damage, as ever — every foe within reach is frozen solid for a
+        // long stretch, the fusion's own hard root at battlefield scale.
+        private static void IceStillness(Agent caster, bool ashen)
+        {
+            Vec3 pos; try { pos = caster.Position; } catch { return; }
+            foreach (Agent a in EnemiesNear(caster, ElementUltimateMath.IceUltimateRadius))
+            {
+                if (SpellEffects.IsWarded(a)) continue;
+                try { a.SetMaximumSpeedLimit(0f, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { NatureEffects.ApplySpeedToken(a, 0f, ElementUltimateMath.IceUltimateFreezeSec); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.SpawnTempSnowParticle(a.Position + new Vec3(0f, 0f, 0.6f), 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            }
+            try { SpellEffects.SpawnNatureBurst(pos, NatureElement.Water, 2.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempLightRgb(pos + new Vec3(0f, 0f, 1.5f), ElementSpellEffects.ElementLightRgb(MagicElement.Ice, ashen), 18f, 1.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.White, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            if (caster == Agent.Main)
+                Msg(ashen ? "The endless winter answers — every foe in reach is locked fast."
+                          : "The absolute stillness falls — every foe in reach freezes where they stand.");
+        }
+
+        // ── SANDSTORM — The Devouring Dunes / The Bone Storm ─────────────────────
+        // Every mount within reach bolts off-line at once — the mass cavalry-
+        // breaker, plus the fusion's own blind and a modest bite.
+        private static void SandstormDevour(Agent caster, bool ashen)
+        {
+            Vec3 pos; try { pos = caster.Position; } catch { return; }
+            foreach (Agent a in EnemiesNear(caster, ElementUltimateMath.SandstormUltimateRadius))
+            {
+                if (SpellEffects.IsWarded(a)) continue;
+                try { SpellEffects.DamageAgent(a, ElementUltimateMath.SandstormUltimateDamage, ColorSchool.Nature, caster, MagicElement.Earth); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { NatureEffects.ApplySpeedToken(a, 0.5f, ElementUltimateMath.SandstormUltimateSlowSec); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try
+                {
+                    if (a.MountAgent != null && a.MountAgent.IsActive())
+                    {
+                        Vec3 bolt = a.MountAgent.Position - pos; bolt.z = 0f;
+                        bolt = bolt.Length > 0.1f ? bolt.NormalizedCopy() : new Vec3(1f, 0f, 0f);
+                        a.MountAgent.TeleportToPosition(a.MountAgent.Position + bolt * ElementUltimateMath.SandstormUltimateBolt);
+                        a.MountAgent.MakeVoice(SkinVoiceManager.VoiceType.Fear, SkinVoiceManager.CombatVoiceNetworkPredictionType.NoPrediction);
+                    }
+                }
+                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.SpawnTempSandWisp(a.Position + new Vec3(0f, 0f, 1f), 1.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            }
+            try { SpellEffects.SpawnTempSandParticle(pos, 2.4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Nature, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            if (caster == Agent.Main)
+                Msg(ashen ? "The bone storm rises — every mount in reach bolts screaming."
+                          : "The devouring dunes rise — every mount in reach bolts off the line.");
+        }
+
+        // ── MIRE — The Swallowing Ground / The Grey Sinking ──────────────────────
+        // One vast bog dropped at the caster's feet — already wider than the
+        // fusion's own footprint, and spreading further still (see the
+        // spell_mirepatch tick) over its long life.
+        private static void MireSwallow(Agent caster, bool ashen)
+        {
+            Vec3 pos; try { pos = caster.Position; } catch { return; }
+            try { SpellEffects.SpawnMirePatch(pos, ElementUltimateMath.MireUltimateTickDamage,
+                    ElementUltimateMath.MireUltimateSeconds, caster.Team, ElementUltimateMath.MireUltimateRadius); }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempLightRgb(pos + new Vec3(0f, 0f, 1.5f), ElementSpellEffects.ElementLightRgb(MagicElement.Mire, ashen), 18f, 1.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Nature, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            if (caster == Agent.Main)
+                Msg(ashen ? "The grey sinking opens beneath them."
+                          : "The swallowing ground opens — the earth itself gives way.");
+        }
+
+        private static string SafeAgentName(Agent a)
+        {
+            try { return a.Name?.ToString() ?? "the foe"; } catch { return "the foe"; }
+        }
+
+        private static void EmitThrallBurst(Vec3 pos, bool ashen, float scale)
+        {
+            try
+            {
+                if (ashen) SpellEffects.SpawnTempSnowParticle(pos + new Vec3(0f, 0f, 0.5f), scale);
+                else       SpellEffects.SpawnTempSmokeParticle(pos + new Vec3(0f, 0f, 0.4f), scale);
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempLightRgb(pos + new Vec3(0f, 0f, 1f),
+                    ElementSpellEffects.ElementLightRgb(MagicElement.Spirit, ashen), 8f, 0.8f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        private static void TickThralls(float dt)
+        {
+            for (int i = _thralls.Count - 1; i >= 0; i--)
+            {
+                var t = _thralls[i];
+                bool alive = false;
+                try { alive = t.Agent != null && t.Agent.IsActive() && t.Agent.Health > 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                if (!alive) { _thralls.RemoveAt(i); continue; }   // died fighting under the borrowed will
+
+                t.Remaining -= dt;
+                if (t.Remaining > 0f) continue;
+                _thralls.RemoveAt(i);
+
+                Vec3 at; try { at = t.Agent.Position; } catch { at = default(Vec3); }
+                EmitThrallBurst(at, t.Ashen, 1.6f);
+                string name = SafeAgentName(t.Agent);
+
+                TryChangeAgentTeam(t.Agent, t.OriginalTeam);
+                try { ElementalFactory.SetAggressive(t.Agent, t.OriginalTeam); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { NatureEffects.ApplySpeedToken(t.Agent, ElementUltimateMath.ThrallDazedSpeedMult,
+                        ElementUltimateMath.ThrallDazedSeconds); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
+                if (t.Ashen)
+                {
+                    try { SpellEffects.DamageAgent(t.Agent, ElementUltimateMath.ThrallAshenPartingDamage,
+                            ColorSchool.Ashen, t.Caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    Msg($"The frost in {name} cracks as it withdraws — they reel back to their own line, marked by its parting bite.");
+                }
+                else
+                {
+                    Msg($"{name}'s eyes clear — the borrowed will lets go, and they stagger back to their own banner.");
+                }
+            }
+        }
+
+        // LOCAL-VERIFY: Agent.Team has no public setter in any signature this mod
+        // has needed before now — every existing spawn sets Team once, at build
+        // time, via AgentBuildData. Re-assigning an agent's side mid-mission is new
+        // ground, so this tries a settable property first (reflection bypasses the
+        // C# "internal"/"private" keyword — only the CLR's own visibility rules
+        // apply — so this works whatever access level the real setter turns out to
+        // have), then falls back to the compiler-generated backing field directly,
+        // the same last-resort this mod already relies on for CultureObject.Name in
+        // AshenCitySystem.Renaming. If both fail, the thrall attempt is aborted
+        // cleanly (see the two call sites above) rather than leaving an agent in a
+        // half-seized state.
+        private static bool TryChangeAgentTeam(Agent agent, Team team)
+        {
+            if (agent == null || team == null) return false;
+            try
+            {
+                var prop = typeof(Agent).GetProperty("Team",
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                if (prop != null && prop.CanWrite) { prop.SetValue(agent, team); return true; }
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try
+            {
+                var field = typeof(Agent).GetField("<Team>k__BackingField",
+                                BindingFlags.NonPublic | BindingFlags.Instance)
+                         ?? typeof(Agent).GetField("_team", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (field != null) { field.SetValue(agent, team); return true; }
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            return false;
+        }
+
+        // ── Helpers ──────────────────────────────────────────────────────────────
+        private static IEnumerable<Agent> EnemiesNear(Agent caster, float radius)
+        {
+            float r2 = radius * radius;
+            Vec3 pos; try { pos = caster.Position; } catch { yield break; }
+            List<Agent> agents;
+            try { agents = Mission.Current.Agents.ToList(); } catch { yield break; }
+            foreach (Agent a in agents)
+            {
+                if (a == caster || !a.IsActive() || a.IsMount) continue;
+                if (caster.Team != null && a.Team == caster.Team) continue;
+                float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
+                if (dx * dx + dy * dy <= r2) yield return a;
+            }
+        }
+
+        private static void AnnounceNpc(Agent agent, Hero hero, string blurb)
+        {
+            try
+            {
+                if (Agent.Main == null) return;
+                if (agent.Team == Agent.Main.Team) return;   // no ally spam
+                InformationManager.DisplayMessage(new InformationMessage(
+                    $"{hero.Name} {blurb}", new Color(0.9f, 0.35f, 0.25f)));
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        private static void Msg(string text)
+            => InformationManager.DisplayMessage(new InformationMessage(text, new Color(0.95f, 0.55f, 0.25f)));
+    }
+}

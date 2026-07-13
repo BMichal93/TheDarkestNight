@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Ash and Ember — Crystal weapon items.
+
+  Crystals occupy a weapon slot and activate via CrystalEffects.OnCrystalHit
+  when the player attacks with them. Physical damage is intentionally minimal
+  (cancelled in code); the real effect fires after a 2-second charge phase.
+
+  Each item is modelled on the vanilla "horse_whip" — a known-good, simple
+  one-handed weapon: a valid collision body (bo_mace_a), a real weapon mesh,
+  a standard one-handed item_usage and physics_material, and the MeleeWeapon
+  flag. A bare Weapon block without item_usage / physics_material / a valid
+  weapon mesh crashes the game the moment the item is equipped (no wield
+  animation set / no collision body) — that was the old definition's bug.
+
+  Mesh: vanilla "throwing_stone" — a rough held mineral, the closest stock mesh
+  to a raw crystal (Bannerlord has no gem/crystal weapon mesh). A custom crystal
+  mesh can replace it via the mesh="" attribute without touching any code. The
+  weapon structure (body / item_usage / physics / flags) is modelled on a vanilla
+  one-handed weapon so it equips and swings without faulting.
+
+  Prices are intentionally high (1100–2000) — these are rare mineral formations,
+  available for purchase only in Crystalline Chamber towns, restocked weekly
+  with one of each type. The formation craft route offers them at material cost.
+-->
+<Items>
+
+  <!-- Sunstone — warmth pulse: heals self and nearby allies -->
+  <Item id="aae_sunstone"
+        name="Sunstone — Warmth Pulse"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="throwing_stone"
+        Type="OneHandedWeapon"
+        weight="0.3"
+        value="1500"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+  <!-- Embershard — shard burst: AoE fire damage to nearby enemies -->
+  <Item id="aae_embershard"
+        name="Embershard — Shard Burst"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="throwing_stone"
+        Type="OneHandedWeapon"
+        weight="0.3"
+        value="1800"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+  <!-- Rimeshard — frost pulse: slows nearby enemies -->
+  <Item id="aae_rimeshard"
+        name="Rimeshard — Frost Pulse"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="throwing_stone"
+        Type="OneHandedWeapon"
+        weight="0.3"
+        value="1500"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+  <!-- Veilstone — veil grasp: strikes one random enemy at range -->
+  <Item id="aae_veilstone"
+        name="Veilstone — Veil Grasp"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="throwing_stone"
+        Type="OneHandedWeapon"
+        weight="0.3"
+        value="1700"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+  <!-- Stormcrystal — thunder clap: AoE damage + morale drain -->
+  <Item id="aae_stormcrystal"
+        name="Stormcrystal — Thunderclap"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="throwing_stone"
+        Type="OneHandedWeapon"
+        weight="0.3"
+        value="2000"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+  <!-- Duskstone — despair wave: morale drain + slow -->
+  <Item id="aae_duskstone"
+        name="Duskstone — Despair Wave"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="throwing_stone"
+        Type="OneHandedWeapon"
+        weight="0.3"
+        value="1600"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+  <!-- Thornveil — root grasp: immobilises one random enemy at range + damage -->
+  <Item id="aae_thornveil"
+        name="Thornveil — Root Grasp"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="throwing_stone"
+        Type="OneHandedWeapon"
+        weight="0.3"
+        value="1700"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+  <!-- Aegisstone — bulwark pulse: self heal + knocks back nearby enemies -->
+  <Item id="aae_aegisstone"
+        name="Aegisstone — Bulwark Pulse"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="throwing_stone"
+        Type="OneHandedWeapon"
+        weight="0.3"
+        value="1800"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+  <!-- Willowisp — dread whisper: shatters the morale of one random enemy at range -->
+  <Item id="aae_willowisp"
+        name="Willowisp — Dread Whisper"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="throwing_stone"
+        Type="OneHandedWeapon"
+        weight="0.3"
+        value="1600"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+  <!-- Bloodstone — vampiric burst: AoE damage, heals caster on the blood spilled -->
+  <Item id="aae_bloodstone"
+        name="Bloodstone — Vampiric Burst"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="throwing_stone"
+        Type="OneHandedWeapon"
+        weight="0.3"
+        value="1900"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+  <!-- Zephyrglass — quickening light: AoE haste for caster and nearby allies -->
+  <Item id="aae_zephyrglass"
+        name="Zephyrglass — Quickening Light"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="throwing_stone"
+        Type="OneHandedWeapon"
+        weight="0.3"
+        value="1500"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+</Items>

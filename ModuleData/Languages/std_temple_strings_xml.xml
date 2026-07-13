@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Vlandia IS The Holy Temple in Ash and Ember. These two keys are the localization
+  ids behind the Vlandian culture's display name (8HMyTKF6) and description
+  (ZPaw3WuO) used by the character-creation culture card and the encyclopedia.
+  Overriding them in English makes the culture read as the Templar order everywhere
+  the text is shown — independent of any load timing.
+-->
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="English" />
+  </tags>
+  <strings>
+    <string id="8HMyTKF6" text="The Holy Temple" />
+    <string id="ZPaw3WuO" text="Once they were lords of the western marches, bound to no altar and no god but conquest. When the grey march first came down from the north, the Empire turned east and left them to face it alone. They held. In the silence that followed, they made a covenant with the fire inside them — not as weapon, but as vow. The Templars are what that vow became.&#10;&#10;They bind throne to altar. They count the cost. They do not flinch at what the Light requires of them." />
+  </strings>
+</base>

@@ -1,0 +1,811 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NPCCharacters>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       FIRE WORSHIPPERS — a cult of bandits who carry a stolen fragment
+       of the Inner Fire. Tier 1–3 melee/caster tree.
+
+       fire_devotee (T1) → fire_zealot (T2, melee)
+                         → ember_caller (T2, throwing/caster)
+                               → ember_shaman (T3, elite caster)
+       ═══════════════════════════════════════════════════════════════════ -->
+
+  <NPCCharacter id="fire_devotee"
+                name="{=fire_devotee_name}Fire Devotee"
+                age="25"
+                level="8"
+                culture="Culture.looters"
+                default_group="Infantry"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.looter" />
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.hand_axe"/>
+        <equipment slot="Item1" id="Item.wicker_shield"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.rough_tied_armor"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.wrapped_stick"/>
+        <equipment slot="Item2" id="Item.stone"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.leather_coat"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="30"/>
+      <skill id="OneHanded"  value="40"/>
+      <skill id="TwoHanded"  value="15"/>
+      <skill id="Throwing"   value="20"/>
+    </skills>
+    <upgrade_targets>
+      <upgrade_target id="NPCCharacter.fire_zealot"/>
+      <upgrade_target id="NPCCharacter.ember_caller"/>
+    </upgrade_targets>
+  </NPCCharacter>
+
+  <NPCCharacter id="fire_zealot"
+                name="{=fire_zealot_name}Fire Zealot"
+                age="25"
+                level="16"
+                culture="Culture.looters"
+                default_group="Infantry"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.looter" />
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.fighting_axe"/>
+        <equipment slot="Item1" id="Item.round_shield"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.bandit_armor"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.short_sword"/>
+        <equipment slot="Item1" id="Item.wooden_round_shield"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.rough_tied_armor"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="60"/>
+      <skill id="OneHanded"  value="80"/>
+      <skill id="TwoHanded"  value="40"/>
+      <skill id="Throwing"   value="30"/>
+    </skills>
+    <upgrade_targets>
+      <upgrade_target id="NPCCharacter.ember_shaman"/>
+    </upgrade_targets>
+  </NPCCharacter>
+
+  <NPCCharacter id="ember_caller"
+                name="{=ember_caller_name}Ember Caller"
+                age="25"
+                level="16"
+                culture="Culture.looters"
+                default_group="Ranged"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.looter" />
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.javelin"/>
+        <equipment slot="Item1" id="Item.javelin"/>
+        <equipment slot="Item2" id="Item.short_sword"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.leather_coat"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.javelin"/>
+        <equipment slot="Item1" id="Item.javelin"/>
+        <equipment slot="Item2" id="Item.wrapped_stick"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.rough_tied_armor"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="50"/>
+      <skill id="OneHanded"  value="40"/>
+      <skill id="Throwing"   value="80"/>
+    </skills>
+    <upgrade_targets>
+      <upgrade_target id="NPCCharacter.ember_shaman"/>
+    </upgrade_targets>
+  </NPCCharacter>
+
+  <NPCCharacter id="ember_shaman"
+                name="{=ember_shaman_name}Ember Sorcerer"
+                age="25"
+                level="26"
+                culture="Culture.looters"
+                default_group="Ranged"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.looter" />
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.javelin"/>
+        <equipment slot="Item1" id="Item.javelin"/>
+        <equipment slot="Item2" id="Item.javelin"/>
+        <equipment slot="Item3" id="Item.fighting_axe"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.bandit_armor"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.javelin"/>
+        <equipment slot="Item1" id="Item.javelin"/>
+        <equipment slot="Item2" id="Item.javelin"/>
+        <equipment slot="Item3" id="Item.short_sword"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.rough_tied_armor"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="80"/>
+      <skill id="OneHanded"  value="70"/>
+      <skill id="Throwing"   value="120"/>
+    </skills>
+  </NPCCharacter>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       ASHEN SPAWN — cold-fire warriors born of the Ashen tide.
+
+       Spawn tree  (bandits, encounter parties):
+         ashen_thrall (T1) → ashen_invoker (T2)
+
+       Garrison tree (Ashen settlements, lord armies):
+         ashen_thrall (T1) → ashen_warrior (T3) → ashen_warden (T4) → ashen_revenant (T5)
+
+       GetHighestTierTroop() fills garrisons directly with ashen_revenant.
+       ═══════════════════════════════════════════════════════════════════ -->
+
+  <NPCCharacter id="ashen_thrall"
+                name="{=ashen_thrall_name}Ashen Thrall"
+                age="25"
+                level="12"
+                culture="Culture.khuzait"
+                default_group="Infantry"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.fighter_khuzait" />
+    </face>
+    <!-- Risen peasants: ragged robes and whatever farm-tool or knife the cold
+         still lets their hands close on. Item ids verified against the native
+         looter roster (SandBox/bandits.xml) so they actually render clothed and
+         armed — the old fighting_axe/rough_tied_armor ids do not exist in this
+         build and left the spawn naked and weaponless. -->
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.peasant_pitchfork_2_t1"/>
+        <equipment slot="Head"  id="Item.pilgrim_hood"/>
+        <equipment slot="Body"  id="Item.tattered_rags"/>
+        <equipment slot="Leg"   id="Item.wrapped_shoes"/>
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.peasant_hatchet_1_t1"/>
+        <equipment slot="Item1" id="Item.throwing_stone"/>
+        <equipment slot="Head"  id="Item.wrapped_headcloth"/>
+        <equipment slot="Body"  id="Item.torn_bandit_clothes"/>
+        <equipment slot="Leg"   id="Item.wrapped_shoes"/>
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0"  id="Item.seax"/>
+        <equipment slot="Head"   id="Item.pilgrim_hood"/>
+        <equipment slot="Body"   id="Item.bandit_envelope_dress_v1"/>
+        <equipment slot="Leg"    id="Item.leather_shoes"/>
+        <equipment slot="Gloves" id="Item.armwraps"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="50"/>
+      <skill id="OneHanded"  value="60"/>
+      <skill id="TwoHanded"  value="30"/>
+      <skill id="Polearm"    value="40"/>
+    </skills>
+    <upgrade_targets>
+      <upgrade_target id="NPCCharacter.ashen_invoker"/>
+      <upgrade_target id="NPCCharacter.ashen_warrior"/>
+    </upgrade_targets>
+  </NPCCharacter>
+
+  <NPCCharacter id="ashen_invoker"
+                name="{=ashen_invoker_name}Ashen Invoker"
+                age="25"
+                level="22"
+                culture="Culture.khuzait"
+                default_group="Infantry"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.fighter_khuzait" />
+    </face>
+    <!-- The cold-caller: hooded and robed, a knife or sickle for when the fire
+         fails. Its reach is the ashen cold it channels, not its blade. -->
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0"  id="Item.seax"/>
+        <equipment slot="Head"   id="Item.pilgrim_hood"/>
+        <equipment slot="Body"   id="Item.bandit_envelope_dress_v2"/>
+        <equipment slot="Leg"    id="Item.wrapped_shoes"/>
+        <equipment slot="Gloves" id="Item.armwraps"/>
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.peasant_sickle_1_t1"/>
+        <equipment slot="Item1" id="Item.throwing_stone"/>
+        <equipment slot="Head"  id="Item.pilgrim_hood"/>
+        <equipment slot="Body"  id="Item.tattered_rags"/>
+        <equipment slot="Leg"   id="Item.leather_shoes"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="70"/>
+      <skill id="OneHanded"  value="90"/>
+      <skill id="TwoHanded"  value="50"/>
+      <skill id="Throwing"   value="40"/>
+    </skills>
+    <upgrade_targets>
+      <upgrade_target id="NPCCharacter.ashen_warrior"/>
+    </upgrade_targets>
+  </NPCCharacter>
+
+  <NPCCharacter id="ashen_warrior"
+                name="{=ashen_warrior_name}Ashen Warrior"
+                age="25"
+                level="20"
+                culture="Culture.khuzait"
+                default_group="Infantry"
+                occupation="Soldier"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.fighter_khuzait" />
+    </face>
+    <!-- The dead that still remember how to hold a line: robed over a padded
+         gambeson, a looted axe or falchion and a battered round shield. -->
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.battania_axe_1_t2"/>
+        <equipment slot="Item1" id="Item.leather_round_shield"/>
+        <equipment slot="Head"  id="Item.wrapped_headcloth"/>
+        <equipment slot="Body"  id="Item.torn_bandit_clothes"/>
+        <equipment slot="Leg"   id="Item.wrapped_shoes"/>
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.falchion_sword_t2"/>
+        <equipment slot="Item1" id="Item.throwing_stone"/>
+        <equipment slot="Head"  id="Item.pilgrim_hood"/>
+        <equipment slot="Body"  id="Item.bandit_gambeson"/>
+        <equipment slot="Leg"   id="Item.leather_shoes"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="70"/>
+      <skill id="OneHanded"  value="80"/>
+      <skill id="TwoHanded"  value="50"/>
+      <skill id="Throwing"   value="45"/>
+    </skills>
+    <upgrade_targets>
+      <upgrade_target id="NPCCharacter.ashen_warden"/>
+    </upgrade_targets>
+  </NPCCharacter>
+
+  <NPCCharacter id="ashen_warden"
+                name="{=ashen_warden_name}Ashen Warden"
+                age="25"
+                level="24"
+                culture="Culture.khuzait"
+                default_group="Infantry"
+                occupation="Soldier"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.fighter_khuzait_veteran" />
+    </face>
+    <!-- Wardens: heavier robes over a gambeson, a mace or bearded axe and a
+         strapped shield. The strongest of the common dead. -->
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.battania_mace_1_t2"/>
+        <equipment slot="Item1" id="Item.strapped_round_shield"/>
+        <equipment slot="Head"  id="Item.wrapped_headcloth"/>
+        <equipment slot="Body"  id="Item.bandit_gambeson"/>
+        <equipment slot="Leg"   id="Item.leather_shoes"/>
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0"  id="Item.bearded_axe_t3"/>
+        <equipment slot="Head"   id="Item.pilgrim_hood"/>
+        <equipment slot="Body"   id="Item.torn_bandit_clothes"/>
+        <equipment slot="Leg"    id="Item.wrapped_shoes"/>
+        <equipment slot="Gloves" id="Item.armwraps"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="80"/>
+      <skill id="OneHanded"  value="100"/>
+      <skill id="TwoHanded"  value="70"/>
+      <skill id="Throwing"   value="55"/>
+    </skills>
+    <upgrade_targets>
+      <upgrade_target id="NPCCharacter.ashen_revenant"/>
+    </upgrade_targets>
+  </NPCCharacter>
+
+  <NPCCharacter id="ashen_revenant"
+                name="{=ashen_revenant_name}Ashen Revenant"
+                age="25"
+                level="28"
+                culture="Culture.khuzait"
+                default_group="Infantry"
+                occupation="Soldier"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.fighter_khuzait_veteran" />
+    </face>
+    <!-- Revenants: the old and the deep-frozen, still bearing looted steel over
+         their grave-robes — a bearded axe or broad falchion behind a round shield. -->
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0"  id="Item.bearded_axe_t3"/>
+        <equipment slot="Item1"  id="Item.leather_round_shield"/>
+        <equipment slot="Head"   id="Item.wrapped_headcloth"/>
+        <equipment slot="Body"   id="Item.bandit_gambeson"/>
+        <equipment slot="Leg"    id="Item.leather_shoes"/>
+        <equipment slot="Gloves" id="Item.armwraps"/>
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.broad_falchion_sword_t3"/>
+        <equipment slot="Item1" id="Item.throwing_stone"/>
+        <equipment slot="Head"  id="Item.pilgrim_hood"/>
+        <equipment slot="Body"  id="Item.torn_bandit_clothes"/>
+        <equipment slot="Leg"   id="Item.leather_shoes"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="90"/>
+      <skill id="OneHanded"  value="120"/>
+      <skill id="TwoHanded"  value="90"/>
+      <skill id="Throwing"   value="70"/>
+    </skills>
+  </NPCCharacter>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       WANDERING CIRCLE — nomadic seers who carry the Inner Fire as
+       ritual wisdom rather than weapon.  Found among steppe and desert
+       bandit parties renamed to "Wandering Circle".
+       acolyte (T1) → druid (T2) → shaman (T3, elite)
+       ═══════════════════════════════════════════════════════════════════ -->
+
+  <NPCCharacter id="circle_acolyte"
+                name="{=circle_acolyte_name}Acolyte"
+                age="25"
+                level="9"
+                culture="Culture.battania"
+                default_group="Ranged"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.fighter_battania" />
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.wrapped_stick"/>
+        <equipment slot="Item2" id="Item.stone"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.leather_coat"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.hand_axe"/>
+        <equipment slot="Item2" id="Item.stone"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.rough_tied_armor"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="35"/>
+      <skill id="OneHanded"  value="30"/>
+      <skill id="Throwing"   value="40"/>
+    </skills>
+    <upgrade_targets>
+      <upgrade_target id="NPCCharacter.circle_druid"/>
+    </upgrade_targets>
+  </NPCCharacter>
+
+  <NPCCharacter id="circle_druid"
+                name="{=circle_druid_name}Druid"
+                age="25"
+                level="19"
+                culture="Culture.battania"
+                default_group="Ranged"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.fighter_battania" />
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.javelin"/>
+        <equipment slot="Item1" id="Item.javelin"/>
+        <equipment slot="Item2" id="Item.short_sword"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.rough_tied_armor"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.javelin"/>
+        <equipment slot="Item1" id="Item.javelin"/>
+        <equipment slot="Item2" id="Item.hand_axe"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.leather_coat"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="55"/>
+      <skill id="OneHanded"  value="50"/>
+      <skill id="Throwing"   value="90"/>
+    </skills>
+    <upgrade_targets>
+      <upgrade_target id="NPCCharacter.circle_shaman"/>
+    </upgrade_targets>
+  </NPCCharacter>
+
+  <NPCCharacter id="circle_shaman"
+                name="{=circle_shaman_name}Shaman"
+                age="25"
+                level="29"
+                culture="Culture.battania"
+                default_group="Ranged"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.fighter_battania_veteran" />
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.javelin"/>
+        <equipment slot="Item1" id="Item.javelin"/>
+        <equipment slot="Item2" id="Item.javelin"/>
+        <equipment slot="Item3" id="Item.fighting_axe"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.bandit_armor"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.javelin"/>
+        <equipment slot="Item1" id="Item.javelin"/>
+        <equipment slot="Item2" id="Item.javelin"/>
+        <equipment slot="Item3" id="Item.short_sword"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.rough_tied_armor"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="75"/>
+      <skill id="OneHanded"  value="65"/>
+      <skill id="Throwing"   value="130"/>
+    </skills>
+  </NPCCharacter>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       PRIESTS — dedicated miracle-casters. Detected by the Miracle battle
+       AI through the word "Priest" in the name (see MiracleBattleAI).
+         • Priest of the Flame — Grace miracles (golden light).
+         • Ashen Priest        — Cold miracles (blue cold).
+       Garrisoned into Sanctuary / Ashen towns by PriestTroops.WeeklySeed.
+       ═══════════════════════════════════════════════════════════════════ -->
+
+  <NPCCharacter id="flame_priest"
+                name="{=flame_priest_name}Priest of the Flame"
+                age="35"
+                level="20"
+                culture="Culture.empire"
+                default_group="Infantry"
+                occupation="Soldier"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.fighter_empire_veteran" />
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.short_sword"/>
+        <equipment slot="Item1" id="Item.wooden_round_shield"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.leather_coat"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="60"/>
+      <skill id="OneHanded"  value="80"/>
+      <skill id="Polearm"    value="40"/>
+    </skills>
+  </NPCCharacter>
+
+  <NPCCharacter id="ashen_priest"
+                name="{=ashen_priest_name}Ashen Priest"
+                age="35"
+                level="20"
+                culture="Culture.khuzait"
+                default_group="Infantry"
+                occupation="Soldier"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <face>
+      <face_key_template value="BodyProperty.fighter_khuzait_veteran" />
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.short_sword"/>
+        <equipment slot="Item1" id="Item.wicker_shield"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.rough_tied_armor"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="60"/>
+      <skill id="OneHanded"  value="80"/>
+      <skill id="Polearm"    value="40"/>
+    </skills>
+  </NPCCharacter>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       THE KINDLED — an elemental being. A bare, weaponless humanoid the land
+       wakes where raw magic pools. ElementalBeings wreathes it in its element
+       (fire / water / stone / storm), drives its weakness, and forces it to
+       charge; it carries no steel and throws no stones. Seeded into wild bands
+       (ElementalWildsBehavior) and summoned through ElementalFactory. Body key
+       is fixed (min==max) so every Kindled shares one bare, uniform shape
+       rather than looking like an individual person.
+
+       The body key must be a FULL, VALID body-properties key (~128 hex chars) —
+       the one below is the base game's adult "BodyProperty.looter" min key. A
+       short/truncated key (e.g. "0000000000000000") fails to parse and the body
+       falls back to BodyProperties.Default, whose age is 0 — so every Kindled
+       spawned as a NEWBORN/baby-scaled model. Keep the min==max age solidly
+       adult too.
+
+       CULTURE MUST BE "Culture.looters" (plural). The base game's bandit culture
+       id is "looters"; "Culture.looter" (singular) does NOT resolve, and an
+       unresolved culture is a placeholder with a null Name. When the player
+       catches a heroless wild band, the engine opens the ordinary caught-party
+       conversation (silenced to "..." by ElementalDialogue) and its very first
+       line does string.Concat(... character.Culture ...), which calls
+       CultureObject.ToString() → Name.ToString() → NRE, hard-crashing the game
+       (ConversationManager.StartNew). This is why the Kindled crashed when it
+       became its own troop but worked while the band was made of real looters
+       (the real "looter" troop is culture "looters", valid). The same typo is in
+       the Fire Worshipper troops below — any heroless band of them crashes the
+       same way. It only bites HEROLESS parties: a hero leader is the conversation
+       partner instead, so its (valid) culture is used.
+
+       Equipment stays a single drab, weaponless garment: a conversable troop
+       should carry a body, and the battle factory already guards a null
+       FirstBattleEquipment with `FirstBattleEquipment ?? Equipment`.
+       ═══════════════════════════════════════════════════════════════════ -->
+
+  <NPCCharacter id="elemental_being"
+                name="{=elemental_being_name}Elemental"
+                age="30"
+                level="30"
+                culture="Culture.looters"
+                default_group="Infantry"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="true">
+    <face>
+      <BodyPropertiesMin version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMax version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+    </face>
+    <Equipments>
+      <!-- Weaponless by design; a plain garment only, so the body renders. -->
+      <EquipmentRoster>
+        <equipment slot="Body" id="Item.rough_tied_armor"/>
+        <equipment slot="Leg"  id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="150"/>
+      <skill id="OneHanded"  value="80"/>
+    </skills>
+  </NPCCharacter>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SACRED-KINDLED — six kind-specific twins of "elemental_being" above,
+       crafted at a Forest Clans sacred site and fielded as real, persistent
+       army troops (unlike the mission-only Kindled the factory spawns).
+       Roster entries carry no per-agent metadata, so the KIND must be known
+       from the troop id alone — hence one CharacterObject per ElementalKind
+       rather than a single generic troop. ElementalBeings.RegisterSacredKindled
+       (called from OnAgentBuild) maps id → ElementalKind and registers the
+       spawned agent for the same aura/weakness/self-cast behaviour as any
+       other Kindled. Same body key, culture and equipment as elemental_being
+       — see the gotcha notes above (adult body key; Culture.looters plural).
+       ═══════════════════════════════════════════════════════════════════ -->
+
+  <NPCCharacter id="sacred_kindled_stone"
+                name="{=sacred_kindled_stone_name}Kindled of Stone"
+                age="30"
+                level="30"
+                culture="Culture.looters"
+                default_group="Infantry"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="true">
+    <face>
+      <BodyPropertiesMin version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMax version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Body" id="Item.rough_tied_armor"/>
+        <equipment slot="Leg"  id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="150"/>
+      <skill id="OneHanded"  value="80"/>
+    </skills>
+  </NPCCharacter>
+
+  <NPCCharacter id="sacred_kindled_frost"
+                name="{=sacred_kindled_frost_name}Kindled of Frost"
+                age="30"
+                level="30"
+                culture="Culture.looters"
+                default_group="Infantry"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="true">
+    <face>
+      <BodyPropertiesMin version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMax version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Body" id="Item.rough_tied_armor"/>
+        <equipment slot="Leg"  id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="150"/>
+      <skill id="OneHanded"  value="80"/>
+    </skills>
+  </NPCCharacter>
+
+  <NPCCharacter id="sacred_kindled_sand"
+                name="{=sacred_kindled_sand_name}Kindled of Sand"
+                age="30"
+                level="30"
+                culture="Culture.looters"
+                default_group="Infantry"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="true">
+    <face>
+      <BodyPropertiesMin version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMax version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Body" id="Item.rough_tied_armor"/>
+        <equipment slot="Leg"  id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="150"/>
+      <skill id="OneHanded"  value="80"/>
+    </skills>
+  </NPCCharacter>
+
+  <NPCCharacter id="sacred_kindled_flame"
+                name="{=sacred_kindled_flame_name}Kindled of Flame"
+                age="30"
+                level="30"
+                culture="Culture.looters"
+                default_group="Infantry"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="true">
+    <face>
+      <BodyPropertiesMin version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMax version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Body" id="Item.rough_tied_armor"/>
+        <equipment slot="Leg"  id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="150"/>
+      <skill id="OneHanded"  value="80"/>
+    </skills>
+  </NPCCharacter>
+
+  <NPCCharacter id="sacred_kindled_tide"
+                name="{=sacred_kindled_tide_name}Kindled of the Tide"
+                age="30"
+                level="30"
+                culture="Culture.looters"
+                default_group="Infantry"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="true">
+    <face>
+      <BodyPropertiesMin version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMax version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Body" id="Item.rough_tied_armor"/>
+        <equipment slot="Leg"  id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="150"/>
+      <skill id="OneHanded"  value="80"/>
+    </skills>
+  </NPCCharacter>
+
+  <NPCCharacter id="sacred_kindled_gale"
+                name="{=sacred_kindled_gale_name}Kindled of the Gale"
+                age="30"
+                level="30"
+                culture="Culture.looters"
+                default_group="Infantry"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="true">
+    <face>
+      <BodyPropertiesMin version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMax version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Body" id="Item.rough_tied_armor"/>
+        <equipment slot="Leg"  id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="150"/>
+      <skill id="OneHanded"  value="80"/>
+    </skills>
+  </NPCCharacter>
+
+</NPCCharacters>
+

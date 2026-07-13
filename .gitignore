@@ -1,0 +1,19 @@
+# Build outputs
+src/bin/
+src/obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Rider
+.idea/
+
+# OS
+Thumbs.db
+desktop.ini
+
+# Claude memory (local only)
+.claude/
+.dotnet-home/
