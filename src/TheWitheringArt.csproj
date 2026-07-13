@@ -114,6 +114,10 @@
     <Compile Include="Economy\EconomyMath.cs"/>
     <Compile Include="Economy\ScarcityModels.cs"/>
     <Compile Include="Economy\MarketScarcityCampaignBehavior.cs"/>
+    <Compile Include="Units\UnitsMath.cs"/>
+    <Compile Include="Units\PromotionToll.cs"/>
+    <Compile Include="Units\PromotionCampaignBehavior.cs"/>
+    <Compile Include="Units\RecruitToll.cs"/>
     <Compile Include="MagicSystem.cs"/>
     <Compile Include="Magic\ElementMagicMath.cs"/>
     <Compile Include="Magic\ElementUltimateMath.cs"/>

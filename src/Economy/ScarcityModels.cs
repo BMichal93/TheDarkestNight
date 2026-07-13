@@ -57,6 +57,11 @@ namespace AshAndEmber
         }
     }
 
+    // Phase 3 (Requirement 4) rides this SAME model class rather than a second
+    // AddModel<PartyTroopUpgradeModel> registration — the campaign starter keeps
+    // one model per interface, so a second implementation would silently
+    // replace this one and drop the gold-scarcity factor above. See
+    // Units/PromotionToll.cs for the horse+armour+weapon check this delegates to.
     internal sealed class EconomyTroopUpgradeModel : DefaultPartyTroopUpgradeModel
     {
         public override ExplainedNumber GetGoldCostForUpgrade(PartyBase party, CharacterObject characterObject, CharacterObject upgradeTarget)
@@ -69,6 +74,23 @@ namespace AshAndEmber
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             return result;
+        }
+
+        // Requirement 4 — tier 4/5 promotion needs a horse, an armour piece, and
+        // a good-price weapon in the party's saddlebags before the upgrade is
+        // even offered. `characterObject` here is the troop being upgraded FROM,
+        // so the toll applies if ANY of its upgrade targets lands tier 4+.
+        public override bool DoesPartyHaveRequiredItemsForUpgrade(PartyBase party, CharacterObject characterObject)
+        {
+            bool baseResult = base.DoesPartyHaveRequiredItemsForUpgrade(party, characterObject);
+            if (!baseResult) return false;
+            try
+            {
+                if (PromotionToll.AnyUpgradeTargetNeedsToll(characterObject))
+                    return PromotionToll.HasPromotionToll(party);
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            return baseResult;
         }
     }
 

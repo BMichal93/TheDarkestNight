@@ -89,6 +89,8 @@ namespace AshAndEmber
                 campaignStarter.AddModel(new EconomyRansomModel());
                 campaignStarter.AddModel(new EconomyGarrisonModel());
                 campaignStarter.AddModel(new EconomyMilitiaModel());
+                // Phase 3 — units reflect scarcity (Requirements 4, 30b).
+                campaignStarter.AddModel(new UnitsRecruitModel());
                 campaignStarter.AddBehavior(new MagicCampaignBehavior());
                 campaignStarter.AddBehavior(new SchemeCampaignBehavior());
                 campaignStarter.AddBehavior(new SanctuaryCampaignBehavior());
@@ -105,6 +107,7 @@ namespace AshAndEmber
                 campaignStarter.AddBehavior(new ElementalWildsBehavior());
                 campaignStarter.AddBehavior(new DemonSpawnCampaignBehavior());
                 campaignStarter.AddBehavior(new MarketScarcityCampaignBehavior());
+                campaignStarter.AddBehavior(new PromotionCampaignBehavior());
                 campaignStarter.AddBehavior(new SacredSitesCampaignBehavior());
                 campaignStarter.AddBehavior(new AshenRecruitCampaignBehavior());
                 campaignStarter.AddBehavior(new TribalKingdomBehavior());
