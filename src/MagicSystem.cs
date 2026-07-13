@@ -79,6 +79,16 @@ namespace AshAndEmber
                 campaignStarter.AddModel(new ForestClansSpeedModel());
                 campaignStarter.AddModel(new ForestClansWageModel());
                 campaignStarter.AddModel(new ForestClansPartySizeModel());
+                // Phase 2 — the barter economy (Path B: gold ~10x scarcer
+                // everywhere; see EconomyMath.cs header for the full feasibility
+                // write-up on why Path A / full gold removal was rejected).
+                campaignStarter.AddModel(new EconomyWageModel());
+                campaignStarter.AddModel(new EconomyTroopUpgradeModel());
+                campaignStarter.AddModel(new EconomyBuildingModel());
+                campaignStarter.AddModel(new EconomyBattleRewardModel());
+                campaignStarter.AddModel(new EconomyRansomModel());
+                campaignStarter.AddModel(new EconomyGarrisonModel());
+                campaignStarter.AddModel(new EconomyMilitiaModel());
                 campaignStarter.AddBehavior(new MagicCampaignBehavior());
                 campaignStarter.AddBehavior(new SchemeCampaignBehavior());
                 campaignStarter.AddBehavior(new SanctuaryCampaignBehavior());
@@ -94,6 +104,7 @@ namespace AshAndEmber
                 campaignStarter.AddBehavior(new SoldierServiceCampaignBehavior());
                 campaignStarter.AddBehavior(new ElementalWildsBehavior());
                 campaignStarter.AddBehavior(new DemonSpawnCampaignBehavior());
+                campaignStarter.AddBehavior(new MarketScarcityCampaignBehavior());
                 campaignStarter.AddBehavior(new SacredSitesCampaignBehavior());
                 campaignStarter.AddBehavior(new AshenRecruitCampaignBehavior());
                 campaignStarter.AddBehavior(new TribalKingdomBehavior());
