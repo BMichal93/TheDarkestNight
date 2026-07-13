@@ -111,6 +111,12 @@
     <Compile Include="Demons\DemonFactory.cs"/>
     <Compile Include="Demons\DemonBattleBehavior.cs"/>
     <Compile Include="Demons\DemonSpawnCampaignBehavior.cs"/>
+    <Compile Include="Spellbook\SpellbookCatalog.cs"/>
+    <Compile Include="Spellbook\SpellbookMath.cs"/>
+    <Compile Include="Spellbook\SpellbookEffects.cs"/>
+    <Compile Include="Spellbook\SpellburnEffects.cs"/>
+    <Compile Include="Spellbook\SpellbookInputHandler.cs"/>
+    <Compile Include="Spellbook\SpellbookCampaignBehavior.cs"/>
     <Compile Include="Economy\EconomyMath.cs"/>
     <Compile Include="Economy\ScarcityModels.cs"/>
     <Compile Include="Economy\MarketScarcityCampaignBehavior.cs"/>

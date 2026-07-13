@@ -224,8 +224,18 @@ namespace AshAndEmber
 
         // ── Campaign cast menu ────────────────────────────────────────────────
 
+        // ── Superseded by the Spellbook (Phase 4, Requirement 9 / 14) ───────────
+        // No campaign-map spells exist in this mod any more — every element's
+        // map working (ElementMapSpells) and the memory-rite that cast it
+        // (ElementSpellMinigame) are neutralized at this single choke point,
+        // rather than deleted, so the machinery stays readable and revivable.
         internal static void ShowCampaignCastMenu()
         {
+            InformationManager.DisplayMessage(new InformationMessage(
+                "The old map rites have gone quiet — only the spellbook answers now.",
+                Color.FromUint(0xFFBBAA99)));
+            return;
+#pragma warning disable CS0162 // unreachable — kept for the map-spell machinery's own sake
             if (Hero.MainHero?.IsPrisoner == true)
             {
                 InformationManager.DisplayMessage(new InformationMessage(
@@ -292,6 +302,7 @@ namespace AshAndEmber
                 },
                 null, "", false
             ), false, true);
+#pragma warning restore CS0162
         }
 
         // ── Rite talent menu (shown by Altar / Sanctuary / Crystalline Chamber) ──

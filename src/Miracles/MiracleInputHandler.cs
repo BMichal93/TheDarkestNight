@@ -61,8 +61,16 @@ namespace AshAndEmber
             _prevLUp = _prevLDown = _prevLLeft = _prevLRight = false;
         }
 
+        // ── Superseded by the Spellbook (Phase 4, Requirement 16/17) ────────────
+        // The player's Grace gesture (battle sequence + map litany) is retired in
+        // favour of the spoken formulas; miracle effect code (MiracleEffects) is
+        // untouched and unreferenced by this guard — a later system may still
+        // call it directly. Nothing NPC-facing runs through this handler.
+        public const bool PlayerCastingEnabled = false;
+
         public static void Tick(bool inMission)
         {
+            if (!PlayerCastingEnabled) return;
             if (inMission)
                 // Battle: cast directly by tracing the prayer's sequence (key combos).
                 TickSequence(inMission: true);

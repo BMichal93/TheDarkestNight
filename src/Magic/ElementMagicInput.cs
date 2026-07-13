@@ -108,8 +108,18 @@ namespace AshAndEmber
             InputSuppressed = false;
         }
 
+        // ── Superseded by the Spellbook (Phase 4, Requirement 16/17) ────────────
+        // The player's hold-and-charge element input is retired: casting now
+        // goes through SpellbookInputHandler's spoken formulas, which bind back
+        // onto ElementSpellEffects.CastAttack/CastWall exactly as this input used
+        // to. The effect code below is untouched and NPC lords (ColourLordAI)
+        // still call CastAttack/CastWall directly, bypassing this file entirely —
+        // only the PLAYER's own gesture is gated off here.
+        public const bool PlayerCastingEnabled = false;
+
         public static void Tick(bool inMission, float dt = 0f)
         {
+            if (!PlayerCastingEnabled) { InputSuppressed = false; return; }
             // Combat casting only — the map grants each element its own litany spell.
             if (!inMission) { InputSuppressed = false; return; }
             // A new battle resets the Ashen cast tally (the previous battle's count is

@@ -56,6 +56,8 @@ namespace AshAndEmber
             try { CrystalEffects.ClearBattleState();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { CrystalBattleAI.Reset();               } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { NatureEffects.ClearBattleState();      } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellbookInputHandler.ResetInputState(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellburnEffects.ClearBattleState();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Wire the Grace bank to the live Abundant Grace devotion (the bank itself
             // is kept TaleWorlds-free so it stays unit-testable — see behaviour.md).
             MiracleInventory.TalentCapBonusProvider = () =>
@@ -114,6 +116,7 @@ namespace AshAndEmber
                 campaignStarter.AddBehavior(new CreationBackstoryRework());
                 campaignStarter.AddBehavior(new GreatAwakeningCampaignBehavior());
                 campaignStarter.AddBehavior(new NorthmenStonesCampaignBehavior());
+                campaignStarter.AddBehavior(new SpellbookCampaignBehavior());
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -139,6 +142,7 @@ namespace AshAndEmber
                 try { GreatAwakeningCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { NorthmenStonesCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SandboxOnlyGate.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellbookCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
                 // player hits Save — long after the quest triggered. Audit at boot instead.
@@ -223,15 +227,23 @@ namespace AshAndEmber
                 try { NatureInputHandler.Tick(inMission: false);  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ActiveEffectManager.MapTick(dt); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
-                // Codex of the Inner Fire — Left Alt + L opens the learning menu on the map.
+                // The spell-list keybind — Left Alt + L. Requirement 17: this now
+                // opens the new Spellbook (a read-only list of every formula known)
+                // once the player has unlocked it; the old element-learning Codex
+                // still answers here too, alongside it, for a mage who has not yet
+                // spent the focus point to open the book.
                 try
                 {
-                    if (MageKnowledge.IsMage
-                        && TaleWorlds.InputSystem.Input.IsKeyDown(TaleWorlds.InputSystem.InputKey.LeftAlt)
+                    if (TaleWorlds.InputSystem.Input.IsKeyDown(TaleWorlds.InputSystem.InputKey.LeftAlt)
                         && TaleWorlds.InputSystem.Input.IsKeyPressed(TaleWorlds.InputSystem.InputKey.L)
                         && MageKnowledge._deferredInquiry == null)
                     {
-                        MageKnowledge._deferredInquiry = MagicLearning.ShowCodex;
+                        if (SpellbookCampaignBehavior.IsUnlocked)
+                            MageKnowledge._deferredInquiry = SpellbookCampaignBehavior.ShowSpellbook;
+                        else if (MageKnowledge.IsMage)
+                            MageKnowledge._deferredInquiry = MagicLearning.ShowCodex;
+                        else
+                            MageKnowledge._deferredInquiry = SpellbookCampaignBehavior.ShowSpellbook;
                     }
                 }
                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -412,7 +424,13 @@ namespace AshAndEmber
             // 4. 100 focus points.
             try { hero.HeroDeveloper.UnspentFocusPoints += 100; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
-            // 5. One of every crystal into the player party's inventory.
+            // 5. Spellbook (Requirement 26): unlock it and learn every formula.
+            //    No magical items exist yet (relics are Phase 6) — the crystal
+            //    grant below already stands in for "magical items" per the
+            //    prompt's own suggested fallback.
+            try { SpellbookCampaignBehavior.DebugUnlockAll(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
+            // 6. One of every crystal into the player party's inventory.
             try
             {
                 var roster = MobileParty.MainParty?.ItemRoster;
@@ -428,7 +446,7 @@ namespace AshAndEmber
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
             MBInformationManager.AddQuickInformation(new TaleWorlds.Localization.TextObject(
-                "[DEBUG] Granted: 100 focus points, all Dark Gifts, max Grace, all Nature talents, all crystals."));
+                "[DEBUG] Granted: 100 focus points, all Dark Gifts, max Grace, all Nature talents, all crystals, spellbook unlocked with every formula known."));
         }
     }
 
@@ -461,6 +479,8 @@ namespace AshAndEmber
             NatureEffects.MissionTick(dt);
             NatureSeerAI.MissionTick(dt);
             NatureCharge.MissionTick(dt);
+            SpellbookInputHandler.Tick(inMission: true);
+            SpellburnEffects.Tick(dt);
             ActiveEffectManager.MissionTick(dt);
             ColourLordAI.MissionTick(dt);
             SpellEffects.TickGlows(dt);
@@ -534,6 +554,8 @@ namespace AshAndEmber
             try { NatureChargeBar.Reset();                    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { NatureSeerAI.ClearCooldowns();              } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { NatureInputHandler.ResetInputState();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellbookInputHandler.ResetInputState();    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellburnEffects.ClearBattleState();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { BattleEvents.OnMissionEnd();               } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { AshenSceneTone.Reset();                    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { BattleWhispers.Reset();                    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }

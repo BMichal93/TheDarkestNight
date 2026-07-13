@@ -43,8 +43,16 @@ namespace AshAndEmber
             _prevPadUp = _prevPadDown = _prevPadLeft = _prevPadRight = false;
         }
 
+        // ── Superseded by the Spellbook (Phase 4, Requirement 16/17) ────────────
+        // The player's Living Ember gesture (battle channel + map litany) is
+        // retired in favour of the spoken formulas; NatureEffects itself is
+        // untouched — the nature discipline's NPC seers (NatureSeerAI) still
+        // call it directly and are unaffected by this guard.
+        public const bool PlayerCastingEnabled = false;
+
         public static void Tick(bool inMission, float dt = 0f)
         {
+            if (!PlayerCastingEnabled) return;
             if (!NatureKnowledge.IsAttuned) return;
             if (DarkGiftSystem.HasAnyGift) return;   // the darkness silences the living world
             // On the campaign map, casting is done through the litany window
