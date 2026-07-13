@@ -58,6 +58,7 @@ namespace AshAndEmber
             try { NatureEffects.ClearBattleState();      } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { SpellbookInputHandler.ResetInputState(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { SpellburnEffects.ClearBattleState();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RelicEffects.ClearBattleState();          } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Wire the Grace bank to the live Abundant Grace devotion (the bank itself
             // is kept TaleWorlds-free so it stays unit-testable — see behaviour.md).
             MiracleInventory.TalentCapBonusProvider = () =>
@@ -511,6 +512,7 @@ namespace AshAndEmber
             SpellEffects.TickMagicMemory(dt);
             SpellEffects.TickHaltedAgents(dt);
             SpellEffects.TickDarkGifts(dt);
+            RelicEffects.MissionTick(dt);
             SpellEffects.FlushPendingDeaths();
             BanditMageAI.MissionTick(dt);
             BattleEvents.MissionTick(dt);
@@ -563,6 +565,7 @@ namespace AshAndEmber
             try { NatureInputHandler.ResetInputState();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { SpellbookInputHandler.ResetInputState();    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { SpellburnEffects.ClearBattleState();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RelicEffects.ClearBattleState();            } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { BattleEvents.OnMissionEnd();               } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { AshenSceneTone.Reset();                    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { BattleWhispers.Reset();                    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -623,6 +626,9 @@ namespace AshAndEmber
             try { SpellEffects.ApplyDarkGiftDefenseEffects(affectedAgent, affectorAgent, blow.InflictedDamage, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { MiracleEffects.OnAgentHit(affectedAgent, affectorAgent, blow.InflictedDamage); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { CrystalEffects.OnCrystalHit(affectedAgent, affectorAgent, affectorWeapon, blow.InflictedDamage); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // Relics: Dark-Gift-sourced relic on-hit procs (weaker, per-item).
+            try { RelicEffects.OnAgentHitAttack(affectedAgent, affectorAgent, blow.InflictedDamage, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RelicEffects.OnAgentHitDefense(affectedAgent, affectorAgent, blow.InflictedDamage, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Nature resistance (reserved for future barrier talents): OnAgentHit fires after
             // damage is applied; heal back the mitigated portion against real weapon hits.
             try
@@ -648,6 +654,8 @@ namespace AshAndEmber
                 if (agentState != AgentState.Killed) return;
                 // Blood Pact gift: heal killer on kill (player and gifted NPC lords)
                 try { SpellEffects.ApplyDarkGiftKillEffects(affectedAgent, affectorAgent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // MartyrsRefusal relic: weaker per-item BloodPact.
+                try { RelicEffects.OnAgentKill(affectedAgent, affectorAgent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Ember passive (legacy): a kill sometimes repays the fire's debt
                 if (affectorAgent == Agent.Main && MageKnowledge.IsMage && TalentSystem.Has(TalentId.Ember))
                     if (_rng.NextDouble() < 0.10)
