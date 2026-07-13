@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Module>
-    <Name value="Ash and Ember"/>
-    <Id value="AshAndEmber"/>
-    <Version value="v0.48.0.0"/>
+    <Name value="The Darkest Night"/>
+    <Id value="TheDarkestNight"/>
+    <Version value="v0.1.0.0"/>
     <SingleplayerModule value="true"/>
     <MultiplayerModule value="false"/>
     <DependedModules>

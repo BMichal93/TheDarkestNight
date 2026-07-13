@@ -65,21 +65,23 @@ namespace AshAndEmber
         // The opening lore, split into paragraphs.
         private static readonly string[] Paragraphs =
         {
-            "First, there was the Fire. The power that breathed life into the world, raised mountains, stilled seas. " +
-            "Then came humans. They harnessed the fire and built a great empire upon it. With the fire, humans built great cities, raised armies and brought order to the world.",
+            "Calradia had a thousand years of history, and then it had one night. " +
+            "No omen announced it. No horn was blown in warning. The sky simply tore, and what came through did not stop coming.",
 
-            "The order lasted a thousand years under the banner of the Empire and the aegis of the Temple. " +
-            "But there were always those who would take the Fire for themselves.",
+            "They call it the Long Night now, though it was one night only — the night the dead world's dead things " +
+            "climbed out from under everything and found the living waiting, unarmed, in their beds.",
 
-            "In the East, sorcerer-kings raised an army to ride against the first empire. They brought fire and blood. " +
-            "In remote, heavily guarded caves, greedy lords mine crystals to harness the Fire and use it for their own ends. " +
-            "In the South, masters of the desert sacrifice dozens of lives at the altars of the dark forces, pleading for their favour, blind to the danger.",
+            "By morning the great armies were ash and the great cities were tombs. The Emperor's word meant nothing to " +
+            "claws that do not negotiate. Gold meant nothing to things that do not trade. Only walls held, where walls were high enough, " +
+            "and only faith held, where faith was hard enough.",
 
-            "Now the fire fades. Ancient forces raise their heads in the north. " +
-            "The Ashen — the mages who defied death — are gathering their strength.",
+            "So the survivors built their world small. Behind stone, behind ward-fire, behind whatever charm or prayer or " +
+            "desperate bargain kept the dark on the other side of the gate until sunrise. Every dusk they count their walls. " +
+            "Every dawn they count their dead.",
 
-            "The Emperor is dead, and three claimants reach for the shattered crown. When the time comes, nothing will stand against the grey march from the wastelands. " +
-            "In the last days of the Empire, among the ruins, you begin your journey. Where will it lead you, O Firelord?",
+            "The demons have not stopped coming. They will not stop coming. Somewhere out past the torchlight, in the wastes " +
+            "and the ruined halls of the old world, something is still gathering itself for a worse night than this one. " +
+            "You were born into what is left of Calradia. Make yourself useful to it, or be one more name the wards failed to keep.",
         };
 
         // Per-paragraph timing (seconds).

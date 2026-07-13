@@ -98,7 +98,7 @@ namespace AshAndEmber
             _hostScreen = ScreenManager.TopScreen;
             if (_hostScreen == null) return;
 
-            _vm    = new AshEmberSplashVM { Subtitle = "Kindle the Inner Fire" };
+            _vm    = new AshEmberSplashVM { Subtitle = "Bar the gate. Mind the wards. Wait for dawn." };
             _layer = new GauntletLayer("AshEmberLoading", 6000, false);  // above the loading window
             _movie = _layer.LoadMovie("AshEmberSplash", _vm);
             _hostScreen.AddLayer(_layer);

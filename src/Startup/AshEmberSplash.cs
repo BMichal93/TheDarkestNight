@@ -24,8 +24,8 @@ namespace AshAndEmber
     // The bound data for the splash prefab. Plain strings — no behaviour.
     public class AshEmberSplashVM : ViewModel
     {
-        private string _title    = "ASH & EMBER";
-        private string _subtitle = "Kindle the Inner Fire";
+        private string _title    = "THE DARKEST NIGHT";
+        private string _subtitle = "Bar the gate. Mind the wards. Wait for dawn.";
 
         [DataSourceProperty]
         public string Title
