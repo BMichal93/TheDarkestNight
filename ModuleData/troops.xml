@@ -782,6 +782,139 @@
     </skills>
   </NPCCharacter>
 
+  <!-- ═══════════════════════════════════════════════════════════════════
+       THE DARKEST NIGHT — demon troops (src/Demons/).
+       Same construction as "elemental_being" above: no custom mesh/texture
+       exists anywhere in this project. A demon is an ordinary human body
+       (or, for the Hellsteed, an ordinary horse under a rider) re-dressed in
+       existing crude gear and re-tinted at runtime by DemonVisuals (bone-
+       bound smoke/ember particles, a follower light, a red-black contour) —
+       the exact technique ElementalVisuals proved for the Kindled. The XML
+       below only supplies the "before" body: a plain, torn, weaponed human
+       (or horse) for the runtime treatment to wreathe.
+
+       CULTURE MUST BE "Culture.looters" (plural) — see the elemental_being
+       comment above for the heroless-party conversation crash this avoids.
+       Demon parties are always heroless, so this is mandatory here too.
+
+       Item ids used below are verified against the shipped game data
+       (SandBoxCore/ModuleData/items/*.xml):
+         Item.rough_tied_armor, Item.strapped_leather_boots — already used
+           by elemental_being above.
+         Item.torn_bandit_clothes — SandBoxCore items/body_armors.xml.
+         Item.cleaver_sword_t3    — SandBoxCore items/weapons.xml (a crude
+           butcher's cleaver — reads as a claw-like weapon at demon scale).
+         Item.old_horse           — SandBoxCore items/horses_and_others.xml,
+           monster="Monster.horse" — the literal horse skeleton the Hellsteed
+           rides; is_mountable="true".
+       ═══════════════════════════════════════════════════════════════════ -->
+
+  <NPCCharacter id="demon_fiend"
+                name="{=demon_fiend_name}Fiend"
+                age="30"
+                level="18"
+                culture="Culture.looters"
+                default_group="Infantry"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="true">
+    <face>
+      <BodyPropertiesMin version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMax version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Body" id="Item.torn_bandit_clothes"/>
+        <equipment slot="Leg"  id="Item.strapped_leather_boots"/>
+        <equipment slot="Item0" id="Item.cleaver_sword_t3"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="140"/>
+      <skill id="OneHanded"  value="110"/>
+    </skills>
+  </NPCCharacter>
+
+  <NPCCharacter id="demon_stalker"
+                name="{=demon_stalker_name}Stalker"
+                age="30"
+                level="27"
+                culture="Culture.looters"
+                default_group="Infantry"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="true">
+    <face>
+      <BodyPropertiesMin version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMax version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Body" id="Item.torn_bandit_clothes"/>
+        <equipment slot="Leg"  id="Item.strapped_leather_boots"/>
+        <equipment slot="Item0" id="Item.cleaver_sword_t3"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="170"/>
+      <skill id="OneHanded"  value="130"/>
+    </skills>
+  </NPCCharacter>
+
+  <NPCCharacter id="demon_ravager"
+                name="{=demon_ravager_name}Ravager"
+                age="30"
+                level="36"
+                culture="Culture.looters"
+                default_group="Infantry"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="true">
+    <face>
+      <BodyPropertiesMin version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMax version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Body" id="Item.torn_bandit_clothes"/>
+        <equipment slot="Leg"  id="Item.strapped_leather_boots"/>
+        <equipment slot="Item0" id="Item.cleaver_sword_t3"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="200"/>
+      <skill id="OneHanded"  value="150"/>
+    </skills>
+  </NPCCharacter>
+
+  <NPCCharacter id="demon_hellsteed"
+                name="{=demon_hellsteed_name}Hellsteed"
+                age="30"
+                level="24"
+                culture="Culture.looters"
+                default_group="Cavalry"
+                occupation="Bandit"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="true">
+    <face>
+      <BodyPropertiesMin version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMax version="4" age="30.0" weight="0.5" build="0.7" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Body" id="Item.torn_bandit_clothes"/>
+        <equipment slot="Leg"  id="Item.strapped_leather_boots"/>
+        <equipment slot="Item0" id="Item.cleaver_sword_t3"/>
+        <equipment slot="Horse" id="Item.old_horse"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="150"/>
+      <skill id="OneHanded"  value="120"/>
+      <skill id="Riding"     value="150"/>
+    </skills>
+  </NPCCharacter>
+
   <NPCCharacter id="sacred_kindled_gale"
                 name="{=sacred_kindled_gale_name}Kindled of the Gale"
                 age="30"

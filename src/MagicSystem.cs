@@ -49,6 +49,7 @@ namespace AshAndEmber
             try { ElementSpellEffects.ClearBattleState();} catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { ElementUltimates.ClearBattleState();   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { ElementalBeings.ClearBattleState();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { DemonBattleBehavior.ClearBattleState(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { MiracleEffects.ClearBattleState();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { MiracleBattleAI.Reset();               } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { MiracleInputHandler.ResetInputState(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -92,6 +93,7 @@ namespace AshAndEmber
                 campaignStarter.AddBehavior(new ClanOrdersCampaignBehavior());
                 campaignStarter.AddBehavior(new SoldierServiceCampaignBehavior());
                 campaignStarter.AddBehavior(new ElementalWildsBehavior());
+                campaignStarter.AddBehavior(new DemonSpawnCampaignBehavior());
                 campaignStarter.AddBehavior(new SacredSitesCampaignBehavior());
                 campaignStarter.AddBehavior(new AshenRecruitCampaignBehavior());
                 campaignStarter.AddBehavior(new TribalKingdomBehavior());
@@ -118,6 +120,7 @@ namespace AshAndEmber
                 try { ClanOrdersCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SoldierServiceCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalWildsBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { DemonSpawnCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { BattleEvents.ResetForNewGame();           } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { GreatAwakeningCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { NorthmenStonesCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -429,6 +432,7 @@ namespace AshAndEmber
             ElementSpellEffects.Tick(dt);
             ElementUltimates.Tick(dt);
             ElementalBeings.TickAuras(dt);
+            DemonBattleBehavior.TickAuras(dt);
             CrystalEffects.MissionTick(dt);
             CrystalBattleAI.MissionTick(dt);
             MiracleInputHandler.Tick(inMission: true);
@@ -505,6 +509,7 @@ namespace AshAndEmber
             try { ElementSpellEffects.ClearBattleState();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { ElementUltimates.ClearBattleState();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { ElementalBeings.ClearBattleState();          } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { DemonBattleBehavior.ClearBattleState();      } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { NatureEffects.ClearBattleState();           } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { NatureCharge.ClearForMission();             } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { NatureChargeBar.Reset();                    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -534,6 +539,11 @@ namespace AshAndEmber
             // the same aura/weakness/self-cast behaviour by troop id. No-op for
             // every other troop.
             try { ElementalBeings.RegisterSacredKindled(agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // The Night Tide: identifies a troops.xml demon id (Fiend/Stalker/
+            // Ravager/Hellsteed) the moment its Agent is built, wreathes it in
+            // DemonVisuals, scales its health for its region, and forces it to
+            // charge. No-op for every other troop.
+            try { DemonBattleBehavior.OnAgentBuild(agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // The Great Awakening: the one Great Other champion, the moment its
             // own party's mission builds it. No-op unless this mission actually
             // involves that party (GreatOtherParty.OnMapEventStarted).
