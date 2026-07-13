@@ -3508,5 +3508,101 @@ namespace AshAndEmber.Tests
             Assert.GreaterOrEqual(TowerMath.MinTransmuteTier, 2, "Requirement: tier-2+ troops only.");
             Assert.Greater(TowerMath.LordGrantedSpellCount, 0);
         }
+
+        // ── HiveMath tests (Phase 7, Faction C) ────────────────────────────────
+
+        [Test]
+        public void HiveMath_IsStartingTownId_MatchesOnlyMarunathAndCarBanseth()
+        {
+            Assert.IsTrue(HiveMath.IsStartingTownId("town_B1"));  // Marunath
+            Assert.IsTrue(HiveMath.IsStartingTownId("town_B3"));  // Car Banseth
+            Assert.IsFalse(HiveMath.IsStartingTownId("town_B2")); // Dunglanys
+            Assert.IsFalse(HiveMath.IsStartingTownId("town_B4")); // Seonon
+            Assert.IsFalse(HiveMath.IsStartingTownId("town_B5")); // Pen Cannoc
+            Assert.IsFalse(HiveMath.IsStartingTownId(null));
+            Assert.IsFalse(HiveMath.IsStartingTownId(""));
+        }
+
+        [Test]
+        public void HiveMath_IsStartingTownId_IsCaseInsensitive()
+        {
+            Assert.IsTrue(HiveMath.IsStartingTownId("TOWN_b1"));
+            Assert.IsTrue(HiveMath.IsStartingTownId("Town_B3"));
+        }
+
+        [Test]
+        public void HiveMath_Tunables_ArePositiveAndSane()
+        {
+            Assert.AreEqual(2, HiveMath.StartingTownIds.Length, "The Hive should keep exactly two starting towns.");
+            Assert.Greater(HiveMath.DoseIntervalDays, 0f);
+            Assert.Greater(HiveMath.DoseGraceDays, 0f);
+            Assert.AreEqual(HiveMath.DoseIntervalDays + HiveMath.DoseGraceDays, HiveMath.DoseWindowDays, 0.001f);
+            Assert.Greater(HiveMath.FreeRecruitPerClick, 0);
+            Assert.Greater(HiveMath.DownsideCheckIntervalSeconds, 0f);
+            Assert.Greater(HiveMath.ColourInversionChance, 0f);
+            Assert.Less(HiveMath.ColourInversionChance, 1f);
+            Assert.Greater(HiveMath.WillSuppressionChance, 0f);
+            Assert.Less(HiveMath.WillSuppressionChance, 1f);
+            Assert.Greater(HiveMath.ColourInversionDurationSeconds, 0f);
+        }
+
+        [Test]
+        public void HiveMath_IsBondBroken_FalseWithinWindow_TrueBeyondIt()
+        {
+            Assert.IsFalse(HiveMath.IsBondBroken(0f));
+            Assert.IsFalse(HiveMath.IsBondBroken(HiveMath.DoseIntervalDays)); // due, but still within the window
+            Assert.IsFalse(HiveMath.IsBondBroken(HiveMath.DoseWindowDays));  // exactly at the edge — still holds
+            Assert.IsTrue(HiveMath.IsBondBroken(HiveMath.DoseWindowDays + 0.01f));
+            Assert.IsTrue(HiveMath.IsBondBroken(999f));
+        }
+
+        [Test]
+        public void HiveMath_DaysUntilBondBreaks_CountsDownAndFloorsAtZero()
+        {
+            Assert.AreEqual(HiveMath.DoseWindowDays, HiveMath.DaysUntilBondBreaks(0f), 0.001f);
+            Assert.AreEqual(0f, HiveMath.DaysUntilBondBreaks(HiveMath.DoseWindowDays), 0.001f);
+            Assert.AreEqual(0f, HiveMath.DaysUntilBondBreaks(HiveMath.DoseWindowDays + 50f), 0.001f);
+            Assert.Greater(HiveMath.DaysUntilBondBreaks(1f), HiveMath.DaysUntilBondBreaks(HiveMath.DoseIntervalDays));
+        }
+
+        [Test]
+        public void HiveMath_RollColourInversion_RespectsBoundary()
+        {
+            Assert.IsTrue(HiveMath.RollColourInversion(0.0));
+            Assert.IsFalse(HiveMath.RollColourInversion(HiveMath.ColourInversionChance));
+            Assert.IsFalse(HiveMath.RollColourInversion(0.999));
+        }
+
+        [Test]
+        public void HiveMath_RollWillSuppression_RespectsBoundary()
+        {
+            Assert.IsTrue(HiveMath.RollWillSuppression(0.0));
+            Assert.IsFalse(HiveMath.RollWillSuppression(HiveMath.WillSuppressionChance));
+            Assert.IsFalse(HiveMath.RollWillSuppression(0.999));
+        }
+
+        [Test]
+        public void HiveMath_PickSuccessorIndex_StaysInBoundsAndHandlesNegativeDraws()
+        {
+            for (int draw = -20; draw <= 20; draw++)
+            {
+                int idx = HiveMath.PickSuccessorIndex(5, draw);
+                Assert.GreaterOrEqual(idx, 0);
+                Assert.Less(idx, 5);
+            }
+        }
+
+        [Test]
+        public void HiveMath_PickSuccessorIndex_NoCandidatesReturnsNegativeOne()
+        {
+            Assert.AreEqual(-1, HiveMath.PickSuccessorIndex(0, 5));
+            Assert.AreEqual(-1, HiveMath.PickSuccessorIndex(-1, 5));
+        }
+
+        [Test]
+        public void HiveMath_PickSuccessorIndex_IsDeterministicForSameInputs()
+        {
+            Assert.AreEqual(HiveMath.PickSuccessorIndex(7, 100), HiveMath.PickSuccessorIndex(7, 100));
+        }
     }
 }
