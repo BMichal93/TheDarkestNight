@@ -29,7 +29,7 @@ These rules exist to keep you from making errors. Follow all of them, always.
    - Depend on abstractions where the codebase already does; do not invent new frameworks — match the existing architecture.
 6. **Mod-conflict safety:** null-guard `Campaign.Current` / `Mission.Current`, wrap TaleWorlds singleton access in try/catch, and **never** write a bare `catch { }` — always `catch (System.Exception logEx) { ModLog.Error(logEx); }`.
 7. **Prefer the simple working solution** over the clever fragile one. When a requirement says "if possible / if not feasible, do X instead", actually test feasibility with a small spike first, then commit to one path and note the decision in the commit message.
-8. **Names and text must be climatic, mysterious, lore-friendly** — Dark Souls / Game of Thrones register. No placeholder text ships.
+8. **Names and text must be climatic, mysterious, lore-friendly** — the tonal inspirations are **Dark Souls and Gothic** (the Piranha Bytes RPG series: a harsh, broken world of scavengers, camps, and uneasy factions), with a Game of Thrones sense of grit. No placeholder text ships.
 9. **Keep a running checklist.** The "Requirement traceability" table at the bottom of this prompt lists all 33 requirements. After each phase, update your todo list against it. Nothing may be silently dropped.
 10. Where this prompt names a settlement the game does not know (e.g. "Aragon", "Otysia", "Lycarob", "Chaikland", "Akalat"), **match it to the closest real Bannerlord settlement id** (Argoron, Ortysia, Lycaron, Chaikand, Akkalat) and use the real id. Match settlements **by name at session launch** the same tolerant way `SeaCampaignBehavior` matches ports (a failed match logs and degrades, never crashes).
 
@@ -85,7 +85,7 @@ These rules exist to keep you from making errors. Follow all of them, always.
 **Reuse:** everything in `src/Elementals/` (this is your template — the Kindled are already skeleton-riding, particle-tinted, weaponless chargers built at runtime), `ModuleData/troops.xml`, `AshenDiplomacyModel`, `ElementalWildsBehavior` (roaming band breeding + `ELEM_*` persistence pattern).
 
 1. Create `src/Demons/` with, at minimum: `DemonFactory.cs`, `DemonCatalog.cs` (pure data), `DemonSpawnCampaignBehavior.cs`, `DemonBattleBehavior.cs`, `DemonMath.cs` (pure) + tests.
-2. **Requirement 2 — the bodies.** Demon troops in `ModuleData/troops.xml` modeled on `elemental_being`:
+2. **Requirement 2 — the bodies.** There are **no demon textures or meshes in this project and none will be provided** — every demon must be assembled from what the game already ships: **human bodies/armour pieces and horse meshes**, re-dressed and re-tinted at runtime. The Kindled prove this works: `ElementalVisuals` makes an ordinary human body read as a creature purely through bone-bound particles, follower lights, and a coloured contour. Do the same — dark, ragged human gear + smoke/ember particle shrouds + red-black contour = a demon; a horse under the same treatment = a hellsteed. Do not reference any texture, mesh, or asset id you have not confirmed exists in the game or in `ModuleData/`. Demon troops in `ModuleData/troops.xml` modeled on `elemental_being`:
    - **Humanoid-skeleton demons** ("Fiend", "Stalker", "Ravager"-type tiers): strong melee claw attacks (bare-handed or claw-like weapon, high damage), some with magical attacks (reuse `ElementSpellEffects.CastAttack` on a cooldown exactly like `ElementalBeings` looses its element cone).
    - **Horse-skeleton demons** ("Hellsteed"/hunting-beast type): mounted or beast units using the horse skeleton.
    - **Palette: dark grey, red, black.** Reuse `ElementalVisuals`' bone-bound particle systems, follower lights, and coloured contour — re-tuned to smoke-black bodies, ember-red glow. Bind particles **once** to skeleton bones as `ElementalVisuals` does; never re-stamp per tick.
@@ -223,7 +223,7 @@ Do all eight, exactly as specified:
 
 **B. Aserai → "Tower"** — town **Iyakis**. Scholars of magic. Vassal title → **Warlock**. Joining opens the way to magic (grants the spellbook unlock if you lack it). They **teach spells**: a menu offering 6 random spells, each at an influence cost. A further menu option **transmutes any tier-2+ troop into a magical (spellcaster) unit** for influence.
 
-**C. Battania → "The Hive"** — towns **Marunath, Car Banseth**. Bound by a protective fungus into one network. Lords **always speak in plural** ("we", "us") — sweep their dialogue. You join by **drinking the elixir** and **can never leave** (vassal → **Integrated**). **If the player dies (game-over), automatically take control of a random Hive lord and continue.** City option: **recruit prisoners into your army for free**. Downside: sometimes battle **screen colours invert** (hallucinations; investigate a feasible post-processing/scene-tone trick — `Visual/AshenSceneTone` is your starting point) and your will is suppressed by others.
+**C. Battania → "The Hive"** — towns **Marunath, Car Banseth**. Bound by a protective fungus into one network. Lords **always speak in plural** ("we", "us") — sweep their dialogue. You join by **drinking the elixir** (vassal → **Integrated**), and the bond is kept alive only by **drinking it regularly** — lore-wise the Integrated dose themselves often to stay in the network. **Leaving is therefore possible**: stop drinking and the fungus lets go (leaving works like leaving any faction; the Hive bonuses and downsides simply end). **While Integrated, if the player dies (game-over), automatically take control of a random Hive lord and continue.** City option: **recruit prisoners into your army for free**. Downside: sometimes battle **screen colours invert** (hallucinations; investigate a feasible post-processing/scene-tone trick — `Visual/AshenSceneTone` is your starting point) and your will is suppressed by others.
 
 **D. Khuzait → invent a name** (demon-hunter flavoured — e.g. "The Bloodbound"; you choose, keep it lore-fitting) — towns **Akkalat, Chaikand**. They hunt demons and use their blood. As a vassal, every demon party you defeat yields **1–3 × "Demon Blood"** items (use a wine-like texture/mesh, trade-good type). In their cities, spend it via a city menu for one of: demons **ignore you for 1–4 days** (they won't attack your party); **+80 max HP for a week**; or **−1 Social/Intellect (random) for +1 Vigor/Endurance (random)**. They refuse candidates with low Vigor+Endurance and no focus points in combat skills.
 
@@ -300,9 +300,10 @@ For each faction: rename (culture-text override), reduce to starting towns, vass
    - **~Day 300:** rumours begin (tavern rumours + map portents) of demons behaving strangely, as if planning something.
    - **~Day 600:** **they are gathering** — spawn a large demon band in one random corner of the map that persists and grows.
    - **Beyond day 1000:** each period, a chance the **Demon Lord** appears — a unique, named demon lord who binds all demons into **his** faction, summons many more, and begins conquering settlements. He can end the game by killing everyone. Make him a real campaign presence (party, army, sieges), not a text event.
+   - **Defeating the Demon Lord is the campaign's victory** — killing him counts as winning The Darkest Night (a proper victory announcement/journal resolution; the surviving demons scatter back to leaderless night-tide behaviour). But he must **not be easily killable**: he is a monstrous battlefield presence (boss-tier stats, heavy magic, demon-bane resistance ideas inverted), his host is enormous, and simply catching him should itself be an endgame feat. Tunables in pure math, tested — the intent is that only a late-game player with relics, spells, and a hardened army has a real chance.
 3. Commit per milestone.
 
-**Acceptance:** a 900-day save has lived through hunts and watched the gathering; past day 1000 the endgame can genuinely arrive and lose the game.
+**Acceptance:** a 900-day save has lived through hunts and watched the gathering; past day 1000 the endgame can genuinely arrive — and either side can end the campaign: he kills everyone, or you kill him and win.
 
 ---
 
@@ -399,7 +400,7 @@ Commit. **Acceptance:** a new sandbox character walks the six steps in the new f
 | # | Requirement (short) | Phase |
 |---|---|---|
 | 1 | Demon armies spawn at night, vanish by day, aggressive, numerous, never flee | 1 |
-| 2 | Demon assets: horse+humanoid skeletons, grey/red/black, claws + magic, environment variants | 1 |
+| 2 | Demon assets built from existing human/horse meshes (no custom textures exist), grey/red/black, claws + magic, environment variants | 1 |
 | 3 | Scarcity: poor traders, almost no city food, crude rare weapons, no horses, village food | 2 |
 | 4 | Tier 4/5 promotion costs horse + armour + good weapon | 3 |
 | 5 | Gold removed (barter only) or 10× scarcer fallback; no coin upkeep/recruit/build/loot; ransom nerfed | 2 |
@@ -430,7 +431,7 @@ Commit. **Acceptance:** a new sandbox character walks the six steps in the new f
 | 30 | Tier 3–4 gear shabbier; tier 5 good but costs items to recruit | 3 |
 | 31 | Garrisons/food ~half of normal or less | 2 |
 | 32 | Night of the Hunt every 20–82 days | 11 |
-| 33 | Day ~300 rumours, ~600 gathering, 1000+ Demon Lord endgame | 11 |
+| 33 | Day ~300 rumours, ~600 gathering, 1000+ Demon Lord endgame; killing him (very hard) wins the campaign | 11 |
 
 ---
 
