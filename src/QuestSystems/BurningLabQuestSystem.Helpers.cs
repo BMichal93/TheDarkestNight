@@ -133,10 +133,14 @@ namespace AshAndEmber
             }
         }
 
+        // Requirement 9: this is always a reward path (the "+N gold" message
+        // below assumes a positive amount), so it always runs through the
+        // reward scarcity scale -- the barter economy makes it trivial.
         private static void GainGold(int amount)
         {
-            try { Hero.MainHero?.ChangeHeroGold(amount); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            Notify($"+{amount} gold.");
+            int applied = EconomyMath.ScaledReward(amount);
+            try { Hero.MainHero?.ChangeHeroGold(applied); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            Notify($"+{applied} gold.");
         }
 
         private static void ShiftHonour(int delta)

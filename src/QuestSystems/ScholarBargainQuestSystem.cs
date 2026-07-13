@@ -145,14 +145,17 @@ namespace AshAndEmber
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
+        // Requirement 9: NPC-granted gold rewards become trivial under the
+        // barter economy; a negative amount (the player paying) is untouched.
         private static bool ChangeGold(int amount)
         {
-            if (amount < 0 && (Hero.MainHero?.Gold ?? 0) < -amount)
+            int applied = EconomyMath.ScaledReward(amount);
+            if (applied < 0 && (Hero.MainHero?.Gold ?? 0) < -applied)
             {
-                Msg($"Not enough gold. (Need {-amount}, have {Hero.MainHero?.Gold ?? 0})", BadColor);
+                Msg($"Not enough gold. (Need {-applied}, have {Hero.MainHero?.Gold ?? 0})", BadColor);
                 return false;
             }
-            try { Hero.MainHero?.ChangeHeroGold(amount); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { Hero.MainHero?.ChangeHeroGold(applied); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             return true;
         }
 
