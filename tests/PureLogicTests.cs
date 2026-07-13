@@ -3080,5 +3080,42 @@ namespace AshAndEmber.Tests
         {
             Assert.AreEqual(1, SpellbookMath.UnlockFocusCost);
         }
+
+        // ── SpellcasterLordMath (Requirement 14) ─────────────────────────────
+        [Test]
+        public void SpellcasterLordMath_TargetCasterCount_IsRoughlySevenPercent()
+        {
+            Assert.AreEqual(7, SpellcasterLordMath.TargetCasterCount(100));
+            Assert.AreEqual(14, SpellcasterLordMath.TargetCasterCount(200));
+            Assert.AreEqual(0, SpellcasterLordMath.TargetCasterCount(0));
+        }
+
+        [Test]
+        public void SpellcasterLordMath_TargetCasterCount_NeverNegative()
+        {
+            Assert.AreEqual(0, SpellcasterLordMath.TargetCasterCount(-5));
+        }
+
+        [Test]
+        public void SpellcasterLordMath_KnownSpellCount_RespectsBoundaries()
+        {
+            Assert.AreEqual(1, SpellcasterLordMath.KnownSpellCount(0));
+            Assert.AreEqual(1, SpellcasterLordMath.KnownSpellCount(54));
+            Assert.AreEqual(2, SpellcasterLordMath.KnownSpellCount(55));
+            Assert.AreEqual(2, SpellcasterLordMath.KnownSpellCount(84));
+            Assert.AreEqual(3, SpellcasterLordMath.KnownSpellCount(85));
+            Assert.AreEqual(3, SpellcasterLordMath.KnownSpellCount(99));
+        }
+
+        [Test]
+        public void SpellcasterLordMath_KnownSpellCount_StaysWithinDeclaredRange()
+        {
+            for (int roll = 0; roll < 100; roll++)
+            {
+                int count = SpellcasterLordMath.KnownSpellCount(roll);
+                Assert.IsTrue(count >= SpellcasterLordMath.MinKnownSpells
+                    && count <= SpellcasterLordMath.MaxKnownSpells);
+            }
+        }
     }
 }

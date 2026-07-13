@@ -117,6 +117,8 @@
     <Compile Include="Spellbook\SpellburnEffects.cs"/>
     <Compile Include="Spellbook\SpellbookInputHandler.cs"/>
     <Compile Include="Spellbook\SpellbookCampaignBehavior.cs"/>
+    <Compile Include="Spellbook\SpellcasterLordMath.cs"/>
+    <Compile Include="Spellbook\SpellcasterLords.cs"/>
     <Compile Include="Economy\EconomyMath.cs"/>
     <Compile Include="Economy\ScarcityModels.cs"/>
     <Compile Include="Economy\MarketScarcityCampaignBehavior.cs"/>
