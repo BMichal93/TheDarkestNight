@@ -468,6 +468,52 @@ namespace AshAndEmber
         private void OnMapEventEnded(MapEvent mapEvent)
         {
             try { DemonBattleBehavior.PendingVariant = null; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RollRelicDrop(mapEvent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // ── Requirement 19 — relics from demon battles ────────────────────────
+        // Small chance, when the PLAYER personally defeats a demon party, that
+        // one relic falls out of the wreckage. Chance/index rolls live in
+        // RelicMath so they stay pure and tested; this method only supplies
+        // the campaign-side "did the player just win a fight against demons"
+        // check, mirrored on DragonQuestSystem.OnMapEventEnded's playerWon test.
+        private void RollRelicDrop(MapEvent mapEvent)
+        {
+            if (mapEvent == null) return;
+
+            bool playerAttacker = mapEvent.AttackerSide?.Parties.Any(p => p.Party == PartyBase.MainParty) == true;
+            bool playerDefender = mapEvent.DefenderSide?.Parties.Any(p => p.Party == PartyBase.MainParty) == true;
+            if (!playerAttacker && !playerDefender) return;
+
+            bool playerWon = (playerAttacker && mapEvent.WinningSide == BattleSideEnum.Attacker)
+                          || (playerDefender && mapEvent.WinningSide == BattleSideEnum.Defender);
+            if (!playerWon) return;
+
+            var enemySide = playerAttacker ? mapEvent.DefenderSide : mapEvent.AttackerSide;
+            if (enemySide == null) return;
+
+            bool foughtDemons = enemySide.Parties.Any(p => IsDemonParty(p?.Party?.MobileParty));
+            if (!foughtDemons) return;
+
+            if (!RelicMath.RollRelicDrop(_rng.NextDouble())) return;
+
+            var relics = RelicCatalog.All;
+            int idx = RelicMath.PickRelicIndex(_rng.NextDouble(), relics.Count);
+            if (idx < 0) return;
+            var def = relics[idx];
+
+            try
+            {
+                var item = MBObjectManager.Instance?.GetObject<ItemObject>(def.ItemId);
+                var roster = MobileParty.MainParty?.ItemRoster;
+                if (item != null && roster != null)
+                {
+                    roster.AddToCounts(item, 1);
+                    Announce($"Among the wreckage of the Night's dead, something answers a different light — {def.Name}.",
+                        new Color(0.75f, 0.65f, 0.35f));
+                }
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
         private static void Announce(string text, Color color)
