@@ -146,6 +146,13 @@
     <Compile Include="Factions\Hive\HiveBattleEffects.cs"/>
     <Compile Include="Factions\Hive\HiveCampaignBehavior.cs"/>
     <Compile Include="Factions\Hive\HiveCampaignBehavior.Menus.cs"/>
+    <Compile Include="Factions\Bloodbound\BloodboundMath.cs"/>
+    <Compile Include="Factions\Bloodbound\BloodboundCulture.cs"/>
+    <Compile Include="Factions\Bloodbound\BloodboundSettlements.cs"/>
+    <Compile Include="Factions\Bloodbound\BloodboundDialogue.cs"/>
+    <Compile Include="Factions\Bloodbound\BloodboundCatalog.cs"/>
+    <Compile Include="Factions\Bloodbound\BloodboundCampaignBehavior.cs"/>
+    <Compile Include="Factions\Bloodbound\BloodboundCampaignBehavior.Menus.cs"/>
     <Compile Include="Economy\EconomyMath.cs"/>
     <Compile Include="Economy\ScarcityModels.cs"/>
     <Compile Include="Economy\MarketScarcityCampaignBehavior.cs"/>

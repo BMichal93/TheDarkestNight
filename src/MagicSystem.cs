@@ -128,11 +128,12 @@ namespace AshAndEmber
                 campaignStarter.AddBehavior(new TowerCampaignBehavior());
                 // Phase 7, Faction C — the Hive (Battania).
                 campaignStarter.AddBehavior(new HiveCampaignBehavior());
+                // Phase 7, Faction D — the Bloodbound (Khuzait).
+                campaignStarter.AddBehavior(new BloodboundCampaignBehavior());
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { TempleDialogue.Register(campaignStarter);   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { TribesDialogue.Register(campaignStarter);   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Sturgia is now the Wolf Brothers, not the (retired) Northmen —
                 // see Factions/WolfBrothers/WolfBrothersDialogue.cs. NorthmenDialogue.cs
                 // is left in place, unreferenced, for save compatibility.
@@ -146,6 +147,10 @@ namespace AshAndEmber
                 // registrations are left in place, unreferenced, for save
                 // compatibility.
                 try { HiveDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Khuzait is now the Bloodbound, not the (retired) Tribes of the East —
+                // see Factions/Bloodbound/BloodboundDialogue.cs. TribesDialogue.cs is
+                // left in place, unreferenced, for save compatibility.
+                try { BloodboundDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SchemeSystem.Initialize();              } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Drop the previous campaign's Ashen rolls before this one's data loads.
                 // A save reload repopulates them in SyncData, which runs before
@@ -168,6 +173,7 @@ namespace AshAndEmber
                 try { SpellcasterTroopBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SpellbookCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { HiveCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { BloodboundCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
                 // player hits Save — long after the quest triggered. Audit at boot instead.
@@ -183,7 +189,6 @@ namespace AshAndEmber
         {
             base.OnGameInitializationFinished(game);
             try { AshenCitySystem.ApplyTempleCultureTexts();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { AshenCitySystem.ApplyTribalCultureTexts();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Sturgia is now the Wolf Brothers, not the (retired) Northmen.
             try { WolfBrothersCulture.ApplyWolfBrothersCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Aserai is now the Tower, not the (retired) Duneborn.
@@ -193,6 +198,11 @@ namespace AshAndEmber
             // (and the Forest Clans rename helpers behind it) are left in place,
             // unreferenced, for save compatibility — only the call site moves.
             try { HiveCulture.ApplyHiveCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // Khuzait is now the Bloodbound, not the (retired) Tribes of the East —
+            // see Factions/Bloodbound/BloodboundCulture.cs. AshenCitySystem.ApplyTribalCultureTexts
+            // (and the Tribal rename helpers behind it) are left in place,
+            // unreferenced, for save compatibility — only the call site moves.
+            try { BloodboundCulture.ApplyBloodboundCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Phase 3 — Requirement 30a: tier 3-4 troop trees (every culture) are
             // re-equipped with the cheapest real armour of the same slot type;
             // Requirement 29: lords are stripped of gold/ornate/rich gear.
@@ -213,13 +223,14 @@ namespace AshAndEmber
             if (preGame)
             {
                 try { AshenCitySystem.ApplyTempleCultureTexts();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AshenCitySystem.ApplyTribalCultureTexts();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Sturgia is now the Wolf Brothers, not the (retired) Northmen.
             try { WolfBrothersCulture.ApplyWolfBrothersCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Aserai is now the Tower, not the (retired) Duneborn.
                 try { TowerCulture.ApplyTowerCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Battania is now the Hive, not the (retired) Forest Clans.
                 try { HiveCulture.ApplyHiveCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Khuzait is now the Bloodbound, not the (retired) Tribes of the East.
+                try { BloodboundCulture.ApplyBloodboundCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // The character-creation culture cards cache their name when built, so
                 // the text override above never reaches them — rename the card directly.
                 try { TempleCultureCardFixer.TickTryFix(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }

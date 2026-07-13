@@ -342,10 +342,15 @@ namespace AshAndEmber
                     if (party.MapEvent != null) continue;           // already fighting
                     if (party.BesiegedSettlement != null) continue; // already assaulting
 
+                    // Faction D (the Bloodbound) can buy a few days of being left
+                    // alone — a party currently under that bought-off window is
+                    // simply never picked as prey (see
+                    // BloodboundCampaignBehavior.IsPartyIgnored / GrantIgnore).
                     MobileParty prey = MobileParty.All
                         .Where(p => p != null && p.IsActive && p != party
                                  && !IsDemonParty(p) && p.MapEvent == null
-                                 && (p.MemberRoster?.TotalManCount ?? 0) > 0)
+                                 && (p.MemberRoster?.TotalManCount ?? 0) > 0
+                                 && !BloodboundCampaignBehavior.IsPartyIgnored(p))
                         .OrderBy(p => (p.GetPosition2D - party.GetPosition2D).LengthSquared)
                         .FirstOrDefault(p => (p.GetPosition2D - party.GetPosition2D).Length <= EngageSearchRadius);
 
@@ -469,6 +474,46 @@ namespace AshAndEmber
         {
             try { DemonBattleBehavior.PendingVariant = null; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { RollRelicDrop(mapEvent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RollDemonBloodDrop(mapEvent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // ── Faction D (the Bloodbound) — demon blood from a hunt ────────────────
+        // Unlike RollRelicDrop (player-only), this checks EVERY winning party on
+        // the winning side — a Bloodbound vassal's own lords earn Demon Blood
+        // from their own kills too, not just the player (see BloodboundCulture.
+        // IsBloodboundParty / BloodboundCampaignBehavior.GrantDemonBlood). No
+        // roll gate on "did we fight demons at all" beyond the same enemySide
+        // check RollRelicDrop already does; the yield itself is always 1-3 (never
+        // zero) per Requirement D, so there is no drop-chance to roll here.
+        private static void RollDemonBloodDrop(MapEvent mapEvent)
+        {
+            if (mapEvent == null) return;
+
+            foreach (var winningSide in new[] { mapEvent.AttackerSide, mapEvent.DefenderSide })
+            {
+                try
+                {
+                    if (winningSide == null) continue;
+                    bool isWinningSide = (winningSide == mapEvent.AttackerSide && mapEvent.WinningSide == BattleSideEnum.Attacker)
+                                      || (winningSide == mapEvent.DefenderSide && mapEvent.WinningSide == BattleSideEnum.Defender);
+                    if (!isWinningSide) continue;
+
+                    var losingSide = winningSide == mapEvent.AttackerSide ? mapEvent.DefenderSide : mapEvent.AttackerSide;
+                    bool foughtDemons = losingSide != null && losingSide.Parties.Any(p => IsDemonParty(p?.Party?.MobileParty));
+                    if (!foughtDemons) continue;
+
+                    foreach (var p in winningSide.Parties)
+                    {
+                        try
+                        {
+                            if (p?.Party == null) continue;
+                            BloodboundCampaignBehavior.GrantDemonBlood(p.Party);
+                        }
+                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    }
+                }
+                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            }
         }
 
         // ── Requirement 19 — relics from demon battles ────────────────────────

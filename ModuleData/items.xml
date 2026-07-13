@@ -657,4 +657,33 @@
     <Flags />
   </Item>
 
+  <!-- ======================================================================
+       THE DARKEST NIGHT — Demon Blood (Phase 7, Faction D, "The Bloodbound").
+
+       A tradeable good, not a weapon — cloned from the vanilla "wine" item
+       (mesh="amphora_slim", item_category="wine", Type="Goods", weight 10)
+       since Bannerlord ships no blood/vial mesh and the brief calls for a
+       "wine-like texture/mesh, trade-good type". Reusing the "wine" category
+       keeps it sorted sensibly in trade screens without needing a new
+       <ItemCategory> definition. Earned from demon-party victories won by a
+       Bloodbound vassal (player or lord) — see
+       Factions/Bloodbound/BloodboundCampaignBehavior.cs (GrantDemonBlood) and
+       Demons/DemonSpawnCampaignBehavior.cs (RollDemonBloodDrop). Spent at the
+       Bloodbound city menu — see BloodboundCampaignBehavior.Menus.cs.
+       ====================================================================== -->
+
+  <Item id="aae_demon_blood"
+        name="Demon Blood"
+        mesh="amphora_slim"
+        item_category="wine"
+        IsFood="false"
+        value="120"
+        weight="10"
+        Type="Goods">
+    <ItemComponent>
+      <Trade morale_bonus="0" />
+    </ItemComponent>
+    <Flags Civilian="true" />
+  </Item>
+
 </Items>

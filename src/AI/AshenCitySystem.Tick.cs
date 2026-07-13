@@ -56,8 +56,14 @@ namespace AshAndEmber
             try { RenameHolyTempleKingdom();         } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { RenameVlandianTroops();             } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { TempleCulture.SetupTempleKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { RenameTribesKingdom();              } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { RenameKhuzaitTroops();              } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // Faction D of The Darkest Night's Phase 7: Khuzait is now the
+            // Bloodbound, not the (retired) Tribes of the East — both target the
+            // same "khuzait" StringId, and a kingdom can only wear one name. The old
+            // RenameTribesKingdom()/ApplyTribalCultureTexts() helpers are left in
+            // AshenCitySystem.Renaming.cs, unreferenced, for save compatibility;
+            // only this call site moved. See Factions/Bloodbound/BloodboundCulture.cs.
+            try { BloodboundCulture.RenameBloodboundKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Faction A of The Darkest Night's Phase 7: Sturgia is now the Wolf
             // Brothers, not the (retired) Northmen — both target the same
             // "sturgia" StringId, and a kingdom can only wear one name. The old
