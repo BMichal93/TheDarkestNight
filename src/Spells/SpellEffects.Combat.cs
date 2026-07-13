@@ -182,6 +182,14 @@ namespace AshAndEmber
                 try { damage *= ElementalBeings.IncomingElementMultiplier(target, attackElement.Value); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             }
 
+            // Requirement 20 — demons fear the flame. DamageAgent is the single
+            // choke point every magic-damage path in the mod already routes
+            // through (element spells, spoken formulas, crystals, relics,
+            // nature/miracle workings, dark gifts) — see the file header for the
+            // full list. A registered demon takes bonus damage from all of it.
+            try { if (DemonBattleBehavior.IsDemon(target)) damage *= RelicMath.DemonBaneMultiplier; }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
             // Cinder Shell enchantment: reduce incoming damage
             if (_stoneskinAgents.TryGetValue(target, out var skin) && skin.Remaining > 0f)
             {
@@ -220,6 +228,10 @@ namespace AshAndEmber
 
             if (attackElement.HasValue)
                 try { damage *= ElementalBeings.IncomingElementMultiplier(target, attackElement.Value); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // Requirement 20 — demons fear the flame (see DamageAgent's matching
+            // comment; this is the visible-blow twin of the same choke point).
+            try { if (DemonBattleBehavior.IsDemon(target)) damage *= RelicMath.DemonBaneMultiplier; }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             if (_stoneskinAgents.TryGetValue(target, out var skin) && skin.Remaining > 0f)
                 damage *= (1f - Math.Min(0.5f, skin.BonusArmor / 100f));
             if (_sunderedAgents.TryGetValue(target, out var sunder) && sunder.Remaining > 0f)
