@@ -189,6 +189,9 @@ namespace AshAndEmber
                 case RuinsMath.LootKind.SpellFormula:
                     return GrantSpellFormula();
 
+                case RuinsMath.LootKind.Wand:
+                    return GrantWand();
+
                 default:
                     return null;
             }
@@ -230,6 +233,31 @@ namespace AshAndEmber
                 if (item == null || roster == null) return null;
                 roster.AddToCounts(item, 1);
                 return $"Something answers a different light beneath the dust — {def.Name}.";
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+        }
+
+        // Wand loot (mod-author-directed addition) — the same "pull a random
+        // catalog item and grant it" shape GrantRelic already uses, but the
+        // chamber-loot roll already gates the rarity (RuinsMath.RollChamberLoot),
+        // so there is no separate WandsMath.RollRuinWandLoot re-roll here —
+        // reaching this method at all already means "the roll landed on Wand."
+        private static string GrantWand()
+        {
+            try
+            {
+                var wands = WandsCatalog.All;
+                if (wands.Count == 0) return null;
+                int idx = WandsMath.PickWandIndex(_rng.NextDouble(), wands.Count);
+                if (idx < 0) return null;
+                var def = wands[idx];
+
+                var item = MBObjectManager.Instance?.GetObject<ItemObject>(def.ItemId);
+                var roster = MobileParty.MainParty?.ItemRoster;
+                if (item == null || roster == null) return null;
+                roster.AddToCounts(item, 1);
+                WandEffects.RefillPlayerCharges(def.ItemId);
+                return $"Wrapped in oiled cloth, untouched by the dust — {def.Name}.";
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
         }

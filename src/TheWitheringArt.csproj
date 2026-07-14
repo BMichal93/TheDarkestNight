@@ -127,6 +127,11 @@
     <Compile Include="Relics\RelicNaming.cs"/>
     <Compile Include="Relics\RelicCatalog.cs"/>
     <Compile Include="Relics\RelicEffects.cs"/>
+    <Compile Include="Wands\WandsMath.cs"/>
+    <Compile Include="Wands\WandsCatalog.cs"/>
+    <Compile Include="Wands\WandEffects.cs"/>
+    <Compile Include="Wands\WandsCampaignBehavior.cs"/>
+    <Compile Include="Wands\WandsCampaignBehavior.Menus.cs"/>
     <Compile Include="Factions\WolfBrothers\WolfBrothersMath.cs"/>
     <Compile Include="Factions\WolfBrothers\WolfBrothersCulture.cs"/>
     <Compile Include="Factions\WolfBrothers\WolfBrothersSettlements.cs"/>

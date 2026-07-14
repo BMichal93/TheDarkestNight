@@ -1160,10 +1160,37 @@
     <face>
       <face_key_template value="BodyProperty.fighter_empire_veteran" />
     </face>
+    <!-- Four equipment rosters, picked uniformly at spawn by the engine: three
+         carry the plain wrapped_stick prop, one substitutes a Wand of
+         Stoneroot Strike (one of the Magus's own known spells — see
+         Spellbook/SpellcasterTroopCatalog.cs's hollow_magus tier) — a ~25%
+         chance any given Magus is wand-armed, matching WandsMath.
+         HollowMagusWandRosterFraction. See Wands/WandsCatalog.cs. -->
     <Equipments>
       <EquipmentRoster>
         <equipment slot="Item0" id="Item.short_sword"/>
         <equipment slot="Item1" id="Item.wrapped_stick"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.bandit_armor"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.short_sword"/>
+        <equipment slot="Item1" id="Item.wrapped_stick"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.bandit_armor"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.short_sword"/>
+        <equipment slot="Item1" id="Item.wrapped_stick"/>
+        <equipment slot="Head"  id="Item.leather_cap"/>
+        <equipment slot="Body"  id="Item.bandit_armor"/>
+        <equipment slot="Leg"   id="Item.strapped_leather_boots"/>
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.short_sword"/>
+        <equipment slot="Item1" id="Item.aae_wand_stonerootstrike"/>
         <equipment slot="Head"  id="Item.leather_cap"/>
         <equipment slot="Body"  id="Item.bandit_armor"/>
         <equipment slot="Leg"   id="Item.strapped_leather_boots"/>

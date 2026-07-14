@@ -3231,6 +3231,154 @@ namespace AshAndEmber.Tests
             Assert.IsFalse(RelicMath.RollRuinLoot(RelicMath.RuinBaseRelicChance + 0.0001));
         }
 
+        // ── WandsMath / WandsCatalog tests (mod-author-directed addition) ─────
+
+        [Test]
+        public void WandsMath_DramaticPrice_IsHigherThanStandard()
+        {
+            Assert.Greater(WandsMath.DramaticWandPriceGold, WandsMath.StandardWandPriceGold);
+        }
+
+        [Test]
+        public void WandsMath_BothPrices_FarExceedRodPurchaseCost()
+        {
+            // "Price each wand well above the Rod of the Apostle's 6000 denars."
+            Assert.Greater(WandsMath.StandardWandPriceGold, ChosenMath.RodPurchaseCostGold);
+            Assert.Greater(WandsMath.DramaticWandPriceGold, ChosenMath.RodPurchaseCostGold);
+        }
+
+        [Test]
+        public void WandsMath_PriceForTier_MatchesConstants()
+        {
+            Assert.AreEqual(WandsMath.StandardWandPriceGold, WandsMath.PriceForTier(WandTier.Standard));
+            Assert.AreEqual(WandsMath.DramaticWandPriceGold, WandsMath.PriceForTier(WandTier.Dramatic));
+        }
+
+        [Test]
+        public void WandsMath_NpcWandBreaks_RespectsChanceBoundary()
+        {
+            Assert.IsTrue(WandsMath.NpcWandBreaks(WandsMath.NpcBreakChancePerUse - 0.0001));
+            Assert.IsFalse(WandsMath.NpcWandBreaks(WandsMath.NpcBreakChancePerUse + 0.0001));
+        }
+
+        [Test]
+        public void WandsMath_NpcBreakChance_IsModestNotGuaranteed()
+        {
+            Assert.Greater(WandsMath.NpcBreakChancePerUse, 0f);
+            Assert.Less(WandsMath.NpcBreakChancePerUse, 0.5f);
+        }
+
+        [Test]
+        public void WandsMath_RollRuinWandLoot_RespectsChanceBoundary()
+        {
+            Assert.IsTrue(WandsMath.RollRuinWandLoot(WandsMath.RuinWandChance - 0.0001));
+            Assert.IsFalse(WandsMath.RollRuinWandLoot(WandsMath.RuinWandChance + 0.0001));
+        }
+
+        [Test]
+        public void WandsMath_RuinWandChance_IsRarerThanRelicDrop()
+        {
+            Assert.Less(WandsMath.RuinWandChance, RelicMath.RuinBaseRelicChance);
+        }
+
+        [Test]
+        public void WandsMath_PickWandIndex_StaysInBounds()
+        {
+            var rng = new Random(13);
+            for (int i = 0; i < 500; i++)
+            {
+                int idx = WandsMath.PickWandIndex(rng.NextDouble(), WandsCatalog.All.Count);
+                Assert.GreaterOrEqual(idx, 0);
+                Assert.Less(idx, WandsCatalog.All.Count);
+            }
+        }
+
+        [Test]
+        public void WandsMath_PickWandIndex_ZeroCount_ReturnsNegativeOne()
+        {
+            Assert.AreEqual(-1, WandsMath.PickWandIndex(0.5, 0));
+        }
+
+        [Test]
+        public void WandsMath_LordWandChances_AreRareNotGuaranteed()
+        {
+            Assert.Greater(WandsMath.TowerLordWandChance, 0.0);
+            Assert.Less(WandsMath.TowerLordWandChance, 0.5);
+            Assert.Greater(WandsMath.ChosenLordWandChance, 0.0);
+            Assert.Less(WandsMath.ChosenLordWandChance, 0.5);
+        }
+
+        [Test]
+        public void WandsMath_ShouldGrantLordWand_RespectsChanceBoundary()
+        {
+            Assert.IsTrue(WandsMath.ShouldGrantLordWand(0.05, 0.15));
+            Assert.IsFalse(WandsMath.ShouldGrantLordWand(0.25, 0.15));
+        }
+
+        [Test]
+        public void WandsMath_PlayerMaxCharges_IsPositiveAndBounded()
+        {
+            Assert.Greater(WandsMath.PlayerMaxCharges, 0);
+            Assert.LessOrEqual(WandsMath.PlayerMaxCharges, 20);
+        }
+
+        [Test]
+        public void WandsCatalog_HasSixteenEntries()
+        {
+            Assert.AreEqual(16, WandsCatalog.All.Count);
+        }
+
+        [Test]
+        public void WandsCatalog_AllItemIdsAreUniqueAndPrefixed()
+        {
+            var ids = WandsCatalog.AllItemIds();
+            Assert.AreEqual(ids.Length, ids.Distinct().Count(), "Wand item ids must be unique.");
+            foreach (var id in ids)
+                Assert.IsTrue(id.StartsWith("aae_wand_"), $"Unexpected wand item id: {id}");
+        }
+
+        [Test]
+        public void WandsCatalog_AllNamesFollowWandOfConvention()
+        {
+            foreach (var def in WandsCatalog.All)
+                Assert.IsTrue(def.Name.StartsWith("Wand of "), $"Unexpected wand name: {def.Name}");
+        }
+
+        [Test]
+        public void WandsCatalog_TryGetBySpell_RoundTripsToItemId()
+        {
+            Assert.IsTrue(WandsCatalog.TryGetBySpell(SpellId.Fireball, out var def));
+            Assert.AreEqual("aae_wand_fireball", def.ItemId);
+        }
+
+        [Test]
+        public void WandsCatalog_TryGetByItemId_UnknownId_ReturnsFalse()
+        {
+            Assert.IsFalse(WandsCatalog.TryGetByItemId("not_a_wand", out _));
+            Assert.IsFalse(WandsCatalog.TryGetByItemId(null, out _));
+        }
+
+        [Test]
+        public void WandsCatalog_IsWandItemId_MatchesOnlyCatalogEntries()
+        {
+            Assert.IsTrue(WandsCatalog.IsWandItemId("aae_wand_summondemon"));
+            Assert.IsFalse(WandsCatalog.IsWandItemId("aae_rod_of_apostle"));
+        }
+
+        [Test]
+        public void WandsCatalog_UnbindingSpells_AreNeverWands()
+        {
+            // The 12-mark Unbindings are deliberately excluded — see
+            // WandsCatalog.cs's header for why.
+            var unbindings = new[]
+            {
+                SpellId.FirstFlameRemembered, SpellId.OnTheWingsOfTheGale, SpellId.MountainsWrath,
+                SpellId.TheWeepingSky, SpellId.TheBentKnee,
+            };
+            foreach (var s in unbindings)
+                Assert.IsFalse(WandsCatalog.TryGetBySpell(s, out _), $"{s} should not be wand-eligible.");
+        }
+
         // ── RelicNaming tests (Phase 6) ──────────────────────────────────────
 
         [Test]
@@ -4240,7 +4388,15 @@ namespace AshAndEmber.Tests
             Assert.IsTrue(seen.Contains(RuinsMath.LootKind.TradeGoods));
             Assert.IsTrue(seen.Contains(RuinsMath.LootKind.Relic));
             Assert.IsTrue(seen.Contains(RuinsMath.LootKind.SpellFormula));
+            Assert.IsTrue(seen.Contains(RuinsMath.LootKind.Wand));
             Assert.IsTrue(seen.Contains(RuinsMath.LootKind.None));
+        }
+
+        [Test]
+        public void RuinsMath_RollChamberLoot_WandIsRarerThanSpellFormula()
+        {
+            Assert.AreEqual(RuinsMath.LootKind.Wand, RuinsMath.RollChamberLoot(0.92));
+            Assert.AreEqual(RuinsMath.LootKind.SpellFormula, RuinsMath.RollChamberLoot(0.85));
         }
 
         [Test]
