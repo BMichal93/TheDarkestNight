@@ -4600,5 +4600,80 @@ namespace AshAndEmber.Tests
             // WolfHuntMath's header comment for the design reasoning.
             Assert.Greater(WolfHuntMath.BurningRenownGain, WolfHuntMath.TransformationRenownGain);
         }
+
+        // ── TowerRiteMath tests (Phase 12, Faction B — The Unbinding Rite) ───────
+
+        [Test]
+        public void TowerRiteMath_MeetsGatherThreshold_RequiresAllThreeTracks()
+        {
+            int r = TowerRiteMath.GatherRelicsRequired;
+            int b = TowerRiteMath.GatherDemonBloodRequired;
+            int s = TowerRiteMath.GatherHolySigilsRequired;
+
+            Assert.IsTrue(TowerRiteMath.MeetsGatherThreshold(r, b, s));
+            Assert.IsFalse(TowerRiteMath.MeetsGatherThreshold(r - 1, b, s));
+            Assert.IsFalse(TowerRiteMath.MeetsGatherThreshold(r, b - 1, s));
+            Assert.IsFalse(TowerRiteMath.MeetsGatherThreshold(r, b, s - 1));
+            Assert.IsTrue(TowerRiteMath.MeetsGatherThreshold(r + 5, b + 5, s + 5));
+        }
+
+        [Test]
+        public void TowerRiteMath_GatherQuantities_AreGenuinelyScarce()
+        {
+            // Relics: at RelicMath's own drop chance, gathering the required
+            // count takes real, sustained play — dozens of personally-won
+            // demon-party victories, not a lucky single fight.
+            double expectedRelicVictories = TowerRiteMath.GatherRelicsRequired / RelicMath.RelicDropChancePerVictory;
+            Assert.Greater(expectedRelicVictories, 30);
+
+            // Demon Blood and Holy Sigils are both required in more than a
+            // token amount — never satisfiable by a single lucky drop or a
+            // single cheap purchase.
+            Assert.GreaterOrEqual(TowerRiteMath.GatherDemonBloodRequired, BloodboundMath.MaxDemonBloodPerVictory * 3);
+            Assert.GreaterOrEqual(TowerRiteMath.GatherHolySigilsRequired, 3);
+        }
+
+        [Test]
+        public void TowerRiteMath_HostTier_NeverProducesFiends()
+        {
+            var rng = new System.Random(1234);
+            for (int i = 0; i < 500; i++)
+                Assert.AreNotEqual(DemonMath.DemonTier.Fiend, TowerRiteMath.HostTier(rng));
+        }
+
+        [Test]
+        public void TowerRiteMath_HostPartySize_IsLargerThanOrdinaryNightTideParty()
+        {
+            Assert.Greater(TowerRiteMath.HostPartySizeEach, DemonMath.MaxPartyBodies);
+            Assert.Greater(TowerRiteMath.HostPartyCount, 1);
+        }
+
+        [Test]
+        public void TowerRiteMath_RaidChance_ExceedsOrdinaryNightTideAssaultChance()
+        {
+            // This IS the disaster, not a rare escalation of the ordinary tide.
+            Assert.Greater(TowerRiteMath.RaidChancePerHostPerDay, DemonMath.SettlementAssaultChancePerPartyPerNight);
+        }
+
+        [Test]
+        public void TowerRiteMath_IsRampageOver_GatesAtConfiguredDuration()
+        {
+            Assert.IsFalse(TowerRiteMath.IsRampageOver(TowerRiteMath.RampageDurationDays - 1));
+            Assert.IsTrue(TowerRiteMath.IsRampageOver(TowerRiteMath.RampageDurationDays));
+            Assert.IsTrue(TowerRiteMath.IsRampageOver(TowerRiteMath.RampageDurationDays + 100));
+        }
+
+        [Test]
+        public void TowerRiteMath_Aftermath_RelationPenaltyIsNegative()
+        {
+            Assert.Less(TowerRiteMath.AftermathRelationPenalty, 0);
+        }
+
+        [Test]
+        public void TowerRiteMath_RemnantPartySize_SmallerThanFullHostBand()
+        {
+            Assert.Less(TowerRiteMath.RemnantPartySize, TowerRiteMath.HostPartySizeEach);
+            Assert.Greater(TowerRiteMath.RemnantPartySize, 0);
+        }
     }
 }

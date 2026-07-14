@@ -76,6 +76,9 @@ namespace AshAndEmber
 
                 // Phase 12, Faction A — the Wolf Brothers' "The Great Hunt."
                 new KeyValuePair<Type, int>(typeof(WolfHuntQuestLog),          15),
+
+                // Phase 12, Faction B — the Tower's "The Unbinding Rite."
+                new KeyValuePair<Type, int>(typeof(TowerRiteQuestLog),         16),
             };
 
         protected override void DefineClassTypes()

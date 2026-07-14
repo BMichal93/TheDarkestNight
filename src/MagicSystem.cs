@@ -171,10 +171,12 @@ namespace AshAndEmber
                 // Phase 12 — eight faction questlines, from ~day 50. The shared,
                 // generic trigger (FactionQuests/FactionQuestTrigger.cs) is
                 // registered once; each questline's own behavior plugs into it
-                // from its own constructor. Only Faction A (Wolf Brothers' "The
-                // Great Hunt") exists so far — see FactionQuests/WolfBrothers/.
+                // from its own constructor. Faction A (Wolf Brothers' "The Great
+                // Hunt") and Faction B (the Tower's "The Unbinding Rite") exist
+                // so far — see FactionQuests/WolfBrothers/ and FactionQuests/Tower/.
                 try { campaignStarter.AddBehavior(new FactionQuestTriggerCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { campaignStarter.AddBehavior(new WolfHuntQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { campaignStarter.AddBehavior(new TowerRiteQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -236,6 +238,7 @@ namespace AshAndEmber
                 try { ApocalypseCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { FactionQuestTriggerCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { WolfHuntQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { TowerRiteQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
                 // player hits Save — long after the quest triggered. Audit at boot instead.

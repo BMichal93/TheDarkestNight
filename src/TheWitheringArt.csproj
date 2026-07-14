@@ -201,6 +201,11 @@
     <Compile Include="FactionQuests\WolfBrothers\WolfHuntQuestLog.cs"/>
     <Compile Include="FactionQuests\WolfBrothers\WolfHuntQuestCampaignBehavior.cs"/>
     <Compile Include="FactionQuests\WolfBrothers\WolfHuntQuestCampaignBehavior.Menus.cs"/>
+    <Compile Include="FactionQuests\Tower\TowerRiteMath.cs"/>
+    <Compile Include="FactionQuests\Tower\TowerRiteQuestLog.cs"/>
+    <Compile Include="FactionQuests\Tower\TowerRiteHostParty.cs"/>
+    <Compile Include="FactionQuests\Tower\TowerRiteQuestCampaignBehavior.cs"/>
+    <Compile Include="FactionQuests\Tower\TowerRiteQuestCampaignBehavior.Menus.cs"/>
     <Compile Include="MortalLaw\MortalLawMath.cs"/>
     <Compile Include="MortalLaw\MortalLawCampaignBehavior.cs"/>
     <Compile Include="MortalLaw\MortalLawCampaignBehavior.NightFear.cs"/>
