@@ -76,12 +76,18 @@ namespace AshAndEmber
             "and only faith held, where faith was hard enough.",
 
             "So the survivors built their world small. Behind stone, behind ward-fire, behind whatever charm or prayer or " +
-            "desperate bargain kept the dark on the other side of the gate until sunrise. Every dusk they count their walls. " +
+            "desperate bargain kept the dark on the other side of the gate until sunrise. A lord's coffers buy little when " +
+            "there is nothing left worth selling for it — grain, iron, and a sound horse are worth more than gold now, and " +
+            "most dealing is hand to hand, goods for goods, favour for favour. Every dusk they count their walls. " +
             "Every dawn they count their dead.",
 
-            "The demons have not stopped coming. They will not stop coming. Somewhere out past the torchlight, in the wastes " +
-            "and the ruined halls of the old world, something is still gathering itself for a worse night than this one. " +
-            "You were born into what is left of Calradia. Make yourself useful to it, or be one more name the wards failed to keep.",
+            "The old world left more behind than ruins. In collapsed halls and drowned cellars, on the tongues of the dying " +
+            "and the mad, a few have found the old formulas still — a shape spoken with empty hands and a held nerve that " +
+            "bends the world's grain the way fire bends air. Get the shape wrong and the working may turn on the one who " +
+            "spoke it. The demons have not stopped coming. They will not stop coming. Somewhere out past the torchlight, in " +
+            "the wastes and the ruined halls of the old world, something is still gathering itself for a worse night than " +
+            "this one. You were born into what is left of Calradia. Make yourself useful to it, or be one more name the " +
+            "wards failed to keep.",
         };
 
         // Per-paragraph timing (seconds).
