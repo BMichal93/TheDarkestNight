@@ -1,4 +1,55 @@
-# Ash and Ember — Changelog
+# The Darkest Night — Changelog
+
+---
+
+## v0.1.0 — The Darkest Night
+
+The initial release of **The Darkest Night**, a total-conversion of Bannerlord built on the Ash and Ember codebase (whose own history continues below this entry as the baseline this mod forked from). The world shattered overnight; this is everything that changed to tell that story.
+
+### The demons
+- Every dusk, demon war-parties spawn across the whole map and dissolve at dawn; they never retreat, never strategize, never negotiate, and execute captured heroes and troops (with a per-hero escape roll). Surviving parties replenish each night, and rarely a horde assaults a town or castle.
+- Every demon body — humanoid ("Fiend"/"Stalker"/"Ravager"-tier) and mounted ("Hellsteed") — is assembled entirely from existing human and horse meshes/gear, re-tinted smoke-black and ember-red with bone-bound particles, follower lights, and a coloured contour (the same one-time-bind technique the Kindled already used). Stats and looks vary slightly by terrain/culture region.
+- A permanent demon faction is at war with everyone, holds no settlements, and can never be negotiated with.
+
+### The barter economy
+- Gold is roughly a tenth as scarce everywhere it can be model-overridden (wages, promotion, building, battle/plunder gold, ransom, garrison and militia growth, auto-recruitment); the town trade screen and item-exchange popup were left gold-priced because TaleWorlds hard-codes gold there with no override seam (documented decision: Path B, not full gold removal).
+- Town markets are pruned daily: little food, almost no horses, crude and rare weapons. Village food becomes the practical way to feed a party. Garrisons, food stores, and militia run at roughly half vanilla strength or less.
+- Every NPC reward (quests, favors, events) pays in food/items; unavoidable gold rewards are trivial.
+
+### Units of a broken world
+- Promoting a troop to tier 4 or 5 now costs a horse, an armour piece, and a good weapon from the player's inventory, alongside the usual requirements. Tier 3–4 gear across every culture was re-equipped shabbier; tier 5 stays strong but costs items to recruit.
+- Lords' equipment was de-blinged at session start — worn, patched, post-apocalyptic gear replacing gold and ornate items.
+
+### The Spellbook
+- Casting is now a directional formula (5–20 characters, U/D/L/R), tapped with a held focus key and free hands. A correct sequence casts and is learned on the spot, even if never studied; an incorrect completed sequence fizzles and rolls a spellburn (base 60%, reduced by Intellect) from an eight-entry table.
+- 30–50 spells span Fireball, Firewall, every elemental gust/wave/entangle/nova and its ward, Summon Demon, Banish Demons, Light, and further wards/curses/veils/callings in the same register.
+- The Spellbook supersedes the old player-facing casting inputs (unified element hold-and-charge, Grace/Nature gestures, all campaign-map spells); their effect code and NPC casting paths continue unchanged.
+- Roughly 7% of named lords/companions know 1–3 battle spells; a full, rare recruit-to-tier-5 spellcaster troop tree exists alongside them.
+
+### Magic worth finding
+- Relics, wands, and talismans — weakened, permanent versions of the Crystal and Dark Gift effects, with generated evocative names for relics — drop rarely from demon fights and from the ruins below. Spells and magical weapons deal bonus damage to demons.
+
+### The eight factions
+- Every kingdom was rebuilt into its own desperate answer to the Long Night, each with a culture rename, a vassal title, a joining ritual, and lord-shared city mechanics: **Wolf Brothers** (Sturgia — cannibal survivalism), **Tower** (Aserai — spell teaching and transmutation), **Forest Widows** (Battania — a fungal hive-mind speaking as "we", possession on player death), **Bloodbound** (Khuzait — Demon Blood economy and blood attunement), **Temple** (Vlandia — Holy Sigils and prayer), **The Empire** (Northern Empire — free grain, Schemes access), **Legion** (Western Empire — heightened aggression, training fields), and **The Chosen** (Southern Empire — matriarchal succession, sacrifice for demon immunity).
+- Schemes (the covert-operations system) is now gated to Empire membership and paid entirely in influence; the influence costs absorbed the old gold prices so the relative cost hierarchy between schemes is unchanged.
+- Every town outside the eight factions' starting lists became a permanent, clan-named city-state that never joins a kingdom and recruits Looter/Bandit-culture rabble.
+
+### The ruins
+- Roughly 80% of castles, chosen stably per save, became ownerless Ruins — collapsed halls, flooded cellars, sealed bedchambers, and worse — explored chamber by chamber on a Scouting-scaled wait timer, with real demon risk if night falls while inside. Weapons, armor, trade goods, relics, and spell formulas are found this way.
+
+### The mortal world
+- NPC lords now live under the same rules as the player: no kingdom snowballs past a small fief cap, small parties shelter near settlements at dusk instead of travelling, hungry parties raid for food, and enemy rosters carry the same tier scarcity the player's does.
+
+### Eight questlines and the clock of the apocalypse
+- Each faction's answer to the Long Night can be pursued as a full questline from day ~50 onward, several borrowing the donation-accumulation and gather-in-one-town machinery already proven by the Great Awakening and Northmen Standing Stones systems — including two campaign-ending outcomes.
+- A Night of the Hunt strikes every 20–82 days; rumours of something gathering begin around day 300; a persistent demon band forms around day 600; past day 1000, a chance exists each period for a named, boss-tier Demon Lord to rise, bind the demons into his own faction, and besiege the world. Killing him is the campaign's victory condition; failing to stop him is its defeat.
+
+### A survivor's past
+- Character creation now offers a single background — "I am a survivor" — with the Youth and Young Adulthood steps rewritten around scavenging, demons, and the arcane instead of peacetime Calradia armies; the "studied the arcane arts" options grant the Spellbook and two short (≤7-character) starting spells.
+
+### Presentation
+- The mod presents in the launcher as **The Darkest Night** (`SubModule.xml` name/id), Sandbox-only (New Campaign/StoryMode is blocked), with a rewritten splash, lore intro, and loading-screen text for the new fiction. The codex/lexicon and every faction's dialogue were swept for the new lore and titles (Kinsman, Warlock, Integrated, Brother Templar, Comrade, and more).
+- Internally, the DLL and root C# namespace remain `AshAndEmber` — a deliberate, documented scope cut (see `CLAUDE.md`, "On the `AshAndEmber` namespace") rather than an oversight; it has no effect on gameplay, saves, or the player-visible mod name.
 
 ---
 

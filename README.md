@@ -1,45 +1,77 @@
-# Ash and Ember — v0.38
+# The Darkest Night — v0.1.0
 
-A Mount & Blade II: Bannerlord magic overhaul centred on the Inner Fire: a single, versatile force shaped by the caster's will. Lords who carry it fight differently. Bandits who steal it burn. The Ashen march from the north and do not negotiate.
+A total-conversion of Mount & Blade II: Bannerlord. The world shattered overnight: demons crawl out from the underworld every dusk and hunt the living, humanity survives behind walls and wards, gold has stopped mattering, and magic is no longer a noble's birthright but a formula anyone can tap out with their own two hands — if they're brave (or reckless) enough to try an untested one in battle.
+
+This mod is built on **Ash and Ember**, a mature magic-overhaul codebase that serves as this conversion's baseline and "parts bin" — many of the mechanics below (the Kindled, the Codex, crystals, schemes, sea trade, the tavern) are Ash and Ember systems reused wholesale or repurposed; see `CLAUDE.md` for the full architecture map and which folders are new versus inherited.
+
+## What's new in The Darkest Night
+
+- **The demons.** Every dusk, red-and-black demon war-parties — built entirely from re-dressed, re-tinted human and horse meshes (no new assets exist) — flood the map. They never retreat, never negotiate, execute their prisoners, and sink back below at dawn. Rarely, a horde assaults a town. See `src/Demons/`.
+- **The barter economy.** Gold is roughly a tenth as common everywhere (wages, upgrades, building, loot, ransom); town markets are starved of food/horses/good weapons; garrisons and food stores run at about half strength. Village food and the barter/item-exchange screens are how you actually get by. See `src/Economy/`.
+- **The Spellbook.** Casting is a directional formula: hold the focus key with free hands and tap a 5–20-character U/D/L/R sequence. A correct sequence casts — and is learned — even if you never studied it; a wrong one fizzles and risks a *spellburn* (self-harm, immobilization, a rogue demon on the field, and more). ~30–50 spells exist, from Fireball and Firewall to Summon Demon and Banish Demons. Opening the spellbook unlock costs one focus point; learn spells from ruins, from the Tower faction, or start with two. See `src/Spellbook/`.
+- **The eight factions.** Every kingdom has been rebuilt into a desperate answer to the Long Night, each with its own joining ritual, vassal title, and city-menu mechanic: the **Wolf Brothers** (Sturgia, cannibal survivalists), the **Tower** (Aserai, scholars who teach spells), the **Forest Widows** (Battania, a fungal hive-mind that speaks as "we"), the **Bloodbound** (Khuzait, demon-hunters who harvest Demon Blood), the **Temple** (Vlandia, a militant faith bearing Holy Sigils), **The Empire** (Northern Empire, keepers of the old rites, with Schemes access), **Legion** (Western Empire, raiders dreaming of an ark beyond the sea), and **The Chosen** (Southern Empire, a matriarchy that buys peace with sacrifice). Every other town stands alone as a Looter/Bandit-recruiting city-state. See `src/Factions/`, `src/FactionQuests/`, `src/CityStates/`.
+- **The ruins.** ~80% of castles are ownerless dungeons of the old world — collapsed halls, flooded cellars, sealed bedchambers — explored chamber by chamber on a Scouting-scaled timer, with real risk if night catches you inside. They're where relics and spell formulas are actually found. See `src/Ruins/`.
+- **Magical items.** Relics, wands, and talismans — weakened, permanent versions of the old Crystal and Dark Gift effects, generated cool names included — drop rarely from demon fights and ruins, and deal bonus damage to demons. See `src/Relics/`, `src/Wands/`, `src/Talismans/`.
+- **The clock of the apocalypse.** A Night of the Hunt strikes every 20–82 days; rumours of something gathering begin around day 300; a persistent demon band forms around day 600; past day 1000, a named Demon Lord may rise to conquer the world — or be hunted down and killed to win the campaign. See `src/Apocalypse/`.
+- **Mortal law.** NPC lords live under the same rules as the player: no empire ever re-forms, small parties shelter at dusk instead of travelling, hungry armies raid for food, and enemy rosters look as scarce as yours. See `src/MortalLaw/`.
+- **A survivor's past.** Character creation offers one background — *"I am a survivor"* — and rewrites the Youth/Young Adulthood steps around demons and scarcity instead of peacetime Calradia; choosing "studied the arcane arts" starts you with the Spellbook and two short spells. See `src/AI/CreationBackstoryRework.cs`.
+
+Everything below this point documents the underlying Ash and Ember mechanics that The Darkest Night is built on and, in several cases, still drives NPC casting or specific retained features through (dice games, drinking, and sea travel are explicitly untouched). Where a section describes something the player can no longer do directly (e.g. choosing the Inner Fire/Living Ember/Dark Gift path at creation, or casting through the old hold-and-charge input), it now describes the game's internals rather than the current player experience — see "What's new" above and `CLAUDE.md` for what replaced it.
 
 ---
 
 ## Package Structure
 
 ```
-AshAndEmber/
+AshAndEmber/                         (module id TheDarkestNight, presented as "The Darkest Night")
 ├── SubModule.xml                    mod manifest
 ├── ModuleData/
-│   ├── items.xml                    (reserved)
-│   └── troops.xml                   (reserved)
-├── src/                             ~62 000 lines across ~200 source files (grouped by system folder)
-│   ├── MagicSystem.cs               module entry point + mission behaviour
+│   ├── items.xml                    demon/relic/wand/talisman/Holy Sigil/Demon Blood item defs
+│   └── troops.xml                   elemental_being / demon troop templates
+├── src/                             ~65 000+ lines across ~250 source files (grouped by system folder)
+│   ├── MagicSystem.cs               module entry point + mission behaviour + debug-grant hook
 │   ├── MagicInputHandler.cs         keyboard/gamepad combo detection (legacy path)
 │   ├── SpellBuilder.cs              two-phase input parser → SpellCast (legacy / NPC)
 │   ├── AgingSystem.cs               casting cost (days of life)
 │   ├── SchoolData.cs / SpellDatabase.cs / ActiveEffects.cs / SaveDefiner.cs
-│   ├── Magic/                       unified element system (Codex, input, effects, walls, ultimates, map spells, teachers)
+│   │
+│   │   ── The Darkest Night systems ──
+│   ├── Demons/                      the night tide: factory, catalog, spawner, battle AI, visuals
+│   ├── Spellbook/                   formula casting, fizzle/spellburn, rare spellcaster lords + troop tree
+│   ├── Relics/ Wands/ Talismans/    magical items — weakened Crystal/Dark Gift effects, demon-bane bonus
+│   ├── Ruins/                       ~80% of castles as explorable, ownerless dungeons
+│   ├── CityStates/                  unclaimed towns as clan-named, Looter/Bandit-recruiting free cities
+│   ├── Apocalypse/                  Night of the Hunt, the gathering, the Demon Lord endgame
+│   ├── MortalLaw/                   NPC lords under the same scarcity/night-fear/food rules as the player
+│   ├── Economy/                     barter/scarcity GameModel overrides, daily market pruning
+│   ├── Factions/                    the eight reworked kingdoms (culture, dialogue, joining ritual, city menus)
+│   └── FactionQuests/               one questline per faction, day-50+ trigger
+│   │
+│   │   ── Ash and Ember baseline (still live — NPC casting, retained features, reuse templates) ──
+│   ├── Magic/                       unified element system (Codex, input [player path retired], effects, walls, ultimates, teachers)
 │   ├── Spells/                      legacy two-phase Inner Fire — SpellEffects.* partials, Blast/Self/Create spells, enchantments (drives NPC casts)
-│   ├── Nature/                      the Living Ember — charges, living-energy economy, seers, backlash
-│   ├── Miracles/                    Grace — prayers, grace economy, priest troops, battle AI, talents
-│   ├── DarkGifts/                   the Dark Gift path
-│   ├── Crystals/                    consumable crystal items, effects, battle AI
+│   ├── Nature/                      the Living Ember — charges, living-energy economy, seers, backlash (player path retired)
+│   ├── Miracles/                    Grace — prayers, grace economy, priest troops, battle AI, talents (player path retired)
+│   ├── DarkGifts/                   the Dark Gift path (template for Talismans/Relics)
+│   ├── Crystals/                    consumable crystal items, effects, battle AI (template for Relics)
+│   ├── Elementals/                  the Kindled — elemental beings; direct visual/behaviour template for Demons/
 │   ├── Talents/                     talent tree, learning curve, map-spell talents
-│   ├── Schemes/                     covert operations (scheme system, behaviour, minigame)
-│   ├── Sea/                         harbours, voyages, trade ventures, NPC sea lanes
+│   ├── Schemes/                     covert operations — now Empire-only, influence-paid (see CLAUDE.md)
+│   ├── Soldier/                     Take the Lord's Coin — hire out as a common soldier
+│   ├── Sea/                         harbours, voyages, trade ventures, NPC sea lanes (retained untouched)
 │   ├── Markets/                     the Exchange — commodity speculation
-│   ├── Tavern/                      tavern menus, rumours, outcomes
+│   ├── Tavern/                      tavern menus, rumours, outcomes (dice games + drinking, retained untouched)
 │   ├── ClanOrders/                  clan order system
-│   ├── AshenRuins/                  explorable Ashen ruins
+│   ├── AshenRuins/                  explorable Ashen ruins — structural template for Ruins/
 │   ├── Conclave/ Apprentice/        Ember Conclave, apprentice system
-│   ├── QuestSystems/                Dragon main quest, Burning Lab questline, settlement encounters, world & battle events
-│   ├── AI/                          Ashen kingdom/city, NPC mage AI, bandit mages, dialogue, Rival Shadow, cultures
-│   ├── Tribes/ Campaign/            faction/culture reworks (Templars, Tribes, Northmen, Duneborn), map tone
+│   ├── QuestSystems/                Dragon main quest, Burning Lab questline, settlement encounters, world & battle events; GreatAwakening/ and NorthmenStones/ are the reuse templates for FactionQuests/
+│   ├── AI/                          Ashen kingdom/city (template for CityStates/), NPC mage AI, bandit mages, dialogue, cultures, character-creation rework, Sandbox-only gate
+│   ├── Tribes/ Campaign/            legacy faction/culture reworks, map tone
 │   ├── Visual/                      glows, movement, atmospheric scene tone, battle whispers
-│   └── Startup/                     splash, lore intro, loading screen
+│   └── Startup/                     splash, lore intro, loading screen (The Long Night text)
 ├── tests/
 │   ├── AshAndEmber.Tests.csproj
-│   └── PureLogicTests.cs
+│   └── PureLogicTests.cs            covers every pure *Math.cs above — 563+ tests
 └── README.md
 ```
 
@@ -96,17 +128,40 @@ Start a new Sandbox campaign. A lore introduction screen appears. If the **"The 
 
 ## Lore Introduction
 
-When starting a new Sandbox campaign, a short lore screen appears before play begins:
+When starting a new Sandbox campaign, the intro screen (`src/Startup/AshEmberLoreIntro.cs`) tells the Long Night's story: Calradia had a thousand years of history and then one night the sky tore and the dead world's things climbed out; by morning the great armies were ash and only walls and faith held; the survivors built their world small, trading grain and iron hand-to-hand because gold buys nothing from things that don't trade; and in the ruins a few have found the old formulas still — spoken shapes that bend the world, if you get the shape right. The character-creation flow that follows is described under **A Survivor's Past** below, not the old gift-choice prompt.
 
-- The fire gives life. The Ashen chose the cold instead.
-- Three Empire factions fight over Calradia's bones while ash moves south.
-- Some mages, tempted by unliving, may answer the cold's call.
-
-The gift selection follows immediately after.
+**Getting the Spellbook:** every new character walks the same background (*"I am a survivor"*), and the Spellbook itself is unlocked by spending one focus point at the in-game menu, or granted at creation by choosing one of the Young Adulthood "studied the arcane arts" options (which also grants two random spells with formulas up to 7 characters). See **A Survivor's Past** and **The Spellbook** below.
 
 ---
 
-## Getting the Gift
+## The Spellbook
+
+*(The Darkest Night's only player-facing casting path. Superseded the sections below it, which now describe internals/NPC behaviour — kept for reference.)*
+
+### Unlocking
+
+Open the spellbook menu (Alt+L once the option appears) and spend **one focus point**. From then on, spells are learned three ways: tap a full, correct formula in battle (even one you've never studied — a lucky/reckless guess is recorded exactly like a taught spell), learn from **the Tower** faction's teaching menu, or find a formula in the **Ruins**.
+
+### Casting
+
+| Action | Input |
+|--------|-------|
+| Hold focus | **Left Alt** (keyboard) or **Controller RLeft** |
+| Tap the formula | **W/A/S/D** = Up/Left/Right/Down (keyboard) or the **left stick** (controller), while holding focus |
+| Open the spellbook mid-formula | **Alt + X** |
+| Cast | complete the correct 5–20-character sequence |
+
+Casting requires **empty hands** — no weapon or shield wielded. A correct sequence looses the bound spell (see `src/Spellbook/SpellbookCatalog.cs` for the full 30–50-entry list, including Fireball, Firewall, every elemental gust/wave/entangle/nova and its wall, Summon Demon, Banish Demons, and Light). A wrong, *completed* sequence fizzles and rolls a **spellburn** — base 60% chance, reduced by Intellect: self-damage, immobilization, a rogue unit command, an area burst, a demon flickering onto the field for 70 seconds switching sides every 10, and several more in the same vein (`src/Spellbook/SpellburnEffects.cs`).
+
+### Rare casters
+
+Roughly 7% of named lords/companions know 1–3 spells and cast them in battle. A dedicated, rare spellcaster troop tree also exists (recruit through tier 5, each tier knowing 2–3 battle spells) — see `src/Spellbook/SpellcasterLords.cs` / `SpellcasterTroops.cs`. No spells exist on the campaign map; every working is a battlefield cast.
+
+---
+
+## Getting the Gift *(legacy — describes the underlying Ash and Ember caster paths and mostly no longer chosen at creation)*
+
+**What actually still happens:** every new campaign still opens with a short yes/no "The Gift" prompt (`CampaignBehavior.Events.ShowGiftPrompt`) — *"Do you feel it still?"* — that sets `MageKnowledge.IsMage`. Answering yes no longer opens the old three-branch menu below or lets you cast through the retired element input; it exists to keep the underlying Codex/NPC-parity plumbing (and the Alt+L key's fallback to the legacy Codex for a non-Spellbook mage) consistent. **Actual player casting is exclusively the Spellbook**, described above. The three-path description below is kept for reference on what the *paths themselves* still are and drive for NPC lords/seers/priests.
 
 Two paths open at campaign start. Each is permanent — you walk one or the other.
 
@@ -121,13 +176,13 @@ Two paths open at campaign start. Each is permanent — you walk one or the othe
 
 **The Dark Gift** — For the cruel. If your hero is **Dishonourable**, the gift prompt also offers *"I bargained with the dark, and it marked me."* — choosing it starts you bearing **one random Dark Gift** (see *The Dark Altars and the Dark Gifts*). Visit a Dark Altar to buy more or renounce them.
 
-All these paths are **mutually exclusive** — Inner Fire, Grace, Nature, and the Dark Gifts cannot be mixed.
+All these paths are **mutually exclusive** — Inner Fire, Grace, Nature, and the Dark Gifts cannot be mixed. **The three-branch menu text above is not shown to the player** in The Darkest Night — only the simplified yes/no Gift prompt described above fires at new-game start. The paths, their talents, and their effects remain fully live for NPC lords, priest troops, and seer troops.
 
 ---
 
-## Controls
+## Controls *(legacy — the underlying element input; retired for the player, still drives NPC lords/the Kindled/demons)*
 
-*(As of v0.35.0, fire and nature magic are one unified art. The in-game journal entry **"Notes for the Adventurer"** always holds the authoritative, build-current controls; this is a summary.)*
+*(As of v0.35.0, fire and nature magic are one unified art. The in-game journal entry **"Notes for the Adventurer"** always holds the authoritative, build-current controls; this is a summary. In The Darkest Night, the hold-and-charge gesture below is no longer bound to the player — see **The Spellbook** above for what Left Alt / focus now actually does for you in battle.)*
 
 ### Keyboard
 
