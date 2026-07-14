@@ -1432,4 +1432,155 @@
     <Flags />
   </Item>
 
+  <!-- Phase 12, Faction E — the Temple's "The Unbroken Vow": the Five Vigils.
+       Same verified-safe one-handed-weapon clone template as the Holy Sigil /
+       Talismans (body_name="bo_mace_a", item_usage="onehanded_block_shield_swing",
+       physics_material="wood_weapon") — see TempleQuestArtifacts.cs. Not sold
+       anywhere; granted only by TempleQuestCampaignBehavior.Artifacts.cs on a
+       guaranteed ruin full-clear, so value is nominal/flavour only. -->
+  <Item id="aae_temple_artifact_vigil_brand"
+        name="The Vigil-Brand of Ocs Hall"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="throwing_stone"
+        Type="OneHandedWeapon"
+        weight="0.6"
+        value="1"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+  <Item id="aae_temple_artifact_last_chalice"
+        name="The Chalice of the Last Light"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="throwing_stone"
+        Type="OneHandedWeapon"
+        weight="0.6"
+        value="1"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+  <Item id="aae_temple_artifact_ash_rosary"
+        name="The Rosary of Ash"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="throwing_stone"
+        Type="OneHandedWeapon"
+        weight="0.6"
+        value="1"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+  <Item id="aae_temple_artifact_unbroken_standard"
+        name="The Standard of the Unbroken Vow"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="throwing_stone"
+        Type="OneHandedWeapon"
+        weight="0.6"
+        value="1"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+  <Item id="aae_temple_artifact_pravend_seal"
+        name="The Seal of Pravend"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="throwing_stone"
+        Type="OneHandedWeapon"
+        weight="0.6"
+        value="1"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
 </Items>

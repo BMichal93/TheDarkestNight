@@ -5148,5 +5148,131 @@ namespace AshAndEmber.Tests
         {
             Assert.Greater(BloodboundQuestMath.AttackPartiesPerSettlement, 0);
         }
+
+        // ── TempleQuestMath tests (Phase 12, Faction E — The Unbroken Vow) ──────
+
+        [Test]
+        public void TempleQuestMath_SelectArtifactRuins_PicksExactlyDesiredCountWhenEnoughExist()
+        {
+            var ruins = new System.Collections.Generic.List<string>();
+            for (int i = 0; i < 20; i++) ruins.Add("ruin_" + i);
+
+            var picked = TempleQuestMath.SelectArtifactRuins(ruins, TempleQuestMath.ArtifactCount);
+
+            Assert.AreEqual(TempleQuestMath.ArtifactCount, picked.Count);
+            // Every picked id must have come from the input set, and no duplicates.
+            Assert.AreEqual(picked.Count, new System.Collections.Generic.HashSet<string>(picked).Count);
+            foreach (var id in picked) Assert.Contains(id, ruins);
+        }
+
+        [Test]
+        public void TempleQuestMath_SelectArtifactRuins_IsDeterministic_SameInputSameOutput()
+        {
+            var ruins = new System.Collections.Generic.List<string> { "ruin_a", "ruin_b", "ruin_c", "ruin_d", "ruin_e", "ruin_f", "ruin_g" };
+
+            var first  = TempleQuestMath.SelectArtifactRuins(ruins, TempleQuestMath.ArtifactCount);
+            var second = TempleQuestMath.SelectArtifactRuins(new System.Collections.Generic.List<string>(ruins), TempleQuestMath.ArtifactCount);
+
+            CollectionAssert.AreEqual(first, second);
+        }
+
+        [Test]
+        public void TempleQuestMath_SelectArtifactRuins_FallsBackToFewerWhenNotEnoughRuinsExist()
+        {
+            var ruins = new System.Collections.Generic.List<string> { "ruin_only_one", "ruin_only_two" };
+
+            var picked = TempleQuestMath.SelectArtifactRuins(ruins, TempleQuestMath.ArtifactCount);
+
+            Assert.AreEqual(2, picked.Count);
+            Assert.Contains("ruin_only_one", picked);
+            Assert.Contains("ruin_only_two", picked);
+        }
+
+        [Test]
+        public void TempleQuestMath_SelectArtifactRuins_DegenerateInputsReturnEmpty()
+        {
+            Assert.AreEqual(0, TempleQuestMath.SelectArtifactRuins(null, TempleQuestMath.ArtifactCount).Count);
+            Assert.AreEqual(0, TempleQuestMath.SelectArtifactRuins(new System.Collections.Generic.List<string>(), TempleQuestMath.ArtifactCount).Count);
+        }
+
+        [Test]
+        public void TempleQuestMath_SelectArtifactRuins_IgnoresBlankAndDuplicateIds()
+        {
+            var ruins = new System.Collections.Generic.List<string> { "ruin_x", "ruin_x", "", null, "ruin_y" };
+
+            var picked = TempleQuestMath.SelectArtifactRuins(ruins, TempleQuestMath.ArtifactCount);
+
+            Assert.AreEqual(2, picked.Count);
+            CollectionAssert.AllItemsAreUnique(picked);
+        }
+
+        [Test]
+        public void TempleQuestMath_HasAllArtifacts_GatesAtConfiguredCount()
+        {
+            Assert.IsFalse(TempleQuestMath.HasAllArtifacts(TempleQuestMath.ArtifactCount - 1));
+            Assert.IsTrue(TempleQuestMath.HasAllArtifacts(TempleQuestMath.ArtifactCount));
+            Assert.IsTrue(TempleQuestMath.HasAllArtifacts(TempleQuestMath.ArtifactCount + 1));
+        }
+
+        [Test]
+        public void TempleQuestMath_HasReachedKillTarget_GatesAtConfiguredCount()
+        {
+            Assert.IsFalse(TempleQuestMath.HasReachedKillTarget(TempleQuestMath.KillTarget - 1));
+            Assert.IsTrue(TempleQuestMath.HasReachedKillTarget(TempleQuestMath.KillTarget));
+            Assert.IsTrue(TempleQuestMath.HasReachedKillTarget(TempleQuestMath.KillTarget + 1000));
+        }
+
+        [Test]
+        public void TempleQuestMath_KillTarget_IsHugeButFinite()
+        {
+            // "A huge but technically countable number" — genuinely large next
+            // to a single demon party (DemonMath.MaxPartyBodies), but not so
+            // large it can never in principle be reached over a very long,
+            // sustained campaign.
+            Assert.Greater(TempleQuestMath.KillTarget, DemonMath.MaxPartyBodies * 100);
+            Assert.Less(TempleQuestMath.KillTarget, int.MaxValue / 2);
+        }
+
+        [Test]
+        public void TempleQuestMath_ClampedKillProgress_NeverExceedsTargetOrGoesNegative()
+        {
+            Assert.AreEqual(0, TempleQuestMath.ClampedKillProgress(-5));
+            Assert.AreEqual(0, TempleQuestMath.ClampedKillProgress(0));
+            Assert.AreEqual(TempleQuestMath.KillTarget, TempleQuestMath.ClampedKillProgress(TempleQuestMath.KillTarget));
+            Assert.AreEqual(TempleQuestMath.KillTarget, TempleQuestMath.ClampedKillProgress(TempleQuestMath.KillTarget + 999));
+        }
+
+        [Test]
+        public void TempleQuestMath_ArmyCohesionTopUp_IsAboveTheFloor()
+        {
+            Assert.Greater(TempleQuestMath.ArmyCohesionTopUp, TempleQuestMath.ArmyCohesionFloor);
+        }
+
+        [Test]
+        public void TempleQuestArtifacts_HasExactlyArtifactCountEntries_WithUniqueIndicesAndItemIds()
+        {
+            var all = TempleQuestArtifacts.All;
+            Assert.AreEqual(TempleQuestMath.ArtifactCount, all.Count);
+
+            var indices = new System.Collections.Generic.HashSet<int>();
+            var itemIds = new System.Collections.Generic.HashSet<string>();
+            foreach (var def in all)
+            {
+                Assert.IsTrue(indices.Add(def.Index), "Duplicate artifact index: " + def.Index);
+                Assert.IsTrue(itemIds.Add(def.ItemId), "Duplicate artifact item id: " + def.ItemId);
+                Assert.IsFalse(string.IsNullOrEmpty(def.Name));
+                Assert.IsFalse(string.IsNullOrEmpty(def.Lore));
+            }
+        }
+
+        [Test]
+        public void TempleQuestArtifacts_TryGet_FindsEveryDefinedIndex_AndFailsOutOfRange()
+        {
+            for (int i = 0; i < TempleQuestMath.ArtifactCount; i++)
+                Assert.IsTrue(TempleQuestArtifacts.TryGet(i, out _), "Missing artifact index " + i);
+
+            Assert.IsFalse(TempleQuestArtifacts.TryGet(-1, out _));
+            Assert.IsFalse(TempleQuestArtifacts.TryGet(TempleQuestMath.ArtifactCount, out _));
+        }
     }
 }

@@ -196,6 +196,9 @@ namespace AshAndEmber
                 // Phase 12, Faction D — the Bloodbound's "The Surpassing Rite" (see
                 // FactionQuests/Bloodbound/).
                 try { campaignStarter.AddBehavior(new BloodboundQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Phase 12, Faction E — the Temple's "The Unbroken Vow" (see
+                // FactionQuests/Temple/).
+                try { campaignStarter.AddBehavior(new TempleQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -266,6 +269,7 @@ namespace AshAndEmber
                 try { ChosenQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ForestWidowsQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { BloodboundQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { TempleQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
                 // player hits Save — long after the quest triggered. Audit at boot instead.
@@ -812,6 +816,9 @@ namespace AshAndEmber
                 try { SpellEffects.ApplyDarkGiftKillEffects(affectedAgent, affectorAgent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // MartyrsRefusal relic: weaker per-item BloodPact.
                 try { RelicEffects.OnAgentKill(affectedAgent, affectorAgent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Phase 12, Faction E — the Temple's "The Unbroken Vow": counts
+                // every demon kill toward the 50,000 target once the Vow is bound.
+                try { TempleQuestCampaignBehavior.OnDemonAgentKilled(affectedAgent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Ember passive (legacy): a kill sometimes repays the fire's debt
                 if (affectorAgent == Agent.Main && MageKnowledge.IsMage && TalentSystem.Has(TalentId.Ember))
                     if (_rng.NextDouble() < 0.10)

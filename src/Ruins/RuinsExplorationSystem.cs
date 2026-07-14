@@ -53,6 +53,19 @@ namespace AshAndEmber
 
         public static bool HasActiveCrawl => _activeRuin != null;
 
+        // Extensibility hook (mod-author-directed addition, Phase 12) — fired
+        // once, with the settlement's StringId, the moment a ruin is FULLY
+        // cleared (FinishCrawl(fullyCleared: true)). Lets an outside system
+        // (the Temple's "The Unbroken Vow" — FactionQuests/Temple/) hang a
+        // deterministic, RNG-free grant off a specific ruin's full clear
+        // WITHOUT this file needing to know anything about artifacts,
+        // factions, or quest state — see TempleQuestMath.cs's header for why
+        // the normal chamber loot roll (RelicMath.RollRuinLoot) is never used
+        // for a quest-critical, must-exist item. Subscribers must guard their
+        // own logic; a throwing subscriber is caught here so a broken hook
+        // can never break ordinary ruin exploration.
+        public static event Action<string> RuinFullyCleared;
+
         // ── Entry point (called from RuinsMenus) ────────────────────────────
         public static void BeginExploration(Settlement ruin)
         {
@@ -324,6 +337,7 @@ namespace AshAndEmber
                 InformationManager.DisplayMessage(new InformationMessage(
                     $"You reach the Throne of Dust and find nothing left sitting on it. {ruinName} has given up what it had.",
                     new Color(0.75f, 0.65f, 0.35f)));
+                try { RuinFullyCleared?.Invoke(stringId); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             }
             else if (stringId != null)
             {

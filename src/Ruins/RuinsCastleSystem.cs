@@ -88,6 +88,13 @@ namespace AshAndEmber
 
         // ── Queries ──────────────────────────────────────────────────────────
         public static bool IsRuin(Settlement s) => s != null && _ruinIds.Contains(s.StringId);
+
+        // Every settlement id currently converted to a ruin this session
+        // (mod-author-directed addition — Phase 12's Temple questline needs
+        // to deterministically pick five of these for guaranteed artifact
+        // placement; see TempleQuestMath.SelectArtifactRuins). Defensive copy;
+        // never mutate the returned list.
+        public static List<string> AllRuinIds() => _ruinIds.ToList();
         public static bool IsCleared(string settlementStringId) => _cleared.Contains(settlementStringId);
         public static bool IsOnCooldown(string settlementStringId) =>
             _cooldownDays.TryGetValue(settlementStringId, out int d) && d > 0;

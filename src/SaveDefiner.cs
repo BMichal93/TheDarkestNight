@@ -88,6 +88,9 @@ namespace AshAndEmber
 
                 // Phase 12, Faction D -- the Bloodbound's "The Surpassing Rite".
                 new KeyValuePair<Type, int>(typeof(BloodboundQuestLog),        19),
+
+                // Phase 12, Faction E -- the Temple's "The Unbroken Vow".
+                new KeyValuePair<Type, int>(typeof(TempleQuestLog),            20),
             };
 
         protected override void DefineClassTypes()

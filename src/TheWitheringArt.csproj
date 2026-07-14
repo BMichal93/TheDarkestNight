@@ -228,6 +228,13 @@
     <Compile Include="FactionQuests\ForestWidows\ForestWidowsQuestCampaignBehavior.cs"/>
     <Compile Include="FactionQuests\ForestWidows\ForestWidowsQuestCampaignBehavior.Altar.cs"/>
     <Compile Include="FactionQuests\ForestWidows\ForestWidowsQuestCampaignBehavior.Resolution.cs"/>
+    <Compile Include="FactionQuests\Temple\TempleQuestMath.cs"/>
+    <Compile Include="FactionQuests\Temple\TempleQuestArtifacts.cs"/>
+    <Compile Include="FactionQuests\Temple\TempleQuestLog.cs"/>
+    <Compile Include="FactionQuests\Temple\TempleQuestCampaignBehavior.cs"/>
+    <Compile Include="FactionQuests\Temple\TempleQuestCampaignBehavior.Artifacts.cs"/>
+    <Compile Include="FactionQuests\Temple\TempleQuestCampaignBehavior.Army.cs"/>
+    <Compile Include="FactionQuests\Temple\TempleQuestCampaignBehavior.Kills.cs"/>
     <Compile Include="FactionQuests\ForestWidows\ForestWidowsQuestDialogue.cs"/>
     <Compile Include="FactionQuests\Bloodbound\BloodboundQuestMath.cs"/>
     <Compile Include="FactionQuests\Bloodbound\BloodboundQuestLog.cs"/>
