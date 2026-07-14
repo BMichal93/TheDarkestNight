@@ -163,6 +163,11 @@ namespace AshAndEmber
                 // the same scarcity silhouette the player already lives under.
                 // See MortalLaw/MortalLawCampaignBehavior.cs for the full design note.
                 try { campaignStarter.AddBehavior(new MortalLawCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Phase 11 — the clock of the apocalypse. The Night of the Hunt
+                // (requirement 32), the day-300/600/1000 escalation stages, and
+                // the Demon Lord's rise/victory/defeat (requirement 33). See
+                // Apocalypse/ApocalypseCampaignBehavior.cs.
+                try { campaignStarter.AddBehavior(new ApocalypseCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -221,6 +226,7 @@ namespace AshAndEmber
                 try { CityStateCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { RuinsCastleSystem.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { MortalLawCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ApocalypseCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
                 // player hits Save — long after the quest triggered. Audit at boot instead.

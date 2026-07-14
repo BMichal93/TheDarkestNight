@@ -53,6 +53,19 @@ namespace AshAndEmber
             return f1IsDuneborn ^ f2IsDuneborn;
         }
 
+        // Phase 11 — the Demon Lord's kingdom is at war with everyone for as
+        // long as it exists at all; ApocalypseCampaignBehavior also re-declares
+        // war on a weekly tick as a belt-and-suspenders backstop, but blocking
+        // the AI from ever proposing peace here is what actually prevents a
+        // one-week gap in which some kingdom quietly settles with him.
+        private static bool IsDemonLordPermanentWar(IFaction f1, IFaction f2)
+        {
+            if (f1 == null || f2 == null || f1 == f2) return false;
+            bool f1IsLord = (f1 as Kingdom)?.StringId == DemonLordSystem.KingdomId;
+            bool f2IsLord = (f2 as Kingdom)?.StringId == DemonLordSystem.KingdomId;
+            return f1IsLord ^ f2IsLord;
+        }
+
         // Marks Ashen-vs-faction wars as constant so the engine excludes them from
         // overcommitment checks and never generates peace proposals for them.
         // Also locks all wars involving Arenicos's empire after the Ashen merger.
@@ -61,6 +74,7 @@ namespace AshAndEmber
             if (IsAshenVsOther(faction1, faction2)) return true;
             if (IsArenicosPostMerger(faction1) || IsArenicosPostMerger(faction2)) return true;
             if (IsDunebornPermanentWar(faction1, faction2)) return true;
+            if (IsDemonLordPermanentWar(faction1, faction2)) return true;
             return base.IsAtConstantWar(faction1, faction2);
         }
 
@@ -101,6 +115,8 @@ namespace AshAndEmber
             if (IsArenicosPostMerger(factionDeclaresPeace) || IsArenicosPostMerger(factionDeclaredPeace))
                 return -10000f;
             if (IsDunebornPermanentWar(factionDeclaresPeace, factionDeclaredPeace))
+                return -10000f;
+            if (IsDemonLordPermanentWar(factionDeclaresPeace, factionDeclaredPeace))
                 return -10000f;
 
             // Prevent any kingdom from ending a war that started less than MinWarDays ago.
