@@ -4082,5 +4082,63 @@ namespace AshAndEmber.Tests
         {
             Assert.Greater(PaleWidowsMath.DemonTroopsGrantedPerMaleSacrifice, 0);
         }
+
+        // ── CityStateMath tests (Phase 8 — the wretched free towns) ────────────
+
+        [Test]
+        public void CityStateMath_ShouldBeginConversion_RespectsSettleDelay()
+        {
+            Assert.IsFalse(CityStateMath.ShouldBeginConversion(0));
+            Assert.IsFalse(CityStateMath.ShouldBeginConversion(CityStateMath.SettleDelayDays - 1));
+            Assert.IsTrue(CityStateMath.ShouldBeginConversion(CityStateMath.SettleDelayDays));
+            Assert.IsTrue(CityStateMath.ShouldBeginConversion(CityStateMath.SettleDelayDays + 10));
+        }
+
+        [Test]
+        public void CityStateMath_CityStateKingdomId_IsPrefixedAndStable()
+        {
+            Assert.AreEqual("citystate_clan_test", CityStateMath.CityStateKingdomId("clan_test"));
+            Assert.AreEqual(
+                CityStateMath.CityStateKingdomId("clan_test"),
+                CityStateMath.CityStateKingdomId("clan_test"),
+                "The same clan must always map to the same city-state kingdom id (reload-safety depends on this).");
+            Assert.IsNull(CityStateMath.CityStateKingdomId(null));
+            Assert.IsNull(CityStateMath.CityStateKingdomId(""));
+        }
+
+        [Test]
+        public void CityStateMath_IsCityStateKingdomId_OnlyMatchesThePrefix()
+        {
+            Assert.IsTrue(CityStateMath.IsCityStateKingdomId("citystate_clan_test"));
+            Assert.IsFalse(CityStateMath.IsCityStateKingdomId("clan_test"));
+            Assert.IsFalse(CityStateMath.IsCityStateKingdomId("ashen_kingdom"));
+            Assert.IsFalse(CityStateMath.IsCityStateKingdomId(null));
+        }
+
+        [Test]
+        public void CityStateMath_CityStateKingdomName_UsesClanNameConvention()
+        {
+            Assert.AreEqual("Clan Uxkhal", CityStateMath.CityStateKingdomName("Uxkhal"));
+            Assert.AreEqual("Clan Unknown", CityStateMath.CityStateKingdomName(null));
+        }
+
+        [Test]
+        public void CityStateMath_BanditCultureIdFor_MapsEachCoreCultureToABanditCulture()
+        {
+            Assert.AreEqual("sea_raiders",     CityStateMath.BanditCultureIdFor("empire"));
+            Assert.AreEqual("mountain_bandits", CityStateMath.BanditCultureIdFor("sturgia"));
+            Assert.AreEqual("forest_bandits",  CityStateMath.BanditCultureIdFor("vlandia"));
+            Assert.AreEqual("steppe_bandits",  CityStateMath.BanditCultureIdFor("khuzait"));
+            Assert.AreEqual("desert_bandits",  CityStateMath.BanditCultureIdFor("aserai"));
+            Assert.AreEqual("forest_bandits",  CityStateMath.BanditCultureIdFor("battania"));
+            Assert.AreEqual("looters",         CityStateMath.BanditCultureIdFor("some_unknown_culture"));
+            Assert.AreEqual("looters",         CityStateMath.BanditCultureIdFor(null));
+        }
+
+        [Test]
+        public void CityStateMath_BanditCultureIdFor_IsCaseInsensitive()
+        {
+            Assert.AreEqual("steppe_bandits", CityStateMath.BanditCultureIdFor("KHUZAIT"));
+        }
     }
 }

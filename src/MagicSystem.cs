@@ -147,6 +147,10 @@ namespace AshAndEmber
                 // the Empire's CultureObject but not its Kingdom — see
                 // Factions/PaleWidows/PaleWidowsCulture.cs.
                 campaignStarter.AddBehavior(new PaleWidowsCampaignBehavior());
+                // Phase 8 — the wretched free towns. Turns every town the eight
+                // Phase 7 factions ejected into its own permanent one-city
+                // kingdom (modelled on AshenCitySystem's mechanics).
+                campaignStarter.AddBehavior(new CityStateCampaignBehavior());
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -202,6 +206,7 @@ namespace AshAndEmber
                 try { EmpireCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { LegionCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { PaleWidowsCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { CityStateCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
                 // player hits Save — long after the quest triggered. Audit at boot instead.
