@@ -51,6 +51,14 @@ namespace AshAndEmber
         // at map-event end.
         public static DemonMath.EnvironmentVariant? PendingVariant = null;
 
+        // Generic "this mission's demons are a boss/named encounter" hook —
+        // set by any system staging one (e.g. FactionQuests/WolfBrothers'
+        // Great Hunt) so OnAgentBuild scales every demon in THIS mission the
+        // same layering technique ApocalypseMath.DemonLordHealthMultiplier
+        // uses for the Demon Lord, just opt-in and scaled down. 1f (no-op) in
+        // every ordinary battle; reset at mission end.
+        public static float PendingBossMultiplier = 1f;
+
         public static void Register(Agent agent, DemonMath.DemonTier tier)
         {
             if (agent == null) return;
@@ -102,6 +110,7 @@ namespace AshAndEmber
             _beings.Clear();
             _tierOf.Clear();
             PendingVariant = null;
+            PendingBossMultiplier = 1f;
         }
 
         // Every troop built for this mission passes through here; no-op unless
@@ -145,6 +154,7 @@ namespace AshAndEmber
                     DemonMath.EnvironmentVariant variant = PendingVariant ?? DemonMath.EnvironmentVariant.Default;
                     float hp = DemonMath.Health(tier, variant);
                     if (tier == DemonMath.DemonTier.Lord) hp *= ApocalypseMath.DemonLordHealthMultiplier;
+                    hp *= PendingBossMultiplier;
                     agent.HealthLimit = Math.Max(agent.HealthLimit, hp);
                     agent.Health = agent.HealthLimit;
                 }

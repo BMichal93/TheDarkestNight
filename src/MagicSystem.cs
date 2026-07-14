@@ -168,6 +168,13 @@ namespace AshAndEmber
                 // the Demon Lord's rise/victory/defeat (requirement 33). See
                 // Apocalypse/ApocalypseCampaignBehavior.cs.
                 try { campaignStarter.AddBehavior(new ApocalypseCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Phase 12 — eight faction questlines, from ~day 50. The shared,
+                // generic trigger (FactionQuests/FactionQuestTrigger.cs) is
+                // registered once; each questline's own behavior plugs into it
+                // from its own constructor. Only Faction A (Wolf Brothers' "The
+                // Great Hunt") exists so far — see FactionQuests/WolfBrothers/.
+                try { campaignStarter.AddBehavior(new FactionQuestTriggerCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { campaignStarter.AddBehavior(new WolfHuntQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -227,6 +234,8 @@ namespace AshAndEmber
                 try { RuinsCastleSystem.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { MortalLawCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ApocalypseCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { FactionQuestTriggerCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { WolfHuntQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
                 // player hits Save — long after the quest triggered. Audit at boot instead.

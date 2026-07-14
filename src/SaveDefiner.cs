@@ -73,6 +73,9 @@ namespace AshAndEmber
 
                 // The Bonefire Circle — the Northmen seers' standing stones at Varcheg.
                 new KeyValuePair<Type, int>(typeof(NorthmenStonesQuestLog),    14),
+
+                // Phase 12, Faction A — the Wolf Brothers' "The Great Hunt."
+                new KeyValuePair<Type, int>(typeof(WolfHuntQuestLog),          15),
             };
 
         protected override void DefineClassTypes()

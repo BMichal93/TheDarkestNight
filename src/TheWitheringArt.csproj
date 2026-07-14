@@ -192,6 +192,15 @@
     <Compile Include="Apocalypse\ApocalypseCampaignBehavior.cs"/>
     <Compile Include="Apocalypse\ApocalypseCampaignBehavior.Gathering.cs"/>
     <Compile Include="Apocalypse\ApocalypseCampaignBehavior.Resolution.cs"/>
+    <Compile Include="FactionQuests\FactionQuestMath.cs"/>
+    <Compile Include="FactionQuests\FactionQuestTrigger.cs"/>
+    <Compile Include="FactionQuests\FactionQuestTriggerCampaignBehavior.cs"/>
+    <Compile Include="FactionQuests\WolfBrothers\WolfHuntMath.cs"/>
+    <Compile Include="FactionQuests\WolfBrothers\WolfHuntCatalog.cs"/>
+    <Compile Include="FactionQuests\WolfBrothers\WolfHuntBeastParty.cs"/>
+    <Compile Include="FactionQuests\WolfBrothers\WolfHuntQuestLog.cs"/>
+    <Compile Include="FactionQuests\WolfBrothers\WolfHuntQuestCampaignBehavior.cs"/>
+    <Compile Include="FactionQuests\WolfBrothers\WolfHuntQuestCampaignBehavior.Menus.cs"/>
     <Compile Include="MortalLaw\MortalLawMath.cs"/>
     <Compile Include="MortalLaw\MortalLawCampaignBehavior.cs"/>
     <Compile Include="MortalLaw\MortalLawCampaignBehavior.NightFear.cs"/>

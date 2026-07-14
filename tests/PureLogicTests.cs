@@ -4501,5 +4501,104 @@ namespace AshAndEmber.Tests
             Assert.IsFalse(ApocalypseMath.IsDefeatByElimination(1));
             Assert.IsTrue(ApocalypseMath.IsDefeatByElimination(0));
         }
+
+        // ── FactionQuestMath tests (Phase 12 shared trigger) ─────────────────────
+
+        [Test]
+        public void FactionQuestMath_IsTriggerEligible_GatesAtDay50()
+        {
+            Assert.IsFalse(FactionQuestMath.IsTriggerEligible(0));
+            Assert.IsFalse(FactionQuestMath.IsTriggerEligible(49));
+            Assert.IsTrue(FactionQuestMath.IsTriggerEligible(50));
+            Assert.IsTrue(FactionQuestMath.IsTriggerEligible(51));
+            Assert.IsTrue(FactionQuestMath.IsTriggerEligible(10_000));
+        }
+
+        // ── WolfHuntMath tests (Phase 12, Faction A — The Great Hunt) ────────────
+
+        [Test]
+        public void WolfHuntMath_StageCount_IsThree()
+        {
+            Assert.AreEqual(3, WolfHuntMath.StageCount);
+        }
+
+        [Test]
+        public void WolfHuntMath_IsValidStage_OnlyWithinRange()
+        {
+            Assert.IsFalse(WolfHuntMath.IsValidStage(-1));
+            Assert.IsTrue(WolfHuntMath.IsValidStage(0));
+            Assert.IsTrue(WolfHuntMath.IsValidStage(WolfHuntMath.StageCount - 1));
+            Assert.IsFalse(WolfHuntMath.IsValidStage(WolfHuntMath.StageCount));
+        }
+
+        [Test]
+        public void WolfHuntMath_BeastTier_EscalatesEveryStage()
+        {
+            Assert.AreEqual(DemonMath.DemonTier.Stalker,   WolfHuntMath.BeastTier(0));
+            Assert.AreEqual(DemonMath.DemonTier.Ravager,   WolfHuntMath.BeastTier(1));
+            Assert.AreEqual(DemonMath.DemonTier.Hellsteed, WolfHuntMath.BeastTier(2));
+        }
+
+        [Test]
+        public void WolfHuntMath_PackSize_GrowsEveryStage()
+        {
+            int last = 0;
+            for (int i = 0; i < WolfHuntMath.StageCount; i++)
+            {
+                int size = WolfHuntMath.PackSize(i);
+                Assert.Greater(size, last, $"stage {i} pack should be larger than the previous stage's");
+                last = size;
+            }
+        }
+
+        [Test]
+        public void WolfHuntMath_PackSize_SmallerThanOrdinaryNightTideParty()
+        {
+            // The Great Hunt's packs are deliberately smaller than an ordinary
+            // night-tide party (DemonMath.MaxPartyBodies) — the challenge is
+            // concentrated in the tier/health boost, not sheer numbers.
+            for (int i = 0; i < WolfHuntMath.StageCount; i++)
+                Assert.Less(WolfHuntMath.PackSize(i), DemonMath.MaxPartyBodies);
+        }
+
+        [Test]
+        public void WolfHuntMath_BeastHealthMultiplier_EscalatesAndStaysBelowDemonLord()
+        {
+            float last = 1f;
+            for (int i = 0; i < WolfHuntMath.StageCount; i++)
+            {
+                float mult = WolfHuntMath.BeastHealthMultiplier(i);
+                Assert.Greater(mult, last, $"stage {i} health multiplier should exceed the previous stage's");
+                Assert.Less(mult, ApocalypseMath.DemonLordHealthMultiplier,
+                    "a mid-quest beast must never out-scale the campaign's actual endgame boss");
+                last = mult;
+            }
+        }
+
+        [Test]
+        public void WolfHuntMath_FinalChoice_ConsequencesAreDistinctAndOpposedTraitShifts()
+        {
+            // Transformation hardens (Mercy down, Valor up); Burning partially
+            // restores mercy — genuinely opposite mechanical directions, not
+            // just different flavour text.
+            Assert.Less(WolfHuntMath.TransformationMercyShift, 0);
+            Assert.Greater(WolfHuntMath.TransformationValorShift, 0);
+            Assert.Greater(WolfHuntMath.BurningMercyShift, 0);
+            Assert.AreNotEqual(WolfHuntMath.TransformationMercyShift, WolfHuntMath.BurningMercyShift);
+        }
+
+        [Test]
+        public void WolfHuntMath_FinalChoice_OnlyTransformationGrantsPermanentHp()
+        {
+            Assert.Greater(WolfHuntMath.TransformationHpBonus, 0f);
+        }
+
+        [Test]
+        public void WolfHuntMath_FinalChoice_BurningRenownExceedsTransformationRenown()
+        {
+            // Word of restraint travels further than word of the kill — see
+            // WolfHuntMath's header comment for the design reasoning.
+            Assert.Greater(WolfHuntMath.BurningRenownGain, WolfHuntMath.TransformationRenownGain);
+        }
     }
 }
