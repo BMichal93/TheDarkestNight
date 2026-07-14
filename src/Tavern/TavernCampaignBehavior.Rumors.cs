@@ -303,6 +303,11 @@ namespace AshAndEmber
             "Someone in a red cloak has been asking about the eastern road for three days. Nobody knows them.",
             "The ferry downstream hasn't run in two weeks. The ferryman says the water is wrong. Won't say how.",
             "A whole caravan showed up without its captain. The goods were there. The man wasn't. The guards don't remember him leaving.",
+            "A ruin-hunter came back from the old castle with a scar and a sack of iron, and swears there's more in the flooded cellar. He hasn't gone back for it.",
+            "A wandering mage spoke a formula wrong two towns over and burst into flame right there in the square. They still talk about the smell.",
+            "Someone's selling a 'relic' at half the going rate. Half the going rate for a relic buys you a very good copy.",
+            "The Tower is paying in food for anyone who can bring back a working scratched into stone. No questions about where you found it.",
+            "A free town two days east lost its walls last month. Nobody's rebuilt them. Nobody's said why out loud.",
         };
 
         // ── Spend an evening ──────────────────────────────────────────────────
@@ -408,6 +413,8 @@ namespace AshAndEmber
             "A bearded man at the bar is crying very quietly. No one has asked him why. Probably they know.",
             "The fire snaps and a coal rolls out. Three people reach for the tongs at the same time. The fourth person laughs.",
             "A child has fallen asleep under a bench at the back of the room. None of the adults seem to be responsible for her.",
+            "Everyone in the room glances at the door every time it opens, and pretends they didn't, until the sun comes up.",
+            "A ruin-hunter is showing off a length of chain he swears came off a demon. It might have. Nobody argues with him about it tonight.",
         };
     }
 }

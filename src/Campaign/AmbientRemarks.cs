@@ -300,6 +300,10 @@ namespace AshAndEmber
                 "Someone starts a rumour about the road ahead just to see how far it travels by morning. It travels further than expected.",
                 "A young soldier practices a speech under his breath. He stops the moment anyone gets close enough to hear it.",
                 "The fire pops and throws a spark onto someone's sleeve. He watches it burn a small hole before he thinks to put it out.",
+                "Someone counts the watch fires on the walls behind you until they can't see them anymore, then starts counting something else.",
+                "The sentries double their rounds an hour before dusk without being told to. Nobody has to explain why anymore.",
+                "A soldier asks how far it is to a proper wall by nightfall. You've all learned to answer that question honestly.",
+                "The ground near camp is scored with old claw marks, half-grown over. Someone notices. Nobody mentions it twice.",
             };
             return pool[_rng.Next(pool.Length)];
         }
