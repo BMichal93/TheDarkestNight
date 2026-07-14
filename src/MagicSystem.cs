@@ -57,6 +57,8 @@ namespace AshAndEmber
             try { CrystalBattleAI.Reset();               } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { NatureEffects.ClearBattleState();      } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { SpellbookInputHandler.ResetInputState(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { BloodAttunementInputHandler.ResetInputState(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { BloodAttunementLordAI.ClearCooldowns();    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { SpellburnEffects.ClearBattleState();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { RelicEffects.ClearBattleState();          } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { WandEffects.ClearBattleState();           } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -83,7 +85,12 @@ namespace AshAndEmber
                 gameStarterObject is CampaignGameStarter campaignStarter)
             {
                 campaignStarter.AddModel(new AshenDiplomacyModel());
-                campaignStarter.AddModel(new ForestClansSpeedModel());
+                // BloodAttunementSpeedModel subclasses ForestClansSpeedModel and layers
+                // the blood-attunement daytime-only speed penalty (mod-author-directed
+                // addition) on top of it — TaleWorlds resolves only ONE
+                // PartySpeedCalculatingModel, so registering both independently would
+                // silently drop the Green Roads bonus. See that file's header.
+                campaignStarter.AddModel(new BloodAttunementSpeedModel());
                 campaignStarter.AddModel(new ForestClansWageModel());
                 campaignStarter.AddModel(new ForestClansPartySizeModel());
                 // Phase 2 — the barter economy (Path B: gold ~10x scarcer
@@ -202,6 +209,9 @@ namespace AshAndEmber
                 // Phase 12, Faction F — the Empire's "The Reunification" (see
                 // FactionQuests/Empire/).
                 try { campaignStarter.AddBehavior(new EmpireQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Phase 12, Faction G — Legion's "The Far Shore" (see
+                // FactionQuests/Legion/).
+                try { campaignStarter.AddBehavior(new LegionQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -274,6 +284,7 @@ namespace AshAndEmber
                 try { BloodboundQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { TempleQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { EmpireQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { LegionQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
                 // player hits Save — long after the quest triggered. Audit at boot instead.
@@ -632,6 +643,8 @@ namespace AshAndEmber
             NatureSeerAI.MissionTick(dt);
             NatureCharge.MissionTick(dt);
             SpellbookInputHandler.Tick(inMission: true);
+            BloodAttunementInputHandler.Tick(inMission: true, dt);
+            BloodAttunementLordAI.MissionTick(dt);
             SpellburnEffects.Tick(dt);
             ActiveEffectManager.MissionTick(dt);
             ColourLordAI.MissionTick(dt);
@@ -712,6 +725,8 @@ namespace AshAndEmber
             try { NatureSeerAI.ClearCooldowns();              } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { NatureInputHandler.ResetInputState();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { SpellbookInputHandler.ResetInputState();    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { BloodAttunementInputHandler.ResetInputState(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { BloodAttunementLordAI.ClearCooldowns();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { SpellburnEffects.ClearBattleState();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { RelicEffects.ClearBattleState();            } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { WandEffects.ClearBattleState();             } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }

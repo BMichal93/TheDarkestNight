@@ -162,6 +162,10 @@
     <Compile Include="Factions\Bloodbound\BloodboundCatalog.cs"/>
     <Compile Include="Factions\Bloodbound\BloodboundCampaignBehavior.cs"/>
     <Compile Include="Factions\Bloodbound\BloodboundCampaignBehavior.Menus.cs"/>
+    <Compile Include="Factions\Bloodbound\BloodAttunementMath.cs"/>
+    <Compile Include="Factions\Bloodbound\BloodAttunement.cs"/>
+    <Compile Include="Factions\Bloodbound\BloodAttunementInputHandler.cs"/>
+    <Compile Include="Factions\Bloodbound\BloodAttunementLordAI.cs"/>
     <Compile Include="Factions\Temple\TempleMath.cs"/>
     <Compile Include="Factions\Temple\TempleSettlements.cs"/>
     <Compile Include="Factions\Temple\TempleSigilCatalog.cs"/>
@@ -241,6 +245,12 @@
     <Compile Include="FactionQuests\Empire\EmpireQuestCampaignBehavior.Crowning.cs"/>
     <Compile Include="FactionQuests\Empire\EmpireQuestCampaignBehavior.War.cs"/>
     <Compile Include="FactionQuests\Empire\EmpireQuestCampaignBehavior.Kills.cs"/>
+    <Compile Include="FactionQuests\Legion\LegionQuestMath.cs"/>
+    <Compile Include="FactionQuests\Legion\LegionQuestLog.cs"/>
+    <Compile Include="FactionQuests\Legion\LegionQuestCampaignBehavior.cs"/>
+    <Compile Include="FactionQuests\Legion\LegionQuestCampaignBehavior.Menu.cs"/>
+    <Compile Include="FactionQuests\Legion\LegionQuestCampaignBehavior.NpcContribution.cs"/>
+    <Compile Include="FactionQuests\Legion\LegionQuestCampaignBehavior.Ending.cs"/>
     <Compile Include="FactionQuests\ForestWidows\ForestWidowsQuestDialogue.cs"/>
     <Compile Include="FactionQuests\Bloodbound\BloodboundQuestMath.cs"/>
     <Compile Include="FactionQuests\Bloodbound\BloodboundQuestLog.cs"/>

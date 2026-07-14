@@ -34,6 +34,7 @@ namespace AshAndEmber
         {
             RegisterTownEntry(starter);
             RegisterMainMenu(starter);
+            RegisterAttuneMenu(starter);
         }
 
         // ── Town entry ─────────────────────────────────────────────────────────
@@ -82,6 +83,7 @@ namespace AshAndEmber
             RegisterIgnoreOption(starter);
             RegisterHpBuffOption(starter);
             RegisterAttributeTradeOption(starter);
+            RegisterAttuneEntry(starter);
 
             try
             {
@@ -215,6 +217,136 @@ namespace AshAndEmber
 
             ShowDialog("Remade", $"Something in you gives ground so something else can grow. (-1 {down.Name}, +1 {up.Name})",
                 () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+        }
+
+        // ── Option 4: drink to permanently attune to an element ─────────────────
+        // A mod-author-directed addition — the fourth way to spend Demon Blood.
+        // Fire/Water/Earth/Wind only (Spirit excluded per the brief). Full
+        // mechanics (escalating cost, relation fallout, the random permanent
+        // penalty) live in BloodAttunement.LearnElement / BloodAttunementMath.
+        private static void RegisterAttuneEntry(CampaignGameStarter starter)
+        {
+            try
+            {
+                starter.AddGameMenuOption("bloodbound_hunt_main", "bloodbound_hunt_attune_entry", "{BLOODBOUND_HUNT_ATTUNE_ENTRY_TEXT}",
+                    args =>
+                    {
+                        try
+                        {
+                            MBTextManager.SetTextVariable("BLOODBOUND_HUNT_ATTUNE_ENTRY_TEXT",
+                                "Drink to bind an element to your blood, permanently");
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            args.IsEnabled = BloodAttunement.KnownCount(Hero.MainHero) < BloodAttunement.AttunableElements.Length;
+                        }
+                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        return true;
+                    },
+                    args => { try { GameMenu.SwitchToMenu("bloodbound_hunt_attune_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    false, -1, false);
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        private static void RegisterAttuneMenu(CampaignGameStarter starter)
+        {
+            try
+            {
+                starter.AddGameMenu("bloodbound_hunt_attune_main", "{BLOODBOUND_HUNT_ATTUNE_MAIN_TEXT}", args =>
+                {
+                    try
+                    {
+                        MBTextManager.SetTextVariable("BLOODBOUND_HUNT_ATTUNE_MAIN_TEXT",
+                            "This vial is thicker than the rest, and colder. To drink it is to let something not "
+                          + "yours answer when you reach for the fire, the wind, the earth, or the water — forever. "
+                          + "It will not go unnoticed, by the blood or by those who despise it. The working sleeps "
+                          + "through the full light of day; it wakes with dusk.");
+                    }
+                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                });
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
+            RegisterAttuneElementOption(starter, MagicElement.Fire,  "bloodbound_hunt_attune_fire",  "Fire",  "BLOODBOUND_HUNT_ATTUNE_FIRE_TEXT");
+            RegisterAttuneElementOption(starter, MagicElement.Water, "bloodbound_hunt_attune_water", "Water", "BLOODBOUND_HUNT_ATTUNE_WATER_TEXT");
+            RegisterAttuneElementOption(starter, MagicElement.Earth, "bloodbound_hunt_attune_earth", "Earth", "BLOODBOUND_HUNT_ATTUNE_EARTH_TEXT");
+            RegisterAttuneElementOption(starter, MagicElement.Wind,  "bloodbound_hunt_attune_wind",  "Wind",  "BLOODBOUND_HUNT_ATTUNE_WIND_TEXT");
+
+            try
+            {
+                starter.AddGameMenuOption("bloodbound_hunt_attune_main", "bloodbound_hunt_attune_leave", "Leave it be",
+                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } return true; },
+                    args => { try { GameMenu.SwitchToMenu("bloodbound_hunt_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    true, -1, false);
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        private static void RegisterAttuneElementOption(CampaignGameStarter starter, MagicElement el, string optionId, string label, string textVar)
+        {
+            try
+            {
+                starter.AddGameMenuOption("bloodbound_hunt_attune_main", optionId, "{" + textVar + "}",
+                    args =>
+                    {
+                        try
+                        {
+                            bool already = BloodAttunement.HasElement(Hero.MainHero, el);
+                            int cost = BloodAttunement.NextCost(Hero.MainHero);
+                            MBTextManager.SetTextVariable(textVar, already
+                                ? $"{label} (already bound to your blood)"
+                                : $"Bind {label} to your blood  [{cost} Demon Blood]");
+                            args.IsEnabled = !already && HaveBlood(cost);
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        }
+                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        return true;
+                    },
+                    args => { try { DoAttune(el, label); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        private static void DoAttune(MagicElement el, string label)
+        {
+            Hero hero = Hero.MainHero;
+            if (BloodAttunement.HasElement(hero, el))
+            {
+                GameMenu.SwitchToMenu("bloodbound_hunt_attune_main");
+                return;
+            }
+
+            int cost = BloodAttunement.NextCost(hero);
+            if (!SpendBlood(cost))
+            {
+                ShowDialog("Not Enough Blood", $"You need {cost} Demon Blood for this working.",
+                    () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_attune_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                return;
+            }
+
+            bool learned = BloodAttunement.LearnElement(hero, el, _menuRng, out BloodAttunementMath.PenaltyKind penalty);
+            if (!learned)
+            {
+                // Already known by the time this fired (shouldn't happen given
+                // IsEnabled above) — refund rather than silently eat the blood.
+                var item = MBObjectManager.Instance?.GetObject<ItemObject>(BloodboundCatalog.DemonBloodItemId);
+                var roster = MobileParty.MainParty?.ItemRoster;
+                try { if (item != null && roster != null) roster.AddToCounts(item, cost); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                GameMenu.SwitchToMenu("bloodbound_hunt_attune_main");
+                return;
+            }
+
+            string penaltyText = penalty switch
+            {
+                BloodAttunementMath.PenaltyKind.SocialDown => "Something in your bearing curdles — you feel less sure among people than you did. (-1 Social)",
+                BloodAttunementMath.PenaltyKind.IntellectDown => "A thought slips loose and does not come back. (-1 Intellect)",
+                BloodAttunementMath.PenaltyKind.DaytimeMorale => "The sun sits wrong on you now — your company feels it too, whenever the light is full. (permanent daytime morale penalty)",
+                BloodAttunementMath.PenaltyKind.DaytimeSpeed => "Daylight drags at your feet like wet sand. (permanent daytime marching penalty)",
+                _ => ""
+            };
+
+            ShowDialog("Bound", $"The vial goes down like cold iron. {label} answers when you reach for it now — "
+                + $"but not under a full sun, and not without a price. {penaltyText}",
+                () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_attune_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
         }
 
         // ── Helpers ────────────────────────────────────────────────────────────

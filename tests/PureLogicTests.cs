@@ -5364,5 +5364,84 @@ namespace AshAndEmber.Tests
             Assert.IsFalse(TempleQuestArtifacts.TryGet(-1, out _));
             Assert.IsFalse(TempleQuestArtifacts.TryGet(TempleQuestMath.ArtifactCount, out _));
         }
+
+        // ── BloodAttunementMath (Bloodbound blood-attunement, mod-author-directed) ──
+
+        [Test]
+        public void BloodAttunementMath_AttunementCostBlood_EscalatesByOnePerKnownElement()
+        {
+            Assert.AreEqual(1, BloodAttunementMath.AttunementCostBlood(0));
+            Assert.AreEqual(2, BloodAttunementMath.AttunementCostBlood(1));
+            Assert.AreEqual(3, BloodAttunementMath.AttunementCostBlood(2));
+            Assert.AreEqual(4, BloodAttunementMath.AttunementCostBlood(3));
+        }
+
+        [Test]
+        public void BloodAttunementMath_AttunementCostBlood_NeverGoesBelowOne_EvenForNegativeInput()
+        {
+            Assert.AreEqual(1, BloodAttunementMath.AttunementCostBlood(-5));
+        }
+
+        [Test]
+        public void BloodAttunementMath_IsUsableHour_BlocksOnlyTheDeepDaylightCore()
+        {
+            // Full daylight core — blocked.
+            Assert.IsFalse(BloodAttunementMath.IsUsableHour(9f));
+            Assert.IsFalse(BloodAttunementMath.IsUsableHour(12f));
+            Assert.IsFalse(BloodAttunementMath.IsUsableHour(16.99f));
+
+            // Dawn, dusk, and night — usable.
+            Assert.IsTrue(BloodAttunementMath.IsUsableHour(0f));
+            Assert.IsTrue(BloodAttunementMath.IsUsableHour(8.99f));
+            Assert.IsTrue(BloodAttunementMath.IsUsableHour(17f));
+            Assert.IsTrue(BloodAttunementMath.IsUsableHour(20f));
+            Assert.IsTrue(BloodAttunementMath.IsUsableHour(23.99f));
+        }
+
+        [Test]
+        public void BloodAttunementMath_IsUsableHour_MatchesTheBroaderTwilightWindow_NotDemonMathsNightBand()
+        {
+            // 17:00-20:00 is dusk — blocked by DemonMath.IsNightHour (starts at 20)
+            // but explicitly ALLOWED by the broader blood-attunement window.
+            Assert.IsFalse(DemonMath.IsNightHour(18f));
+            Assert.IsTrue(BloodAttunementMath.IsUsableHour(18f));
+        }
+
+        [Test]
+        public void BloodAttunementMath_RollPenalty_CoversAllFourKindsAcrossTheRollRange()
+        {
+            Assert.AreEqual(BloodAttunementMath.PenaltyKind.SocialDown, BloodAttunementMath.RollPenalty(0.0));
+            Assert.AreEqual(BloodAttunementMath.PenaltyKind.IntellectDown, BloodAttunementMath.RollPenalty(0.26));
+            Assert.AreEqual(BloodAttunementMath.PenaltyKind.DaytimeMorale, BloodAttunementMath.RollPenalty(0.51));
+            Assert.AreEqual(BloodAttunementMath.PenaltyKind.DaytimeSpeed, BloodAttunementMath.RollPenalty(0.99));
+        }
+
+        [Test]
+        public void BloodAttunementMath_PickElementCount_StaysWithinOneToFour()
+        {
+            Assert.AreEqual(1, BloodAttunementMath.PickElementCount(0.0));
+            Assert.AreEqual(4, BloodAttunementMath.PickElementCount(0.99));
+            for (double r = 0.0; r < 1.0; r += 0.05)
+            {
+                int n = BloodAttunementMath.PickElementCount(r);
+                Assert.GreaterOrEqual(n, 1);
+                Assert.LessOrEqual(n, 4);
+            }
+        }
+
+        [Test]
+        public void BloodAttunementMath_RelationPenalties_TempleIsHarsherThanEveryoneElse()
+        {
+            Assert.Less(BloodAttunementMath.RelationPenaltyTemple, BloodAttunementMath.RelationPenaltyOther);
+            Assert.AreEqual(-15, BloodAttunementMath.RelationPenaltyTemple);
+            Assert.AreEqual(-5, BloodAttunementMath.RelationPenaltyOther);
+        }
+
+        [Test]
+        public void BloodAttunementMath_DaytimePenaltyMagnitudes_ArePositiveDrainAndNegativeSpeedFactor()
+        {
+            Assert.Greater(BloodAttunementMath.DaytimeMoraleDrainPerDay, 0f);
+            Assert.Less(BloodAttunementMath.DaytimeSpeedPenaltyFactor, 0f);
+        }
     }
 }

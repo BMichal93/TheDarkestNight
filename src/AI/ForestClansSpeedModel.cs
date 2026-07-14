@@ -16,7 +16,12 @@ using TaleWorlds.Localization;
 
 namespace AshAndEmber
 {
-    internal sealed class ForestClansSpeedModel : DefaultPartySpeedCalculatingModel
+    // Unsealed: BloodAttunementSpeedModel (Factions/Bloodbound/BloodAttunement.cs)
+    // subclasses this rather than registering a second, independent
+    // PartySpeedCalculatingModel — TaleWorlds' GameModels resolves only ONE
+    // such model, so a sibling registration would silently replace this one
+    // instead of composing with it. See that file's header for the full note.
+    internal class ForestClansSpeedModel : DefaultPartySpeedCalculatingModel
     {
         public override ExplainedNumber CalculateFinalSpeed(MobileParty mobileParty, ExplainedNumber finalSpeed)
         {

@@ -61,6 +61,10 @@ namespace AshAndEmber
         private static List<string> _hpBuffHeroIds = new List<string>();
         private static List<float>  _hpBuffGrantDay = new List<float>();
 
+        // Blood-attunement (mod-author-directed addition — see
+        // BloodAttunement.cs) persists its own four parallel lists, synced
+        // below alongside this behavior's other Demon Blood spending trackers.
+
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
@@ -75,12 +79,17 @@ namespace AshAndEmber
             try { store.SyncData("BLD_IGNORE_DURATION",   ref _ignoreDurationDays);  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { store.SyncData("BLD_HPBUFF_IDS",        ref _hpBuffHeroIds);       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { store.SyncData("BLD_HPBUFF_GRANT_DAY",  ref _hpBuffGrantDay);      } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("BLD_ATT_HERO_IDS",      ref BloodAttunement.HeroIds);            } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("BLD_ATT_ELEMENT_MASKS", ref BloodAttunement.ElementMasks);        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("BLD_ATT_MORALE_STACKS", ref BloodAttunement.DaytimeMoraleStacks);  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("BLD_ATT_SPEED_STACKS",  ref BloodAttunement.DaytimeSpeedStacks);   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
             if (_ignoreHeroIds == null) _ignoreHeroIds = new List<string>();
             if (_ignoreGrantDay == null) _ignoreGrantDay = new List<float>();
             if (_ignoreDurationDays == null) _ignoreDurationDays = new List<float>();
             if (_hpBuffHeroIds == null) _hpBuffHeroIds = new List<string>();
             if (_hpBuffGrantDay == null) _hpBuffGrantDay = new List<float>();
+            BloodAttunement.EnsureListsSane();
         }
 
         public static void ResetForNewGame()
@@ -90,6 +99,8 @@ namespace AshAndEmber
             _ignoreDurationDays = new List<float>();
             _hpBuffHeroIds = new List<string>();
             _hpBuffGrantDay = new List<float>();
+            BloodAttunement.ResetForNewGame();
+            BloodAttunementLordAI.ResetForNewGame();
         }
 
         // The kingdom-name rename itself runs from the SAME hook every other
@@ -108,6 +119,7 @@ namespace AshAndEmber
             try { BloodboundSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { TickHpBuffExpiry(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { PruneExpiredIgnores(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { BloodAttunement.TickDaytimeMoralePenalty(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
         // ── The join gate — refuses the soft and the untested ───────────────────
