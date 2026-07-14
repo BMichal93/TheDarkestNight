@@ -79,6 +79,9 @@ namespace AshAndEmber
                 var npc = CharacterObject.OneToOneConversationCharacter;
                 if (npc?.Occupation != Occupation.Tavernkeeper) return false;
                 if (Hero.MainHero?.CurrentSettlement?.IsTown != true) return false;
+                // Schemes now run through the Empire's own network of informants and
+                // spies — only lords currently sworn to the Empire have access to it.
+                if (!EmpireCulture.IsPlayerEmpireKingdom) return false;
                 return true;
             }
             catch { return false; }
@@ -112,6 +115,9 @@ namespace AshAndEmber
                         {
                             var s = Settlement.CurrentSettlement;
                             if (s == null || !s.IsTown) return false;
+                            // Empire-only: the scheme network belongs to the Empire's own
+                            // informants — a lord not currently sworn to it has no access.
+                            if (!EmpireCulture.IsPlayerEmpireKingdom) return false;
                             try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                             // Disable while a queued NPC-era scheme is still in flight
@@ -181,13 +187,11 @@ namespace AshAndEmber
                             {
                                 try
                                 {
-                                    int  playerGold = Hero.MainHero?.Gold ?? 0;
                                     int  playerInf  = (int)(Hero.MainHero?.Clan?.Influence ?? 0f);
-                                    bool canAfford  = playerGold >= captured.GoldCost
-                                                   && playerInf  >= captured.InfluenceCost;
+                                    bool canAfford  = playerInf >= captured.InfluenceCost;
                                     string label = captured.Name
-                                        + $"  —  from {captured.GoldCost}g / from {captured.InfluenceCost} inf"
-                                        + (canAfford ? "" : "  [Insufficient funds]");
+                                        + $"  —  from {captured.InfluenceCost} inf"
+                                        + (canAfford ? "" : "  [Insufficient influence]");
                                     MBTextManager.SetTextVariable(textKey, label);
                                     try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                                     args.IsEnabled = canAfford;
@@ -198,7 +202,7 @@ namespace AshAndEmber
                             },
                             args =>
                             {
-                                if ((Hero.MainHero?.Gold ?? 0) < captured.GoldCost) return;
+                                if ((int)(Hero.MainHero?.Clan?.Influence ?? 0f) < captured.InfluenceCost) return;
                                 _selectedDef     = captured;
                                 _selectedKingdom = null;
                                 OpenFactionFilterUI();

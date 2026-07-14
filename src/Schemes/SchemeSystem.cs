@@ -151,64 +151,76 @@ namespace AshAndEmber
             //   own) were trimmed hardest — assassination and the coup stay
             //   expensive because their effects don't reverse.
             //
+            // Empire-only, influence-only: Schemes now require standing with the
+            // Empire (see the town/dialogue gate in SchemeCampaignBehavior.Menus.cs,
+            // EmpireCulture.IsPlayerEmpireKingdom) and are paid for in influence
+            // alone — GoldCost is 0 everywhere and the old gold price was folded
+            // into InfluenceCost rather than dropped, so the "weight" of a scheme
+            // is preserved, just re-denominated into a single currency. Conversion:
+            // added influence = old GoldCost / 75 (the average implicit gold-per-
+            // influence ratio already present across these 12 schemes before this
+            // change — e.g. Assassinate was 6000g/80inf ≈ 75, StageCoup 4500g/70inf
+            // ≈ 64), so the existing cost hierarchy between schemes is preserved.
+            // The comment on each line below shows the original gold figure folded in.
+            //
             // LORD SCHEMES ─────────────────────────────────────────────────────────
             new SchemeDefinition(SchemeType.Assassinate,
                 "Assassinate a Lord",
                 "Hire a blade. On success the target dies quietly. On exposure: war may follow. Hard 14-day retry block per target.",
-                6000, 80, 0.25f, DefaultSkills.Roguery, needsLord: true, needsSettlement: false, skillXp: 1500),
+                0, 160 /* was 6000g/80inf */, 0.25f, DefaultSkills.Roguery, needsLord: true, needsSettlement: false, skillXp: 1500),
 
             new SchemeDefinition(SchemeType.ForgeDocuments,
                 "Forge Documents",
                 "Fabricated letters damage a lord's reputation with their own faction.",
-                1700, 25, 0.40f, DefaultSkills.Charm, needsLord: true, needsSettlement: false, skillXp: 750),
+                0, 48 /* was 1700g/25inf */, 0.40f, DefaultSkills.Charm, needsLord: true, needsSettlement: false, skillXp: 750),
 
             new SchemeDefinition(SchemeType.FalseAccusations,
                 "False Accusations",
                 "Slander carefully placed at the right ears. Clan renown is damaged; their standing erodes.",
-                1200, 15, 0.45f, DefaultSkills.Charm, needsLord: true, needsSettlement: false, skillXp: 500),
+                0, 31 /* was 1200g/15inf */, 0.45f, DefaultSkills.Charm, needsLord: true, needsSettlement: false, skillXp: 500),
 
             // SETTLEMENT SCHEMES ───────────────────────────────────────────────────
             new SchemeDefinition(SchemeType.StageCoup,
                 "Stage a Coup",
                 "Bribe garrison officers. Loyalty collapses — rebellion becomes likely.",
-                4500, 70, 0.20f, DefaultSkills.Charm, needsLord: false, needsSettlement: true, skillXp: 1200),
+                0, 130 /* was 4500g/70inf */, 0.20f, DefaultSkills.Charm, needsLord: false, needsSettlement: true, skillXp: 1200),
 
             new SchemeDefinition(SchemeType.PoisonWell,
                 "Poison a Well",
                 "The garrison sickens. Militia die before anyone connects cause to effect.",
-                1700, 20, 0.38f, DefaultSkills.Roguery, needsLord: false, needsSettlement: true, skillXp: 750),
+                0, 43 /* was 1700g/20inf */, 0.38f, DefaultSkills.Roguery, needsLord: false, needsSettlement: true, skillXp: 750),
 
             new SchemeDefinition(SchemeType.BribeSoldiers,
                 "Bribe Soldiers",
                 "A portion of the garrison deserts. They scatter — no one joins you, they simply leave.",
-                1700, 20, 0.38f, DefaultSkills.Charm, needsLord: false, needsSettlement: true, skillXp: 750),
+                0, 43 /* was 1700g/20inf */, 0.38f, DefaultSkills.Charm, needsLord: false, needsSettlement: true, skillXp: 750),
 
             new SchemeDefinition(SchemeType.BurnStorage,
                 "Burn a Storage",
                 "Warehouses catch fire. Food is lost, prosperity crumbles.",
-                1500, 15, 0.40f, DefaultSkills.Roguery, needsLord: false, needsSettlement: true, skillXp: 500),
+                0, 35 /* was 1500g/15inf */, 0.40f, DefaultSkills.Roguery, needsLord: false, needsSettlement: true, skillXp: 500),
 
             new SchemeDefinition(SchemeType.SpreadTerror,
                 "Spread Terror",
                 "Random violence shakes the city. Security drops sharply.",
-                1100, 12, 0.40f, DefaultSkills.Roguery, needsLord: false, needsSettlement: true, skillXp: 400),
+                0, 27 /* was 1100g/12inf */, 0.40f, DefaultSkills.Roguery, needsLord: false, needsSettlement: true, skillXp: 400),
 
             new SchemeDefinition(SchemeType.SpreadRumors,
                 "Spread Rumors",
                 "Whisper campaigns corrode trust. Loyalty and prosperity fall.",
-                900, 8, 0.35f, DefaultSkills.Charm, needsLord: false, needsSettlement: true, skillXp: 400),
+                0, 20 /* was 900g/8inf */, 0.35f, DefaultSkills.Charm, needsLord: false, needsSettlement: true, skillXp: 400),
 
             // LORD SCHEME (same kingdom only) ──────────────────────────────────────
             new SchemeDefinition(SchemeType.VipersCounsel,
                 "Viper's Counsel",
                 "Poison the king's ear against a rival clan. Your renown rises; theirs falls. Can only target lords within your own kingdom. On failure, lose standing with both the king and the target.",
-                1800, 40, 0.40f, DefaultSkills.Charm, needsLord: true, needsSettlement: false, skillXp: 600),
+                0, 64 /* was 1800g/40inf */, 0.40f, DefaultSkills.Charm, needsLord: true, needsSettlement: false, skillXp: 600),
 
             // LORD SCHEME (targets enemy kingdom via lord) ─────────────────────────
             new SchemeDefinition(SchemeType.ScatterWolves,
                 "Scatter the Wolves",
                 "Pay deserters and brigands to flood a rival kingdom's roads. Bandit parties surge across their lands, tying up lords and bleeding resources. Target a lord — their whole kingdom suffers.",
-                2500, 35, 0.35f, DefaultSkills.Roguery, needsLord: true, needsSettlement: false, skillXp: 800),
+                0, 68 /* was 2500g/35inf */, 0.35f, DefaultSkills.Roguery, needsLord: true, needsSettlement: false, skillXp: 800),
         };
 
         // ── State ─────────────────────────────────────────────────────────────

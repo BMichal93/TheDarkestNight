@@ -63,6 +63,13 @@ namespace AshAndEmber
             try { return hero.MapFaction?.StringId == CultureId; } catch { return false; }
         }
 
+        // Actual KINGDOM membership (not culture — see LegionCulture's header note:
+        // the three Empire successor kingdoms all share the "empire" CultureObject,
+        // so a culture check cannot tell them apart). Used to gate content that
+        // should require the player to actually stand with this kingdom right now,
+        // not merely have been born under its banner.
+        public static bool IsPlayerEmpireKingdom => IsEmpireLord(Hero.MainHero);
+
         // ── Culture-only rename (no Campaign required) ──────────────────────────
         public static void RenameEmpireCulture()
         {

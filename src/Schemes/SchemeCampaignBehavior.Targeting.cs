@@ -129,13 +129,12 @@ namespace AshAndEmber
                 var elements = lords.Select(h =>
                 {
                     float ch      = SchemeSystem.ComputeSuccessChance(Hero.MainHero, _selectedDef.Type, h, null);
-                    int   cost    = SchemeSystem.ComputeGoldCost(_selectedDef, h, null);
                     int   infCost = SchemeSystem.ComputeInfluenceCost(_selectedDef, h, null);
                     bool  blk     = SchemeSystem.IsHardBlocked(_selectedDef.Type, h, null);
                     bool  cd      = SchemeSystem.IsOnCooldown(_selectedDef.Type, h, null);
                     string label = $"{h.Name}  [{h.Clan?.Name}]"
                                  + (blk ? "  [BLOCKED]" : "");
-                    string hint  = $"Success: {(int)(ch * 100)}%  |  Cost: {cost}g / {infCost} inf  |  Tier: {h.Clan?.Tier ?? 0}"
+                    string hint  = $"Success: {(int)(ch * 100)}%  |  Cost: {infCost} inf  |  Tier: {h.Clan?.Tier ?? 0}"
                                  + (cd ? "  [5× repeat penalty]" : "");
                     return new InquiryElement(h.StringId, label, null, !blk, hint);
                 }).ToList();
@@ -196,12 +195,11 @@ namespace AshAndEmber
                 var elements = settlements.Select(s =>
                 {
                     float ch      = SchemeSystem.ComputeSuccessChance(Hero.MainHero, _selectedDef.Type, null, s);
-                    int   cost    = SchemeSystem.ComputeGoldCost(_selectedDef, null, s);
                     int   infCost = SchemeSystem.ComputeInfluenceCost(_selectedDef, null, s);
                     bool  cd      = SchemeSystem.IsOnCooldown(_selectedDef.Type, null, s);
                     string label = $"{s.Name}  [{s.OwnerClan?.Name?.ToString() ?? "?"}]  "
                                  + $"Security: {(int)(s.Town?.Security ?? 0)}";
-                    string hint  = $"Success: {(int)(ch * 100)}%  |  Cost: {cost}g / {infCost} inf"
+                    string hint  = $"Success: {(int)(ch * 100)}%  |  Cost: {infCost} inf"
                                  + (cd ? "  [5× repeat penalty]" : "");
                     return new InquiryElement(s.StringId, label, null, true, hint);
                 }).ToList();
@@ -238,12 +236,10 @@ namespace AshAndEmber
             {
                 if (_selectedDef == null) return;
 
-                int    goldCost  = SchemeSystem.ComputeGoldCost(_selectedDef, targetHero, targetSett);
                 int    infCost   = SchemeSystem.ComputeInfluenceCost(_selectedDef, targetHero, targetSett);
                 bool   retaliation = SchemeSystem.PlayerRetaliationActive;
                 if (retaliation)
                 {
-                    goldCost /= 2;
                     infCost  /= 2;
                 }
                 bool   onCooldown = SchemeSystem.IsOnCooldown(_selectedDef.Type, targetHero, targetSett);
@@ -272,7 +268,7 @@ namespace AshAndEmber
                     : "If blown (exposure >21): operation backfires — consequences specific to the scheme type.";
                 int skipPct = (int)(SchemeMinigame.SkipSuccessChance * 100f);
                 string body     = $"Scheme: {_selectedDef.Name}   Target: {tName}\n"
-                                + $"Cost: {goldCost}g  +  {infCost} influence{cdNote}\n"
+                                + $"Cost: {infCost} influence{cdNote}\n"
                                 + $"Threshold ≥{cfg.RiskSum}  |  Blown at 21  |  Rounds: {rounds} (Roguery {roguery})"
                                 + traitNote + "\n\n"
                                 + "Each round brings a field report: push hard, tread carefully, or pull back — the "
@@ -323,27 +319,25 @@ namespace AshAndEmber
                     return;
                 }
 
-                int goldCost = SchemeSystem.ComputeGoldCost(_selectedDef, targetHero, targetSett);
+                // Schemes are paid in influence only — GoldCost is 0 on every
+                // definition (see SchemeSystem.cs), so no gold is ever charged here.
                 int infCost  = SchemeSystem.ComputeInfluenceCost(_selectedDef, targetHero, targetSett);
 
                 if (SchemeSystem.PlayerRetaliationActive)
                 {
-                    goldCost /= 2;
                     infCost  /= 2;
                 }
 
                 if (!SchemeSystem.DebugFree)
                 {
-                    if (Hero.MainHero.Gold < goldCost
-                        || (Hero.MainHero.Clan?.Influence ?? 0f) < infCost)
+                    if ((Hero.MainHero.Clan?.Influence ?? 0f) < infCost)
                     {
                         MBInformationManager.AddQuickInformation(
-                            new TextObject("Insufficient funds — the scheme cannot be arranged."));
+                            new TextObject("Insufficient influence — the scheme cannot be arranged."));
                         _selectedDef = null;
                         try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                         return;
                     }
-                    try { Hero.MainHero.Gold -= goldCost; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                     try { if (Hero.MainHero.Clan != null) Hero.MainHero.Clan.Influence -= infCost; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 }
 
