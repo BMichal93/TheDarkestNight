@@ -5248,6 +5248,96 @@ namespace AshAndEmber.Tests
             Assert.Greater(TempleQuestMath.ArmyCohesionTopUp, TempleQuestMath.ArmyCohesionFloor);
         }
 
+        // ── EmpireQuestMath tests (Phase 12, Faction F — The Reunification) ──────
+
+        [Test]
+        public void EmpireQuestMath_HasReachedThreshold_GatesAtConfiguredTownCount()
+        {
+            Assert.IsFalse(EmpireQuestMath.HasReachedThreshold(EmpireQuestMath.ConquestTownThreshold - 1));
+            Assert.IsTrue(EmpireQuestMath.HasReachedThreshold(EmpireQuestMath.ConquestTownThreshold));
+            Assert.IsTrue(EmpireQuestMath.HasReachedThreshold(EmpireQuestMath.ConquestTownThreshold + 10));
+        }
+
+        [Test]
+        public void EmpireQuestMath_ConquestThreshold_IsTwoThirdsOfTheMapsFiftyThreeTowns()
+        {
+            // Verified against the shipped SandBox/ModuleData/settlements.xml (53
+            // towns map-wide, unchanged by Phase 8/9 — see EmpireQuestMath.cs's
+            // header). Two-thirds of 53 floors to 35.
+            const int totalTownsMapWide = 53;
+            int expected = (totalTownsMapWide * 2) / 3;
+            Assert.AreEqual(expected, EmpireQuestMath.ConquestTownThreshold);
+        }
+
+        [Test]
+        public void EmpireQuestMath_ConquestThreshold_IsMuchHigherThanTheChosensOwnFiefThreshold()
+        {
+            // The brief explicitly demands a MUCH higher bar than the Chosen's
+            // own ConquestFiefThreshold (24, roughly a fifth of the 120-fief map)
+            // — two-thirds of ALL cities, not a modest chunk.
+            Assert.Greater(EmpireQuestMath.ConquestTownThreshold, ChosenQuestMath.ConquestFiefThreshold);
+            Assert.Greater(EmpireQuestMath.ConquestTownThreshold, EmpireMath.StartingTownIds.Length * 10);
+        }
+
+        [Test]
+        public void EmpireQuestMath_ClampedTownProgress_NeverExceedsThresholdOrGoesNegative()
+        {
+            Assert.AreEqual(0, EmpireQuestMath.ClampedTownProgress(-5));
+            Assert.AreEqual(0, EmpireQuestMath.ClampedTownProgress(0));
+            Assert.AreEqual(EmpireQuestMath.ConquestTownThreshold, EmpireQuestMath.ClampedTownProgress(EmpireQuestMath.ConquestTownThreshold));
+            Assert.AreEqual(EmpireQuestMath.ConquestTownThreshold, EmpireQuestMath.ClampedTownProgress(EmpireQuestMath.ConquestTownThreshold + 999));
+        }
+
+        [Test]
+        public void EmpireQuestMath_HasReachedKillTarget_GatesAtConfiguredCount()
+        {
+            Assert.IsFalse(EmpireQuestMath.HasReachedKillTarget(EmpireQuestMath.KillTarget - 1));
+            Assert.IsTrue(EmpireQuestMath.HasReachedKillTarget(EmpireQuestMath.KillTarget));
+            Assert.IsTrue(EmpireQuestMath.HasReachedKillTarget(EmpireQuestMath.KillTarget + 1000));
+        }
+
+        [Test]
+        public void EmpireQuestMath_KillTarget_IsLargeButDeliberatelySmallerThanTheTemples()
+        {
+            // "A very large number... smaller than the Temple's 50,000" per the
+            // brief — this ending is meant to be a winnable, triumphant arc, not
+            // the Temple's near-impossible war of attrition.
+            Assert.Greater(EmpireQuestMath.KillTarget, DemonMath.MaxPartyBodies * 100);
+            Assert.Less(EmpireQuestMath.KillTarget, TempleQuestMath.KillTarget);
+        }
+
+        [Test]
+        public void EmpireQuestMath_ClampedKillProgress_NeverExceedsTargetOrGoesNegative()
+        {
+            Assert.AreEqual(0, EmpireQuestMath.ClampedKillProgress(-5));
+            Assert.AreEqual(0, EmpireQuestMath.ClampedKillProgress(0));
+            Assert.AreEqual(EmpireQuestMath.KillTarget, EmpireQuestMath.ClampedKillProgress(EmpireQuestMath.KillTarget));
+            Assert.AreEqual(EmpireQuestMath.KillTarget, EmpireQuestMath.ClampedKillProgress(EmpireQuestMath.KillTarget + 999));
+        }
+
+        [Test]
+        public void EmpireQuestMath_ShouldNudgeToEngageDemons_RollsAgainstConfiguredChance()
+        {
+            Assert.IsTrue(EmpireQuestMath.ShouldNudgeToEngageDemons(0.0));
+            Assert.IsFalse(EmpireQuestMath.ShouldNudgeToEngageDemons(EmpireQuestMath.AggressionNudgeChance));
+            Assert.IsFalse(EmpireQuestMath.ShouldNudgeToEngageDemons(0.999));
+        }
+
+        [Test]
+        public void EmpireQuestMath_AggressionNudgeChance_IsHigherThanLegionsBaselineRaidNudge()
+        {
+            // The brief calls for INCREASED aggression, not the same baseline
+            // eagerness every other kingdom's lords already show toward rivals.
+            Assert.Greater(EmpireQuestMath.AggressionNudgeChance, LegionMath.RaidNudgeChance);
+        }
+
+        [Test]
+        public void EmpireQuestMath_VictoryRenownBonus_IsPositiveAndSmallerThanTheCrowning()
+        {
+            Assert.Greater(EmpireQuestMath.VictoryRenownBonus, 0f);
+            Assert.Greater(EmpireQuestMath.CrownRenownBonus, EmpireQuestMath.VictoryRenownBonus);
+        }
+
         [Test]
         public void TempleQuestArtifacts_HasExactlyArtifactCountEntries_WithUniqueIndicesAndItemIds()
         {

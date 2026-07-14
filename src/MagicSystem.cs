@@ -199,6 +199,9 @@ namespace AshAndEmber
                 // Phase 12, Faction E — the Temple's "The Unbroken Vow" (see
                 // FactionQuests/Temple/).
                 try { campaignStarter.AddBehavior(new TempleQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Phase 12, Faction F — the Empire's "The Reunification" (see
+                // FactionQuests/Empire/).
+                try { campaignStarter.AddBehavior(new EmpireQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -270,6 +273,7 @@ namespace AshAndEmber
                 try { ForestWidowsQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { BloodboundQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { TempleQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { EmpireQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
                 // player hits Save — long after the quest triggered. Audit at boot instead.
@@ -819,6 +823,9 @@ namespace AshAndEmber
                 // Phase 12, Faction E — the Temple's "The Unbroken Vow": counts
                 // every demon kill toward the 50,000 target once the Vow is bound.
                 try { TempleQuestCampaignBehavior.OnDemonAgentKilled(affectedAgent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Phase 12, Faction F — the Empire's "The Reunification": counts
+                // every demon kill toward the 15,000 target once the war is declared.
+                try { EmpireQuestCampaignBehavior.OnDemonAgentKilled(affectedAgent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Ember passive (legacy): a kill sometimes repays the fire's debt
                 if (affectorAgent == Agent.Main && MageKnowledge.IsMage && TalentSystem.Has(TalentId.Ember))
                     if (_rng.NextDouble() < 0.10)

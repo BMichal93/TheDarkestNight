@@ -91,6 +91,9 @@ namespace AshAndEmber
 
                 // Phase 12, Faction E -- the Temple's "The Unbroken Vow".
                 new KeyValuePair<Type, int>(typeof(TempleQuestLog),            20),
+
+                // Phase 12, Faction F -- the Empire's "The Reunification".
+                new KeyValuePair<Type, int>(typeof(EmpireQuestLog),            21),
             };
 
         protected override void DefineClassTypes()

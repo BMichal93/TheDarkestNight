@@ -235,6 +235,12 @@
     <Compile Include="FactionQuests\Temple\TempleQuestCampaignBehavior.Artifacts.cs"/>
     <Compile Include="FactionQuests\Temple\TempleQuestCampaignBehavior.Army.cs"/>
     <Compile Include="FactionQuests\Temple\TempleQuestCampaignBehavior.Kills.cs"/>
+    <Compile Include="FactionQuests\Empire\EmpireQuestMath.cs"/>
+    <Compile Include="FactionQuests\Empire\EmpireQuestLog.cs"/>
+    <Compile Include="FactionQuests\Empire\EmpireQuestCampaignBehavior.cs"/>
+    <Compile Include="FactionQuests\Empire\EmpireQuestCampaignBehavior.Crowning.cs"/>
+    <Compile Include="FactionQuests\Empire\EmpireQuestCampaignBehavior.War.cs"/>
+    <Compile Include="FactionQuests\Empire\EmpireQuestCampaignBehavior.Kills.cs"/>
     <Compile Include="FactionQuests\ForestWidows\ForestWidowsQuestDialogue.cs"/>
     <Compile Include="FactionQuests\Bloodbound\BloodboundQuestMath.cs"/>
     <Compile Include="FactionQuests\Bloodbound\BloodboundQuestLog.cs"/>

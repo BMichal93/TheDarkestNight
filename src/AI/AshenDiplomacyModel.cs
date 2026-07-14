@@ -83,6 +83,26 @@ namespace AshAndEmber
             return f1IsWidows ^ f2IsWidows;
         }
 
+        // Phase 12, Faction F — the Empire's "The Reunification". Once the
+        // crowned Empire declares war on the demons (EmpireQuestCampaignBehavior.
+        // HasDeclaredWarOnDemons), that war is locked permanent exactly like the
+        // Demon Lord's own war above — this is the Empire's OWN aggression, not
+        // "demons are hostile to them" (they already are, to everyone), so the
+        // lock only ever applies to the Demon Lord's actual Kingdom (the one
+        // demon-affiliated IFaction that diplomacy proposals can even reach —
+        // ordinary demon parties hold no Kingdom of their own at all, see
+        // DemonSpawnCampaignBehavior's header note).
+        private static bool IsEmpireDemonWar(IFaction f1, IFaction f2)
+        {
+            if (f1 == null || f2 == null || f1 == f2) return false;
+            if (!EmpireQuestCampaignBehavior.HasDeclaredWarOnDemons) return false;
+            bool f1IsEmpire = (f1 as Kingdom)?.StringId == EmpireCulture.CultureId;
+            bool f2IsEmpire = (f2 as Kingdom)?.StringId == EmpireCulture.CultureId;
+            bool f1IsLord = (f1 as Kingdom)?.StringId == DemonLordSystem.KingdomId;
+            bool f2IsLord = (f2 as Kingdom)?.StringId == DemonLordSystem.KingdomId;
+            return (f1IsEmpire && f2IsLord) || (f2IsEmpire && f1IsLord);
+        }
+
         // Marks Ashen-vs-faction wars as constant so the engine excludes them from
         // overcommitment checks and never generates peace proposals for them.
         // Also locks all wars involving Arenicos's empire after the Ashen merger.
@@ -93,6 +113,7 @@ namespace AshAndEmber
             if (IsDunebornPermanentWar(faction1, faction2)) return true;
             if (IsDemonLordPermanentWar(faction1, faction2)) return true;
             if (IsForestWidowsDarkPact(faction1, faction2)) return true;
+            if (IsEmpireDemonWar(faction1, faction2)) return true;
             return base.IsAtConstantWar(faction1, faction2);
         }
 
@@ -137,6 +158,8 @@ namespace AshAndEmber
             if (IsDemonLordPermanentWar(factionDeclaresPeace, factionDeclaredPeace))
                 return -10000f;
             if (IsForestWidowsDarkPact(factionDeclaresPeace, factionDeclaredPeace))
+                return -10000f;
+            if (IsEmpireDemonWar(factionDeclaresPeace, factionDeclaredPeace))
                 return -10000f;
 
             // Prevent any kingdom from ending a war that started less than MinWarDays ago.
