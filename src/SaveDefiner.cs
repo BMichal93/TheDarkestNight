@@ -85,6 +85,9 @@ namespace AshAndEmber
 
                 // Phase 12, Faction C -- the Forest Widows' "The Final Peace".
                 new KeyValuePair<Type, int>(typeof(ForestWidowsQuestLog),      18),
+
+                // Phase 12, Faction D -- the Bloodbound's "The Surpassing Rite".
+                new KeyValuePair<Type, int>(typeof(BloodboundQuestLog),        19),
             };
 
         protected override void DefineClassTypes()

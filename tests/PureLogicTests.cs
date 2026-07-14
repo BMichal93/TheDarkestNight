@@ -5074,5 +5074,79 @@ namespace AshAndEmber.Tests
             Assert.Greater(ForestWidowsQuestMath.GarrisonFiends, 0);
             Assert.Greater(ForestWidowsQuestMath.GarrisonStalkers, 0);
         }
+
+        // ── BloodboundQuestMath tests (Phase 12, Faction D — The Surpassing Rite) ──
+        [Test]
+        public void BloodboundQuestMath_HasReachedThreshold_GatesAtConfiguredCount()
+        {
+            Assert.IsFalse(BloodboundQuestMath.HasReachedThreshold(BloodboundQuestMath.DonationTarget - 1));
+            Assert.IsTrue(BloodboundQuestMath.HasReachedThreshold(BloodboundQuestMath.DonationTarget));
+            Assert.IsTrue(BloodboundQuestMath.HasReachedThreshold(BloodboundQuestMath.DonationTarget + 500));
+        }
+
+        [Test]
+        public void BloodboundQuestMath_DonationTarget_IsEnormousButScaledBelowGreatAwakeningAndFinalPeace()
+        {
+            // Demon Blood is hard-capped at 1-3 vials per personally-won demon-party
+            // victory (BloodboundMath.RollDemonBloodYield), unlike the Final Peace's
+            // prisoners or Great Awakening's prisoners which a single big battle can
+            // hand over dozens of at once — so the raw target must sit well under
+            // both, even though the number of FIGHTS it demands is still enormous.
+            Assert.Less(BloodboundQuestMath.DonationTarget, GreatAwakeningMath.PrisonerTarget);
+            Assert.Less(BloodboundQuestMath.DonationTarget, ForestWidowsQuestMath.SacrificeTarget);
+
+            // Still a real, multi-hundred-fight grind against the yield rate: the
+            // expected personal-victory count (target / average yield) must clear
+            // TowerRiteMath's own "genuinely hard" bar for a single gather track
+            // (3 relics / 0.05 drop chance = 60 fights) by a wide margin, since this
+            // IS the entire D questline rather than one ingredient of three.
+            double avgYield = (BloodboundMath.MinDemonBloodPerVictory + BloodboundMath.MaxDemonBloodPerVictory) / 2.0;
+            double expectedVictories = BloodboundQuestMath.DonationTarget / avgYield;
+            Assert.Greater(expectedVictories, 200);
+        }
+
+        [Test]
+        public void BloodboundQuestMath_ClampedProgress_NeverExceedsThresholdOrGoesNegative()
+        {
+            Assert.AreEqual(0, BloodboundQuestMath.ClampedProgress(-5));
+            Assert.AreEqual(0, BloodboundQuestMath.ClampedProgress(0));
+            Assert.AreEqual(BloodboundQuestMath.DonationTarget, BloodboundQuestMath.ClampedProgress(BloodboundQuestMath.DonationTarget));
+            Assert.AreEqual(BloodboundQuestMath.DonationTarget, BloodboundQuestMath.ClampedProgress(BloodboundQuestMath.DonationTarget + 999));
+        }
+
+        [Test]
+        public void BloodboundQuestMath_NpcContributionAmount_NeverExceedsHeldOrGoesNegative()
+        {
+            var rng = new System.Random(54321);
+            for (int i = 0; i < 200; i++)
+            {
+                int held = rng.Next(0, 20);
+                int given = BloodboundQuestMath.NpcContributionAmount(rng, held);
+                Assert.GreaterOrEqual(given, 0);
+                Assert.LessOrEqual(given, held);
+            }
+        }
+
+        [Test]
+        public void BloodboundQuestMath_NpcContributionAmount_DegenerateInputsReturnZero()
+        {
+            Assert.AreEqual(0, BloodboundQuestMath.NpcContributionAmount(null, 10));
+            Assert.AreEqual(0, BloodboundQuestMath.NpcContributionAmount(new System.Random(1), 0));
+            Assert.AreEqual(0, BloodboundQuestMath.NpcContributionAmount(new System.Random(1), -5));
+        }
+
+        [Test]
+        public void BloodboundQuestMath_IsDemonAttackDue_GatesAtConfiguredDelay()
+        {
+            Assert.IsFalse(BloodboundQuestMath.IsDemonAttackDue(BloodboundQuestMath.DemonAttackDelayDays - 1));
+            Assert.IsTrue(BloodboundQuestMath.IsDemonAttackDue(BloodboundQuestMath.DemonAttackDelayDays));
+            Assert.IsTrue(BloodboundQuestMath.IsDemonAttackDue(BloodboundQuestMath.DemonAttackDelayDays + 10));
+        }
+
+        [Test]
+        public void BloodboundQuestMath_AttackPartiesPerSettlement_IsPositive()
+        {
+            Assert.Greater(BloodboundQuestMath.AttackPartiesPerSettlement, 0);
+        }
     }
 }

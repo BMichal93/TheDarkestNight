@@ -229,6 +229,11 @@
     <Compile Include="FactionQuests\ForestWidows\ForestWidowsQuestCampaignBehavior.Altar.cs"/>
     <Compile Include="FactionQuests\ForestWidows\ForestWidowsQuestCampaignBehavior.Resolution.cs"/>
     <Compile Include="FactionQuests\ForestWidows\ForestWidowsQuestDialogue.cs"/>
+    <Compile Include="FactionQuests\Bloodbound\BloodboundQuestMath.cs"/>
+    <Compile Include="FactionQuests\Bloodbound\BloodboundQuestLog.cs"/>
+    <Compile Include="FactionQuests\Bloodbound\BloodboundQuestCampaignBehavior.cs"/>
+    <Compile Include="FactionQuests\Bloodbound\BloodboundQuestCampaignBehavior.Altar.cs"/>
+    <Compile Include="FactionQuests\Bloodbound\BloodboundQuestCampaignBehavior.Resolution.cs"/>
     <Compile Include="MortalLaw\MortalLawMath.cs"/>
     <Compile Include="MortalLaw\MortalLawCampaignBehavior.cs"/>
     <Compile Include="MortalLaw\MortalLawCampaignBehavior.NightFear.cs"/>
