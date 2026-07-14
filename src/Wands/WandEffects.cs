@@ -129,6 +129,9 @@ namespace AshAndEmber
                 {
                     if (!TryConsumePlayerCharge(def.ItemId))
                     {
+                        // Same cooldown as a real cast — otherwise every landed
+                        // hit with a dry wand re-prints the message.
+                        _cooldowns[agentIndex] = WandsMath.CastCooldownSeconds;
                         Announce(affectorAgent, $"{def.Name} is spent — nothing answers this time.");
                         return;
                     }
