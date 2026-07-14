@@ -142,6 +142,11 @@ namespace AshAndEmber
                 // identity sharing the Empire's CultureObject but not its
                 // Kingdom — see Factions/Legion/LegionCulture.cs header.
                 campaignStarter.AddBehavior(new LegionCampaignBehavior());
+                // Phase 7, Faction H — the Pale Widows (Southern Empire). The
+                // last of the three Empire successors; a fresh identity sharing
+                // the Empire's CultureObject but not its Kingdom — see
+                // Factions/PaleWidows/PaleWidowsCulture.cs.
+                campaignStarter.AddBehavior(new PaleWidowsCampaignBehavior());
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -168,6 +173,8 @@ namespace AshAndEmber
                 try { EmpireDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // The Western Empire is now Legion — see Factions/Legion/LegionDialogue.cs.
                 try { LegionDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // The Southern Empire is now the Pale Widows — see Factions/PaleWidows/PaleWidowsDialogue.cs.
+                try { PaleWidowsDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SchemeSystem.Initialize();              } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Drop the previous campaign's Ashen rolls before this one's data loads.
                 // A save reload repopulates them in SyncData, which runs before
@@ -194,6 +201,7 @@ namespace AshAndEmber
                 try { TempleCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { EmpireCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { LegionCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { PaleWidowsCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
                 // player hits Save — long after the quest triggered. Audit at boot instead.

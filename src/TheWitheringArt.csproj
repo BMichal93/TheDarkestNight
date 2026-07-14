@@ -171,6 +171,12 @@
     <Compile Include="Factions\Legion\LegionDialogue.cs"/>
     <Compile Include="Factions\Legion\LegionCampaignBehavior.cs"/>
     <Compile Include="Factions\Legion\LegionCampaignBehavior.Menus.cs"/>
+    <Compile Include="Factions\PaleWidows\PaleWidowsMath.cs"/>
+    <Compile Include="Factions\PaleWidows\PaleWidowsCulture.cs"/>
+    <Compile Include="Factions\PaleWidows\PaleWidowsSettlements.cs"/>
+    <Compile Include="Factions\PaleWidows\PaleWidowsDialogue.cs"/>
+    <Compile Include="Factions\PaleWidows\PaleWidowsCampaignBehavior.cs"/>
+    <Compile Include="Factions\PaleWidows\PaleWidowsCampaignBehavior.Menus.cs"/>
     <Compile Include="Economy\EconomyMath.cs"/>
     <Compile Include="Economy\ScarcityModels.cs"/>
     <Compile Include="Economy\MarketScarcityCampaignBehavior.cs"/>
