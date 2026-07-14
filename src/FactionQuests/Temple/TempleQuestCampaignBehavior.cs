@@ -43,6 +43,7 @@ namespace AshAndEmber
         internal const int PhaseDelivery         = 2; // all five carried; must bring them to a Temple town
         internal const int PhaseBound            = 3; // the Vow is sealed — one permanent army, counting kills
         internal const int PhaseEndedDisbanded   = 4; // 50,000 reached — the Order disbands
+        internal const int PhaseEndedFactionGone = 5; // the Temple/Vlandia wiped out entirely before the Vow could be kept or broken — balance-pass closure
 
         private static int _phase = PhaseIdle;
 
@@ -155,7 +156,29 @@ namespace AshAndEmber
 
         private void OnDailyTick()
         {
-            try { CheckDisbandDaily(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { CheckDisbandDaily(); }         catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { CheckFactionGoneDailyTick(); }  catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // ── Balance-pass reliability fix: Vlandia starts with a normal, sprawling
+        // holding, so full elimination is far less likely than for the 1-2-town
+        // factions — but a hard enough campaign can still wipe any kingdom out.
+        // PhaseSeeking/PhaseDelivery would otherwise stall silently (relic
+        // gathering keeps working since the ruins don't care who Vlandia is, but
+        // RegisterDeliveryMenu's TempleSettlements.IsTempleSettlement gate can
+        // never open again with no Temple town left to open it on) and
+        // PhaseBound's permanent army can never be reasserted
+        // (ReassertPermanentArmy's own kingdom==null guard, above) — leaving the
+        // 50,000-kill tally to wait on a host that no longer exists. Resolve to a
+        // documented failure the moment the kingdom is confirmed gone in any of
+        // those three phases, rather than a journal entry with no possible close.
+        private static void CheckFactionGoneDailyTick()
+        {
+            if (_phase != PhaseSeeking && _phase != PhaseDelivery && _phase != PhaseBound) return;
+            if (GetTempleKingdom() != null) return; // still exists — nothing to do
+
+            _phase = PhaseEndedFactionGone;
+            try { TempleQuestLog.Current?.LogFactionGone(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
         private void OnHourlyTick()

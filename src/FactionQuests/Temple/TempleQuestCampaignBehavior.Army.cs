@@ -98,7 +98,7 @@ namespace AshAndEmber
         {
             try
             {
-                if (kingdom == null) return; // the kingdom itself is gone — CheckDisbandDaily's own guard handles that
+                if (kingdom == null) return; // the kingdom itself is gone — nothing to anchor the host on this tick; TempleQuestCampaignBehavior.CheckFactionGoneDailyTick handles the terminal case
 
                 Hero leader = ResolveLeaderHero();
                 if (leader == null || !leader.IsAlive || leader.IsPrisoner

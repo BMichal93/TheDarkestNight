@@ -100,5 +100,21 @@ namespace AshAndEmber
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
+
+        // ── Reliability closure — Iyakis, the Tower's only seat, falls before
+        // the rite is ever performed (see TowerRiteQuestCampaignBehavior.
+        // CheckFactionGoneDailyTick). Ends the quest instead of leaving it
+        // dangling open with no possible resolution.
+        internal void LogFactionGone()
+        {
+            try
+            {
+                AddLog(new TextObject(
+                    "Iyakis falls before the altar is ever laid. The Warlock, and whatever the Tower still knew " +
+                    "of the working, goes with it — the Great Rite is a question nobody is left alive to finish asking."));
+                CompleteQuestWithFail();
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
     }
 }

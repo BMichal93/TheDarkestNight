@@ -104,5 +104,21 @@ namespace AshAndEmber
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
+
+        // ── Reliability closure — Legion was wiped out before the ark was ever
+        // finished (see LegionQuestCampaignBehavior.CheckFactionGoneWeeklyTick).
+        // Ends the quest instead of leaving it dangling open, decaying toward
+        // zero with no possible resolution.
+        internal void LogFactionGone()
+        {
+            try
+            {
+                AddLog(new TextObject(
+                    "The ark never leaves the yard. Lageta and Ortysia both fall before the hold is stocked — " +
+                    "the Warlord's far shore stays exactly that: far, and now unreachable."));
+                CompleteQuestWithFail();
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
     }
 }

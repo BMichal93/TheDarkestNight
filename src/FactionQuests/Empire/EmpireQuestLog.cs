@@ -121,5 +121,22 @@ namespace AshAndEmber
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
+
+        // ── Reliability closure — the Empire was wiped out before it ever
+        // reunified Calradia (see EmpireQuestCampaignBehavior.
+        // TickConquestProgress). Ends the quest instead of leaving it dangling
+        // open with no possible resolution.
+        internal void LogFactionGone()
+        {
+            try
+            {
+                AddLog(new TextObject(
+                    "The old throne stays empty. The Empire falls to rival swords or the dark itself before " +
+                    "two-thirds of Calradia was ever reclaimed — reunification dies an unfinished ambition, " +
+                    "not a broken promise."));
+                CompleteQuestWithFail();
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
     }
 }

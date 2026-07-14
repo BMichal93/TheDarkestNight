@@ -142,5 +142,21 @@ namespace AshAndEmber
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
+
+        // ── Reliability closure — the Temple/Vlandia was wiped out before the
+        // Vow could be kept or broken (see TempleQuestCampaignBehavior.
+        // CheckFactionGoneDailyTick). Ends the quest instead of leaving it
+        // dangling open, waiting on a host that no longer exists.
+        internal void LogFactionGone()
+        {
+            try
+            {
+                AddLog(new TextObject(
+                    "There is no Order left to keep the Vow, broken or unbroken. Ocs Hall and Pravend both fall, " +
+                    "and whatever the Five Vigils might have bound together goes unbound, and unfinished."));
+                CompleteQuestWithFail();
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
     }
 }

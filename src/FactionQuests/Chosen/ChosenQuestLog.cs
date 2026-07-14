@@ -98,5 +98,21 @@ namespace AshAndEmber
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
+
+        // ── Reliability closure — the Chosen were wiped out before the promise
+        // ever came due (see ChosenQuestCampaignBehavior.TickConquestProgress).
+        // Ends the quest instead of leaving it dangling open with no possible
+        // resolution.
+        internal void LogFactionGone()
+        {
+            try
+            {
+                AddLog(new TextObject(
+                    "The promise never comes due. Phycaon and Lycaron fall before the wall of reclaimed ground " +
+                    "was ever finished — the PriestKing's vision dies with the last of his court, still unproven."));
+                CompleteQuestWithFail();
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
     }
 }

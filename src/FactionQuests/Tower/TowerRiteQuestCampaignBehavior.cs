@@ -31,6 +31,7 @@ namespace AshAndEmber
         internal const int PhaseGathering = 1; // accepted; collecting/delivering grave-goods
         internal const int PhaseRampage   = 2; // rite performed and failed; host is loose
         internal const int PhaseEnded     = 3; // aftermath applied
+        internal const int PhaseEndedFactionGone = 4; // Tower wiped out before the rite was ever performed — balance-pass closure
 
         private static int _phase = PhaseIdle;
         private static int _rampageStartDay = -1;
@@ -114,7 +115,29 @@ namespace AshAndEmber
 
         private void OnDailyTick()
         {
-            try { TickRampageState(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TickRampageState(); }           catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { CheckFactionGoneDailyTick(); }   catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // ── Balance-pass reliability fix: the Tower holds only ONE seat (Iyakis,
+        // TowerMath.StartingTownIds), the most fragile of any Phase 12 faction —
+        // if Iyakis falls to a rival kingdom the Tower kingdom is fully
+        // eliminated, TowerSettlements.IsTowerSettlement (the gate on the rite
+        // menu, and on where the rite itself can even be performed) can never
+        // become true again, and PhaseGathering would otherwise sit stalled
+        // forever with no possible closure. Resolve to a documented failure the
+        // moment the kingdom is confirmed gone.
+        private static void CheckFactionGoneDailyTick()
+        {
+            if (_phase != PhaseGathering) return;
+
+            Kingdom k = null;
+            try { k = Kingdom.All.FirstOrDefault(x => x != null && x.StringId == TowerCulture.CultureId && !x.IsEliminated); }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            if (k != null) return; // still exists — nothing to do
+
+            _phase = PhaseEndedFactionGone;
+            try { TowerRiteQuestLog.Current?.LogFactionGone(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
         private static int CurrentDay()

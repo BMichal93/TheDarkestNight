@@ -37,6 +37,7 @@ namespace AshAndEmber
         internal const int PhaseGathering = 1; // accepted; stocking the ark at Ortysia
         internal const int PhaseEndedSail = 2; // ending (a) — sailed beyond the sea
         internal const int PhaseEndedStay = 3; // ending (b) — stayed as the new Warlord
+        internal const int PhaseEndedFactionGone = 4; // Legion wiped out before the ark was ever finished — balance-pass closure
 
         private static int _phase = PhaseIdle;
 
@@ -146,8 +147,28 @@ namespace AshAndEmber
 
         private void OnWeeklyTick()
         {
-            try { NpcContributionWeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ApplyDecayWeeklyTick(); }      catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { NpcContributionWeeklyTick(); }  catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ApplyDecayWeeklyTick(); }       catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { CheckFactionGoneWeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // ── Balance-pass reliability fix: Legion is scoped to only two seats
+        // (LegionMath.StartingTownIds). ApplyDecayWeeklyTick already handles
+        // Ortysia changing hands (the stock decays but the quest keeps waiting,
+        // per the brief's own "theft when Ortysia falls" note) — but if Legion
+        // is wiped out ENTIRELY (both Lageta and Ortysia lost for good), there is
+        // no path back: Ortysia can never become Legion's again, so
+        // EndingDailyTick's IsOrtysiaLegionOwned gate would block the ending
+        // forever. Resolve to a documented failure once the kingdom itself is
+        // confirmed gone, rather than leaving the quest decaying toward zero
+        // forever with no closure.
+        private static void CheckFactionGoneWeeklyTick()
+        {
+            if (_phase != PhaseGathering) return;
+            if (GetLegionKingdom() != null) return; // still exists — nothing to do
+
+            _phase = PhaseEndedFactionGone;
+            try { LegionQuestLog.Current?.LogFactionGone(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
         private void OnDailyTick()

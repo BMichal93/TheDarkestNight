@@ -133,7 +133,31 @@ namespace AshAndEmber
 
         private void OnWeeklyTick()
         {
-            try { WolfHuntBeastParty.WeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { WolfHuntBeastParty.WeeklyTick(); }         catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { CheckFactionGoneWeeklyTick(); }             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // ── Balance-pass reliability fix: the beast hunt itself never depends on
+        // the Wolf Brothers kingdom still existing (SpawnCurrentBeast/PickAnchor
+        // already fall back to the player's own position with no towns left to
+        // anchor on) — but the FINAL CHOICE menu is gated to a live Wolf
+        // Brothers settlement (WolfBrothersSettlements.IsWolfBrothersSettlement).
+        // If the kingdom is wiped out (both WolfBrothersMath.StartingTownIds
+        // lost) while awaiting that choice, the menu could never become
+        // reachable again. Rather than leave the quest stalled forever with all
+        // three beasts already dead, auto-resolve to the Burning ending — "no
+        // pack left to feed" is the honest reading, and Burning is this quest's
+        // own "hold back" outcome rather than an invented third one.
+        private static void CheckFactionGoneWeeklyTick()
+        {
+            if (_phase != PhaseAwaitingFinalChoice) return;
+
+            Kingdom k = null;
+            try { k = Kingdom.All.FirstOrDefault(x => x != null && x.StringId == WolfBrothersCulture.CultureId && !x.IsEliminated); }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            if (k != null) return; // still exists (even leaderless) — nothing to do
+
+            try { OnChooseBurning(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
         // ── Daily: spawn/track the current stage's beast ─────────────────────────

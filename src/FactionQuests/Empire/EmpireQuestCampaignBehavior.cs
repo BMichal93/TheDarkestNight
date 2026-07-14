@@ -42,6 +42,7 @@ namespace AshAndEmber
         internal const int PhaseConquering = 1; // accepted; tracking Empire town count
         internal const int PhaseWar        = 2; // crowned; war declared on demons, counting kills
         internal const int PhaseVictory    = 3; // kill target reached; the Empire's triumph
+        internal const int PhaseEndedFactionGone = 4; // Empire wiped out before it ever reunified Calradia — balance-pass closure
 
         private static int _phase = PhaseIdle;
 
@@ -142,7 +143,18 @@ namespace AshAndEmber
             if (_phase != PhaseConquering) return;
 
             var empire = GetEmpireKingdom();
-            if (empire == null) return; // wiped out or otherwise gone — nothing to track
+            if (empire == null)
+            {
+                // Balance-pass reliability fix (mirrors ChosenQuestCampaignBehavior.
+                // TickConquestProgress): a rival kingdom or the Night Tide itself
+                // could in principle wipe out the Empire before it ever reaches
+                // ConquestTownThreshold. Left unhandled this would leave the quest
+                // silently stuck at PhaseConquering forever. Resolve to a
+                // documented failure the moment the kingdom is confirmed gone.
+                _phase = PhaseEndedFactionGone;
+                try { EmpireQuestLog.Current?.LogFactionGone(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                return;
+            }
 
             int currentTowns = 0;
             try { currentTowns = empire.Fiefs?.Count(t => t?.Settlement != null && t.Settlement.IsTown) ?? 0; }

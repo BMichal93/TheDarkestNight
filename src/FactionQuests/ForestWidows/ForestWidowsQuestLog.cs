@@ -103,5 +103,21 @@ namespace AshAndEmber
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
+
+        // ── Reliability closure — the Forest Widows were wiped out before the
+        // count was ever met (see ForestWidowsQuestCampaignBehavior.
+        // CheckFactionGoneWeeklyTick). Ends the quest instead of leaving it
+        // dangling open with no possible resolution.
+        internal void LogFactionGone()
+        {
+            try
+            {
+                AddLog(new TextObject(
+                    "The ledger never gets settled. Marunath and Car Banseth fall to someone or something else " +
+                    "first — the Grand Widow's bargain dies with the last of her court, unpaid and unpayable."));
+                CompleteQuestWithFail();
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
     }
 }

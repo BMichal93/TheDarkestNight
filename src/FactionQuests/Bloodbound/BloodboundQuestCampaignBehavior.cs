@@ -42,6 +42,7 @@ namespace AshAndEmber
         internal const int PhaseAwaitingChoice     = 2; // threshold met, resolution inquiry pending/showing
         internal const int PhaseEndedParticipated  = 3; // player drank with them — the player character dies
         internal const int PhaseEndedRan           = 4; // player ran — abandoned the Bloodbound kingdom
+        internal const int PhaseEndedFactionGone   = 5; // Bloodbound wiped out (rival war/demons) before the draught was ever filled — balance-pass closure, see CheckFactionGoneWeeklyTick
 
         private static int _phase = PhaseIdle;
 
@@ -144,6 +145,26 @@ namespace AshAndEmber
             try { EnsureShrineChosen(); }        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { NpcContributionWeeklyTick(); }  catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { CheckThresholdWeeklyTick(); }   catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { CheckFactionGoneWeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // ── Balance-pass reliability fix: the Bloodbound are scoped to only two
+        // seats (BloodboundMath.StartingTownIds), so a rival kingdom's war or the
+        // Night Tide itself can plausibly wipe them out before the 750-vial
+        // draught is ever filled. Without this check the quest would sit at
+        // PhaseAccumulating forever — the shrine gate (ShrineIsBloodboundOwned)
+        // permanently refuses donations once there is no Bloodbound kingdom left
+        // to own it, and CheckThresholdWeeklyTick has nothing left to trigger —
+        // a silent, permanent stall with a dangling journal entry and no closure
+        // for the player. Once the kingdom is confirmed gone, the quest resolves
+        // to a documented failure instead.
+        private static void CheckFactionGoneWeeklyTick()
+        {
+            if (_phase != PhaseAccumulating) return;
+            if (GetBloodboundKingdom() != null) return; // still exists — nothing to do
+
+            _phase = PhaseEndedFactionGone;
+            try { BloodboundQuestLog.Current?.LogFactionGone(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
         private void OnDailyTick()

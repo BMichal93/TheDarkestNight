@@ -46,6 +46,7 @@ namespace AshAndEmber
         internal const int PhaseAwaitingChoice = 2; // threshold met, resolution inquiry pending/showing
         internal const int PhaseEndedCastOut  = 3; // player refused — Widows bound to the dark, player free
         internal const int PhaseEndedStayed   = 4; // player accepted the same fate
+        internal const int PhaseEndedFactionGone = 5; // Widows wiped out before the count was ever met — balance-pass closure, see CheckFactionGoneWeeklyTick
 
         private static int _phase = PhaseIdle;
 
@@ -136,8 +137,28 @@ namespace AshAndEmber
 
         private void OnWeeklyTick()
         {
-            try { NpcContributionWeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { CheckThresholdWeeklyTick(); }  catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { NpcContributionWeeklyTick(); }  catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { CheckThresholdWeeklyTick(); }   catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { CheckFactionGoneWeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // ── Balance-pass reliability fix: the Forest Widows are scoped to only
+        // two seats (ForestWidowsMath.StartingTownIds), so a rival kingdom's war
+        // or the Night Tide itself can plausibly wipe them out before the
+        // 3,000-man count is ever met. Without this check the quest would sit at
+        // PhaseAccumulating forever — the pledge option is only reachable through
+        // "forestwidows_altar_main," itself gated behind a Forest-Widows-owned
+        // settlement (ForestWidowsSettlements.IsForestWidowsSettlement), which
+        // permanently stops existing once the kingdom is gone. Once the kingdom
+        // is confirmed gone, the quest resolves to a documented failure instead
+        // of leaving a dangling journal entry with no possible closure.
+        private static void CheckFactionGoneWeeklyTick()
+        {
+            if (_phase != PhaseAccumulating) return;
+            if (GetForestWidowsKingdom() != null) return; // still exists — nothing to do
+
+            _phase = PhaseEndedFactionGone;
+            try { ForestWidowsQuestLog.Current?.LogFactionGone(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
         // ── Shared: record a contribution toward the count ──────────────────────

@@ -49,9 +49,10 @@ namespace AshAndEmber
     public sealed partial class ChosenQuestCampaignBehavior : CampaignBehaviorBase
     {
         // ── Phase state machine ──────────────────────────────────────────────────
-        internal const int PhaseIdle       = 0; // not yet accepted
-        internal const int PhaseConquering = 1; // accepted; tracking Chosen fief count
-        internal const int PhaseEnded      = 2; // revelation + split applied
+        internal const int PhaseIdle          = 0; // not yet accepted
+        internal const int PhaseConquering    = 1; // accepted; tracking Chosen fief count
+        internal const int PhaseEnded         = 2; // revelation + split applied
+        internal const int PhaseEndedFactionGone = 3; // Chosen wiped out before the promise ever came due — balance-pass closure
 
         private static int _phase = PhaseIdle;
 
@@ -131,7 +132,20 @@ namespace AshAndEmber
             if (_phase != PhaseConquering) return;
 
             var chosen = ChosenCulture.GetChosenKingdom();
-            if (chosen == null) return; // wiped out or otherwise gone — nothing to track
+            if (chosen == null)
+            {
+                // Balance-pass reliability fix: the Chosen are scoped to only two
+                // seats (ChosenMath.StartingTownIds), so a rival kingdom's war or
+                // the Night Tide itself can plausibly wipe them out before
+                // ConquestFiefThreshold is ever reached. Left unhandled this would
+                // leave the quest at PhaseConquering forever (a weekly tick that
+                // silently no-ops with a dangling, unresolvable journal entry) —
+                // instead, resolve to a documented failure the moment the kingdom
+                // is confirmed gone.
+                _phase = PhaseEndedFactionGone;
+                try { ChosenQuestLog.Current?.LogFactionGone(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                return;
+            }
 
             int currentFiefs = 0;
             try { currentFiefs = chosen.Fiefs?.Count ?? 0; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
