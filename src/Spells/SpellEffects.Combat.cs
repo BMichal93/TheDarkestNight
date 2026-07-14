@@ -187,7 +187,15 @@ namespace AshAndEmber
             // through (element spells, spoken formulas, crystals, relics,
             // nature/miracle workings, dark gifts) — see the file header for the
             // full list. A registered demon takes bonus damage from all of it.
-            try { if (DemonBattleBehavior.IsDemon(target)) damage *= RelicMath.DemonBaneMultiplier; }
+            // Phase 11 — the Demon Lord specifically resists this bonus rather
+            // than suffering it (ApocalypseMath.DemonLordBaneMultiplier is
+            // deliberately far below RelicMath.DemonBaneMultiplier) — every
+            // other demon still burns for the full bane bonus.
+            try
+            {
+                if (DemonBattleBehavior.IsBoss(target)) damage *= ApocalypseMath.DemonLordBaneMultiplier;
+                else if (DemonBattleBehavior.IsDemon(target)) damage *= RelicMath.DemonBaneMultiplier;
+            }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
             // Cinder Shell enchantment: reduce incoming damage
@@ -230,7 +238,15 @@ namespace AshAndEmber
                 try { damage *= ElementalBeings.IncomingElementMultiplier(target, attackElement.Value); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Requirement 20 — demons fear the flame (see DamageAgent's matching
             // comment; this is the visible-blow twin of the same choke point).
-            try { if (DemonBattleBehavior.IsDemon(target)) damage *= RelicMath.DemonBaneMultiplier; }
+            // Phase 11 — the Demon Lord specifically resists this bonus rather
+            // than suffering it (ApocalypseMath.DemonLordBaneMultiplier is
+            // deliberately far below RelicMath.DemonBaneMultiplier) — every
+            // other demon still burns for the full bane bonus.
+            try
+            {
+                if (DemonBattleBehavior.IsBoss(target)) damage *= ApocalypseMath.DemonLordBaneMultiplier;
+                else if (DemonBattleBehavior.IsDemon(target)) damage *= RelicMath.DemonBaneMultiplier;
+            }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             if (_stoneskinAgents.TryGetValue(target, out var skin) && skin.Remaining > 0f)
                 damage *= (1f - Math.Min(0.5f, skin.BonusArmor / 100f));

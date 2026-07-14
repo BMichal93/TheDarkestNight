@@ -17,7 +17,13 @@ namespace AshAndEmber
     public static class DemonMath
     {
         // ── Identity ─────────────────────────────────────────────────────────────
-        public enum DemonTier { Fiend = 0, Stalker = 1, Ravager = 2, Hellsteed = 3 }
+        // Lord = 4 — the Phase 11 Demon Lord. Never produced by RollTier (an
+        // ordinary night-tide roll can only land on 0..3); he is spawned once,
+        // deliberately, by DemonLordSystem. Kept in this same enum (rather than
+        // a parallel type) so he rides through every existing demon-recognition
+        // choke point for free: DemonBattleBehavior.IsDemon, the demon-bane
+        // damage bonus, the visuals shroud, the "never retreat" AI.
+        public enum DemonTier { Fiend = 0, Stalker = 1, Ravager = 2, Hellsteed = 3, Lord = 4 }
 
         // The land a demon rose under leaves a mark — a pale, hardier Snow demon;
         // a leaner, quicker Desert demon; a quieter Forest demon. Pure lookup by a
@@ -44,6 +50,12 @@ namespace AshAndEmber
                 case DemonTier.Stalker:   return 100f;
                 case DemonTier.Ravager:   return 150f;
                 case DemonTier.Hellsteed: return 120f; // rider; the horse carries its own pool
+                // Base only — DemonLordSystem layers ApocalypseMath.DemonLordHealthMultiplier
+                // on top of this when he is actually built, per Phase 11's "boss stat
+                // multipliers" tunable. Left large even unscaled so nothing that reads
+                // DemonMath.Health(Lord, ...) directly (e.g. a stray visual scale check)
+                // ever sees him as a Fiend by accident.
+                case DemonTier.Lord:      return 400f;
                 default:                  return 70f;
             }
         }
@@ -94,6 +106,7 @@ namespace AshAndEmber
                 case DemonTier.Stalker:   return 1.25f;
                 case DemonTier.Ravager:   return 1.60f;
                 case DemonTier.Hellsteed: return 1.15f;
+                case DemonTier.Lord:      return 1.60f; // further scaled by ApocalypseMath.DemonLordDamageMultiplier
                 default:                  return 1.00f;
             }
         }

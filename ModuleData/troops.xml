@@ -938,6 +938,45 @@
     </skills>
   </NPCCharacter>
 
+  <!-- ═══════════════════════════════════════════════════════════════════
+       Phase 11 — THE DEMON LORD. The template HeroCreator.CreateSpecialHero
+       wraps in Apocalypse/DemonLordSystem.cs, once, deliberately, on the
+       weekly roll past day 1000. occupation="Lord" (not "Bandit") so the
+       engine treats him as a real ruler once he is placed on a Kingdom's
+       ruling clan. Boss-tier skills; his real HP boost is layered on top of
+       DemonMath.BaseHealth(Lord) at battle time by ApocalypseMath's
+       DemonLordHealthMultiplier — see DemonBattleBehavior.OnAgentBuild.
+       ═══════════════════════════════════════════════════════════════════ -->
+  <NPCCharacter id="demon_lord"
+                name="{=demon_lord_name}The Demon Lord"
+                age="30"
+                level="63"
+                culture="Culture.looters"
+                default_group="Infantry"
+                occupation="Lord"
+                is_basic_troop="false"
+                is_hidden_in_encyclopedia="false">
+    <!-- Both sliders maxed — the most massive, distorted silhouette any demon
+         tier reaches, so he reads unmistakably apart from a Ravager at a
+         glance even before the shroud/tint sets in. -->
+    <face>
+      <BodyPropertiesMin version="4" age="40.0" weight="0.95" build="1.00" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMax version="4" age="55.0" weight="1.00" build="1.00" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+    </face>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Body" id="Item.bandit_fur_a"/>
+        <equipment slot="Item0" id="Item.cleaver_sword_t3"/>
+      </EquipmentRoster>
+    </Equipments>
+    <skills>
+      <skill id="Athletics"  value="280"/>
+      <skill id="OneHanded"  value="260"/>
+      <skill id="Leadership" value="200"/>
+      <skill id="Tactics"    value="150"/>
+    </skills>
+  </NPCCharacter>
+
   <NPCCharacter id="sacred_kindled_gale"
                 name="{=sacred_kindled_gale_name}Kindled of the Gale"
                 age="30"

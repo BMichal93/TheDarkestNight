@@ -187,6 +187,11 @@
     <Compile Include="Ruins\RuinsExplorationSystem.WaitMenu.cs"/>
     <Compile Include="Ruins\RuinsMenus.cs"/>
     <Compile Include="Ruins\RuinsCampaignBehavior.cs"/>
+    <Compile Include="Apocalypse\ApocalypseMath.cs"/>
+    <Compile Include="Apocalypse\DemonLordSystem.cs"/>
+    <Compile Include="Apocalypse\ApocalypseCampaignBehavior.cs"/>
+    <Compile Include="Apocalypse\ApocalypseCampaignBehavior.Gathering.cs"/>
+    <Compile Include="Apocalypse\ApocalypseCampaignBehavior.Resolution.cs"/>
     <Compile Include="MortalLaw\MortalLawMath.cs"/>
     <Compile Include="MortalLaw\MortalLawCampaignBehavior.cs"/>
     <Compile Include="MortalLaw\MortalLawCampaignBehavior.NightFear.cs"/>

@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -63,6 +64,13 @@ namespace AshAndEmber
         }
 
         public static bool IsDemon(Agent agent) => agent != null && _tierOf.ContainsKey(agent);
+
+        // Phase 11 — true only for the Demon Lord himself (DemonTier.Lord).
+        // Consulted by SpellEffects.Combat.cs's demon-bane carve-out so he
+        // resists (rather than takes bonus damage from) Requirement 20's bane
+        // multiplier — see ApocalypseMath.DemonLordBaneMultiplier.
+        public static bool IsBoss(Agent agent)
+            => agent != null && _tierOf.TryGetValue(agent, out var tier) && tier == DemonMath.DemonTier.Lord;
 
         // Every demon currently alive and registered in this mission — the
         // Spellbook's Banish Demons (src/Spellbook/) reads this to find its
@@ -105,7 +113,29 @@ namespace AshAndEmber
                 if (agent == null || agent.IsMount) return;
                 string id = null;
                 try { id = agent.Character?.StringId; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                if (!DemonCatalog.TryGetTier(id, out DemonMath.DemonTier tier)) return;
+                bool matched = DemonCatalog.TryGetTier(id, out DemonMath.DemonTier tier);
+
+                // Phase 11 — the Demon Lord is a real Hero (see DemonLordSystem),
+                // so HeroCreator wraps the "demon_lord" template in a cloned
+                // CharacterObject with its own generated StringId — a plain id
+                // lookup above will not find him. Identify him by Hero identity
+                // instead, exactly like SpellcasterLords.MissionTick does for its
+                // caster lords.
+                if (!matched)
+                {
+                    try
+                    {
+                        Hero hero = (agent.Character as CharacterObject)?.HeroObject;
+                        if (hero != null && DemonLordSystem.IsTrackedHero(hero))
+                        {
+                            matched = true;
+                            tier = DemonMath.DemonTier.Lord;
+                        }
+                    }
+                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                }
+                if (!matched) return;
+
                 Register(agent, tier);
                 // Environment variant (snow/desert/forest): scale HP the same way
                 // ElementalBeings.ConvertBattleAgent scales a Kindled's — bumped up,
@@ -114,6 +144,7 @@ namespace AshAndEmber
                 {
                     DemonMath.EnvironmentVariant variant = PendingVariant ?? DemonMath.EnvironmentVariant.Default;
                     float hp = DemonMath.Health(tier, variant);
+                    if (tier == DemonMath.DemonTier.Lord) hp *= ApocalypseMath.DemonLordHealthMultiplier;
                     agent.HealthLimit = Math.Max(agent.HealthLimit, hp);
                     agent.Health = agent.HealthLimit;
                 }
