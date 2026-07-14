@@ -179,6 +179,9 @@ namespace AshAndEmber
                 try { campaignStarter.AddBehavior(new WolfHuntQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { campaignStarter.AddBehavior(new TowerRiteQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { campaignStarter.AddBehavior(new ChosenQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Phase 12, Faction C — the Forest Widows' "The Final Peace" (see
+                // FactionQuests/ForestWidows/).
+                try { campaignStarter.AddBehavior(new ForestWidowsQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -195,6 +198,10 @@ namespace AshAndEmber
                 // the (retired) Forest Clans — see
                 // Factions/ForestWidows/ForestWidowsDialogue.cs.
                 try { ForestWidowsDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Once "The Final Peace" seals the dark pact, every Forest Widows
+                // lord's dialogue is overridden with "..." — see
+                // FactionQuests/ForestWidows/ForestWidowsQuestDialogue.cs.
+                try { ForestWidowsQuestDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Khuzait is now the Bloodbound, not the (retired) Tribes of the East —
                 // see Factions/Bloodbound/BloodboundDialogue.cs. TribesDialogue.cs is
                 // left in place, unreferenced, for save compatibility.
@@ -241,6 +248,7 @@ namespace AshAndEmber
                 try { WolfHuntQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { TowerRiteQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ChosenQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ForestWidowsQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
                 // player hits Save — long after the quest triggered. Audit at boot instead.

@@ -66,6 +66,23 @@ namespace AshAndEmber
             return f1IsLord ^ f2IsLord;
         }
 
+        // Phase 12, the Forest Widows' "The Final Peace" — once the dark pact is
+        // sealed (ForestWidowsQuestCampaignBehavior.HasJoinedTheDark),
+        // Marunath/Car Banseth's kingdom is "removed from ordinary diplomacy"
+        // exactly like Duneborn's controlled Great Other and the Demon Lord
+        // above: permanent war with everyone, never offered peace again. The
+        // Widows now fight FOR the dark rather than paying it off, so the shape
+        // is the same block, just inverted in spirit — hostility instead of a
+        // truce nobody can broker.
+        private static bool IsForestWidowsDarkPact(IFaction f1, IFaction f2)
+        {
+            if (f1 == null || f2 == null || f1 == f2) return false;
+            if (!ForestWidowsQuestCampaignBehavior.HasJoinedTheDark) return false;
+            bool f1IsWidows = (f1 as Kingdom)?.StringId == ForestWidowsCulture.CultureId;
+            bool f2IsWidows = (f2 as Kingdom)?.StringId == ForestWidowsCulture.CultureId;
+            return f1IsWidows ^ f2IsWidows;
+        }
+
         // Marks Ashen-vs-faction wars as constant so the engine excludes them from
         // overcommitment checks and never generates peace proposals for them.
         // Also locks all wars involving Arenicos's empire after the Ashen merger.
@@ -75,6 +92,7 @@ namespace AshAndEmber
             if (IsArenicosPostMerger(faction1) || IsArenicosPostMerger(faction2)) return true;
             if (IsDunebornPermanentWar(faction1, faction2)) return true;
             if (IsDemonLordPermanentWar(faction1, faction2)) return true;
+            if (IsForestWidowsDarkPact(faction1, faction2)) return true;
             return base.IsAtConstantWar(faction1, faction2);
         }
 
@@ -117,6 +135,8 @@ namespace AshAndEmber
             if (IsDunebornPermanentWar(factionDeclaresPeace, factionDeclaredPeace))
                 return -10000f;
             if (IsDemonLordPermanentWar(factionDeclaresPeace, factionDeclaredPeace))
+                return -10000f;
+            if (IsForestWidowsDarkPact(factionDeclaresPeace, factionDeclaredPeace))
                 return -10000f;
 
             // Prevent any kingdom from ending a war that started less than MinWarDays ago.

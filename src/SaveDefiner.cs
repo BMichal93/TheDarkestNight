@@ -82,6 +82,9 @@ namespace AshAndEmber
 
                 // Phase 12, Faction H -- the Chosen's "The Promise".
                 new KeyValuePair<Type, int>(typeof(ChosenQuestLog),            17),
+
+                // Phase 12, Faction C -- the Forest Widows' "The Final Peace".
+                new KeyValuePair<Type, int>(typeof(ForestWidowsQuestLog),      18),
             };
 
         protected override void DefineClassTypes()

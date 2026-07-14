@@ -213,6 +213,12 @@
     <Compile Include="FactionQuests\Chosen\ChosenQuestLog.cs"/>
     <Compile Include="FactionQuests\Chosen\ChosenQuestCampaignBehavior.cs"/>
     <Compile Include="FactionQuests\Chosen\ChosenQuestCampaignBehavior.Split.cs"/>
+    <Compile Include="FactionQuests\ForestWidows\ForestWidowsQuestMath.cs"/>
+    <Compile Include="FactionQuests\ForestWidows\ForestWidowsQuestLog.cs"/>
+    <Compile Include="FactionQuests\ForestWidows\ForestWidowsQuestCampaignBehavior.cs"/>
+    <Compile Include="FactionQuests\ForestWidows\ForestWidowsQuestCampaignBehavior.Altar.cs"/>
+    <Compile Include="FactionQuests\ForestWidows\ForestWidowsQuestCampaignBehavior.Resolution.cs"/>
+    <Compile Include="FactionQuests\ForestWidows\ForestWidowsQuestDialogue.cs"/>
     <Compile Include="MortalLaw\MortalLawMath.cs"/>
     <Compile Include="MortalLaw\MortalLawCampaignBehavior.cs"/>
     <Compile Include="MortalLaw\MortalLawCampaignBehavior.NightFear.cs"/>

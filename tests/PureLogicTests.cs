@@ -4752,5 +4752,62 @@ namespace AshAndEmber.Tests
             foreach (var id in ChosenQuestMath.SplinterKingdomIds) Assert.IsFalse(string.IsNullOrWhiteSpace(id));
             foreach (var name in ChosenQuestMath.SplinterKingdomNames) Assert.IsFalse(string.IsNullOrWhiteSpace(name));
         }
+
+        // ── ForestWidowsQuestMath tests (Phase 12, Faction C — The Final Peace) ──
+        [Test]
+        public void ForestWidowsQuestMath_HasReachedThreshold_GatesAtConfiguredCount()
+        {
+            Assert.IsFalse(ForestWidowsQuestMath.HasReachedThreshold(ForestWidowsQuestMath.SacrificeTarget - 1));
+            Assert.IsTrue(ForestWidowsQuestMath.HasReachedThreshold(ForestWidowsQuestMath.SacrificeTarget));
+            Assert.IsTrue(ForestWidowsQuestMath.HasReachedThreshold(ForestWidowsQuestMath.SacrificeTarget + 500));
+        }
+
+        [Test]
+        public void ForestWidowsQuestMath_SacrificeTarget_IsEnormousButSmallerThanGreatAwakening()
+        {
+            // Smaller than Duneborn's ten thousand (a two-town scarcity economy
+            // cannot plausibly bleed at that kingdom's scale), but still an order
+            // of magnitude beyond what the old altar's 1-day-per-soldier rate
+            // could plausibly accumulate across a single campaign.
+            Assert.Less(ForestWidowsQuestMath.SacrificeTarget, GreatAwakeningMath.PrisonerTarget);
+            Assert.Greater(ForestWidowsQuestMath.SacrificeTarget, ForestWidowsMath.StartingTownIds.Length * 500);
+        }
+
+        [Test]
+        public void ForestWidowsQuestMath_ClampedProgress_NeverExceedsThresholdOrGoesNegative()
+        {
+            Assert.AreEqual(0, ForestWidowsQuestMath.ClampedProgress(-5));
+            Assert.AreEqual(0, ForestWidowsQuestMath.ClampedProgress(0));
+            Assert.AreEqual(ForestWidowsQuestMath.SacrificeTarget, ForestWidowsQuestMath.ClampedProgress(ForestWidowsQuestMath.SacrificeTarget));
+            Assert.AreEqual(ForestWidowsQuestMath.SacrificeTarget, ForestWidowsQuestMath.ClampedProgress(ForestWidowsQuestMath.SacrificeTarget + 999));
+        }
+
+        [Test]
+        public void ForestWidowsQuestMath_NpcContributionAmount_NeverExceedsHeldOrGoesNegative()
+        {
+            var rng = new System.Random(12345);
+            for (int i = 0; i < 200; i++)
+            {
+                int held = rng.Next(0, 40);
+                int given = ForestWidowsQuestMath.NpcContributionAmount(rng, held);
+                Assert.GreaterOrEqual(given, 0);
+                Assert.LessOrEqual(given, held);
+            }
+        }
+
+        [Test]
+        public void ForestWidowsQuestMath_NpcContributionAmount_DegenerateInputsReturnZero()
+        {
+            Assert.AreEqual(0, ForestWidowsQuestMath.NpcContributionAmount(null, 10));
+            Assert.AreEqual(0, ForestWidowsQuestMath.NpcContributionAmount(new System.Random(1), 0));
+            Assert.AreEqual(0, ForestWidowsQuestMath.NpcContributionAmount(new System.Random(1), -5));
+        }
+
+        [Test]
+        public void ForestWidowsQuestMath_GarrisonCounts_ArePositive()
+        {
+            Assert.Greater(ForestWidowsQuestMath.GarrisonFiends, 0);
+            Assert.Greater(ForestWidowsQuestMath.GarrisonStalkers, 0);
+        }
     }
 }

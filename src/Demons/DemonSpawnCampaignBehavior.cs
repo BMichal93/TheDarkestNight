@@ -407,13 +407,18 @@ namespace AshAndEmber
                     // faction-owned trackers consulted at the same choke
                     // point). Faction H (the Chosen) has no such tracker — the
                     // Chosen fend for themselves against the Night Tide, same
-                    // as everyone else.
+                    // as everyone else. Once the Forest Widows' "Final Peace"
+                    // dark pact is sealed (FactionQuests/ForestWidows/
+                    // ForestWidowsQuestCampaignBehavior.Resolution.cs), their
+                    // parties are excluded permanently, not just for a bought
+                    // window — see IsDarkPactParty.
                     MobileParty prey = MobileParty.All
                         .Where(p => p != null && p.IsActive && p != party
                                  && !IsDemonParty(p) && p.MapEvent == null
                                  && (p.MemberRoster?.TotalManCount ?? 0) > 0
                                  && !BloodboundCampaignBehavior.IsPartyIgnored(p)
-                                 && !ForestWidowsCampaignBehavior.IsPartyIgnored(p))
+                                 && !ForestWidowsCampaignBehavior.IsPartyIgnored(p)
+                                 && !ForestWidowsQuestCampaignBehavior.IsDarkPactParty(p))
                         .OrderBy(p => (p.GetPosition2D - party.GetPosition2D).LengthSquared)
                         .FirstOrDefault(p => (p.GetPosition2D - party.GetPosition2D).Length <= EngageSearchRadius);
 
