@@ -251,12 +251,6 @@
     <Compile Include="FactionQuests\Legion\LegionQuestCampaignBehavior.Menu.cs"/>
     <Compile Include="FactionQuests\Legion\LegionQuestCampaignBehavior.NpcContribution.cs"/>
     <Compile Include="FactionQuests\Legion\LegionQuestCampaignBehavior.Ending.cs"/>
-    <Compile Include="FactionQuests\Legion\LegionQuestMath.cs"/>
-    <Compile Include="FactionQuests\Legion\LegionQuestLog.cs"/>
-    <Compile Include="FactionQuests\Legion\LegionQuestCampaignBehavior.cs"/>
-    <Compile Include="FactionQuests\Legion\LegionQuestCampaignBehavior.Menu.cs"/>
-    <Compile Include="FactionQuests\Legion\LegionQuestCampaignBehavior.NpcContribution.cs"/>
-    <Compile Include="FactionQuests\Legion\LegionQuestCampaignBehavior.Ending.cs"/>
     <Compile Include="FactionQuests\ForestWidows\ForestWidowsQuestDialogue.cs"/>
     <Compile Include="FactionQuests\Bloodbound\BloodboundQuestMath.cs"/>
     <Compile Include="FactionQuests\Bloodbound\BloodboundQuestLog.cs"/>

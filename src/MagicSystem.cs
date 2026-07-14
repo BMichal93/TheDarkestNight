@@ -588,9 +588,6 @@ namespace AshAndEmber
             try { hero.HeroDeveloper.UnspentFocusPoints += 100; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
             // 5. Spellbook (Requirement 26): unlock it and learn every formula.
-            //    No magical items exist yet (relics are Phase 6) — the crystal
-            //    grant below already stands in for "magical items" per the
-            //    prompt's own suggested fallback.
             try { SpellbookCampaignBehavior.DebugUnlockAll(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
             // 6. One of every crystal into the player party's inventory.
@@ -608,8 +605,36 @@ namespace AshAndEmber
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
+            // 7. A few magical items (Requirement 26, extended once relics/wands/
+            //    talismans existed — Phases 6/mid-build): one of each rather than
+            //    every entry in each catalog, since these are meant to be rare finds,
+            //    not a full set. Kept small and additive to the existing grant.
+            try
+            {
+                var roster = MobileParty.MainParty?.ItemRoster;
+                if (roster != null)
+                {
+                    if (RelicCatalog.All.Count > 0)
+                    {
+                        var item = MBObjectManager.Instance?.GetObject<ItemObject>(RelicCatalog.All[0].ItemId);
+                        if (item != null) roster.AddToCounts(item, 1);
+                    }
+                    if (WandsCatalog.All.Count > 0)
+                    {
+                        var item = MBObjectManager.Instance?.GetObject<ItemObject>(WandsCatalog.All[0].ItemId);
+                        if (item != null) roster.AddToCounts(item, 1);
+                    }
+                    if (TalismansCatalog.All.Count > 0)
+                    {
+                        var item = MBObjectManager.Instance?.GetObject<ItemObject>(TalismansCatalog.All[0].ItemId);
+                        if (item != null) roster.AddToCounts(item, 1);
+                    }
+                }
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
             MBInformationManager.AddQuickInformation(new TaleWorlds.Localization.TextObject(
-                "[DEBUG] Granted: 100 focus points, all Dark Gifts, max Grace, all Nature talents, all crystals, spellbook unlocked with every formula known."));
+                "[DEBUG] Granted: 100 focus points, all Dark Gifts, max Grace, all Nature talents, all crystals, a relic/wand/talisman, spellbook unlocked with every formula known."));
         }
     }
 
