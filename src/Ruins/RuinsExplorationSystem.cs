@@ -192,6 +192,9 @@ namespace AshAndEmber
                 case RuinsMath.LootKind.Wand:
                     return GrantWand();
 
+                case RuinsMath.LootKind.Talisman:
+                    return GrantTalisman();
+
                 default:
                     return null;
             }
@@ -258,6 +261,31 @@ namespace AshAndEmber
                 roster.AddToCounts(item, 1);
                 WandEffects.RefillPlayerCharges(def.ItemId);
                 return $"Wrapped in oiled cloth, untouched by the dust — {def.Name}.";
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+        }
+
+        // Talisman loot (mod-author-directed addition) — the same "pull a
+        // random catalog item and grant it" shape GrantWand already uses; the
+        // chamber-loot roll already gates the rarity (RuinsMath.RollChamberLoot),
+        // so there is no separate TalismansMath.RollRuinTalismanLoot re-roll
+        // here — reaching this method at all already means "the roll landed
+        // on Talisman."
+        private static string GrantTalisman()
+        {
+            try
+            {
+                var talismans = TalismansCatalog.All;
+                if (talismans.Count == 0) return null;
+                int idx = TalismansMath.PickTalismanIndex(_rng.NextDouble(), talismans.Count);
+                if (idx < 0) return null;
+                var def = talismans[idx];
+
+                var item = MBObjectManager.Instance?.GetObject<ItemObject>(def.ItemId);
+                var roster = MobileParty.MainParty?.ItemRoster;
+                if (item == null || roster == null) return null;
+                roster.AddToCounts(item, 1);
+                return $"A small stone charm, still warm to the touch — {def.Name}.";
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
         }

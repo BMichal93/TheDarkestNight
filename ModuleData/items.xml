@@ -1268,4 +1268,168 @@
     <Flags Civilian="false" />
   </Item>
 
+  <!-- ======================================================================
+       Holy talismans (mod-author-directed addition, not part of the original
+       phased build) — Temple (Vlandia) passive-while-carried items, sibling
+       to the wands above. Cloned from the SAME proven one-handed-weapon
+       template (body_name="bo_mace_a", item_usage="onehanded_block_shield_swing",
+       physics_material="wood_weapon" — a known-good combination that does not
+       fault on equip), but with a DIFFERENT vanilla stone mesh than the Holy
+       Sigil's "throwing_stone": mesh="projectile_rock" (the vanilla "boulder"
+       item's mesh — a rough thrown/siege stone, verified present in
+       SandBoxCore/ModuleData/items/weapons.xml, distinct from every other
+       aae_* item in this file). Token 3/3 combat stats — like the Crystals,
+       these are not meant to be drawn and swung, only carried; the passive
+       bonus fires regardless of which weapon slot holds them (see
+       Talismans/TalismanEffects.cs). Purchasable in one random Temple town
+       (Talismans/TalismansCampaignBehavior(.Menus).cs) or found as rare ruin
+       loot (Ruins/RuinsExplorationSystem.cs). See Talismans/TalismansCatalog.cs
+       for the five entries' passive effects and lore.
+       ====================================================================== -->
+
+  <Item id="aae_talisman_unburnt_tongue"
+        name="Talisman of the Unburnt Tongue"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="projectile_rock"
+        Type="OneHandedWeapon"
+        weight="0.4"
+        value="10000"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+  <Item id="aae_talisman_ember_vigil"
+        name="Talisman of the Ember Vigil"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="projectile_rock"
+        Type="OneHandedWeapon"
+        weight="0.4"
+        value="10000"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+  <Item id="aae_talisman_steadfast_line"
+        name="Talisman of the Steadfast Line"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="projectile_rock"
+        Type="OneHandedWeapon"
+        weight="0.4"
+        value="10000"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+  <Item id="aae_talisman_cleansing_brand"
+        name="Talisman of the Cleansing Brand"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="projectile_rock"
+        Type="OneHandedWeapon"
+        weight="0.4"
+        value="10000"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
+  <Item id="aae_talisman_last_ward"
+        name="Talisman of the Last Ward"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="projectile_rock"
+        Type="OneHandedWeapon"
+        weight="0.4"
+        value="10000"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="3"
+              thrust_damage_type="Blunt"
+              swing_damage="3"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags />
+  </Item>
+
 </Items>

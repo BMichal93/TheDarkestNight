@@ -141,13 +141,15 @@ namespace AshAndEmber
         // ── Loot (Requirement 12: weapons, armor, trade goods, relics, formulas) ─
         // Wand added later (mod-author-directed addition, not part of the
         // original phased build) — see WandsMath.RuinWandChance for the header
-        // note on why it is rarer than a relic drop.
-        public enum LootKind { None, Weapon, Armor, TradeGoods, Relic, SpellFormula, Wand }
+        // note on why it is rarer than a relic drop. Talisman added the same
+        // way, straight after it — see TalismansMath.RuinTalismanChance for why
+        // it is rarer still.
+        public enum LootKind { None, Weapon, Armor, TradeGoods, Relic, SpellFormula, Wand, Talisman }
 
         // Base weights out of 100 (before a chamber's own bias nudges the odds
         // toward its favoured kind — see BiasedLootRoll). Relics and spell
-        // formulas stay rarer than mundane finds; a wand is rarer still.
-        // Every chamber can still turn up nothing at all.
+        // formulas stay rarer than mundane finds; a wand is rarer still, and a
+        // talisman rarer still. Every chamber can still turn up nothing at all.
         public static LootKind RollChamberLoot(double roll01)
         {
             if (roll01 < 0.24) return LootKind.Weapon;
@@ -156,6 +158,7 @@ namespace AshAndEmber
             if (roll01 < 0.80) return LootKind.Relic;
             if (roll01 < 0.90) return LootKind.SpellFormula;
             if (roll01 < 0.95) return LootKind.Wand;
+            if (roll01 < 0.99) return LootKind.Talisman;
             return LootKind.None;
         }
 

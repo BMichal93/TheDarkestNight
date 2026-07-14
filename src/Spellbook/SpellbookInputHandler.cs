@@ -145,7 +145,17 @@ namespace AshAndEmber
             int intellect = 0;
             try { intellect = Hero.MainHero?.GetAttributeValue(DefaultCharacterAttributes.Intelligence) ?? 0; }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            if (SpellbookMath.RollSpellburn(_rng.NextDouble(), intellect))
+            float chance = SpellbookMath.SpellburnChance(intellect);
+            // Talisman of the Unburnt Tongue (mod-author-directed addition):
+            // shaves flat percentage points off the roll, still respecting
+            // SpellbookMath.MinSpellburnChance's floor.
+            try
+            {
+                if (TalismanEffects.CarriesTalisman(caster, TalismanId.UnburntTongue))
+                    chance = TalismansMath.ReducedSpellburnChance(chance);
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            if (_rng.NextDouble() < chance)
                 SpellburnEffects.Trigger(caster);
         }
 

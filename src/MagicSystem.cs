@@ -60,6 +60,7 @@ namespace AshAndEmber
             try { SpellburnEffects.ClearBattleState();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { RelicEffects.ClearBattleState();          } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { WandEffects.ClearBattleState();           } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TalismanEffects.ClearBattleState();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Wire the Grace bank to the live Abundant Grace devotion (the bank itself
             // is kept TaleWorlds-free so it stays unit-testable — see behaviour.md).
             MiracleInventory.TalentCapBonusProvider = () =>
@@ -153,6 +154,11 @@ namespace AshAndEmber
                 // separate item category riding the same choke points the
                 // Rod of the Apostle/Holy Sigil already use. See Wands/.
                 try { campaignStarter.AddBehavior(new WandsCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Holy talismans (mod-author-directed addition) — a small,
+                // separate Temple item category riding the same passive-while-
+                // carried choke point Dark Gift-sourced Relics already use.
+                // See Talismans/.
+                try { campaignStarter.AddBehavior(new TalismansCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Phase 8 — the wretched free towns. Turns every town the eight
                 // Phase 7 factions ejected into its own permanent one-city
                 // kingdom (modelled on AshenCitySystem's mechanics).
@@ -246,6 +252,7 @@ namespace AshAndEmber
                 try { LegionCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ChosenCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { WandsCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { TalismansCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { CityStateCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { RuinsCastleSystem.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { MortalLawCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -640,6 +647,7 @@ namespace AshAndEmber
             SpellEffects.TickHaltedAgents(dt);
             SpellEffects.TickDarkGifts(dt);
             RelicEffects.MissionTick(dt);
+            TalismanEffects.MissionTick(dt);
             WandEffects.MissionTick(dt);
             SpellEffects.FlushPendingDeaths();
             BanditMageAI.MissionTick(dt);
@@ -695,6 +703,7 @@ namespace AshAndEmber
             try { SpellburnEffects.ClearBattleState();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { RelicEffects.ClearBattleState();            } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { WandEffects.ClearBattleState();             } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TalismanEffects.ClearBattleState();         } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { BattleEvents.OnMissionEnd();               } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { AshenSceneTone.Reset();                    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { BattleWhispers.Reset();                    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -765,6 +774,10 @@ namespace AshAndEmber
             // zealotry. On block: 50 damage to a random nearby ally, wielder heals
             // 100. On a landed hit: kills a random nearby ally AND summons a demon.
             try { ChosenRodEffects.OnAgentHit(affectedAgent, affectorAgent, affectorWeapon, blow, attackCollisionData, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // Holy talismans (mod-author-directed addition): Cleansing Brand
+            // (bonus damage to a struck demon) + Last Ward (heal back a
+            // fraction of a blocked/parried blow) — passive while carried.
+            try { TalismanEffects.OnAgentHit(affectedAgent, affectorAgent, blow, attackCollisionData, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Magical wands: a fixed spoken formula released on a landed hit,
             // gated by a short cooldown. Fires for any wielder.
             try { WandEffects.OnAgentHit(affectedAgent, affectorAgent, affectorWeapon, blow, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }

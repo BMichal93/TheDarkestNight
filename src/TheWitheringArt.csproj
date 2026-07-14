@@ -132,6 +132,11 @@
     <Compile Include="Wands\WandEffects.cs"/>
     <Compile Include="Wands\WandsCampaignBehavior.cs"/>
     <Compile Include="Wands\WandsCampaignBehavior.Menus.cs"/>
+    <Compile Include="Talismans\TalismansMath.cs"/>
+    <Compile Include="Talismans\TalismansCatalog.cs"/>
+    <Compile Include="Talismans\TalismanEffects.cs"/>
+    <Compile Include="Talismans\TalismansCampaignBehavior.cs"/>
+    <Compile Include="Talismans\TalismansCampaignBehavior.Menus.cs"/>
     <Compile Include="Factions\WolfBrothers\WolfBrothersMath.cs"/>
     <Compile Include="Factions\WolfBrothers\WolfBrothersCulture.cs"/>
     <Compile Include="Factions\WolfBrothers\WolfBrothersSettlements.cs"/>

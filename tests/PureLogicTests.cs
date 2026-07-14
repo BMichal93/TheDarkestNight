@@ -3379,6 +3379,114 @@ namespace AshAndEmber.Tests
                 Assert.IsFalse(WandsCatalog.TryGetBySpell(s, out _), $"{s} should not be wand-eligible.");
         }
 
+        // ── TalismansMath / TalismansCatalog tests (mod-author-directed) ─────
+
+        [Test]
+        public void TalismansMath_PurchaseCost_IsSlightlyBelowStandardWandPrice()
+        {
+            Assert.Greater(TalismansMath.TalismanPurchaseCostGold, 0);
+            Assert.Less(TalismansMath.TalismanPurchaseCostGold, WandsMath.StandardWandPriceGold);
+        }
+
+        [Test]
+        public void TalismansMath_ReducedSpellburnChance_NeverBelowFloor()
+        {
+            float reduced = TalismansMath.ReducedSpellburnChance(SpellbookMath.MinSpellburnChance);
+            Assert.AreEqual(SpellbookMath.MinSpellburnChance, reduced, 0.0001f);
+        }
+
+        [Test]
+        public void TalismansMath_ReducedSpellburnChance_ShavesOffTheDocumentedAmount()
+        {
+            float baseChance = SpellbookMath.BaseSpellburnChance;
+            float reduced = TalismansMath.ReducedSpellburnChance(baseChance);
+            Assert.AreEqual(baseChance - TalismansMath.UnburntTongueSpellburnReduction, reduced, 0.0001f);
+        }
+
+        [Test]
+        public void TalismansMath_RollRuinTalismanLoot_RespectsChanceBoundary()
+        {
+            Assert.IsTrue(TalismansMath.RollRuinTalismanLoot(TalismansMath.RuinTalismanChance - 0.0001));
+            Assert.IsFalse(TalismansMath.RollRuinTalismanLoot(TalismansMath.RuinTalismanChance + 0.0001));
+        }
+
+        [Test]
+        public void TalismansMath_RuinTalismanChance_IsRarerThanRuinWandChance()
+        {
+            Assert.Less(TalismansMath.RuinTalismanChance, WandsMath.RuinWandChance);
+        }
+
+        [Test]
+        public void TalismansMath_PickTalismanIndex_StaysInBounds()
+        {
+            var rng = new Random(29);
+            for (int i = 0; i < 500; i++)
+            {
+                int idx = TalismansMath.PickTalismanIndex(rng.NextDouble(), TalismansCatalog.All.Count);
+                Assert.GreaterOrEqual(idx, 0);
+                Assert.Less(idx, TalismansCatalog.All.Count);
+            }
+        }
+
+        [Test]
+        public void TalismansMath_PickTalismanIndex_ZeroCount_ReturnsNegativeOne()
+        {
+            Assert.AreEqual(-1, TalismansMath.PickTalismanIndex(0.5, 0));
+        }
+
+        [Test]
+        public void TalismansCatalog_HasFiveEntries()
+        {
+            Assert.AreEqual(5, TalismansCatalog.All.Count);
+        }
+
+        [Test]
+        public void TalismansCatalog_AllItemIdsAreUniqueAndPrefixed()
+        {
+            var ids = TalismansCatalog.AllItemIds();
+            Assert.AreEqual(ids.Length, ids.Distinct().Count(), "Talisman item ids must be unique.");
+            foreach (var id in ids)
+                Assert.IsTrue(id.StartsWith("aae_talisman_"), $"Unexpected talisman item id: {id}");
+        }
+
+        [Test]
+        public void TalismansCatalog_TryGetByItemId_UnknownId_ReturnsFalse()
+        {
+            Assert.IsFalse(TalismansCatalog.TryGetByItemId("not_a_talisman", out _));
+            Assert.IsFalse(TalismansCatalog.TryGetByItemId(null, out _));
+        }
+
+        [Test]
+        public void TalismansCatalog_IsTalismanItemId_MatchesOnlyCatalogEntries()
+        {
+            Assert.IsTrue(TalismansCatalog.IsTalismanItemId("aae_talisman_last_ward"));
+            Assert.IsFalse(TalismansCatalog.IsTalismanItemId("aae_wand_fireball"));
+        }
+
+        [Test]
+        public void TalismansCatalog_TryGet_RoundTripsToItemId()
+        {
+            Assert.IsTrue(TalismansCatalog.TryGet(TalismanId.CleansingBrand, out var def));
+            Assert.AreEqual("aae_talisman_cleansing_brand", def.ItemId);
+        }
+
+        [Test]
+        public void RuinsMath_RollChamberLoot_TalismanIsRarerThanWand()
+        {
+            Assert.AreEqual(RuinsMath.LootKind.Talisman, RuinsMath.RollChamberLoot(0.97));
+            Assert.AreEqual(RuinsMath.LootKind.Wand, RuinsMath.RollChamberLoot(0.92));
+        }
+
+        [Test]
+        public void RuinsMath_RollChamberLoot_CoversTheWholeRollRangeIncludingTalisman()
+        {
+            var seen = new HashSet<RuinsMath.LootKind>();
+            for (double r = 0.0; r < 1.0; r += 0.001)
+                seen.Add(RuinsMath.RollChamberLoot(r));
+            Assert.IsTrue(seen.Contains(RuinsMath.LootKind.Talisman));
+            Assert.IsTrue(seen.Contains(RuinsMath.LootKind.None));
+        }
+
         // ── RelicNaming tests (Phase 6) ──────────────────────────────────────
 
         [Test]
@@ -4402,12 +4510,13 @@ namespace AshAndEmber.Tests
         [Test]
         public void RuinsMath_BiasedLootRoll_FavoursTheChambersBiasAboutHalfTheTimeOnAMiss()
         {
-            // A roll that would otherwise be "None" (>= 0.90) should become the
-            // bias when the bias-roll succeeds, and stay None when it doesn't.
+            // A roll that would otherwise be "None" (>= 0.99, after the Talisman
+            // slice) should become the bias when the bias-roll succeeds, and
+            // stay None when it doesn't.
             Assert.AreEqual(RuinsMath.LootKind.SpellFormula,
-                RuinsMath.BiasedLootRoll(0.95, 0.0, RuinsMath.LootKind.SpellFormula));
+                RuinsMath.BiasedLootRoll(0.995, 0.0, RuinsMath.LootKind.SpellFormula));
             Assert.AreEqual(RuinsMath.LootKind.None,
-                RuinsMath.BiasedLootRoll(0.95, 0.9, RuinsMath.LootKind.SpellFormula));
+                RuinsMath.BiasedLootRoll(0.995, 0.9, RuinsMath.LootKind.SpellFormula));
             // A roll that already hit something concrete is left alone.
             Assert.AreEqual(RuinsMath.LootKind.Weapon,
                 RuinsMath.BiasedLootRoll(0.1, 0.0, RuinsMath.LootKind.SpellFormula));
