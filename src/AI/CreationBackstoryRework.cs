@@ -1,46 +1,57 @@
 // =============================================================================
-// ASH AND EMBER — AI/CreationBackstoryRework.cs
-// Reworks specific Sandbox character-creation backstory options for the
-// Templar (vlandia), Tribal (khuzait), and Ashen (sturgia) cultures.
+// THE DARKEST NIGHT — AI/CreationBackstoryRework.cs
+// Reworks Sandbox character-creation backstory options for the new fiction
+// (Requirement 23: "Who you were before the Night").
 //
-//   Most changes are thematic renames; the bonuses are left untouched.
-//   Two options change mechanically:
-//     • Khuzait "A noyan's kinsfolk" → "Apostles of the God-King":
-//         the Polearm skill grant is replaced by a random Dark Gift.
-//     • Vlandia "A baron's groom"   → "A Lord Templar's squire":
-//         the Charm skill grant is replaced by +3 Grace and +1 Honour.
+//   Step 1 — Background: every culture/faction option is removed from the
+//   selection stage save one — the Empire template, relabelled "I am a
+//   survivor" (RestrictBackgroundToSurvivor). No other background, and so no
+//   faction bonus tied to one, can ever be picked. Steps 2-4 (Family, Early
+//   Childhood, Adolescence) are the Empire's own vanilla content and are left
+//   exactly as they were; the old Khuzait/Vlandia/Sturgia-gated renames below
+//   are consequently unreachable dead weight, kept only because deleting
+//   working, harmless code buys nothing.
 //
-//   Ashen (Sturgia) characters gain a unique "I don't remember my past" option
-//   on every backstory stage (parent, childhood, education, youth, adulthood)
-//   plus an "I don't know how old I am" age option (equivalent to age 40).
-//   Each forgotten-past option grants +1 attribute and +2 focus to a
-//   thematically fitting skill — no skill level, since the character has no
-//   memory of training for anything in particular.
+//   Step 5 — Youth: the six options the Empire background can actually reach
+//   are re-themed from "drafted into an army" to "surviving the Long Night in
+//   the city" (RewriteYouthMenu).
+//
+//   Step 6 — Young Adulthood: renamed to demon-scarred equivalents; the
+//   "invested in land" / "invested in a workshop" options both become "you
+//   studied the arcane arts" — no more skill/focus bonus, instead a free
+//   Spellbook unlock plus two random short-formula spells
+//   (RewriteAdulthoodMenu, ApplyPendingBoons). Two options (saved the village
+//   from a flood / saved the city quarter from a fire) are vanilla-gated to
+//   cultures that no longer exist as a pick, so their visibility condition is
+//   forced true alongside the rename (ForceAlwaysVisible) — otherwise a
+//   Step-6 rename the prompt asks for would never be reachable.
 //
 // The vanilla backstory options live in the engine's generic
 // CharacterCreationCampaignBehavior. We register as an
 // ICharacterCreationContentHandler and rewrite the already-built narrative
-// menus in AfterInitializeContent (the option's display text and, for the two
-// reworked options, its skill-effect getter, are private/readonly — set by
+// menus in AfterInitializeContent (the option's display text, visibility
+// condition, and skill-effect getter are private/readonly — set by
 // reflection, matching the reflection-light style of TempleCultureCardFixer).
 //
-// Special boons (Dark Gift, Grace, age override) cannot be granted during
-// character creation: the engine runs OnCharacterCreationFinalize *before* the
-// OnCharacterCreationIsOver event, and our own new-game reset
-// (CampaignBehavior.OnNewGameCreated → MageKnowledge.ResetForNewGame) fires on
-// that event and would wipe them. So we only *record* the player's final pick
-// at finalize, and apply the boon from OnNewGameCreated, after the reset has
-// run (see ApplyPendingBoons).
+// Special boons (Dark Gift, Grace, Magic + starting spells, age override)
+// cannot be granted during character creation: the engine runs
+// OnCharacterCreationFinalize *before* the OnCharacterCreationIsOver event,
+// and our own new-game reset (CampaignBehavior.OnNewGameCreated →
+// MageKnowledge.ResetForNewGame) fires on that event and would wipe them. So
+// we only *record* the player's final pick at finalize, and apply the boon
+// from OnNewGameCreated, after the reset has run (see ApplyPendingBoons).
 // =============================================================================
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterCreationContent;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using TaleWorlds.ObjectSystem;
 
 namespace AshAndEmber
 {
@@ -50,9 +61,18 @@ namespace AshAndEmber
         private const string KhuzaitApostleOptionId = "khuzait_retainer_option";
         private const string VlandiaSquireOptionId  = "youth_groom_option";
 
+        // Requirement 23, Step 1 — the sole surviving background.
+        private const string EmpireCultureId = "empire";
+
+        // Requirement 23, Step 6 — the two options that both become "you
+        // studied the arcane arts" and grant the same Magic + spells boon.
+        private const string AdulthoodInvestorOptionId = "adulthood_investor_option";
+        private const string AdulthoodWorkshopOptionId  = "adulthood_workshop_option";
+
         // Pending boons recorded at finalize, applied after the new-game reset.
         private static bool _pendingApostleDarkGift;
         private static bool _pendingSquireBoon;
+        private static bool _pendingArcaneArts;
 
         // The generic option grants (read from the live content so we stay in
         // sync with the engine's defaults rather than hard-coding 1/10/1).
@@ -89,6 +109,18 @@ namespace AshAndEmber
             typeof(NarrativeMenuOption).GetField("DescriptionText", FPub);
         private static readonly FieldInfo ArgsGetterField =
             typeof(NarrativeMenuOption).GetField("_getNarrativeMenuOptionArgs", FPriv);
+        private static readonly FieldInfo OnConditionField =
+            typeof(NarrativeMenuOption).GetField("_onConditionInternal", FPriv);
+
+        // Requirement 23, Step 1 — the culture-selection stage builds its card
+        // list from this dictionary (CultureObject -> focus/skill bonus pair).
+        private static readonly FieldInfo CulturesDictField =
+            typeof(CharacterCreationContent).GetField("_characterCreationCultures", FPriv);
+
+        // A visibility condition that always passes — used to surface the two
+        // Step-6 renames whose vanilla option is otherwise gated to a culture
+        // that can no longer be picked (see ForceAlwaysVisible).
+        private static readonly NarrativeMenuOptionOnConditionDelegate AlwaysVisible = _ => true;
 
         // ── CampaignBehaviorBase ─────────────────────────────────────────────
 
@@ -104,6 +136,7 @@ namespace AshAndEmber
             // Clear any stale pending state from an abandoned creation this session.
             _pendingApostleDarkGift = false;
             _pendingSquireBoon      = false;
+            _pendingArcaneArts      = false;
             _gated.Clear();
             _manager = null;
             try { manager.RegisterCharacterCreationContentHandler(this, 1000); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -125,6 +158,16 @@ namespace AshAndEmber
                     _attr  = content.AttributeLevelToAdd;
                 }
                 _manager = m;
+                RestrictBackgroundToSurvivor(m);   // Requirement 23, Step 1
+                // Youth/Adulthood rewrites run BEFORE RewriteMenus: one Youth option
+                // (youth_envoys_guard_first_option) is also touched by a pre-existing
+                // Khuzait GatedRename below, which captures the option's CURRENT text
+                // as its "vanilla" fallback the moment it registers. Renaming it here
+                // first means that captured fallback is our new Empire-era text, not
+                // the old vanilla text — and since Khuzait can never be the live
+                // selection any more, the fallback is what always shows.
+                RewriteYouthMenu(m);                // Requirement 23, Step 5
+                RewriteAdulthoodMenu(m);            // Requirement 23, Step 6
                 RewriteMenus(m);
                 ApplyGatedRenames();   // set initial state for the current (or no) selection
             }
@@ -152,6 +195,8 @@ namespace AshAndEmber
                     string id = pair.Value?.StringId;
                     if      (id == KhuzaitApostleOptionId && sel == "khuzait") _pendingApostleDarkGift = true;
                     else if (id == VlandiaSquireOptionId  && sel == "vlandia") _pendingSquireBoon      = true;
+                    else if (id == AdulthoodInvestorOptionId || id == AdulthoodWorkshopOptionId)
+                        _pendingArcaneArts = true;
                 }
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -225,6 +270,152 @@ namespace AshAndEmber
                 + "long vigils, and learning that the Order's strength is bought with discipline and faith.\n\n"
                 + "(You will begin with 3 Grace.)",
                 new GetNarrativeMenuOptionArgsDelegate(SquireArgs));
+        }
+
+        // ── Requirement 23, Step 1 — the sole background ─────────────────────
+
+        // Removes every culture but the Empire from the culture-selection stage's
+        // option pool (CharacterCreationContent._characterCreationCultures — the
+        // dictionary CharacterCreationContent.GetCultures() reads to build the
+        // stage's cards), so "I am a survivor" is the only pick that can ever be
+        // made. The card's own display text/lore/feats are rewritten by
+        // TempleCultureCardFixer (its Cards table carries the "empire" entry) —
+        // the same VM-patch mechanism already used for the other four renamed
+        // cultures, just extended to the one background this phase keeps.
+        private static void RestrictBackgroundToSurvivor(CharacterCreationManager m)
+        {
+            try
+            {
+                var content = m?.CharacterCreationContent;
+                if (content == null) return;
+                if (!(CulturesDictField?.GetValue(content) is System.Collections.IDictionary dict)) return;
+
+                CultureObject empire = null;
+                try { empire = MBObjectManager.Instance?.GetObject<CultureObject>(EmpireCultureId); }
+                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                if (empire == null) return;   // Empire missing — leave the vanilla pool alone rather than break creation.
+
+                var toRemove = new List<object>();
+                foreach (var key in dict.Keys)
+                    if (!(key is CultureObject c) || c.StringId != EmpireCultureId) toRemove.Add(key);
+                foreach (var key in toRemove) dict.Remove(key);
+
+                try { content.SetSelectedCulture(empire, m); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // ── Requirement 23, Step 5 — Youth ───────────────────────────────────
+        // The Empire background's youth stage reaches exactly six vanilla
+        // options (verified against TaleWorlds.CampaignSystem.dll's
+        // CharacterCreationCampaignBehavior.AddYouthMenuOptions): the four
+        // renamed here, "youth_guard_empire_register_option" ("stood guard with
+        // a garrison") which is kept as-is per the brief, and youth_groom_option
+        // (Vlandia-only, already unreachable — left untouched).
+        private static void RewriteYouthMenu(CharacterCreationManager m)
+        {
+            const string menu = "narrative_youth_menu";
+
+            Edit(m, menu, "youth_rider_high_register_option",
+                "scavenged for food.",
+                "The granaries never stretched far enough once the sun went down. You learned which stalls were "
+                + "slack, which cellars still held a forgotten sack of grain, which bins the watch forgot to "
+                + "lock — and how far a stranger's trust could be stretched for half a loaf.");
+            Edit(m, menu, "youth_infantry_option",
+                "trained to fight.",
+                "Every hand old enough to hold a spear was put to drilling once the walls started mattering more "
+                + "than the fields. You learned to hold a line, brace a shield, and not look at what came over "
+                + "it after dark.");
+            Edit(m, menu, "youth_skirmisher_option",
+                "ran the night errands.",
+                "You carried messages between wards after dark, when no one sensible walked the streets alone. "
+                + "You learned the sound the city makes when it is holding its breath, and how to move through "
+                + "it without becoming part of what it fears.");
+            Edit(m, menu, "youth_envoys_guard_first_option",
+                "served as a messenger.",
+                "You carried word between the garrison, the wardens, and whatever remained of the old chains of "
+                + "command — running the gauntlet of empty streets so that orders, warnings, and last words could "
+                + "still reach the people who needed them.");
+            Edit(m, menu, "youth_staff_first_option",
+                "tended the ward-fires of a lord's hall.",
+                "You kept the braziers lit and the oil topped along a lord's walls — a small, ceaseless labour, "
+                + "but the fires held more than the eye could ever tell you. You learned which flames guttered "
+                + "when something passed close in the dark, and which lords listened when you told them so.");
+        }
+
+        // ── Requirement 23, Step 6 — Young Adulthood ─────────────────────────
+        // "adulthood_caravan_leader_option" ("you led a caravan"), "you hunted a
+        // dangerous animal", both escapade registers, and "you treated people
+        // well" are untouched per the brief. "Saved the village from a flood"
+        // and "saved the city quarter from a fire" are vanilla-gated to cultures
+        // (Sturgia/Nord, Battania) that can no longer be picked — their
+        // visibility condition is forced true so the merged rename the brief
+        // asks for is actually reachable.
+        private static void RewriteAdulthoodMenu(CharacterCreationManager m)
+        {
+            const string menu = "narrative_adulthood_menu";
+
+            Edit(m, menu, "adulthood_defeated_enemy_option",
+                "you held your ground against demons.",
+                "The night came for your street and you did not run. Whatever fell in front of you did not rise "
+                + "again, and the ones who saw it happen have not forgotten your name since.");
+            Edit(m, menu, "adulthood_manhunt_option",
+                "you tracked a demon pack to its daylight lair.",
+                "A pack had been raiding the outskirts for a fortnight, and you were the one who followed the "
+                + "drag-marks back to the hollow where it slept out the sun. You did not go in alone, and you "
+                + "made sure the ones who did go with you came back out.");
+            Edit(m, menu, "adulthood_investor_option",
+                "you studied the arcane arts.",
+                "What little your parents left you went, in the end, not into land or trade but into a "
+                + "grimoire-scrap bought off a desperate scholar — and into the long, dangerous nights spent "
+                + "learning to speak what was written there.\n\n"
+                + "(You will begin with the Spellbook unlocked and two spoken formulas already known.)",
+                new GetNarrativeMenuOptionArgsDelegate(ArcaneArtsArgs));
+            Edit(m, menu, "adulthood_workshop_option",
+                "you studied the arcane arts.",
+                "What little your parents left you went, in the end, not into a workshop but into a "
+                + "grimoire-scrap bought off a desperate scholar — and into the long, dangerous nights spent "
+                + "learning to speak what was written there.\n\n"
+                + "(You will begin with the Spellbook unlocked and two spoken formulas already known.)",
+                new GetNarrativeMenuOptionArgsDelegate(ArcaneArtsArgs));
+            Edit(m, menu, "adulthood_saved_village_option",
+                "you saved your kin from the demon.",
+                "It came for your household in the dead of night, and by every right it should have taken them. "
+                + "You stood in the doorway with whatever was in your hands and did not move until it was gone.");
+            ForceAlwaysVisible(m, menu, "adulthood_saved_village_option");
+            Edit(m, menu, "adulthood_saved_city_option",
+                "you saved your kin from the demon.",
+                "It came for your household in the dead of night, and by every right it should have taken them. "
+                + "You stood in the doorway with whatever was in your hands and did not move until it was gone.");
+            ForceAlwaysVisible(m, menu, "adulthood_saved_city_option");
+            Edit(m, menu, "adulthood_siege_survivor_option",
+                "you survived an invasion.",
+                "Your hometown was overrun in a single night, its walls meaning nothing to what came over them. "
+                + "You lived through it while others did not, and you still do not fully understand why.");
+        }
+
+        // Overrides an option's visibility condition so it always shows, for
+        // renamed options whose vanilla condition is gated to a culture that
+        // Requirement 23's single-background restriction has made unreachable.
+        private static void ForceAlwaysVisible(CharacterCreationManager m, string menuId, string optionId)
+        {
+            var o = Find(m, menuId, optionId);
+            if (o == null) return;
+            try { OnConditionField?.SetValue(o, AlwaysVisible); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // No skill/focus/attribute bonus (Requirement 23 explicitly removes it) —
+        // the grant is the Spellbook itself, applied post-reset in
+        // ApplyPendingBoons. SetLevelToAttribute/SetAffectedTraits are still
+        // called with zero/empty values because ApplyFinalEffects reads them
+        // without a null guard (see the header note on _noTraits).
+        private static void ArcaneArtsArgs(NarrativeMenuOptionArgs args)
+        {
+            args.SetAffectedSkills(new SkillObject[0]);
+            args.SetAffectedTraits(_noTraits);
+            args.SetFocusToSkills(0);
+            args.SetLevelToSkills(0);
+            args.SetLevelToAttribute(DefaultCharacterAttributes.Intelligence, 0);
         }
 
         // Registers a culture-gated rename of a shared narrative option: captures the
@@ -333,6 +524,23 @@ namespace AshAndEmber
             {
                 _pendingSquireBoon = false;
                 try { MiracleInventory.AddGrace(3); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            }
+
+            // Requirement 23, Step 6 — "you studied the arcane arts": unlock the
+            // Spellbook for free and teach two distinct spells picked at random
+            // from the short-formula subset (Formula.Length <= 7), through the
+            // exact stub hook SpellbookCampaignBehavior left for this phase.
+            if (_pendingArcaneArts)
+            {
+                _pendingArcaneArts = false;
+                try
+                {
+                    var pool = SpellbookCatalog.QualifyingForArcaneStart.ToList();
+                    var picks = SpellbookMath.PickDistinctIndices(pool.Count, 2, new Random());
+                    foreach (int i in picks)
+                        SpellbookCampaignBehavior.GrantStartingSpell(pool[i].Id);
+                }
+                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             }
         }
     }

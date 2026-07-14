@@ -3081,6 +3081,70 @@ namespace AshAndEmber.Tests
             Assert.AreEqual(1, SpellbookMath.UnlockFocusCost);
         }
 
+        // ── SpellbookMath.PickDistinctIndices (Requirement 23, Step 6) ───────
+        [Test]
+        public void SpellbookMath_PickDistinctIndices_ReturnsRequestedCount()
+        {
+            var picks = SpellbookMath.PickDistinctIndices(10, 2, new Random(1));
+            Assert.AreEqual(2, picks.Count);
+        }
+
+        [Test]
+        public void SpellbookMath_PickDistinctIndices_NeverRepeatsAnIndex()
+        {
+            for (int seed = 0; seed < 50; seed++)
+            {
+                var picks = SpellbookMath.PickDistinctIndices(18, 2, new Random(seed));
+                Assert.AreEqual(2, new HashSet<int>(picks).Count);
+            }
+        }
+
+        [Test]
+        public void SpellbookMath_PickDistinctIndices_StaysWithinPoolBounds()
+        {
+            var picks = SpellbookMath.PickDistinctIndices(5, 2, new Random(7));
+            foreach (int i in picks)
+            {
+                Assert.GreaterOrEqual(i, 0);
+                Assert.Less(i, 5);
+            }
+        }
+
+        [Test]
+        public void SpellbookMath_PickDistinctIndices_ClampsCountToPoolSize()
+        {
+            var picks = SpellbookMath.PickDistinctIndices(1, 2, new Random(3));
+            Assert.AreEqual(1, picks.Count);
+        }
+
+        [Test]
+        public void SpellbookMath_PickDistinctIndices_EmptyPool_ReturnsEmpty()
+        {
+            Assert.AreEqual(0, SpellbookMath.PickDistinctIndices(0, 2, new Random(3)).Count);
+        }
+
+        // ── SpellbookCatalog.QualifyingForArcaneStart (Requirement 23, Step 6) ──
+        [Test]
+        public void SpellbookCatalog_QualifyingForArcaneStart_AllAtMostSevenChars()
+        {
+            foreach (var d in SpellbookCatalog.QualifyingForArcaneStart)
+                Assert.LessOrEqual(d.Formula.Length, 7);
+        }
+
+        [Test]
+        public void SpellbookCatalog_QualifyingForArcaneStart_HasAtLeastTwoSpells()
+        {
+            Assert.GreaterOrEqual(SpellbookCatalog.QualifyingForArcaneStart.Count(), 2);
+        }
+
+        [Test]
+        public void SpellbookCatalog_QualifyingForArcaneStart_IsStrictSubsetOfAll()
+        {
+            int qualifying = SpellbookCatalog.QualifyingForArcaneStart.Count();
+            Assert.Greater(SpellbookCatalog.All.Count, qualifying);
+            Assert.Greater(qualifying, 0);
+        }
+
         // ── SpellcasterLordMath (Requirement 14) ─────────────────────────────
         [Test]
         public void SpellcasterLordMath_TargetCasterCount_IsRoughlySevenPercent()

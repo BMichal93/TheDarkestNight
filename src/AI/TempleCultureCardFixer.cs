@@ -48,6 +48,29 @@ namespace AshAndEmber
 
         private static readonly CultureCard[] Cards =
         {
+            // Empire → the sole surviving background (Requirement 23, Step 1).
+            // RestrictBackgroundToSurvivor (CreationBackstoryRework) removes every
+            // other culture from the selection stage's option pool entirely, so
+            // this is the only card that will ever actually build — the rename
+            // still goes through this same VM-patch mechanism because the card
+            // caches its resolved name/description/feats the moment it is built,
+            // same as the other four renamed cultures below. No Feats: the brief
+            // strips every faction bonus from the standard options, and the one
+            // background that remains carries none either.
+            new CultureCard
+            {
+                Id   = "empire",
+                Name = "I am a survivor",
+                Desc =
+                    "You do not remember the fields, the roads, the roofs that fell first — only that one night "
+                    + "the sky over Calradia tore open, and what came out did not stop coming. Most who saw it did "
+                    + "not live to tell of it. You did.\n\n"
+                    + "You have no clan banner worth boasting of, no cause but the one every soul behind these "
+                    + "walls now shares: to see one more dawn. The Empire's old rites — census, muster, road-ward "
+                    + "— are the closest thing left to order in a broken world, and it is under their roof, among "
+                    + "the last of the record-keepers, that you learned to keep breathing.",
+                Feats = new string[0],
+            },
             new CultureCard
             {
                 Id   = "vlandia",

@@ -162,6 +162,14 @@ namespace AshAndEmber
 
         public static IReadOnlyList<SpellDef> All => _defs;
 
+        // Requirement 23, Step 6 — the "you studied the arcane arts" backstory
+        // grant picks its two starting spells only from formulas short enough to
+        // plausibly be a first lesson (<= 7 marks).
+        public const int ArcaneStartMaxFormulaLength = 7;
+
+        public static IEnumerable<SpellDef> QualifyingForArcaneStart =>
+            _defs.Where(d => d.Length <= ArcaneStartMaxFormulaLength);
+
         public static SpellDef Get(SpellId id) => _defs.First(d => d.Id == id);
 
         public static bool TryGetByFormula(string formula, out SpellDef def)

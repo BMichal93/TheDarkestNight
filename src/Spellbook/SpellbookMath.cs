@@ -17,6 +17,7 @@
 // =============================================================================
 
 using System;
+using System.Collections.Generic;
 
 namespace AshAndEmber
 {
@@ -74,5 +75,27 @@ namespace AshAndEmber
         public const float DemonSideSwitchSeconds = 10f;
         public const float FalseNightSeconds      = 20f;
         public const float VoiceTearsMoraleLoss   = 15f;
+
+        // ── Starting-spell selection (Requirement 23, Step 6) ────────────────
+        // Picks `count` distinct indices into a pool of size `poolSize` — used by
+        // CreationBackstoryRework to hand the "studied the arcane arts" backstory
+        // two random short-formula spells. A partial Fisher-Yates shuffle: pure,
+        // deterministic for a given Random, and never repeats an index.
+        public static List<int> PickDistinctIndices(int poolSize, int count, Random rng)
+        {
+            if (rng == null) rng = new Random();
+            if (poolSize <= 0 || count <= 0) return new List<int>();
+            if (count > poolSize) count = poolSize;
+
+            var pool = new List<int>(poolSize);
+            for (int i = 0; i < poolSize; i++) pool.Add(i);
+
+            for (int i = 0; i < count; i++)
+            {
+                int j = i + rng.Next(poolSize - i);
+                int tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+            }
+            return pool.GetRange(0, count);
+        }
     }
 }
