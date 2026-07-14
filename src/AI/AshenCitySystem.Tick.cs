@@ -93,6 +93,11 @@ namespace AshAndEmber
             // (the baseline mod never renamed any of the three Empire
             // kingdoms). See Factions/Empire/EmpireCulture.cs.
             try { EmpireCulture.RenameEmpireKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // Faction G of The Darkest Night's Phase 7: the Western Empire is
+            // now Legion — a fresh identity sharing the Empire's CultureObject
+            // but renaming only its own Kingdom object (StringId "empire_w").
+            // See Factions/Legion/LegionCulture.cs.
+            try { LegionCulture.RenameLegionKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             _kingdomsRenamed = true;
         }
 

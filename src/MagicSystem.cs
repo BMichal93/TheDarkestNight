@@ -138,6 +138,10 @@ namespace AshAndEmber
                 // Phase 7, Faction F — the Empire (Northern Empire). A fresh
                 // identity (the baseline mod never renamed any Empire kingdom).
                 campaignStarter.AddBehavior(new EmpireCampaignBehavior());
+                // Phase 7, Faction G — Legion (Western Empire). Another fresh
+                // identity sharing the Empire's CultureObject but not its
+                // Kingdom — see Factions/Legion/LegionCulture.cs header.
+                campaignStarter.AddBehavior(new LegionCampaignBehavior());
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -162,6 +166,8 @@ namespace AshAndEmber
                 // The Northern Empire is now simply "The Empire" — see
                 // Factions/Empire/EmpireDialogue.cs.
                 try { EmpireDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // The Western Empire is now Legion — see Factions/Legion/LegionDialogue.cs.
+                try { LegionDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SchemeSystem.Initialize();              } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Drop the previous campaign's Ashen rolls before this one's data loads.
                 // A save reload repopulates them in SyncData, which runs before
@@ -187,6 +193,7 @@ namespace AshAndEmber
                 try { BloodboundCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { TempleCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { EmpireCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { LegionCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
                 // player hits Save — long after the quest triggered. Audit at boot instead.

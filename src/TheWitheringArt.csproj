@@ -165,6 +165,12 @@
     <Compile Include="Factions\Empire\EmpireDialogue.cs"/>
     <Compile Include="Factions\Empire\EmpireCampaignBehavior.cs"/>
     <Compile Include="Factions\Empire\EmpireCampaignBehavior.Menus.cs"/>
+    <Compile Include="Factions\Legion\LegionMath.cs"/>
+    <Compile Include="Factions\Legion\LegionCulture.cs"/>
+    <Compile Include="Factions\Legion\LegionSettlements.cs"/>
+    <Compile Include="Factions\Legion\LegionDialogue.cs"/>
+    <Compile Include="Factions\Legion\LegionCampaignBehavior.cs"/>
+    <Compile Include="Factions\Legion\LegionCampaignBehavior.Menus.cs"/>
     <Compile Include="Economy\EconomyMath.cs"/>
     <Compile Include="Economy\ScarcityModels.cs"/>
     <Compile Include="Economy\MarketScarcityCampaignBehavior.cs"/>
