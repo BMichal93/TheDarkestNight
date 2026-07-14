@@ -157,6 +157,12 @@ namespace AshAndEmber
                 // become ownerless-in-all-but-name legacy dungeons. See
                 // Ruins/RuinsCastleSystem.cs for the full design note.
                 campaignStarter.AddBehavior(new RuinsCampaignBehavior());
+                // Phase 10 — Mortal AI under the same law. Campaign-AI shaping
+                // across all eight Phase 7 kingdoms: no great kingdoms, fear
+                // the night, fight for food, and NPC rosters trimmed toward
+                // the same scarcity silhouette the player already lives under.
+                // See MortalLaw/MortalLawCampaignBehavior.cs for the full design note.
+                try { campaignStarter.AddBehavior(new MortalLawCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -214,6 +220,7 @@ namespace AshAndEmber
                 try { PaleWidowsCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { CityStateCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { RuinsCastleSystem.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { MortalLawCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
                 // player hits Save — long after the quest triggered. Audit at boot instead.
