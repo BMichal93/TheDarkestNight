@@ -159,6 +159,12 @@
     <Compile Include="Factions\Temple\TempleSigilEffects.cs"/>
     <Compile Include="Factions\Temple\TempleCampaignBehavior.cs"/>
     <Compile Include="Factions\Temple\TempleCampaignBehavior.Menus.cs"/>
+    <Compile Include="Factions\Empire\EmpireMath.cs"/>
+    <Compile Include="Factions\Empire\EmpireCulture.cs"/>
+    <Compile Include="Factions\Empire\EmpireSettlements.cs"/>
+    <Compile Include="Factions\Empire\EmpireDialogue.cs"/>
+    <Compile Include="Factions\Empire\EmpireCampaignBehavior.cs"/>
+    <Compile Include="Factions\Empire\EmpireCampaignBehavior.Menus.cs"/>
     <Compile Include="Economy\EconomyMath.cs"/>
     <Compile Include="Economy\ScarcityModels.cs"/>
     <Compile Include="Economy\MarketScarcityCampaignBehavior.cs"/>

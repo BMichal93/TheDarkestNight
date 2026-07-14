@@ -88,6 +88,11 @@ namespace AshAndEmber
             // compatibility; only this call site moved. See Factions/Hive/HiveCulture.cs.
             try { HiveCulture.RenameHiveKingdom();    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { RenameBattanianTroops();            } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // Faction F of The Darkest Night's Phase 7: the Northern Empire is
+            // now simply "The Empire" — a fresh identity, not a supersession
+            // (the baseline mod never renamed any of the three Empire
+            // kingdoms). See Factions/Empire/EmpireCulture.cs.
+            try { EmpireCulture.RenameEmpireKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             _kingdomsRenamed = true;
         }
 
