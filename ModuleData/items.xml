@@ -737,4 +737,52 @@
     <Flags Civilian="false" />
   </Item>
 
+  <!-- ======================================================================
+       THE DARKEST NIGHT — Rod of the Apostle (Phase 7, Faction H, "The Chosen").
+
+       A relic-tier weapon cloned from the SAME verified-safe vanilla
+       "horse_whip" template the Holy Sigil above already uses, unchanged in
+       every field that matters for stability (body_name="bo_mace_a",
+       mesh="throwing_stone", weapon_class="OneHandedSword",
+       physics_material="wood_weapon", item_usage="onehanded_block_shield_swing").
+       Priced far above the Sigil's 350 — this is a genuine relic, not a
+       starter trinket. A deliberately monstrous, self-destructive-to-allies
+       instrument of zealotry: on block, 50 damage to a random nearby ally
+       and the wielder heals 100 HP; on a landed hit, a random nearby ally is
+       killed outright and a demon is summoned at the wielder's side. Granted
+       on joining the Chosen, to the PriestKing, and swept weekly onto every
+       Chosen lord; purchasable in Chosen towns. Battle effect lives in
+       Factions/Chosen/ChosenRodEffects.cs; distribution and the buy menu in
+       Factions/Chosen/ChosenCampaignBehavior(.Menus).cs.
+       ====================================================================== -->
+
+  <Item id="aae_rod_of_apostle"
+        name="Rod of the Apostle"
+        body_name="bo_mace_a"
+        recalculate_body="true"
+        mesh="throwing_stone"
+        Type="OneHandedWeapon"
+        weight="1.6"
+        value="6000"
+        item_holsters="sword_left_hip"
+        using_tableau_cache_system="false">
+    <ItemComponent>
+      <Weapon weapon_class="OneHandedSword"
+              weapon_balance="100"
+              thrust_speed="79"
+              speed_rating="99"
+              physics_material="wood_weapon"
+              missile_speed="0"
+              weapon_length="95"
+              thrust_damage="30"
+              thrust_damage_type="Blunt"
+              swing_damage="35"
+              swing_damage_type="Blunt"
+              item_usage="onehanded_block_shield_swing">
+        <WeaponFlags MeleeWeapon="true" />
+      </Weapon>
+    </ItemComponent>
+    <Flags Civilian="false" />
+  </Item>
+
 </Items>
