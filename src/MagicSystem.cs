@@ -151,6 +151,12 @@ namespace AshAndEmber
                 // Phase 7 factions ejected into its own permanent one-city
                 // kingdom (modelled on AshenCitySystem's mechanics).
                 campaignStarter.AddBehavior(new CityStateCampaignBehavior());
+                // Phase 9 — the ruins. ~80% of castles (deterministically, by
+                // settlement id, exempting Phase 7 starting towns, Phase 8
+                // city-states, the Ashen realm, and the player's own holdings)
+                // become ownerless-in-all-but-name legacy dungeons. See
+                // Ruins/RuinsCastleSystem.cs for the full design note.
+                campaignStarter.AddBehavior(new RuinsCampaignBehavior());
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -207,6 +213,7 @@ namespace AshAndEmber
                 try { LegionCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { PaleWidowsCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { CityStateCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { RuinsCastleSystem.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
                 // player hits Save — long after the quest triggered. Audit at boot instead.

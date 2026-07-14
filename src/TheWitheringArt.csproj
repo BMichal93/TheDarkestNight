@@ -180,6 +180,13 @@
     <Compile Include="CityStates\CityStateMath.cs"/>
     <Compile Include="CityStates\CityStateSystem.cs"/>
     <Compile Include="CityStates\CityStateCampaignBehavior.cs"/>
+    <Compile Include="Ruins\RuinsCatalog.cs"/>
+    <Compile Include="Ruins\RuinsMath.cs"/>
+    <Compile Include="Ruins\RuinsCastleSystem.cs"/>
+    <Compile Include="Ruins\RuinsExplorationSystem.cs"/>
+    <Compile Include="Ruins\RuinsExplorationSystem.WaitMenu.cs"/>
+    <Compile Include="Ruins\RuinsMenus.cs"/>
+    <Compile Include="Ruins\RuinsCampaignBehavior.cs"/>
     <Compile Include="Economy\EconomyMath.cs"/>
     <Compile Include="Economy\ScarcityModels.cs"/>
     <Compile Include="Economy\MarketScarcityCampaignBehavior.cs"/>

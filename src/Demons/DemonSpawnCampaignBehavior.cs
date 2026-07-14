@@ -279,6 +279,62 @@ namespace AshAndEmber
             return names[_rng.Next(names.Length)];
         }
 
+        // ── Public spawn-near-position hook (Phase 9: Ruins nightfall risk) ──────
+        // Every other spawn path in this file picks its own anchor
+        // (TryPickAnchor / SpawnNightTide); this one exists for callers that
+        // already know exactly where they want a demon party to appear right
+        // now — specifically RuinsExplorationSystem.WaitMenu, when a chamber
+        // wait crosses into nightfall while the player is standing inside a
+        // ruin. Always exactly one party, no location-kind roll, and
+        // deliberately NOT gated on MaxLivingDemonParties — a single extra
+        // party never meaningfully risks the campaign-wide budget the way an
+        // unbounded spawn loop would.
+        public static MobileParty SpawnAmbushNear(Vec2 anchor, string biomeHint = "")
+        {
+            try
+            {
+                Clan banditClan = Clan.BanditFactions.FirstOrDefault(c => c != null && !c.IsEliminated);
+                if (banditClan == null) return null;
+                var pt = banditClan.DefaultPartyTemplate;
+                if (pt == null) return null;
+
+                Hideout hideout = null;
+                try
+                {
+                    Settlement hs = banditClan.Settlements.FirstOrDefault(s => s?.Hideout != null)
+                        ?? Settlement.All.Where(s => s?.Hideout != null)
+                            .OrderBy(s => (s.GetPosition2D - anchor).LengthSquared).FirstOrDefault();
+                    hideout = hs?.Hideout;
+                }
+                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                if (hideout == null) return null;
+
+                const float scatter = 1.0f;
+                Vec2 spawnPos = anchor + new Vec2(
+                    (float)(_rng.NextDouble() - 0.5) * scatter * 2f,
+                    (float)(_rng.NextDouble() - 0.5) * scatter * 2f);
+                var cvec = new CampaignVec2(spawnPos, true);
+
+                string partyId = "demon_ambush_" + _rng.Next(999999).ToString("D6");
+                MobileParty party = BanditPartyComponent.CreateBanditParty(partyId, banditClan, hideout, false, pt, cvec);
+                if (party == null) return null;
+
+                try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
+                int bodies = DemonMath.PartyBodyCount(_rng);
+                AddDemonBodies(party, bodies);
+
+                DemonMath.EnvironmentVariant variant = DemonMath.VariantForCulture(biomeHint);
+                try { party.Party.SetCustomName(new TextObject(NightTideName())); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
+                _partyOriginalSize[party.StringId] = bodies;
+                _partyVariant[party.StringId]      = (int)variant;
+
+                return party;
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+        }
+
         // ── Nightfall: surviving parties regain some of their numbers ───────────
         private void ReplenishSurvivors()
         {
