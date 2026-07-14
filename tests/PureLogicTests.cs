@@ -4660,5 +4660,97 @@ namespace AshAndEmber.Tests
             Assert.Less(TowerRiteMath.RemnantPartySize, TowerRiteMath.HostPartySizeEach);
             Assert.Greater(TowerRiteMath.RemnantPartySize, 0);
         }
+
+        // ── ChosenQuestMath tests (Phase 12, Faction H — The Promise) ────────────
+        [Test]
+        public void ChosenQuestMath_HasReachedThreshold_GatesAtConfiguredFiefCount()
+        {
+            Assert.IsFalse(ChosenQuestMath.HasReachedThreshold(ChosenQuestMath.ConquestFiefThreshold - 1));
+            Assert.IsTrue(ChosenQuestMath.HasReachedThreshold(ChosenQuestMath.ConquestFiefThreshold));
+            Assert.IsTrue(ChosenQuestMath.HasReachedThreshold(ChosenQuestMath.ConquestFiefThreshold + 50));
+        }
+
+        [Test]
+        public void ChosenQuestMath_ConquestThreshold_IsSmallerThanTheSupersededTwoThirdsBenchmark()
+        {
+            // The superseded prompt's Empire questline aimed at ~2/3 of all towns
+            // (~35, verified against the shipped settlements.xml's 53 towns). The
+            // Chosen start from just 2 seats, so the threshold must sit clearly
+            // below that full-map benchmark while still being a real, multi-fief
+            // conquest push (far beyond the Chosen's starting 2 towns).
+            const int supersededTwoThirdsBenchmark = 35;
+            Assert.Less(ChosenQuestMath.ConquestFiefThreshold, supersededTwoThirdsBenchmark);
+            Assert.Greater(ChosenQuestMath.ConquestFiefThreshold, ChosenMath.StartingTownIds.Length * 5);
+        }
+
+        [Test]
+        public void ChosenQuestMath_ClampedProgress_NeverExceedsThresholdOrGoesNegative()
+        {
+            Assert.AreEqual(0, ChosenQuestMath.ClampedProgress(-5));
+            Assert.AreEqual(0, ChosenQuestMath.ClampedProgress(0));
+            Assert.AreEqual(ChosenQuestMath.ConquestFiefThreshold, ChosenQuestMath.ClampedProgress(ChosenQuestMath.ConquestFiefThreshold));
+            Assert.AreEqual(ChosenQuestMath.ConquestFiefThreshold, ChosenQuestMath.ClampedProgress(ChosenQuestMath.ConquestFiefThreshold + 999));
+        }
+
+        [Test]
+        public void ChosenQuestMath_SplinterCount_ScalesWithNonPlayerClanPool()
+        {
+            Assert.AreEqual(0, ChosenQuestMath.SplinterCount(0));
+            Assert.AreEqual(0, ChosenQuestMath.SplinterCount(-3));
+            Assert.AreEqual(1, ChosenQuestMath.SplinterCount(1));
+            Assert.AreEqual(2, ChosenQuestMath.SplinterCount(2));
+            Assert.AreEqual(3, ChosenQuestMath.SplinterCount(3));
+            Assert.AreEqual(3, ChosenQuestMath.SplinterCount(10));
+        }
+
+        [Test]
+        public void ChosenQuestMath_AssignSplinterGroups_EveryClanGetsAGroupWithinRange()
+        {
+            int[] groups = ChosenQuestMath.AssignSplinterGroups(7, 3);
+            Assert.AreEqual(7, groups.Length);
+            foreach (int g in groups)
+            {
+                Assert.GreaterOrEqual(g, 0);
+                Assert.Less(g, 3);
+            }
+        }
+
+        [Test]
+        public void ChosenQuestMath_AssignSplinterGroups_GroupZeroIsNeverSmallest()
+        {
+            // Group 0 always anchors the ruling clan (index 0 of the caller's
+            // sorted input) and, per the round-robin remainder bias, is never
+            // smaller than any other group — matching the PriestKing "leads the
+            // largest splinter" fate.
+            for (int clanCount = 1; clanCount <= 12; clanCount++)
+            {
+                for (int splinterCount = 1; splinterCount <= 3; splinterCount++)
+                {
+                    int[] groups = ChosenQuestMath.AssignSplinterGroups(clanCount, splinterCount);
+                    var counts = new int[splinterCount];
+                    foreach (int g in groups) counts[g]++;
+                    for (int g = 1; g < splinterCount; g++)
+                        Assert.GreaterOrEqual(counts[0], counts[g],
+                            $"clanCount={clanCount}, splinterCount={splinterCount}");
+                }
+            }
+        }
+
+        [Test]
+        public void ChosenQuestMath_AssignSplinterGroups_DegenerateInputsReturnEmpty()
+        {
+            Assert.AreEqual(0, ChosenQuestMath.AssignSplinterGroups(0, 3).Length);
+            Assert.AreEqual(0, ChosenQuestMath.AssignSplinterGroups(5, 0).Length);
+        }
+
+        [Test]
+        public void ChosenQuestMath_SplinterIdentities_AreUniqueAndFullyNamed()
+        {
+            Assert.AreEqual(ChosenQuestMath.SplinterKingdomIds.Length, ChosenQuestMath.SplinterKingdomNames.Length);
+            Assert.AreEqual(ChosenQuestMath.SplinterKingdomIds.Distinct().Count(), ChosenQuestMath.SplinterKingdomIds.Length);
+            Assert.AreEqual(ChosenQuestMath.SplinterKingdomNames.Distinct().Count(), ChosenQuestMath.SplinterKingdomNames.Length);
+            foreach (var id in ChosenQuestMath.SplinterKingdomIds) Assert.IsFalse(string.IsNullOrWhiteSpace(id));
+            foreach (var name in ChosenQuestMath.SplinterKingdomNames) Assert.IsFalse(string.IsNullOrWhiteSpace(name));
+        }
     }
 }

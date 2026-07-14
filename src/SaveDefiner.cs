@@ -79,6 +79,9 @@ namespace AshAndEmber
 
                 // Phase 12, Faction B — the Tower's "The Unbinding Rite."
                 new KeyValuePair<Type, int>(typeof(TowerRiteQuestLog),         16),
+
+                // Phase 12, Faction H -- the Chosen's "The Promise".
+                new KeyValuePair<Type, int>(typeof(ChosenQuestLog),            17),
             };
 
         protected override void DefineClassTypes()
