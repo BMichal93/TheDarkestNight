@@ -136,13 +136,16 @@ namespace AshAndEmber
             {
                 var roster = MobileParty.MainParty?.MemberRoster;
                 int healthy = roster?.TotalHealthyCount ?? 0;
-                if (healthy > 1)
+                var nonHeroTroop = healthy > 1
+                    ? roster.GetTroopRoster().FirstOrDefault(t => t.Character != null && !t.Character.IsHero && t.Number > 0).Character
+                    : null;
+                if (nonHeroTroop != null)
                 {
                     int lost = RuinsMath.HazardTroopLoss(_rng);
                     // Wound rather than kill outright — a close call, not a massacre.
-                    try { roster.AddToCounts(roster.GetTroopRoster().FirstOrDefault(t => t.Character != null && !t.Character.IsHero).Character, -Math.Min(lost, healthy - 1)); }
+                    try { roster.AddToCounts(nonHeroTroop, -Math.Min(lost, healthy - 1)); }
                     catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    return $"Something in the dark finds a few of your people before you find it. You lose a handful of soldiers to it.";
+                    return "Something in the dark finds a few of your people before you find it. You lose a handful of soldiers to it.";
                 }
                 else
                 {
