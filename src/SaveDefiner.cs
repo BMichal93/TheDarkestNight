@@ -94,6 +94,9 @@ namespace AshAndEmber
 
                 // Phase 12, Faction F -- the Empire's "The Reunification".
                 new KeyValuePair<Type, int>(typeof(EmpireQuestLog),            21),
+
+                // Phase 12, Faction G -- Legion's "The Far Shore".
+                new KeyValuePair<Type, int>(typeof(LegionQuestLog),            22),
             };
 
         protected override void DefineClassTypes()

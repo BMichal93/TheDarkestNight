@@ -5443,5 +5443,57 @@ namespace AshAndEmber.Tests
             Assert.Greater(BloodAttunementMath.DaytimeMoraleDrainPerDay, 0f);
             Assert.Less(BloodAttunementMath.DaytimeSpeedPenaltyFactor, 0f);
         }
+
+        // ── LegionQuestMath (Phase 12, Faction G — Legion's "The Far Shore") ────
+        [Test]
+        public void LegionQuestMath_IsStockComplete_RequiresBothTracksIndividuallyFull()
+        {
+            Assert.IsFalse(LegionQuestMath.IsStockComplete(LegionQuestMath.HardwoodTarget, 0));
+            Assert.IsFalse(LegionQuestMath.IsStockComplete(0, LegionQuestMath.IronTarget));
+            Assert.IsTrue(LegionQuestMath.IsStockComplete(LegionQuestMath.HardwoodTarget, LegionQuestMath.IronTarget));
+        }
+
+        [Test]
+        public void LegionQuestMath_ClampedRatio_StaysWithinZeroToOne()
+        {
+            Assert.AreEqual(0f, LegionQuestMath.ClampedRatio(-5, 100));
+            Assert.AreEqual(1f, LegionQuestMath.ClampedRatio(500, 100));
+            Assert.AreEqual(0.5f, LegionQuestMath.ClampedRatio(50, 100), 0.0001f);
+        }
+
+        [Test]
+        public void LegionQuestMath_BlendedProgress_IsMeanOfBothRatios()
+        {
+            float expected = (LegionQuestMath.ClampedRatio(1250, LegionQuestMath.HardwoodTarget)
+                + LegionQuestMath.ClampedRatio(2500, LegionQuestMath.IronTarget)) / 2f;
+            Assert.AreEqual(expected, LegionQuestMath.BlendedProgress(1250, 2500), 0.0001f);
+        }
+
+        [Test]
+        public void LegionQuestMath_ApplyWeeklyDecay_Reduces10PercentAndFloorsAtZero()
+        {
+            Assert.AreEqual(900, LegionQuestMath.ApplyWeeklyDecay(1000));
+            Assert.AreEqual(0, LegionQuestMath.ApplyWeeklyDecay(0));
+            Assert.AreEqual(0, LegionQuestMath.ApplyWeeklyDecay(-10));
+        }
+
+        [Test]
+        public void LegionQuestMath_DepartingClanCount_IsTwoOrThree()
+        {
+            Assert.AreEqual(LegionQuestMath.MinDepartingClans, LegionQuestMath.DepartingClanCount(0.0));
+            Assert.AreEqual(LegionQuestMath.MaxDepartingClans, LegionQuestMath.DepartingClanCount(0.99));
+        }
+
+        [Test]
+        public void LegionQuestMath_NpcContributionAmount_StaysWithinRange()
+        {
+            var rng = new System.Random(1);
+            for (int i = 0; i < 50; i++)
+            {
+                int amount = LegionQuestMath.NpcContributionAmount(rng, 15, 60);
+                Assert.GreaterOrEqual(amount, 15);
+                Assert.LessOrEqual(amount, 60);
+            }
+        }
     }
 }
