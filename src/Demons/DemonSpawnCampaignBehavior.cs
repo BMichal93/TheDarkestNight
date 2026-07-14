@@ -398,22 +398,22 @@ namespace AshAndEmber
                     if (party.MapEvent != null) continue;           // already fighting
                     if (party.BesiegedSettlement != null) continue; // already assaulting
 
-                    // Faction D (the Bloodbound), Faction C (the Forest Widows),
-                    // and Faction H (the Pale Widows) can each buy a few days of
-                    // being left alone — a party currently under any bought-off
-                    // window is simply never picked as prey (see
-                    // BloodboundCampaignBehavior.IsPartyIgnored / GrantIgnore,
-                    // ForestWidowsCampaignBehavior.IsPartyIgnored / GrantIgnoreDays,
-                    // and PaleWidowsCampaignBehavior.IsPartyIgnored / GrantIgnoreDays
-                    // — three parallel, faction-owned trackers consulted at the
-                    // same choke point).
+                    // Faction D (the Bloodbound) and Faction C (the Forest
+                    // Widows) can each buy a few days of being left alone — a
+                    // party currently under any bought-off window is simply
+                    // never picked as prey (see BloodboundCampaignBehavior.
+                    // IsPartyIgnored / GrantIgnore and ForestWidowsCampaignBehavior.
+                    // IsPartyIgnored / GrantIgnoreDays — two parallel,
+                    // faction-owned trackers consulted at the same choke
+                    // point). Faction H (the Chosen) has no such tracker — the
+                    // Chosen fend for themselves against the Night Tide, same
+                    // as everyone else.
                     MobileParty prey = MobileParty.All
                         .Where(p => p != null && p.IsActive && p != party
                                  && !IsDemonParty(p) && p.MapEvent == null
                                  && (p.MemberRoster?.TotalManCount ?? 0) > 0
                                  && !BloodboundCampaignBehavior.IsPartyIgnored(p)
-                                 && !ForestWidowsCampaignBehavior.IsPartyIgnored(p)
-                                 && !PaleWidowsCampaignBehavior.IsPartyIgnored(p))
+                                 && !ForestWidowsCampaignBehavior.IsPartyIgnored(p))
                         .OrderBy(p => (p.GetPosition2D - party.GetPosition2D).LengthSquared)
                         .FirstOrDefault(p => (p.GetPosition2D - party.GetPosition2D).Length <= EngageSearchRadius);
 

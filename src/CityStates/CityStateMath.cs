@@ -13,7 +13,7 @@ namespace AshAndEmber
     {
         // How many days the campaign waits, after game start, before the first
         // conversion pass runs. Every Phase 7 faction ejects its non-starting-town
-        // clans on an UNTHROTTLED daily tick (see e.g. PaleWidowsSettlements.
+        // clans on an UNTHROTTLED daily tick (see e.g. ChosenSettlements.
         // ScopeToStartingTowns), so the ejections are already complete after the
         // very first daily tick — this delay exists purely as a safety margin so
         // Phase 8 never races the Ashen realm's own first-run settlement claims

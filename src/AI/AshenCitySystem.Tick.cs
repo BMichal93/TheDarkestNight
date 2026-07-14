@@ -99,10 +99,10 @@ namespace AshAndEmber
             // See Factions/Legion/LegionCulture.cs.
             try { LegionCulture.RenameLegionKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Faction H of The Darkest Night's Phase 7: the Southern Empire is
-            // now the Pale Widows — a fresh identity sharing the Empire's
+            // now the Chosen — a fresh identity sharing the Empire's
             // CultureObject but renaming only its own Kingdom object (StringId
-            // "empire_s"). See Factions/PaleWidows/PaleWidowsCulture.cs.
-            try { PaleWidowsCulture.RenamePaleWidowsKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // "empire_s"). See Factions/Chosen/ChosenCulture.cs.
+            try { ChosenCulture.RenameChosenKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             _kingdomsRenamed = true;
         }
 

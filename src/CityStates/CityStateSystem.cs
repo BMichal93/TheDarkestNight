@@ -6,7 +6,7 @@
 // Every Phase 7 faction (Factions/*) scopes itself down to a handful of named
 // starting towns and, on an unthrottled daily tick, ejects any of its own
 // clans that do not hold one (ChangeKingdomAction.ApplyByLeaveKingdom — see
-// e.g. PaleWidowsSettlements.ScopeToStartingTowns). Because the 8 Phase 7
+// e.g. ChosenSettlements.ScopeToStartingTowns). Because the 8 Phase 7
 // factions ARE the 8 vanilla kingdoms (Vlandia/Sturgia/Khuzait/Aserai/
 // Battania/Empire/Empire_w/Empire_s), every clan that ends up independent
 // (Clan.Kingdom == null) while still holding a town is a direct product of
@@ -73,7 +73,7 @@ namespace AshAndEmber
                 .Concat(TempleMath.StartingTownIds)
                 .Concat(EmpireMath.StartingTownIds)
                 .Concat(LegionMath.StartingTownIds)
-                .Concat(PaleWidowsMath.StartingTownIds),
+                .Concat(ChosenMath.StartingTownIds),
             StringComparer.OrdinalIgnoreCase);
 
         private static bool IsCoreFactionTown(string settlementStringId) =>

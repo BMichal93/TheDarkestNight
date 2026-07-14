@@ -143,11 +143,11 @@ namespace AshAndEmber
                 // identity sharing the Empire's CultureObject but not its
                 // Kingdom — see Factions/Legion/LegionCulture.cs header.
                 campaignStarter.AddBehavior(new LegionCampaignBehavior());
-                // Phase 7, Faction H — the Pale Widows (Southern Empire). The
-                // last of the three Empire successors; a fresh identity sharing
-                // the Empire's CultureObject but not its Kingdom — see
-                // Factions/PaleWidows/PaleWidowsCulture.cs.
-                campaignStarter.AddBehavior(new PaleWidowsCampaignBehavior());
+                // Phase 7, Faction H — the Chosen (Southern Empire). The last
+                // of the three Empire successors; a fresh identity sharing the
+                // Empire's CultureObject but not its Kingdom — see
+                // Factions/Chosen/ChosenCulture.cs.
+                campaignStarter.AddBehavior(new ChosenCampaignBehavior());
                 // Phase 8 — the wretched free towns. Turns every town the eight
                 // Phase 7 factions ejected into its own permanent one-city
                 // kingdom (modelled on AshenCitySystem's mechanics).
@@ -203,8 +203,8 @@ namespace AshAndEmber
                 try { EmpireDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // The Western Empire is now Legion — see Factions/Legion/LegionDialogue.cs.
                 try { LegionDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                // The Southern Empire is now the Pale Widows — see Factions/PaleWidows/PaleWidowsDialogue.cs.
-                try { PaleWidowsDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // The Southern Empire is now the Chosen — see Factions/Chosen/ChosenDialogue.cs.
+                try { ChosenDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SchemeSystem.Initialize();              } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Drop the previous campaign's Ashen rolls before this one's data loads.
                 // A save reload repopulates them in SyncData, which runs before
@@ -231,7 +231,7 @@ namespace AshAndEmber
                 try { TempleCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { EmpireCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { LegionCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { PaleWidowsCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ChosenCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { CityStateCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { RuinsCastleSystem.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { MortalLawCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -743,6 +743,10 @@ namespace AshAndEmber
             // Phase 7, Faction E — the Holy Sigil: small damage to nearby demons
             // on a landed blow, slight morale restore on a block/parry.
             try { TempleSigilEffects.OnAgentHit(affectedAgent, affectorAgent, affectorWeapon, blow, attackCollisionData, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // Phase 7, Faction H — the Rod of the Apostle: a cursed instrument of
+            // zealotry. On block: 50 damage to a random nearby ally, wielder heals
+            // 100. On a landed hit: kills a random nearby ally AND summons a demon.
+            try { ChosenRodEffects.OnAgentHit(affectedAgent, affectorAgent, affectorWeapon, blow, attackCollisionData, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Nature resistance (reserved for future barrier talents): OnAgentHit fires after
             // damage is applied; heal back the mitigated portion against real weapon hits.
             try

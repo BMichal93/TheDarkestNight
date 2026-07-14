@@ -1,14 +1,13 @@
 // =============================================================================
-// THE DARKEST NIGHT — Factions/PaleWidows/PaleWidowsSettlements.cs
+// THE DARKEST NIGHT — Factions/Chosen/ChosenSettlements.cs
 //
-// Scopes the Pale Widows kingdom (Southern Empire, StringId "empire_s") down
-// to its two seats: Lycaron (town_ES4) and Phycaon (town_ES6). Any Pale
-// Widows clan that does not hold one of those two towns (or a castle bound
-// to them) is ejected from the kingdom — it keeps whatever it holds, but
-// that ground falls out of the Widows' scope, exactly the "ownerless" state
-// Phase 8 will later fold into a proper city-state. Mirrors
-// LegionSettlements.cs / EmpireSettlements.cs / BloodboundSettlements.cs
-// exactly, keyed on settlement ownership.
+// Scopes the Chosen kingdom (Southern Empire, StringId "empire_s") down to
+// its two seats: Lycaron (town_ES4) and Phycaon (town_ES6) — the same two
+// seats the (deleted) Pale Widows held. Any Chosen clan that does not hold
+// one of those two towns (or a castle bound to them) is ejected from the
+// kingdom — it keeps whatever it holds, but that ground falls out of the
+// Chosen's scope. Mirrors LegionSettlements.cs / EmpireSettlements.cs /
+// BloodboundSettlements.cs exactly, keyed on settlement ownership.
 // =============================================================================
 
 using System;
@@ -18,14 +17,14 @@ using TaleWorlds.CampaignSystem.Actions;
 
 namespace AshAndEmber
 {
-    internal static class PaleWidowsSettlements
+    internal static class ChosenSettlements
     {
         public static void ScopeToStartingTowns()
         {
             try
             {
                 var kingdom = Kingdom.All.FirstOrDefault(k =>
-                    k.StringId == PaleWidowsCulture.KingdomId && !k.IsEliminated);
+                    k.StringId == ChosenCulture.KingdomId && !k.IsEliminated);
                 if (kingdom == null) return;
 
                 foreach (var clan in kingdom.Clans.ToList())
@@ -49,19 +48,19 @@ namespace AshAndEmber
             try
             {
                 return clan.Settlements.Any(s =>
-                    (s.IsTown || s.IsCastle) && PaleWidowsMath.IsStartingTownId(s.StringId));
+                    (s.IsTown || s.IsCastle) && ChosenMath.IsStartingTownId(s.StringId));
             }
             catch { return false; }
         }
 
-        // Used by the town-menu gate: a settlement counts as a "Pale Widows town"
-        // if the kingdom currently owns it — the two named seats when things are
-        // healthy, but this stays correct even if the Widows later take (or
-        // lose) ground beyond them.
-        internal static bool IsPaleWidowsSettlement(TaleWorlds.CampaignSystem.Settlements.Settlement s)
+        // Used by the town-menu gate: a settlement counts as a "Chosen town"
+        // if the kingdom currently owns it — the two named seats when things
+        // are healthy, but this stays correct even if the Chosen later take
+        // (or lose) ground beyond them.
+        internal static bool IsChosenSettlement(TaleWorlds.CampaignSystem.Settlements.Settlement s)
         {
             if (s == null || !(s.IsTown || s.IsCastle)) return false;
-            try { return s.MapFaction?.StringId == PaleWidowsCulture.KingdomId; }
+            try { return s.MapFaction?.StringId == ChosenCulture.KingdomId; }
             catch { return false; }
         }
     }

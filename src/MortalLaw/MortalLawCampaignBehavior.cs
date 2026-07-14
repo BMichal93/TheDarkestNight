@@ -7,7 +7,7 @@
 // extension of Campaign/CampaignBehavior.cs: that file is MagicCampaignBehavior,
 // already large, and scoped to culture/atmosphere/aging concerns (per
 // CLAUDE.md's folder map); "campaign AI shaping" for eight independent
-// kingdoms is its own concern, matching how Tribes/Legion/PaleWidows each own
+// kingdoms is its own concern, matching how Tribes/Legion/Chosen each own
 // their own faction-behavior folder rather than piling onto the shared one.
 //
 // Four sub-rules, one partial file each:

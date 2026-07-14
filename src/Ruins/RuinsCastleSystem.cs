@@ -148,7 +148,7 @@ namespace AshAndEmber
                 .Concat(TempleMath.StartingTownIds)
                 .Concat(EmpireMath.StartingTownIds)
                 .Concat(LegionMath.StartingTownIds)
-                .Concat(PaleWidowsMath.StartingTownIds),
+                .Concat(ChosenMath.StartingTownIds),
             StringComparer.OrdinalIgnoreCase);
 
         public static void OnSessionLaunched()
