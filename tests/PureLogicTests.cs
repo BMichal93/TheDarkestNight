@@ -3509,100 +3509,112 @@ namespace AshAndEmber.Tests
             Assert.Greater(TowerMath.LordGrantedSpellCount, 0);
         }
 
-        // ── HiveMath tests (Phase 7, Faction C) ────────────────────────────────
+        // ── ForestWidowsMath tests (Phase 7, Faction C) ─────────────────────────
 
         [Test]
-        public void HiveMath_IsStartingTownId_MatchesOnlyMarunathAndCarBanseth()
+        public void ForestWidowsMath_IsStartingTownId_MatchesOnlyMarunathAndCarBanseth()
         {
-            Assert.IsTrue(HiveMath.IsStartingTownId("town_B1"));  // Marunath
-            Assert.IsTrue(HiveMath.IsStartingTownId("town_B3"));  // Car Banseth
-            Assert.IsFalse(HiveMath.IsStartingTownId("town_B2")); // Dunglanys
-            Assert.IsFalse(HiveMath.IsStartingTownId("town_B4")); // Seonon
-            Assert.IsFalse(HiveMath.IsStartingTownId("town_B5")); // Pen Cannoc
-            Assert.IsFalse(HiveMath.IsStartingTownId(null));
-            Assert.IsFalse(HiveMath.IsStartingTownId(""));
+            Assert.IsTrue(ForestWidowsMath.IsStartingTownId("town_B1"));  // Marunath
+            Assert.IsTrue(ForestWidowsMath.IsStartingTownId("town_B3"));  // Car Banseth
+            Assert.IsFalse(ForestWidowsMath.IsStartingTownId("town_B2")); // Dunglanys
+            Assert.IsFalse(ForestWidowsMath.IsStartingTownId("town_B4")); // Seonon
+            Assert.IsFalse(ForestWidowsMath.IsStartingTownId("town_B5")); // Pen Cannoc
+            Assert.IsFalse(ForestWidowsMath.IsStartingTownId(null));
+            Assert.IsFalse(ForestWidowsMath.IsStartingTownId(""));
+            Assert.AreEqual(2, ForestWidowsMath.StartingTownIds.Length, "The Forest Widows should keep exactly two starting towns.");
         }
 
         [Test]
-        public void HiveMath_IsStartingTownId_IsCaseInsensitive()
+        public void ForestWidowsMath_IsStartingTownId_IsCaseInsensitive()
         {
-            Assert.IsTrue(HiveMath.IsStartingTownId("TOWN_b1"));
-            Assert.IsTrue(HiveMath.IsStartingTownId("Town_B3"));
+            Assert.IsTrue(ForestWidowsMath.IsStartingTownId("TOWN_b1"));
+            Assert.IsTrue(ForestWidowsMath.IsStartingTownId("Town_B3"));
         }
 
         [Test]
-        public void HiveMath_Tunables_ArePositiveAndSane()
+        public void ForestWidowsMath_RollVanishDays_StaysWithinOneToFourWeeks()
         {
-            Assert.AreEqual(2, HiveMath.StartingTownIds.Length, "The Hive should keep exactly two starting towns.");
-            Assert.Greater(HiveMath.DoseIntervalDays, 0f);
-            Assert.Greater(HiveMath.DoseGraceDays, 0f);
-            Assert.AreEqual(HiveMath.DoseIntervalDays + HiveMath.DoseGraceDays, HiveMath.DoseWindowDays, 0.001f);
-            Assert.Greater(HiveMath.FreeRecruitPerClick, 0);
-            Assert.Greater(HiveMath.DownsideCheckIntervalSeconds, 0f);
-            Assert.Greater(HiveMath.ColourInversionChance, 0f);
-            Assert.Less(HiveMath.ColourInversionChance, 1f);
-            Assert.Greater(HiveMath.WillSuppressionChance, 0f);
-            Assert.Less(HiveMath.WillSuppressionChance, 1f);
-            Assert.Greater(HiveMath.ColourInversionDurationSeconds, 0f);
-        }
-
-        [Test]
-        public void HiveMath_IsBondBroken_FalseWithinWindow_TrueBeyondIt()
-        {
-            Assert.IsFalse(HiveMath.IsBondBroken(0f));
-            Assert.IsFalse(HiveMath.IsBondBroken(HiveMath.DoseIntervalDays)); // due, but still within the window
-            Assert.IsFalse(HiveMath.IsBondBroken(HiveMath.DoseWindowDays));  // exactly at the edge — still holds
-            Assert.IsTrue(HiveMath.IsBondBroken(HiveMath.DoseWindowDays + 0.01f));
-            Assert.IsTrue(HiveMath.IsBondBroken(999f));
-        }
-
-        [Test]
-        public void HiveMath_DaysUntilBondBreaks_CountsDownAndFloorsAtZero()
-        {
-            Assert.AreEqual(HiveMath.DoseWindowDays, HiveMath.DaysUntilBondBreaks(0f), 0.001f);
-            Assert.AreEqual(0f, HiveMath.DaysUntilBondBreaks(HiveMath.DoseWindowDays), 0.001f);
-            Assert.AreEqual(0f, HiveMath.DaysUntilBondBreaks(HiveMath.DoseWindowDays + 50f), 0.001f);
-            Assert.Greater(HiveMath.DaysUntilBondBreaks(1f), HiveMath.DaysUntilBondBreaks(HiveMath.DoseIntervalDays));
-        }
-
-        [Test]
-        public void HiveMath_RollColourInversion_RespectsBoundary()
-        {
-            Assert.IsTrue(HiveMath.RollColourInversion(0.0));
-            Assert.IsFalse(HiveMath.RollColourInversion(HiveMath.ColourInversionChance));
-            Assert.IsFalse(HiveMath.RollColourInversion(0.999));
-        }
-
-        [Test]
-        public void HiveMath_RollWillSuppression_RespectsBoundary()
-        {
-            Assert.IsTrue(HiveMath.RollWillSuppression(0.0));
-            Assert.IsFalse(HiveMath.RollWillSuppression(HiveMath.WillSuppressionChance));
-            Assert.IsFalse(HiveMath.RollWillSuppression(0.999));
-        }
-
-        [Test]
-        public void HiveMath_PickSuccessorIndex_StaysInBoundsAndHandlesNegativeDraws()
-        {
-            for (int draw = -20; draw <= 20; draw++)
+            for (double roll = 0.0; roll <= 1.0; roll += 0.05)
             {
-                int idx = HiveMath.PickSuccessorIndex(5, draw);
-                Assert.GreaterOrEqual(idx, 0);
-                Assert.Less(idx, 5);
+                float days = ForestWidowsMath.RollVanishDays(roll);
+                Assert.GreaterOrEqual(days, ForestWidowsMath.MinVanishDays);
+                Assert.LessOrEqual(days, ForestWidowsMath.MaxVanishDays);
+            }
+            Assert.AreEqual(ForestWidowsMath.MinVanishDays, ForestWidowsMath.RollVanishDays(0.0));
+            Assert.AreEqual(ForestWidowsMath.MaxVanishDays, ForestWidowsMath.RollVanishDays(1.0));
+        }
+
+        [Test]
+        public void ForestWidowsMath_RollLordSacrificeImmunityDays_StaysWithinBounds()
+        {
+            for (double roll = 0.0; roll <= 1.0; roll += 0.05)
+            {
+                float days = ForestWidowsMath.RollLordSacrificeImmunityDays(roll);
+                Assert.GreaterOrEqual(days, ForestWidowsMath.MinLordSacrificeImmunityDays);
+                Assert.LessOrEqual(days, ForestWidowsMath.MaxLordSacrificeImmunityDays);
             }
         }
 
         [Test]
-        public void HiveMath_PickSuccessorIndex_NoCandidatesReturnsNegativeOne()
+        public void ForestWidowsMath_ExtendIgnoreExpiry_StacksInsteadOfOverwriting()
         {
-            Assert.AreEqual(-1, HiveMath.PickSuccessorIndex(0, 5));
-            Assert.AreEqual(-1, HiveMath.PickSuccessorIndex(-1, 5));
+            // No active window yet (currentExpiry == today): a 2-day grant simply
+            // starts a fresh 2-day window from today.
+            float extended = ForestWidowsMath.ExtendIgnoreExpiry(today: 100f, currentExpiryDay: 100f, grantDays: 2f);
+            Assert.AreEqual(102f, extended);
+
+            // An active window already runs to day 105: a further 3-day grant
+            // extends it to day 108, not day 103 (today + grant) and not merely
+            // day 105 (unchanged) — it STACKS on top of the remaining time.
+            float stacked = ForestWidowsMath.ExtendIgnoreExpiry(today: 100f, currentExpiryDay: 105f, grantDays: 3f);
+            Assert.AreEqual(108f, stacked);
         }
 
         [Test]
-        public void HiveMath_PickSuccessorIndex_IsDeterministicForSameInputs()
+        public void ForestWidowsMath_ExtendIgnoreExpiry_IgnoresAnExpiredWindow()
         {
-            Assert.AreEqual(HiveMath.PickSuccessorIndex(7, 100), HiveMath.PickSuccessorIndex(7, 100));
+            // The old window already lapsed (expiry before today) — the new grant
+            // should count from today, not from the stale expiry day.
+            float extended = ForestWidowsMath.ExtendIgnoreExpiry(today: 100f, currentExpiryDay: 40f, grantDays: 5f);
+            Assert.AreEqual(105f, extended);
+        }
+
+        [Test]
+        public void ForestWidowsMath_IsIgnoreActive_ComparesAgainstExpiry()
+        {
+            Assert.IsTrue(ForestWidowsMath.IsIgnoreActive(today: 100f, expiryDay: 101f));
+            Assert.IsFalse(ForestWidowsMath.IsIgnoreActive(today: 101f, expiryDay: 101f));
+            Assert.IsFalse(ForestWidowsMath.IsIgnoreActive(today: 102f, expiryDay: 101f));
+        }
+
+        [Test]
+        public void ForestWidowsMath_RollSelfSacrifice_RespectsChanceBoundary()
+        {
+            Assert.IsTrue(ForestWidowsMath.RollSelfSacrifice(0.0));
+            Assert.IsFalse(ForestWidowsMath.RollSelfSacrifice(ForestWidowsMath.SelfSacrificeChance));
+            Assert.IsFalse(ForestWidowsMath.RollSelfSacrifice(0.999));
+        }
+
+        [Test]
+        public void ForestWidowsMath_SelfSacrificeChance_IsSmall()
+        {
+            Assert.Greater(ForestWidowsMath.SelfSacrificeChance, 0.0);
+            Assert.Less(ForestWidowsMath.SelfSacrificeChance, 0.2, "The self-sacrifice roll should read as a small chance, not a coin flip.");
+        }
+
+        [Test]
+        public void ForestWidowsMath_InfluenceAfterDailyDrain_DrainsOnlyAMaleMember()
+        {
+            Assert.AreEqual(0f, ForestWidowsMath.InfluenceAfterDailyDrain(isMale: true, isMember: true, currentInfluence: 250f));
+            Assert.AreEqual(250f, ForestWidowsMath.InfluenceAfterDailyDrain(isMale: false, isMember: true, currentInfluence: 250f));
+            Assert.AreEqual(250f, ForestWidowsMath.InfluenceAfterDailyDrain(isMale: true, isMember: false, currentInfluence: 250f));
+            Assert.AreEqual(250f, ForestWidowsMath.InfluenceAfterDailyDrain(isMale: false, isMember: false, currentInfluence: 250f));
+        }
+
+        [Test]
+        public void ForestWidowsMath_DemonTroopsGrantedPerMaleSacrifice_IsPositive()
+        {
+            Assert.Greater(ForestWidowsMath.DemonTroopsGrantedPerMaleSacrifice, 0);
         }
 
         // ── BloodboundMath tests (Phase 7, Faction D) ──────────────────────────

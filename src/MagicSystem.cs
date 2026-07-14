@@ -76,7 +76,6 @@ namespace AshAndEmber
             try { BattleWhispers.Reset();                } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { AshenVisuals.Reset();                  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { GreatOtherParty.ClearMissionLatch();    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { HiveBattleEffects.Reset();              } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
             if (game.GameType is Campaign &&
                 gameStarterObject is CampaignGameStarter campaignStarter)
@@ -126,8 +125,10 @@ namespace AshAndEmber
                 campaignStarter.AddBehavior(new WolfBrothersCampaignBehavior());
                 // Phase 7, Faction B — the Tower (Aserai).
                 campaignStarter.AddBehavior(new TowerCampaignBehavior());
-                // Phase 7, Faction C — the Hive (Battania).
-                campaignStarter.AddBehavior(new HiveCampaignBehavior());
+                // Phase 7, Faction C — the Forest Widows (Battania). Battania's
+                // own kingdom/culture, retargeted from the (deleted) Hive
+                // identity — see Factions/ForestWidows/ForestWidowsCulture.cs.
+                campaignStarter.AddBehavior(new ForestWidowsCampaignBehavior());
                 // Phase 7, Faction D — the Bloodbound (Khuzait).
                 campaignStarter.AddBehavior(new BloodboundCampaignBehavior());
                 // Phase 7, Faction E — the Temple (Vlandia). The Vlandia -> Temple
@@ -189,11 +190,10 @@ namespace AshAndEmber
                 // Factions/Tower/TowerDialogue.cs. DunebornDialogue.cs is left in
                 // place, unreferenced, for save compatibility.
                 try { TowerDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                // Battania is now the Hive, not the (retired) Forest Clans — see
-                // Factions/Hive/HiveDialogue.cs. ForestClansCulture-adjacent
-                // registrations are left in place, unreferenced, for save
-                // compatibility.
-                try { HiveDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Battania is now the Forest Widows, not the (deleted) Hive nor
+                // the (retired) Forest Clans — see
+                // Factions/ForestWidows/ForestWidowsDialogue.cs.
+                try { ForestWidowsDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Khuzait is now the Bloodbound, not the (retired) Tribes of the East —
                 // see Factions/Bloodbound/BloodboundDialogue.cs. TribesDialogue.cs is
                 // left in place, unreferenced, for save compatibility.
@@ -226,7 +226,7 @@ namespace AshAndEmber
                 try { SpellcasterLords.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SpellcasterTroopBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SpellbookCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { HiveCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ForestWidowsCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { BloodboundCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { TempleCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { EmpireCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -258,11 +258,12 @@ namespace AshAndEmber
             try { WolfBrothersCulture.ApplyWolfBrothersCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Aserai is now the Tower, not the (retired) Duneborn.
             try { TowerCulture.ApplyTowerCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            // Battania is now the Hive, not the (retired) Forest Clans — see
-            // Factions/Hive/HiveCulture.cs. AshenCitySystem.ApplyForestClansCultureTexts
+            // Battania is now the Forest Widows, not the (deleted) Hive nor the
+            // (retired) Forest Clans — see Factions/ForestWidows/
+            // ForestWidowsCulture.cs. AshenCitySystem.ApplyForestClansCultureTexts
             // (and the Forest Clans rename helpers behind it) are left in place,
             // unreferenced, for save compatibility — only the call site moves.
-            try { HiveCulture.ApplyHiveCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ForestWidowsCulture.ApplyForestWidowsCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Khuzait is now the Bloodbound, not the (retired) Tribes of the East —
             // see Factions/Bloodbound/BloodboundCulture.cs. AshenCitySystem.ApplyTribalCultureTexts
             // (and the Tribal rename helpers behind it) are left in place,
@@ -295,8 +296,9 @@ namespace AshAndEmber
             try { WolfBrothersCulture.ApplyWolfBrothersCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Aserai is now the Tower, not the (retired) Duneborn.
                 try { TowerCulture.ApplyTowerCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                // Battania is now the Hive, not the (retired) Forest Clans.
-                try { HiveCulture.ApplyHiveCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Battania is now the Forest Widows, not the (deleted) Hive nor
+                // the (retired) Forest Clans.
+                try { ForestWidowsCulture.ApplyForestWidowsCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Khuzait is now the Bloodbound, not the (retired) Tribes of the East.
                 try { BloodboundCulture.ApplyBloodboundCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // The Northern Empire is now simply "The Empire".
@@ -627,7 +629,6 @@ namespace AshAndEmber
             BattleEvents.MissionTick(dt);
             AshenSceneTone.MissionTick(dt);
             BattleWhispers.MissionTick(dt);
-            HiveBattleEffects.MissionTick(dt);
         }
 
         protected override void OnEndMission()
@@ -680,7 +681,6 @@ namespace AshAndEmber
             try { AshenSceneTone.Reset();                    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { BattleWhispers.Reset();                    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { GreatOtherParty.ClearMissionLatch();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { HiveBattleEffects.Reset();                 } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
         public override void OnAgentBuild(Agent agent, Banner banner)

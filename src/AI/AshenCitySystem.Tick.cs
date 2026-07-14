@@ -80,13 +80,13 @@ namespace AshAndEmber
             // only this call site moved. See Factions/Tower/TowerCulture.cs.
             try { TowerCulture.RenameTowerKingdom();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { RenameAseraiTroops();               } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            // Faction C of The Darkest Night's Phase 7: Battania is now the Hive,
-            // not the (retired) Forest Clans — both target the same "battania"
-            // StringId, and a kingdom can only wear one name. The old
-            // RenameForestClansKingdom()/ApplyForestClansCultureTexts() helpers
-            // are left in AshenCitySystem.Renaming.cs, unreferenced, for save
-            // compatibility; only this call site moved. See Factions/Hive/HiveCulture.cs.
-            try { HiveCulture.RenameHiveKingdom();    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // Faction C of The Darkest Night's Phase 7: Battania is now the
+            // Forest Widows, not the (deleted) Hive nor the (retired) Forest
+            // Clans — Battania owns its own unshared culture, so this follows
+            // the WolfBrothers/Tower own-culture rename pattern (both Kingdom
+            // AND CultureObject), not the Empire-family pattern. See
+            // Factions/ForestWidows/ForestWidowsCulture.cs.
+            try { ForestWidowsCulture.RenameForestWidowsKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { RenameBattanianTroops();            } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Faction F of The Darkest Night's Phase 7: the Northern Empire is
             // now simply "The Empire" — a fresh identity, not a supersession

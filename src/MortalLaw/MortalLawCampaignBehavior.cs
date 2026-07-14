@@ -56,7 +56,7 @@ namespace AshAndEmber
         {
             "vlandia",   // the Temple
             "khuzait",   // the Bloodbound
-            "battania",  // the Hive
+            "battania",  // the Forest Widows
             "aserai",    // the Tower
             "sturgia",   // the Wolf Brothers
             "empire",    // the Empire

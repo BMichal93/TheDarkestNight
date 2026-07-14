@@ -3,8 +3,9 @@
 //
 // GENERIC, REUSABLE infrastructure for Phase 12 (Requirement 21) — "eight
 // faction questlines, all sharing the same day-50 leader-conversation
-// trigger." Every faction questline (Wolf Brothers now; Tower, the Hive, the
-// Bloodbound, the Temple, the Empire, Legion, the Pale Widows later) hooks in
+// trigger." Every faction questline (Wolf Brothers now; Tower, the Forest
+// Widows, the Bloodbound, the Temple, the Empire, Legion, the Pale Widows
+// later) hooks in
 // by constructing ONE FactionQuestDef and calling FactionQuestTrigger.Register
 // — nothing here knows anything about any specific faction.
 //

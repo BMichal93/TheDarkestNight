@@ -143,7 +143,7 @@ namespace AshAndEmber
         private static readonly HashSet<string> _exemptTownIds = new HashSet<string>(
             WolfBrothersMath.StartingTownIds
                 .Concat(TowerMath.StartingTownIds)
-                .Concat(HiveMath.StartingTownIds)
+                .Concat(ForestWidowsMath.StartingTownIds)
                 .Concat(BloodboundMath.StartingTownIds)
                 .Concat(TempleMath.StartingTownIds)
                 .Concat(EmpireMath.StartingTownIds)
