@@ -3973,5 +3973,114 @@ namespace AshAndEmber.Tests
             Assert.AreEqual(LegionMath.TrainingSkillPoolSize - 1, lastFirst);
             Assert.AreNotEqual(lastFirst, lastSecond);
         }
+
+        // ── PaleWidowsMath tests (Phase 7, Faction H) ───────────────────────────
+
+        [Test]
+        public void PaleWidowsMath_IsStartingTownId_MatchesOnlyPhycaonAndLycaron()
+        {
+            Assert.IsTrue(PaleWidowsMath.IsStartingTownId("town_ES4"));  // Lycaron
+            Assert.IsTrue(PaleWidowsMath.IsStartingTownId("town_ES6"));  // Phycaon
+            Assert.IsFalse(PaleWidowsMath.IsStartingTownId("town_ES1"));
+            Assert.IsFalse(PaleWidowsMath.IsStartingTownId("town_ES2"));
+            Assert.IsFalse(PaleWidowsMath.IsStartingTownId("town_ES3"));
+            Assert.IsFalse(PaleWidowsMath.IsStartingTownId("town_ES5"));
+            Assert.IsFalse(PaleWidowsMath.IsStartingTownId(null));
+            Assert.IsFalse(PaleWidowsMath.IsStartingTownId(""));
+            Assert.AreEqual(2, PaleWidowsMath.StartingTownIds.Length, "The Pale Widows should keep exactly two starting towns.");
+        }
+
+        [Test]
+        public void PaleWidowsMath_IsStartingTownId_IsCaseInsensitive()
+        {
+            Assert.IsTrue(PaleWidowsMath.IsStartingTownId("TOWN_es4"));
+            Assert.IsTrue(PaleWidowsMath.IsStartingTownId("Town_Es6"));
+        }
+
+        [Test]
+        public void PaleWidowsMath_RollVanishDays_StaysWithinOneToFourWeeks()
+        {
+            for (double roll = 0.0; roll <= 1.0; roll += 0.05)
+            {
+                float days = PaleWidowsMath.RollVanishDays(roll);
+                Assert.GreaterOrEqual(days, PaleWidowsMath.MinVanishDays);
+                Assert.LessOrEqual(days, PaleWidowsMath.MaxVanishDays);
+            }
+            Assert.AreEqual(PaleWidowsMath.MinVanishDays, PaleWidowsMath.RollVanishDays(0.0));
+            Assert.AreEqual(PaleWidowsMath.MaxVanishDays, PaleWidowsMath.RollVanishDays(1.0));
+        }
+
+        [Test]
+        public void PaleWidowsMath_RollLordSacrificeImmunityDays_StaysWithinBounds()
+        {
+            for (double roll = 0.0; roll <= 1.0; roll += 0.05)
+            {
+                float days = PaleWidowsMath.RollLordSacrificeImmunityDays(roll);
+                Assert.GreaterOrEqual(days, PaleWidowsMath.MinLordSacrificeImmunityDays);
+                Assert.LessOrEqual(days, PaleWidowsMath.MaxLordSacrificeImmunityDays);
+            }
+        }
+
+        [Test]
+        public void PaleWidowsMath_ExtendIgnoreExpiry_StacksInsteadOfOverwriting()
+        {
+            // No active window yet (currentExpiry == today): a 2-day grant simply
+            // starts a fresh 2-day window from today.
+            float extended = PaleWidowsMath.ExtendIgnoreExpiry(today: 100f, currentExpiryDay: 100f, grantDays: 2f);
+            Assert.AreEqual(102f, extended);
+
+            // An active window already runs to day 105: a further 3-day grant
+            // extends it to day 108, not day 103 (today + grant) and not merely
+            // day 105 (unchanged) — it STACKS on top of the remaining time.
+            float stacked = PaleWidowsMath.ExtendIgnoreExpiry(today: 100f, currentExpiryDay: 105f, grantDays: 3f);
+            Assert.AreEqual(108f, stacked);
+        }
+
+        [Test]
+        public void PaleWidowsMath_ExtendIgnoreExpiry_IgnoresAnExpiredWindow()
+        {
+            // The old window already lapsed (expiry before today) — the new grant
+            // should count from today, not from the stale expiry day.
+            float extended = PaleWidowsMath.ExtendIgnoreExpiry(today: 100f, currentExpiryDay: 40f, grantDays: 5f);
+            Assert.AreEqual(105f, extended);
+        }
+
+        [Test]
+        public void PaleWidowsMath_IsIgnoreActive_ComparesAgainstExpiry()
+        {
+            Assert.IsTrue(PaleWidowsMath.IsIgnoreActive(today: 100f, expiryDay: 101f));
+            Assert.IsFalse(PaleWidowsMath.IsIgnoreActive(today: 101f, expiryDay: 101f));
+            Assert.IsFalse(PaleWidowsMath.IsIgnoreActive(today: 102f, expiryDay: 101f));
+        }
+
+        [Test]
+        public void PaleWidowsMath_RollSelfSacrifice_RespectsChanceBoundary()
+        {
+            Assert.IsTrue(PaleWidowsMath.RollSelfSacrifice(0.0));
+            Assert.IsFalse(PaleWidowsMath.RollSelfSacrifice(PaleWidowsMath.SelfSacrificeChance));
+            Assert.IsFalse(PaleWidowsMath.RollSelfSacrifice(0.999));
+        }
+
+        [Test]
+        public void PaleWidowsMath_SelfSacrificeChance_IsSmall()
+        {
+            Assert.Greater(PaleWidowsMath.SelfSacrificeChance, 0.0);
+            Assert.Less(PaleWidowsMath.SelfSacrificeChance, 0.2, "The self-sacrifice roll should read as a small chance, not a coin flip.");
+        }
+
+        [Test]
+        public void PaleWidowsMath_InfluenceAfterDailyDrain_DrainsOnlyAMaleMember()
+        {
+            Assert.AreEqual(0f, PaleWidowsMath.InfluenceAfterDailyDrain(isMale: true, isMember: true, currentInfluence: 250f));
+            Assert.AreEqual(250f, PaleWidowsMath.InfluenceAfterDailyDrain(isMale: false, isMember: true, currentInfluence: 250f));
+            Assert.AreEqual(250f, PaleWidowsMath.InfluenceAfterDailyDrain(isMale: true, isMember: false, currentInfluence: 250f));
+            Assert.AreEqual(250f, PaleWidowsMath.InfluenceAfterDailyDrain(isMale: false, isMember: false, currentInfluence: 250f));
+        }
+
+        [Test]
+        public void PaleWidowsMath_DemonTroopsGrantedPerMaleSacrifice_IsPositive()
+        {
+            Assert.Greater(PaleWidowsMath.DemonTroopsGrantedPerMaleSacrifice, 0);
+        }
     }
 }
