@@ -61,6 +61,7 @@ namespace AshAndEmber
             try { AddProsperityRumor(buckets); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { AddCaptiveRumor(buckets); }    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { AddSeasonRumor(buckets); }     catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { AddApocalypseRumor(buckets); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
             // Shuffle what world-state produced
             for (int i = buckets.Count - 1; i > 0; i--)
@@ -255,6 +256,37 @@ namespace AshAndEmber
                 }
             }
             catch { return; }
+            buckets.Add(rumor);
+        }
+
+        // Phase 11, requirement 33 stage 1 — from day 300, the common room
+        // starts noticing the demons are behaving strangely. Escalates in tone
+        // once the Demon Lord has actually appeared (stage 3).
+        private static void AddApocalypseRumor(List<string> buckets)
+        {
+            if (!ApocalypseCampaignBehavior.RumoursActive) return;
+
+            string rumor;
+            if (DemonLordSystem.HasAppeared && !DemonLordSystem.VictoryResolved && !DemonLordSystem.DefeatResolved)
+            {
+                string[] lordTemplates = {
+                    "Every demon band on the roads moves the same direction now. North, south, doesn't matter — they all end up walking toward the same nothing.",
+                    "A trapper swears he saw them kneel. Actually kneel, in the mud, all facing one way, before they moved on. Nobody believed him until the second man said the same thing.",
+                    "There's a name for it now, whatever's leading them. People say it quiet, like saying it loud calls it.",
+                    "The garrisons that used to fight the demon bands don't anymore. They just watch them pass. Word is there's too many to fight, and they're not stopping to raid — they're marching somewhere.",
+                };
+                rumor = lordTemplates[_rng.Next(lordTemplates.Length)];
+            }
+            else
+            {
+                string[] templates = {
+                    "The demon bands aren't raiding like they used to. They're circling. Counting walls, maybe. Nobody knows what for.",
+                    "A hunter says he watched a pack of them stand at a tree line for an hour, not moving, like they were waiting for a signal that never came.",
+                    "Something's changed out there. The old-timers say the dark used to be mindless. It isn't anymore. Or it's learning to look like it isn't.",
+                    "Three villages report the same thing this month: demons passing by without attacking, moving with purpose toward the same horizon.",
+                };
+                rumor = templates[_rng.Next(templates.Length)];
+            }
             buckets.Add(rumor);
         }
 
