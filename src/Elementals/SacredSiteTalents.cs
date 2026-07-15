@@ -119,7 +119,7 @@ namespace AshAndEmber
             {
                 case SacredSiteTalentId.DeeperBinding: return "Deeper Binding — you have learned to listen properly; a sacred-site binding takes more readily (+20% success chance).";
                 case SacredSiteTalentId.SparingRite:   return "Sparing Rite — a failed binding is not wasted; the Iron Ore and Charcoal are returned to you.";
-                default:                                return "Kindred Ease — the old debt sits lighter on you; every Kindled you have bound costs half its usual upkeep.";
+                default:                                return "Kindred Ease — the old debt sits lighter on you; every Awakened you have bound costs half its usual upkeep.";
             }
         }
 

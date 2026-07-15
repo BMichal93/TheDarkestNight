@@ -108,7 +108,7 @@ namespace AshAndEmber
                 var party = new ElementalWildsBehavior().SpawnBand(
                     main.GetPosition2D + new Vec2(0.15f, 0f), kind, roam: false, announce: false);
                 Announce(party == null
-                    ? "[DEBUG] Kindled spawn FAILED — no bandit clan/hideout/troop available."
+                    ? "[DEBUG] Awakened spawn FAILED — no bandit clan/hideout/troop available."
                     : $"[DEBUG] {ElementUltimateMath.ElementalName(kind)} band spawned beside you — engage it.");
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -195,7 +195,7 @@ namespace AshAndEmber
             string line;
             switch (kind)
             {
-                case ElementalKind.Flame: line = "Word comes of a fire that walks — the Kindled stir in the wilds."; break;
+                case ElementalKind.Flame: line = "Word comes of a fire that walks — the Awakened stir in the wilds."; break;
                 case ElementalKind.Frost: line = "Herdsmen speak of shapes of ice moving in the northern snows."; break;
                 case ElementalKind.Sand:  line = "The deep desert breeds a walking dune — the Sand-Born rise."; break;
                 case ElementalKind.Tide:  line = "The old wetlands churn — the Risen Tide takes a shape that hunts."; break;

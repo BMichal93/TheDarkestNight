@@ -25,7 +25,7 @@ namespace AshAndEmber
             try
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "Dark forces gather in the deep desert. Word reaches you that Duneborn has found " +
+                    "Dark forces gather in the deep desert. Word reaches you that the Tower has found " +
                     "something ancient down in the Sands — and means to bring it in."));
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }

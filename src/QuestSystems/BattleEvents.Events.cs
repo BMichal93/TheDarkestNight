@@ -301,7 +301,7 @@ namespace AshAndEmber
                     try { ElementalFactory.SpawnElemental(kind, target, pos, charge: true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 }
                 try { MBInformationManager.AddQuickInformation(new TextObject(
-                    "The Kindling — the ground itself wakes and takes a side.")); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    "The Waking — the ground itself wakes and takes a side.")); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }

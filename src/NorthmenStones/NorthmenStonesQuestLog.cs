@@ -39,7 +39,7 @@ namespace AshAndEmber
                 log.AddLog(new TextObject(
                     "The Ruler of the Northmen has told you the seers' plan: raise standing stones at " +
                     "Varcheg and bind them with Fire, so nothing Ashen crosses there living again. Iron, " +
-                    "hardwood, tools, silver, coin for the masons — and Kindled, bound and given up, one " +
+                    "hardwood, tools, silver, coin for the masons — and Awakened, bound and given up, one " +
                     "of every kind the Forest Clans' sacred sites can wake. The Forest Clans must stand " +
                     "truly allied with the Northmen when the working closes, and Varcheg must still be " +
                     "theirs. You have agreed to see it done."));

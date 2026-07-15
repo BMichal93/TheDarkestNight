@@ -33,7 +33,7 @@ namespace AshAndEmber
                     "and bound with Fire — any Ashen thing that tries to cross there will burn before it " +
                     "sets foot on living ground. To raise them we need iron, hardwood, tools, silver, coin " +
                     "enough to keep the masons fed for years, and — this is the seers' price, not mine — " +
-                    "Kindled bound and given up, one of every kind the Forest Clans' sacred sites can wake. " +
+                    "Awakened bound and given up, one of every kind the Forest Clans' sacred sites can wake. " +
                     "We will need the Forest Clans standing with us in this, truly with us, not merely at " +
                     "peace. And Varcheg must be ours when the working closes, or it closes on nothing.",
                     CondCanAsk, null, DialoguePriority);

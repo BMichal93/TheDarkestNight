@@ -55,8 +55,8 @@ namespace AshAndEmber
                     {
                         bool ownedByDuneborn = AltarIsDunebornOwned();
                         string status = ownedByDuneborn
-                            ? "The Dark Altar still answers to Duneborn."
-                            : "The altar has fallen out of Duneborn's hands. Nothing offered here reaches it now.";
+                            ? "The Dark Altar still answers to the Tower."
+                            : "The altar has fallen out of the Tower's hands. Nothing offered here reaches it now.";
                         MBTextManager.SetTextVariable("GRAWK_ALTAR_HEADER",
                             "Something vast and patient waits on the other side of this stone. It does not need to be fed "
                           + "quickly — only fully.\n\n"
@@ -78,8 +78,8 @@ namespace AshAndEmber
                             if (_phase != PhaseActive) return false;
                             int held = PlayerPrisonerCount();
                             bool canGive = AltarIsDunebornOwned() && IsPlayerOnDunebornPath() && held > 0;
-                            string note = !AltarIsDunebornOwned() ? "  [the altar is not Duneborn's to use]"
-                                        : !IsPlayerOnDunebornPath() ? "  [only Duneborn's own may offer here]"
+                            string note = !AltarIsDunebornOwned() ? "  [the altar is not the Tower's to use]"
+                                        : !IsPlayerOnDunebornPath() ? "  [only the Tower's own may offer here]"
                                         : held <= 0 ? "  [you hold no prisoners]"
                                         : "";
                             MBTextManager.SetTextVariable("GRAWK_ALTAR_CONTRIBUTE_TEXT",

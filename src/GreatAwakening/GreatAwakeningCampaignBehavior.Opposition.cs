@@ -35,7 +35,7 @@ namespace AshAndEmber
             try
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "Duneborn's kingdom is destroyed. Whatever waited beyond the Sands waits still — the Great " +
+                    "The Tower's kingdom is destroyed. Whatever waited beyond the Sands waits still — the Great " +
                     "Awakening has failed. The Dark Altar stands cold and unfinished."));
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -60,7 +60,7 @@ namespace AshAndEmber
                 {
                     MBInformationManager.AddQuickInformation(new TextObject(
                         "Word of the Dark Altar's count has spread beyond hiding. Thousands of the taken have " +
-                        "vanished into Duneborn's south, and the courts of Calradia begin to speak of war."));
+                        "vanished into the Tower's south, and the courts of Calradia begin to speak of war."));
                 }
                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             }

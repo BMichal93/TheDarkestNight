@@ -79,7 +79,7 @@ namespace AshAndEmber
 
                         MBTextManager.SetTextVariable("SACRED_SITE_MAIN_TEXT",
                             "The standing stones lean at angles no mason chose. Between them the old grove keeps its own "
-                          + "weather — cold where the sun should reach, warm where the frost should bite. Binding a Kindled "
+                          + "weather — cold where the sun should reach, warm where the frost should bite. Binding an Awakened "
                           + "here costs gold and a smith's steady hand.\n\n"
                           + $"Binding chance: {(int)(odds * 100)} % (Smithing {smithing})."
                           + blockNote + talentNote);

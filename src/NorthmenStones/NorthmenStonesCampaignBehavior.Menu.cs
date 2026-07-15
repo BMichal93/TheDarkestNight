@@ -78,7 +78,7 @@ namespace AshAndEmber
                             $"Tools: {_tools:N0} / {NorthmenStonesMath.ToolsTarget:N0}\n" +
                             $"Silver: {_silver:N0} / {NorthmenStonesMath.SilverTarget:N0}\n" +
                             $"Denars: {_denars:N0} / {NorthmenStonesMath.DenarsTarget:N0}\n" +
-                            $"Bound Kindled given: {KindledTotal()} / {NorthmenStonesMath.KindledTotalTarget}\n\n" +
+                            $"Bound Awakened given: {KindledTotal()} / {NorthmenStonesMath.KindledTotalTarget}\n\n" +
                             ownerNote);
                     }
                     catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }

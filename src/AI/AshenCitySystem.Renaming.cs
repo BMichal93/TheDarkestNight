@@ -660,8 +660,8 @@ namespace AshAndEmber
         private static readonly string[] _forestClansFeats =
         {
             "Kinship of Root and Stone — the old grove knows its own kin. (Sacred-site binding costs 15% less and succeeds 10% more often for the clan-born)",
-            "The Wilds Remember — the wandering Kindled's magic answers a Forest Clans hand only half as fiercely. (Wild-band Kindled deal half damage to a Forest Clans player)",
-            "Debt of the Deep Wood — the old bargain still asks its price. (Each bound Kindled costs 5 gold a day in upkeep)",
+            "The Wilds Remember — the wandering Awakened's magic answers a Forest Clans hand only half as fiercely. (Wild-band Awakened deal half damage to a Forest Clans player)",
+            "Debt of the Deep Wood — the old bargain still asks its price. (Each bound Awakened costs 5 gold a day in upkeep)",
         };
         private static bool _forestClansFeatsRelabeled;
 

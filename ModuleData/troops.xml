@@ -658,7 +658,7 @@
        ═══════════════════════════════════════════════════════════════════ -->
 
   <NPCCharacter id="sacred_kindled_stone"
-                name="{=sacred_kindled_stone_name}Kindled of Stone"
+                name="{=sacred_kindled_stone_name}Awakened of Stone"
                 age="30"
                 level="30"
                 culture="Culture.looters"
@@ -683,7 +683,7 @@
   </NPCCharacter>
 
   <NPCCharacter id="sacred_kindled_frost"
-                name="{=sacred_kindled_frost_name}Kindled of Frost"
+                name="{=sacred_kindled_frost_name}Awakened of Frost"
                 age="30"
                 level="30"
                 culture="Culture.looters"
@@ -708,7 +708,7 @@
   </NPCCharacter>
 
   <NPCCharacter id="sacred_kindled_sand"
-                name="{=sacred_kindled_sand_name}Kindled of Sand"
+                name="{=sacred_kindled_sand_name}Awakened of Sand"
                 age="30"
                 level="30"
                 culture="Culture.looters"
@@ -733,7 +733,7 @@
   </NPCCharacter>
 
   <NPCCharacter id="sacred_kindled_flame"
-                name="{=sacred_kindled_flame_name}Kindled of Flame"
+                name="{=sacred_kindled_flame_name}Awakened of Flame"
                 age="30"
                 level="30"
                 culture="Culture.looters"
@@ -758,7 +758,7 @@
   </NPCCharacter>
 
   <NPCCharacter id="sacred_kindled_tide"
-                name="{=sacred_kindled_tide_name}Kindled of the Tide"
+                name="{=sacred_kindled_tide_name}Awakened of the Tide"
                 age="30"
                 level="30"
                 culture="Culture.looters"
@@ -989,7 +989,7 @@
   </NPCCharacter>
 
   <NPCCharacter id="sacred_kindled_gale"
-                name="{=sacred_kindled_gale_name}Kindled of the Gale"
+                name="{=sacred_kindled_gale_name}Awakened of the Gale"
                 age="30"
                 level="30"
                 culture="Culture.looters"

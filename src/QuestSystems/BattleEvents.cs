@@ -304,7 +304,7 @@ namespace AshAndEmber
             // join one side, shaped by the ground they rose from.
             if (Rolled("Kindling", ChanceKindling))
             {
-                names.Add("The Kindling");
+                names.Add("The Waking");
                 AddOneShot("The Kindling", OneShotDelay + 2f, FireKindling);
             }
 

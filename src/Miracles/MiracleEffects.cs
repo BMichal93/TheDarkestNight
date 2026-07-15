@@ -647,7 +647,7 @@ namespace AshAndEmber
             try { SpellEffects.RecordMagicCast(pos); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
             if (announce)
-                Log(caster, $"calls the Undivided Flame — {ashenBurned} Ashen seared, {kindledBurned} Kindled unmade, " +
+                Log(caster, $"calls the Undivided Flame — {ashenBurned} Ashen seared, {kindledBurned} Awakened unmade, " +
                             $"{othersScorched} others burned, {alliesMended} allies mended.");
         }
 

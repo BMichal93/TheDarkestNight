@@ -109,7 +109,7 @@ namespace AshAndEmber
 
                     "The seer meets you at the half-raised ring of stones, and does not waste words on it.\n\n" +
                     "\"Every stone is set. Every stone is fed. What is left is the spark that makes iron and " +
-                    "silver and bound Kindled into a working instead of a heap of dead things. Fire, from a " +
+                    "silver and bound Awakened into a working instead of a heap of dead things. Fire, from a " +
                     "living mage, given whole and given knowing. We would give one of our own if it would " +
                     "hold — it will not. It has to be a fire that already answers to yours, bound to the same " +
                     "working. It has to be you, or blood of yours.\"\n\n" +
@@ -205,7 +205,7 @@ namespace AshAndEmber
                     "The Working Fails",
 
                     "You give the seer your answer, and watch the fire go out of her eyes.\n\n" +
-                    "\"Then it was all for nothing. The iron, the silver, the Kindled we bled to bind and you " +
+                    "\"Then it was all for nothing. The iron, the silver, the Awakened we bled to bind and you " +
                     "led here yourself — spent on a ring of dead stone.\"\n\n" +
                     "Word travels north faster than you do. You will not be welcome in a Northmen hall again — " +
                     "not as a guest, and not as anything safer than a hunted thing. They will not forget the " +
@@ -227,7 +227,7 @@ namespace AshAndEmber
 
                     "There is no ceremony to it beyond what the stones themselves demand.\n\n" +
                     "You feel your own fire drawn out of you and into the ring — not torn, given — and for a " +
-                    "moment you understand exactly what the seers meant: iron and silver and bound Kindled " +
+                    "moment you understand exactly what the seers meant: iron and silver and bound Awakened " +
                     "were never going to be enough on their own. They needed something that chose to burn.\n\n" +
                     "The Bonefire Circle stands at Varcheg. You will not see what it does.",
 

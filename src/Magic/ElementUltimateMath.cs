@@ -170,7 +170,7 @@ namespace AshAndEmber
             {
                 case ElementalKind.Frost: return "Frost-Born";
                 case ElementalKind.Sand:  return "Sand-Born";
-                case ElementalKind.Flame: return "the Kindled";
+                case ElementalKind.Flame: return "Flame-Born";
                 case ElementalKind.Tide:  return "the Risen Tide";
                 case ElementalKind.Gale:  return "the Gathered Storm";
                 case ElementalKind.Void:  return "The Great Other";

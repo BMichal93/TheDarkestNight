@@ -80,17 +80,17 @@ namespace AshAndEmber
 
                 bool duneborn = GreatAwakeningCampaignBehavior.IsPlayerOnDunebornPath();
                 log.AddLog(new TextObject(duneborn
-                    ? "You have heard it from the Sheikh's own mouth: Duneborn has reached beyond the Sands and " +
+                    ? "You have heard it from the Archmagister's own mouth: the Tower has reached beyond the Sands and " +
                       "touched something that answered. Ten thousand lives, poured out at the Dark Altar, and it " +
                       "will stand on Calradian soil and rule it. You mean to see it done."
-                    : "You have heard it from the Sheikh's own mouth: Duneborn means to drag something ancient and " +
+                    : "You have heard it from the Archmagister's own mouth: the Tower means to drag something ancient and " +
                       "dark out of the deep desert on ten thousand sacrificed lives. If it arrives, nothing that " +
-                      "follows will be undone. Duneborn's kingdom must fall before the count is paid in full."));
+                      "follows will be undone. The Tower's kingdom must fall before the count is paid in full."));
 
                 log._objProgress = log.AddDiscreteLog(
                     new TextObject(duneborn
                         ? "Feed the Dark Altar until the Great Summoning is complete."
-                        : "Destroy Duneborn's kingdom before the Great Summoning completes."),
+                        : "Destroy the Tower's kingdom before the Great Summoning completes."),
                     new TextObject("Prisoners Sacrificed"), 0, GreatAwakeningMath.PrisonerTarget, null, false);
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -112,7 +112,7 @@ namespace AshAndEmber
             {
                 _questLog?.AddLog(new TextObject(
                     "The count is paid. The Dark Altar drinks the last of it, and something vast steps out of the " +
-                    "space behind the stone — The Great Other has come, and it stands at Duneborn's side."));
+                    "space behind the stone — The Great Other has come, and it stands at the Tower's side."));
                 _questLog?.CompleteQuestWithSuccess();
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -124,7 +124,7 @@ namespace AshAndEmber
             {
                 _questLog?.AddLog(new TextObject(
                     "The count is paid — but whatever answered the Dark Altar answers to no one. The Great Other " +
-                    "has come, and it belongs to nothing and no one, least of all Duneborn."));
+                    "has come, and it belongs to nothing and no one, least of all the Tower."));
                 _questLog?.CompleteQuestWithFail();
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -135,7 +135,7 @@ namespace AshAndEmber
             try
             {
                 _questLog?.AddLog(new TextObject(
-                    "Duneborn's kingdom is broken and gone. Whatever waited beyond the Sands waits still — the " +
+                    "The Tower's kingdom is broken and gone. Whatever waited beyond the Sands waits still — the " +
                     "count was never paid, and never will be."));
                 _questLog?.CompleteQuestWithSuccess();
             }

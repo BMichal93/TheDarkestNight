@@ -20,6 +20,12 @@ The night tide no longer wears a man's silhouette. Every lever here is built fro
 
 Save-safe throughout: no troop id, savedata key, or tier enum changed; the Monster entry and head-slot equipment are additive; all engine access degrades to a logged no-op under `ModLog` if another mod interferes.
 
+### The Kindled are now the Awakened
+The elemental beings' family name loses its fire-flavoured "Kindled" (a leftover of Ash and Ember's one-fire cosmology) for the element-neutral **Awakened** — the land's own magic, pooled too thick and too long, woken and walking. Every player-facing string follows: the six sacred-site troops ("Awakened of Stone/Frost/Sand/Flame/the Tide/the Gale"), the wilds rumour lines, sacred-site menus and talents, miracle text, the Forest questline's donation lines, and the mid-battle event once called "The Kindling" — now **"The Waking"** ("the ground itself wakes and takes a side"). The flame-kind wild band is named "Flame-Born", matching its Frost-/Sand-/Stone-Born kin. All troop ids, save keys, and code identifiers are untouched — a mid-save Kindled loads as the same being under its new name.
+
+### The Great Awakening speaks for the Tower now
+The Great Other questline was still telling Ash and Ember's story — "Duneborn" (a faction name that no longer exists; the Aserai are the Tower) and its "Sheikh." The quest already keyed on the Aserai kingdom mechanically, so it always *worked*; now its words match: it is **the Tower** that has reached beyond the Sands and touched something that answered, its **Archmagister** from whose mouth you hear the terms, the Tower's kingdom that must fall — or be served — before the count of ten thousand is paid at the Dark Altar. No trigger, phase, or save key changed.
+
 ---
 
 ## v0.6.0 — The Night Retold

@@ -49,8 +49,8 @@ namespace AshAndEmber
                 {
                     MBInformationManager.AddQuickInformation(new TextObject(
                         "The count is paid. The Dark Altar drinks the last of it — and The Great Other steps out " +
-                        "of the space behind the stone, into Duneborn's service. Every kingdom in Calradia is now " +
-                        "Duneborn's enemy, and Duneborn means to keep it that way until the thing dies."));
+                        "of the space behind the stone, into the Tower's service. Every kingdom in Calradia is now " +
+                        "the Tower's enemy, and the Tower means to keep it that way until the thing dies."));
                 }
                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { GreatAwakeningQuestLog.CompleteSummoningControlled(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -61,7 +61,7 @@ namespace AshAndEmber
                 {
                     MBInformationManager.AddQuickInformation(new TextObject(
                         "The count is paid — but whatever answered the Dark Altar answers to no one. The Great " +
-                        "Other has come, and it belongs to nothing and no one, least of all Duneborn."));
+                        "Other has come, and it belongs to nothing and no one, least of all the Tower."));
                 }
                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { GreatAwakeningQuestLog.CompleteSummoningUncontrolled(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
