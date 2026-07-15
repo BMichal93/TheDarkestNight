@@ -2,6 +2,13 @@
 
 ---
 
+## v0.3.0 — The Keepsake
+
+### Character creation: The Keepsake
+- The vanilla Young Adulthood stage ("your biggest achievement was...") is replaced outright with "The Keepsake" — one question, asked of every culture with no gating: what did you carry out the door the night you left home? Six options: **My blade** (One Handed + Tactics, Vigor, Valor; a good one-handed sword), **Strange book** (Medicine + Roguery, Intelligence, Calculating; the Spellbook unlocked with two spoken formulas already known), **Trusted mount** (Riding + Scouting, Endurance; a war-capable horse and salted fish in its stores), **Pack of goods** (Trade + Charm, Social, Generosity; cheese, butter, fish, and a mule), **Family heirloom** (Steward + Crafting, Cunning; +20 clan renown and an inherited wand), and **Just pure luck** (Athletics + Charm + Leadership, Control, Valor; nothing — the driest of the six). Supersedes the previous "you studied the arcane arts" adulthood rework.
+
+---
+
 ## v0.2.0 — Legion Roads, the Old Blood, and a cleaner house
 
 ### Legion Expeditions
