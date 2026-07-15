@@ -15,7 +15,7 @@
 // │ Stage 0 (Idle)      initial approach — A / B / C / D                │
 // │ Stage 1 (PendingA2) 7d  → breakthrough offer — 1 / 2 / 3             │
 // │ Stage 2 (PendingA3) 3d  → first revenant, offer more — 1 / 2 / 3     │
-// │ Stage 3 (PendingA4) 7d  → 50/50: Ashen recruiting boon, or overrun   │
+// │ Stage 3 (PendingA4) 7d  → 50/50: cult recruiting boon, or overrun   │
 // │ Stage 4 (Ended)     terminal — no further triggers                  │
 // │ (parallel) B2 countdown, 7-30d → consequence for another lord        │
 // └─────────────────────────────────────────────────────────────────────┘

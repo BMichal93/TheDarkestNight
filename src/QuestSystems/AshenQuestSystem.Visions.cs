@@ -64,7 +64,7 @@ namespace AshAndEmber
             _phase = PhaseWasteland;
             try { _questLog?.LogWastelandUnlocked(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             InformationManager.DisplayMessage(new InformationMessage(
-                "The Wasteland Rite is revealed. Visit an Ashen-owned city to consecrate it.",
+                "The Wasteland Rite is revealed. Visit a demon-cult-owned city to consecrate it.",
                 new Color(0.4f, 0.5f, 0.85f)));
             InformationManager.DisplayMessage(new InformationMessage(
                 $"Consecrate {RequiredCapitals} capitals. Epicrotea awaits the rite first.",
@@ -205,7 +205,7 @@ namespace AshAndEmber
                     "The Wasteland Rite is here now. You can feel it waiting, " +
                     "the way you felt the cold waiting behind every flame you have ever snuffed.\n\n" +
                     "The second condition is met. " +
-                    "Visit any Ashen-owned city and look for the Wasteland Rite.",
+                    "Visit any cult-owned city and look for the Wasteland Rite.",
 
                     true, false, "Begin the consecrations.", "",
                     () => { }, () => { }
@@ -235,7 +235,7 @@ namespace AshAndEmber
                     "Every fire in this city goes out at once. The villages fall silent. " +
                     "The stone remembers nothing but cold.\n\n" +
                     "What remains will serve the grey march permanently. " +
-                    "An altar will rise here, as it does in all true Ashen cities. " +
+                    "An altar will rise here, as it does in all true cult cities. " +
                     "The people who remain will serve, or they will not remain." +
                     capitalNote,
 

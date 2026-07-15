@@ -223,8 +223,8 @@ namespace AshAndEmber
 
         // ═══════════════════════════════════════════════════════════════════
         // STAGE 3 — THE BARGAIN COMES DUE (fires 7 days after the second consent)
-        // 50/50: permanent Ashen recruiting in the scholar's settlement, or the
-        // settlement is besieged by three large Ashen Spawn warbands.
+        // 50/50: permanent cult recruiting in the scholar's settlement, or the
+        // settlement is besieged by three large demons warbands.
         // ═══════════════════════════════════════════════════════════════════
         private static void FireAshenOutcome()
         {
@@ -244,7 +244,7 @@ namespace AshAndEmber
                         $"and finished. Beneath {(s != null ? s.Name.ToString() : "the keep")} he has raised something " +
                         "that does not need him anymore to keep working: a standing muster of the cold-fire dead, " +
                         "ready to be raised from captives brought to the yard whether or not you ever call yourself " +
-                        "Ashen. He calls it a gift. You are less sure the word is his to give.",
+                        "cult. He calls it a gift. You are less sure the word is his to give.",
                         true, false, "So be it.", "",
                         () => { _stage = StageEnded; }, null));
                 }
@@ -260,7 +260,7 @@ namespace AshAndEmber
                         "◆  The Cold Gets In",
                         $"Whatever {ScholarName} finished, it did not stay his to command. The cold comes up through " +
                         $"{(s != null ? s.Name.ToString() : "the keep")}'s own foundations faster than anyone can " +
-                        "name it, and by the time riders bring you word, there are already banners of Ashen Spawn " +
+                        "name it, and by the time riders bring you word, there are already banners of demons " +
                         "massing on the roads around it. The scholar is nowhere to be found. You suspect he was the " +
                         "least of what walked out.",
                         true, false, "Damn him.", "",

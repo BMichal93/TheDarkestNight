@@ -150,7 +150,7 @@ namespace AshAndEmber
             }
             _qbConversionTimer = QBConversionDelay;
 
-            // Convert the next settlement to Ashen
+            // Convert the next settlement to cult
             string sid = _qbSettlementQueue[0];
             _qbSettlementQueue.RemoveAt(0);
 

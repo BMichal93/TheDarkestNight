@@ -1,7 +1,7 @@
 // =============================================================================
 // ASH AND EMBER — DragonQuestSystem.Ending.cs
 // Three possible endings: Banish (campaign continues), Merge (player becomes
-// the Vessel), Sacrifice (Last Binding — player dies, Ashen crumble).
+// the Vessel), Sacrifice (Last Binding — player dies, cult crumble).
 // Also contains the Sacrifice ending sequence (TickEnding / ShowSacrificeDialog)
 // and the grimoire summary.
 // Partial of DragonQuestSystem (shared state lives in DragonQuestSystem.cs).
@@ -38,7 +38,7 @@ namespace AshAndEmber
                     "\"You have your own life to carry. That was always a valid answer.\"\n\n" +
                     "The pull is gone. The visions will not come again. Whatever you collected " +
                     "of him across the grey march — it dissolves, quietly, into nothing permanent.\n\n" +
-                    "The Ashen still move. The cycle continues. The grey will come again, " +
+                    "The demon-cult still move. The cycle continues. The grey will come again, " +
                     "in a generation or three — and whoever faces it will do so without knowing " +
                     "what you found, or what you chose.\n\n" +
                     "That is how the world works. You have known it for a long time.",
@@ -96,7 +96,7 @@ namespace AshAndEmber
                     "You are also him — and he was enormous, and old, and certain of very little " +
                     "except that he was right to try.\n\n" +
                     "You are not sure you disagree.\n\n" +
-                    "The Ashen still move. The cycle continues. " +
+                    "The demon-cult still move. The cycle continues. " +
                     "But something in the grey tide — something the lords carry without knowing it — " +
                     "recognises what you are now. And hesitates.",
 
@@ -119,9 +119,9 @@ namespace AshAndEmber
         }
 
         // ── Sacrifice ending sequence ─────────────────────────────────────────
-        // Phase 1: set worldBound, begin killing Ashen lords
-        // Phase 2: continue killing Ashen lords and mage lords
-        // Phase 3: kill mage companions, redistribute Ashen settlements
+        // Phase 1: set worldBound, begin killing cult lords
+        // Phase 2: continue killing cult lords and mage lords
+        // Phase 3: kill mage companions, redistribute cult settlements
         // Phase 4: finish redistribution, show final dialog
         private static void TickEnding()
         {
@@ -177,7 +177,7 @@ namespace AshAndEmber
                     "loses the thing it was moving toward. The cold finds nothing to call it forward.\n\n" +
                     "For a moment you are aware of everything: " +
                     "the march stopping, the grey retreating, " +
-                    "the Ashen lords falling where they stand — not in battle, " +
+                    "the demon-cult lords falling where they stand — not in battle, " +
                     "not with ceremony, simply the final release of things that were already done. " +
                     "Somewhere far away, the first new fire kindles in a hearth " +
                     "that will not know what it cost.\n\n" +
@@ -290,7 +290,7 @@ namespace AshAndEmber
                     return "";
 
                 case PhaseFirstRefused:
-                    return "\nA presence tried to reach you after the first Ashen lord fell. " +
+                    return "\nA presence tried to reach you after the first cult lord fell. " +
                            "You refused it once. It is still waiting.\n";
 
                 case PhasePermanentlyClosed:
@@ -335,7 +335,7 @@ namespace AshAndEmber
                 : "";
 
             return $"\nQuest: The Sundered Crown\n" +
-                   $"  {lords}   Ashen lords silenced (need {TargetLordsSlain})\n" +
+                   $"  {lords}   cult lords silenced (need {TargetLordsSlain})\n" +
                    $"  {ruin1}   The Sunken Scriptorium  (Dravend)\n" +
                    $"  {ruin2}   The Shattered Throne    (Epis)\n" +
                    $"  {ruin3}   The Dragon's Tomb       (Myzea)\n" +

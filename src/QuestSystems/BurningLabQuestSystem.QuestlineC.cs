@@ -225,7 +225,7 @@ namespace AshAndEmber
             // Lose honour
             ShiftHonour(-1);
 
-            // 5 % chance: become Ashen
+            // 5 % chance: become cult-bound
             bool turnedAshen = _rng.NextDouble() < 0.05;
             if (turnedAshen && !MageKnowledge.IsAshen)
             {

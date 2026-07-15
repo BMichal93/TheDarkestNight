@@ -20,14 +20,14 @@
 // QUESTLINE A — The Resurrection of Arenicos
 //   Phase 0: 3-day delay  → "Rituals begin in secret…"
 //   Phase 1: 10-day delay → Arenicos possesses a random male lord;
-//              secretly rolled: true emperor or false emperor (Ashen spirit)
+//              secretly rolled: true emperor or false emperor (cult spirit)
 //   Phase 2: 3-day delay  → each other empire faction may submit (one is
 //              guaranteed, the rest 50 %); a submitting empire's clans and
 //              fiefs are absorbed into Arenicos's empire
 //   Phase 3: 3-day delay  → Arenicos declares war on all non-imperial factions
 //   Phase 4: active monitoring:
 //              • detect Arenicos hero death → empire split (phase 5)
-//              • false emperor: 50-day timer → ally with Ashen (peace maintained daily)
+//              • false emperor: 50-day timer → ally with cult (peace maintained daily)
 //   Phase 5: empire split — distribute Arenicos empire fiefs to surviving empires
 //   Phase 9: complete
 //
@@ -35,7 +35,7 @@
 //   Phase 0: 3-day delay  → "The book has reached their scholars…"
 //   Phase 1: roll outcome (1/3 each):
 //              1 = discard   → narrative end
-//              2 = bad       → faction consumed; towns/castles flip to Ashen every 3 days
+//              2 = bad       → faction consumed; towns/castles flip to cult every 3 days
 //              3 = good      → weekly: each army gains 30 tier-4 troops;
 //                              20 % per week: triggers bad path instead
 //   Phase 9: complete
@@ -45,7 +45,7 @@
 //   Weekly prompt (7-day cooldown):
 //     A. Discard  → quest ends
 //     B. Perform rite → Renown +50, large XP gain, lose Honour,
-//                        5 % chance player becomes Ashen
+//                        5 % chance player becomes cult
 //
 // SAVE KEYS  (prefix BLQ_)
 //   BLQ_Phase, BLQ_Fired
@@ -150,16 +150,16 @@ namespace AshAndEmber
         public static bool IsArenicosHero(Hero h) =>
             h != null && _arenicosHeroId != null && h.StringId == _arenicosHeroId;
 
-        /// True if the current Arenicos is the genuine emperor spirit; false if it is an Ashen impostor.
+        /// True if the current Arenicos is the genuine emperor spirit; false if it is a demon-cult impostor.
         public static bool ArenicosIsTrue => _arenicosIsTrue;
 
-        /// True after the Ashen faction has merged into Arenicos's empire.
+        /// True after the demon-cult faction has merged into Arenicos's empire.
         public static bool AshenMergedWithArenicos => _qaAshenMerged;
 
         /// StringId of the empire kingdom that hosts Arenicos.
         public static string ArenicosEmpireId => _qaEmpireId;
 
-        /// True when a false-emperor Arenicos (Ashen impostor) is currently alive.
+        /// True when a false-emperor Arenicos (cult impostor) is currently alive.
         public static bool FalseEmperorIsAlive =>
             !_arenicosIsTrue
             && _arenicosHeroId != null
@@ -388,7 +388,7 @@ namespace AshAndEmber
                 : $"The ritual succeeded. Something old and cold passed through {heroName} and did not leave. He calls himself Arenicos. His eyes are wrong."));
 
         internal void LogMerger(string arName) =>
-            AddLog(new TextObject($"{arName}'s empire has revealed its allegiance. The Ashen march under the imperial banner. The cold and the throne are one."));
+            AddLog(new TextObject($"{arName}'s empire has revealed its allegiance. The demon-cult march under the imperial banner. The cold and the throne are one."));
 
         internal void LogWitheringVictory() =>
             AddLog(new TextObject("The empire holds nine in ten cities. The cold has won. The world will not recover from this."));
@@ -397,7 +397,7 @@ namespace AshAndEmber
             AddLog(new TextObject("The empire holds nine in ten cities. The withering is complete. The world the fires built is over."));
 
         internal void LogFalseEmperorDead() =>
-            AddLog(new TextObject("The false emperor is dead. The cold alliance shatters. The Ashen withdraw. What the empire does next is its own affair."));
+            AddLog(new TextObject("The false emperor is dead. The cold alliance shatters. The demon-cult withdraw. What the empire does next is its own affair."));
 
         internal void LogTrueEmperorDead() =>
             AddLog(new TextObject("The emperor is dead. The empire he briefly held together has fractured. The resurrection failed to hold."));

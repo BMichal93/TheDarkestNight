@@ -111,7 +111,7 @@ namespace AshAndEmber
 
         private static void TickQA()
         {
-            // Maintain false-emperor Ashen alliance (keep peace with Ashen daily)
+            // Maintain false-emperor cult alliance (keep peace with cult daily)
             if (_qaFalseAllianceActive)
                 MaintainFalseEmperorAlliance();
 
@@ -431,7 +431,7 @@ namespace AshAndEmber
                 {
                     string arName = arHero.Name?.ToString() ?? "The false emperor";
                     InformationManager.DisplayMessage(new InformationMessage(
-                        $"{arName} — the cold answers. {added} Ashen warriors emerge from shadow.",
+                        $"{arName} — the cold answers. {added} cult warriors emerge from shadow.",
                         new Color(0.4f, 0.5f, 0.8f)));
                 }
 
@@ -488,9 +488,9 @@ namespace AshAndEmber
                     $"{arName}'s empire holds everything worth holding. " +
                     "The last lords who refused to kneel are dying in keeps that will not survive the season.\n\n" +
                     "Children are born without warmth in their lungs. The rivers run slower. The land does not grow.\n\n" +
-                    "Calradia is the Ashen's now — vast, still, perfect. The world the fires built is ended. " +
+                    "Calradia is the demon-cult's now — vast, still, perfect. The world the fires built is ended. " +
                     "You are standing in what comes after.\n\n" +
-                    "(Ashen Victory)";
+                    "(cult Victory)";
                 button = "The cold has won.";
             }
             else
@@ -534,7 +534,7 @@ namespace AshAndEmber
             if (arenicosEmpire != null && !arenicosEmpire.IsEliminated
                 && ashen != null && !ashen.IsEliminated)
             {
-                // Abort if the empire has no ruling clan — an Ashen clan becoming ruler
+                // Abort if the empire has no ruling clan — a demon-cult clan becoming ruler
                 // would change the empire's visual identity and can trigger cascade ejections.
                 if (arenicosEmpire.RulingClan == null) return;
 
@@ -544,8 +544,8 @@ namespace AshAndEmber
 
             Notify(
                 $"The Burning Laboratory — {arName}'s empire has revealed its true allegiance. " +
-                "The grey banners lower. The cold warriors of the Ashen march under the imperial eagle now. " +
-                "The Ashen and the Empire are one. Whatever stands against them stands alone.");
+                "The grey banners lower. The cold warriors of the demon-cult march under the imperial eagle now. " +
+                "The demon-cult and the Empire are one. Whatever stands against them stands alone.");
             try { _qaQuestLog?.LogMerger(arName); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
@@ -553,7 +553,7 @@ namespace AshAndEmber
         {
             if (!_qaFalseAllianceActive) return;
 
-            // Re-anchor any Ashen clan that drifted out of Arenicos's empire.
+            // Re-anchor any cult clan that drifted out of Arenicos's empire.
             // Throttled to every 3 days — mirrors AshenCitySystem's _clanThrottle pattern
             // and avoids firing ChangeKingdomAction on every daily tick.
             if (_qaAnchorThrottle > 0) { _qaAnchorThrottle--; return; }
@@ -585,7 +585,7 @@ namespace AshAndEmber
 
             if (_qaAshenMerged)
             {
-                // Break the Ashen clans back out to the Ashen kingdom
+                // Break the demon-cult clans back out to the demon-cult kingdom
                 Kingdom ashen = Kingdom.All.FirstOrDefault(k => k.StringId == AshenKingdomId);
                 if (ashen != null)
                 {
@@ -595,21 +595,21 @@ namespace AshAndEmber
                         if (clan == Clan.PlayerClan) continue;            // never eject the player
                         if (clan == arenicosEmpire.RulingClan) continue;  // keep the empire's ruler so it endures
                         if (clan.Leader == null || !ElementLordRegistry.IsAshenLord(clan.Leader)) continue;
-                        // Atomic withdrawal back to the Ashen kingdom, fiefs intact
-                        // (MoveClanInto seeds the Ashen kingdom if it currently has no ruler).
+                        // Atomic withdrawal back to the demon-cult kingdom, fiefs intact
+                        // (MoveClanInto seeds the demon-cult kingdom if it currently has no ruler).
                         MoveClanInto(clan, ashen);
                     }
                 }
 
                 Notify(
                     $"The Burning Laboratory — with the false emperor gone, the cold alliance shatters. " +
-                    $"The Ashen withdraw from {empName} and vanish back into their own dark. " +
+                    $"The demon-cult withdraw from {empName} and vanish back into their own dark. " +
                     "The empire endures — diminished, uncertain, no longer the void's instrument.");
                 try { _qaQuestLog?.LogFalseEmperorDead(); _qaQuestLog?.CompleteSuccess(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 return;
             }
 
-            // Original path: true emperor died without Ashen merger.
+            // Original path: true emperor died without cult merger.
             // Scatter settlements to any surviving empire kingdoms.
             var targets = Kingdom.All
                 .Where(k => !k.IsEliminated

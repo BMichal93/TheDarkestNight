@@ -1,27 +1,38 @@
 // =============================================================================
 // ASH AND EMBER — DragonQuestSystem.cs
-// The Sundered Crown — campaign quest for non-Ashen players.
+// The Sundered Crown — legacy Ash and Ember campaign quest for non-cult players.
 //
-// Trigger  : Player defeats their first Ashen lord in battle (leading the
+// RETIRED for The Darkest Night (dormant, not deleted — see CLAUDE.md's note on
+// save compatibility). Its premise — a First Emperor's soul shattered into a
+// world-ending "cult cycle," broken by killing enough Ashen lords — is Ash and
+// Ember metaphysics that has no place in this world. The Darkest Night already
+// has its own world-ending endgame in the same narrative slot: the Demon Lord
+// who may rise past day 1000 (see Apocalypse/DemonLordSystem). Rather than
+// graft this quest onto that system, the trigger below is gated off entirely
+// (DormantForDarkestNight) so it can never start in a new game. Every method
+// and save key is left intact: a save that already has this quest in progress
+// from an earlier build continues to tick and resolve normally.
+//
+// Trigger  : Player defeats their first cult lord in battle (leading the
 //            winning side). A presence stirs — fragments of Aelisar Veth,
-//            the First Emperor, who shattered his soul into the Ashen cycle.
+//            the First Emperor, who shattered his soul into the demon-cult cycle.
 //            The player is prompted once, then once more. Two refusals close
 //            the quest permanently.
 //
 // Sequence
-//   1. First contact — urgency felt after the 1st Ashen lord kill
+//   1. First contact — urgency felt after the 1st cult lord kill
 //      (accept or refuse; refused once = re-prompted on 2nd kill; refused twice = closed)
-//   2. Visions — haunt the player as more Ashen lords are killed; grow clearer
+//   2. Visions — haunt the player as more cult lords are killed; grow clearer
 //      and more vocal with each kill (up to 7)
 //   3. Three parallel objectives:
-//      · Kill 7 Ashen lords (player leads winning party)
+//      · Kill 7 cult lords (player leads winning party)
 //      · Clear 3 predestined ruin sites (The Sunken Scriptorium, The Shattered
 //        Throne, The Dragon's Tomb)
 //      · Capture Tyal — the Heart of Winter
 //   4. Final choice (all objectives met):
 //      · Banish Aelisar — campaign continues unchanged
 //      · Become the Vessel — player gains fire magic; Aelisar's covenant bars aging
-//      · The Last Binding — spend everything to break the Ashen cycle (player dies)
+//      · The Last Binding — spend everything to break the demon-cult cycle (player dies)
 //
 // Save keys  (prefix LDQ2_ — distinct from the legacy v1 system's LDQ_ keys)
 //   LDQ2_Phase, LDQ2_LordsSlain, LDQ2_VisionPhase, LDQ2_ContactDay,
@@ -55,13 +66,17 @@ namespace AshAndEmber
         private const int PhaseAllDone           = 5;  // all objectives met; final choice pending
         private const int PhaseEndedBanish       = 6;  // player banished Aelisar; campaign normal
         private const int PhaseEndedMerge        = 7;  // player became the Vessel
-        private const int PhaseEndedSacrifice    = 8;  // Last Binding fired; player dies, Ashen break
-        private const int PhaseColdActive        = 9;  // player turned Ashen; cold conquest begins
+        private const int PhaseEndedSacrifice    = 8;  // Last Binding fired; player dies, cult break
+        private const int PhaseColdActive        = 9;  // player turned cult-bound; cold conquest begins
         private const int PhaseColdDone          = 10; // cold conquest complete
 
         // ── Tuning ────────────────────────────────────────────────────────────
         public const int TargetLordsSlain = 7;
         private const string AshenKingdomId = "ashen_kingdom";
+
+        // Gates the fresh-start trigger off for The Darkest Night — see the
+        // header comment above. A save already mid-quest is unaffected.
+        private const bool DormantForDarkestNight = true;
 
         // The three predestined ruins the player must clear
         internal static readonly string[] DestinedRuinVillages =
@@ -114,6 +129,7 @@ namespace AshAndEmber
             bool active       = _phase == PhaseActive || _phase == PhaseAllDone;
 
             if (!idle && !firstRefused && !active) return;
+            if (idle && DormantForDarkestNight) return; // never starts fresh in this world
             if (active && _lordsSlain >= TargetLordsSlain) return;
 
             try
@@ -143,7 +159,7 @@ namespace AshAndEmber
 
                 if (idle)
                 {
-                    // First Ashen lord — the presence stirs
+                    // First cult lord — the presence stirs
                     _phase      = PhaseFirstContact;
                     _contactDay = Today();
                     _lordsSlain = Math.Min(ashenKilled, 1);
@@ -293,7 +309,7 @@ namespace AshAndEmber
             }
         }
 
-        // ── Cold conversion (player turned Ashen) ─────────────────────────────
+        // ── Cold conversion (player turned cult-bound) ─────────────────────────────
         private static void TurnToCold()
         {
             if (_phase == PhaseColdActive) { TickColdQuest(); return; }
@@ -402,7 +418,7 @@ namespace AshAndEmber
         {
             AddLog(new TextObject(
                 "A presence touched you on the battlefield — ancient and urgent. " +
-                "It is Aelisar Veth, the First Emperor, who shattered his soul into the Ashen cycle as a lock. " +
+                "It is Aelisar Veth, the First Emperor, who shattered his soul into the demon-cult cycle as a lock. " +
                 "Seven of his lords carry his fragments. Three ruins hold his pact. " +
                 "The Heart of Winter holds his purpose. Gather all of it."));
             EnsureObjectives();
@@ -424,8 +440,8 @@ namespace AshAndEmber
             }
 
             _objLords = AddDiscreteLog(
-                new TextObject("Silence seven Ashen lords in battle — each one releases a shard of Aelisar."),
-                new TextObject("Ashen Lords Silenced"), 0, DragonQuestSystem.TargetLordsSlain, null, false);
+                new TextObject("Silence seven cult lords in battle — each one releases a shard of Aelisar."),
+                new TextObject("cult Lords Silenced"), 0, DragonQuestSystem.TargetLordsSlain, null, false);
             _objRuin1 = AddDiscreteLog(
                 new TextObject("Clear the Sunken Scriptorium (Dravend) — where the first covenant was written."),
                 new TextObject("Sunken Scriptorium"), 0, 1, null, false);
@@ -458,7 +474,7 @@ namespace AshAndEmber
 
         internal void LogLordSlain(int count) =>
             AddLog(new TextObject(
-                $"An Ashen lord silenced — a shard of Aelisar returns. [{count}/{DragonQuestSystem.TargetLordsSlain}]"));
+                $"A demon-cult lord silenced — a shard of Aelisar returns. [{count}/{DragonQuestSystem.TargetLordsSlain}]"));
 
         internal void LogHeartCaptured() =>
             AddLog(new TextObject(

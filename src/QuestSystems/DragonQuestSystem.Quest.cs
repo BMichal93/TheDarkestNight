@@ -18,7 +18,7 @@ namespace AshAndEmber
 {
     public static partial class DragonQuestSystem
     {
-        // ── First contact (after 1st Ashen lord kill) ─────────────────────────
+        // ── First contact (after 1st cult lord kill) ─────────────────────────
         private static void ShowFirstContact()
         {
             try
@@ -54,7 +54,7 @@ namespace AshAndEmber
                             "Quest added: The Sundered Crown.",
                             new Color(0.80f, 0.55f, 0.25f)));
                         InformationManager.DisplayMessage(new InformationMessage(
-                            $"Objectives: silence {TargetLordsSlain} Ashen lords  ·  " +
+                            $"Objectives: silence {TargetLordsSlain} cult lords  ·  " +
                             "clear 3 predestined ruins  ·  capture the Heart of Winter (Tyal).",
                             new Color(0.70f, 0.50f, 0.25f)));
                         // Queue the first vision immediately as the opening dream
@@ -77,7 +77,7 @@ namespace AshAndEmber
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
-        // ── Second contact (after 2nd Ashen kill, having refused once) ─────────
+        // ── Second contact (after 2nd cult kill, having refused once) ─────────
         private static void ShowSecondContact()
         {
             try
@@ -85,7 +85,7 @@ namespace AshAndEmber
                 InformationManager.ShowInquiry(new InquiryData(
                     "Again",
 
-                    "You have killed another Ashen lord, and the presence returns before the blood dries.\n\n" +
+                    "You have killed another cult lord, and the presence returns before the blood dries.\n\n" +
                     "Stronger this time. Less patient. The images are the same — fire, snow, " +
                     "strange faces, a crown coming apart — but there is something underneath them " +
                     "now. Urgency. The particular urgency of something that has been trying to " +
@@ -111,7 +111,7 @@ namespace AshAndEmber
                             "Quest added: The Sundered Crown.",
                             new Color(0.80f, 0.55f, 0.25f)));
                         InformationManager.DisplayMessage(new InformationMessage(
-                            $"Objectives: silence {TargetLordsSlain} Ashen lords  ·  " +
+                            $"Objectives: silence {TargetLordsSlain} cult lords  ·  " +
                             "clear 3 predestined ruins  ·  capture the Heart of Winter (Tyal).",
                             new Color(0.70f, 0.50f, 0.25f)));
                         if (MageKnowledge._deferredInquiry == null)
@@ -134,7 +134,7 @@ namespace AshAndEmber
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
-        // ── Visions (0–6, one per Ashen lord killed after accepting) ──────────
+        // ── Visions (0–6, one per cult lord killed after accepting) ──────────
         internal static void ShowVision(int idx)
         {
             try
@@ -279,7 +279,7 @@ namespace AshAndEmber
                 "I chose to shatter myself into the cycle rather than let the cycle shatter everything else. " +
                 "I thought it would hold forever. I was wrong about the 'forever' part.\"\n\n" +
                 "A pause. The face does not change.\n\n" +
-                "\"You are collecting what remains of me. Each Ashen lord you silence — " +
+                "\"You are collecting what remains of me. Each cult lord you silence — " +
                 "a shard returns. I did not know this was possible. Neither did they.\"",
 
                 true, true,
@@ -378,11 +378,11 @@ namespace AshAndEmber
                 string body =
                     "He tells you everything.\n\n" +
                     "The cycle is not natural. It is a mechanism — built, refined, maintained across " +
-                    "centuries by those who understood what the grey tide was. The Ashen do not march " +
+                    "centuries by those who understood what the grey tide was. The demon-cult do not march " +
                     "because they hunger. They march because something in the world calls them forward, " +
                     "the way water is called downhill.\n\n" +
                     "Aelisar built the call into himself. He became the mechanism. He scattered his soul " +
-                    "into the Ashen lords as seeds of what he was, hoping the warmth in each fragment " +
+                    "into the demon-cult lords as seeds of what he was, hoping the warmth in each fragment " +
                     "would slow the cold from within. It did not work the way he intended.\n\n" +
                     "\"What it did do,\" he says quietly, \"was leave pieces of me everywhere. " +
                     "Including in you, now.\"\n\n" +
@@ -418,8 +418,8 @@ namespace AshAndEmber
                         new InquiryElement("sacrifice",
                             "The Last Binding — we end it.",
                             null, true,
-                            "Spend Aelisar and your fire to break the Ashen cycle forever. " +
-                            "Your hero dies. The Ashen are broken. This ends your campaign."),
+                            "Spend Aelisar and your fire to break the demon-cult cycle forever. " +
+                            "Your hero dies. The demon-cult are broken. This ends your campaign."),
                     },
                     true, 1, 1,
                     "Decide.",

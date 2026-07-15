@@ -5,9 +5,9 @@
 // The Temple exists from the start of the campaign (Vlandia IS The Holy Temple),
 // and it watches the player:
 //   • A clean-handed player (whisper tier ≤ 1, clan tier ≥ 2) may be offered
-//     the COVENANT: a standing pact against the Ashen. While sworn, battle
+//     the COVENANT: a standing pact against the demon-cult. While sworn, battle
 //     casts cost 1 fewer day of life (the Temple's rites steady the fire),
-//     and every few weeks the Temple calls for aid in a strike on the Ashen —
+//     and every few weeks the Temple calls for aid in a strike on the demon-cult —
 //     answering builds renown and standing, refusing erodes it.
 //   • A whisper-heavy mage (tier 3, 75+ whispers) is declared ANATHEMA: the
 //     covenant is revoked if sworn, relations with the High Templar collapse,
@@ -91,7 +91,7 @@ namespace AshAndEmber
                 // Temple members need no covenant — their standing is the kingdom itself.
                 if (Hero.MainHero?.Clan?.Kingdom == temple) return;
 
-                // The Ashen are already at war with the Temple; nothing personal remains.
+                // The demon-cult are already at war with the Temple; nothing personal remains.
                 if (MageKnowledge.IsAshen)
                 {
                     if (_state == StateSworn) _state = StateClosed;
@@ -154,7 +154,7 @@ namespace AshAndEmber
                 $"An envoy of The Temple finds your camp — grey-robed, travel-worn, unarmed. "
                 + $"They carry a letter sealed by {leaderName}.\n\n"
                 + "\"We have watched you. Your fire burns clean, and the cold has not found purchase in it. "
-                + "The Temple offers covenant: stand with us against the Ashen when we call, and our rites "
+                + "The Temple offers covenant: stand with us against the demon-cult when we call, and our rites "
                 + "will steady your fire — every working in battle will cost you one day less of your life.\"\n\n"
                 + "The envoy waits. The covenant binds both ways: the Temple will call for aid, "
                 + "and an answer will be expected.",
@@ -195,14 +195,14 @@ namespace AshAndEmber
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "The Temple Calls",
-                $"A rider in grey reaches you with word from {leaderName}: the Temple strikes at the Ashen "
+                $"A rider in grey reaches you with word from {leaderName}: the Temple strikes at the demon-cult "
                 + "within the week, and the covenant asks your answer.\n\n"
                 + "\"Ride with us, send what you can spare, or stand aside — but know that the cold counts "
                 + "those who stand aside.\"",
                 new List<InquiryElement>
                 {
                     new InquiryElement("ride", "Ride with the strike", null, true,
-                        "Your veterans join the templar column. Ashen warbands are bloodied, your renown grows, and the Temple remembers."),
+                        "Your veterans join the templar column. cult warbands are bloodied, your renown grows, and the Temple remembers."),
                     new InquiryElement("coin", $"Send coin ({goldOffer} denars)", null, true,
                         "Fund the strike without leaving your road. A smaller mark of faith, but a mark."),
                     new InquiryElement("decline", "Stand aside this time", null, true,
@@ -225,7 +225,7 @@ namespace AshAndEmber
                                     try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, leader, 10, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                                 InformationManager.DisplayMessage(new InformationMessage(
                                     struck > 0
-                                        ? $"You ride with the templars. {struck} Ashen warband{(struck != 1 ? "s were" : " was")} caught on the road and bloodied. "
+                                        ? $"You ride with the templars. {struck} cult warband{(struck != 1 ? "s were" : " was")} caught on the road and bloodied. "
                                           + "+50 renown. The Temple remembers."
                                         : "You ride with the templars, but the grey columns melted away before the strike could land. "
                                           + "The intent is remembered all the same. +50 renown.",
@@ -270,7 +270,7 @@ namespace AshAndEmber
                 null, "", false), false, true);
         }
 
-        // Wounds soldiers in up to `maxParties` Ashen field parties. Returns parties struck.
+        // Wounds soldiers in up to `maxParties` cult field parties. Returns parties struck.
         private static int StrikeAshenParties(int maxParties, int minWounds, int maxWounds)
         {
             int struck = 0;

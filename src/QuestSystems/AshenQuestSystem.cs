@@ -1,8 +1,17 @@
 // =============================================================================
 // ASH AND EMBER — AshenQuestSystem.cs
-// The Hunger of the Void — Ashen player campaign goal.
+// The Hunger of the Void — legacy Ash and Ember "cult player" evil-ending goal.
 //
-// Trigger : Ashen player executes a prisoner lord for the first time.
+// RETIRED for The Darkest Night (dormant, not deleted — see CLAUDE.md's note on
+// save compatibility). There is no "player becomes the Ashen and consecrates
+// seven capitals to end the world" path in this game: the Ashen machinery
+// (MageKnowledge.IsAshen, ElementLordRegistry) survives as the mechanical
+// substrate for a demon-corrupted state, but the trigger below is gated off
+// entirely (DormantForDarkestNight) so this quest can never start in a new
+// game. Every method and save key is left intact for a save already mid-quest
+// from an earlier build.
+//
+// Trigger : cult player executes a prisoner lord for the first time.
 //
 // Sequence
 //   1. "The Silence After"   — two-part Hunger vision (accept or refuse).
@@ -76,6 +85,10 @@ namespace AshAndEmber
         public const int    RequiredCapitals  = 7;
         public const string EpicroteaMarker   = "Epicrotea";
 
+        // Gates the fresh-start trigger off for The Darkest Night — see the
+        // header comment above. A save already mid-quest is unaffected.
+        private const bool DormantForDarkestNight = true;
+
         public static readonly string[] TargetCapitalNames =
         {
             "Pravend",    // Vlandia
@@ -110,6 +123,7 @@ namespace AshAndEmber
         public static void OnHeroExecuted(Hero victim)
         {
             if (_phase != PhaseIdle) return;
+            if (DormantForDarkestNight) return; // never starts fresh in this world
             if (!MageKnowledge.IsAshen) return;
             if (victim == null || !victim.IsLord || victim.IsChild) return;
             _phase = PhaseHungerReady;
@@ -129,7 +143,7 @@ namespace AshAndEmber
             if (_worldFrozen) return;
             if (!MageKnowledge.IsAshen) return;
 
-            // Withering ending (Arenicos-Ashen territorial victory/defeat) already resolved the world.
+            // Withering ending (Arenicos-cult territorial victory/defeat) already resolved the world.
             if (BurningLabQuestSystem.WitheringFired) return;
 
             // Flush pending hunger visions
@@ -193,7 +207,7 @@ namespace AshAndEmber
 
         internal void LogWastelandUnlocked() =>
             AddLog(new TextObject(
-                "The Wasteland Rite is revealed. Visit any Ashen-controlled city to consecrate it. " +
+                "The Wasteland Rite is revealed. Visit any cult-controlled city to consecrate it. " +
                 $"Seven capitals must answer: {string.Join(", ", AshenQuestSystem.TargetCapitalNames)}."));
 
         internal void LogCapital(string name, int count) =>
