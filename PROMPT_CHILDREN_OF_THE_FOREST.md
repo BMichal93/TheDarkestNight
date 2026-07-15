@@ -89,7 +89,12 @@ Model this **exactly** on The Camp special case — same seams, second instance:
 - Make the equip **idempotent and self-healing** on the weekly sweep (another system — `LordGearWeathering` rewrites lord weapon slots — may replace it; re-assert, don't stack). Check `LordGearWeathering`'s slot loop and make sure it either skips wand items or your re-assert runs after it deterministically; state in a comment which one you chose and why.
 - Decide (and record) whether Tower/Chosen wand-holding lords get the same equip fix — see the latent-gap note above.
 
-**Young-adult lords:** at conversion/rebrand time, every lord of the Children's ruling clan is aged into the **18–25** window (never below the campaign's coming-of-age — verify `Campaign.Current.Models.AgeModel.HeroComesOfAge` or the equivalent seam so party leadership keeps working). Verify the hero-age API against the DLLs before use (`Hero.SetBirthDay` / `BirthDay` — `behaviour.md` rules apply; do not guess). Target age per hero is a pure deterministic function of the hero's `StringId` hash in `CityStateMath` (+ test) so a reload never re-rolls ages. Apply once and make it idempotent (a hero already inside the window is left alone).
+**Young-adult lords who never age:** at conversion/rebrand time, every lord of the Children's ruling clan is aged into the **16–18** window (Bannerlord's young-adult band — this is the intended look, faces just past coming-of-age, not middle-aged and not children; never set an age below the campaign's coming-of-age so party leadership and command keep working — verify `Campaign.Current.Models.AgeModel.HeroComesOfAge` or the equivalent seam). Verify the hero-age API against the DLLs before use (`Hero.SetBirthDay` / `Hero.BirthDay` — `behaviour.md` rules apply; do not guess). Target age per hero is a pure deterministic function of the hero's `StringId` hash in `CityStateMath` (+ test) so a reload never re-rolls ages. Apply once and make it idempotent (a hero already inside the window is left alone).
+
+**And they must not age at all** — the wood keeps them. A one-time set is not enough: campaign time marches on and vanilla aging would carry them out of the 16–18 window within a couple of in-game years. Hold each Forest lord's age fixed for the life of the campaign. Investigate the cheapest reliable seam and pick one, recording the choice and why in a comment + the commit message:
+  - **Re-assert (simplest, proven):** on the existing weekly sweep, if a Forest lord has drifted out of the young-adult window, push their `BirthDay` forward so their age lands back in it — a rolling anchor keyed off `CampaignTime.Now` and the deterministic target age, so it is idempotent and reload-safe (no new saved state; age is re-derived from live campaign time each week). This is the low-risk default and needs no unverified API.
+  - Only if you find and **verify** a clean per-hero "disable aging" flag in the DLLs (do not assume one exists — Bannerlord has no obvious public one) may you use it instead of the re-assert; otherwise use the re-assert.
+  The drift-check threshold and the re-anchor math live as pure functions in `CityStateMath` with `PureLogicTests` coverage (inputs: current campaign day, hero birth day, target age; no TaleWorlds types).
 
 ---
 
@@ -112,6 +117,6 @@ Model this **exactly** on The Camp special case — same seams, second instance:
 | 4 | Children of the Forest never at war (score discouragement + daily force-peace) | Phase 3, shared sanctuary predicate |
 | 5 | Pen Cannoc market: no weapons; permanent wandwright with the fullest case | Phase 4 |
 | 6 | ~85% of Forest lords carry **and actually wield** a wand (`BattleEquipment`), sidearm kept, self-healing vs. gear weathering | Phase 4 |
-| 7 | Forest lords are young adults (18–25, deterministic, idempotent, ≥ coming-of-age) | Phase 4, `CityStateMath` test |
+| 7 | Forest lords are young adults (16–18, deterministic, ≥ coming-of-age) **and never age** (held in the window for the whole campaign) | Phase 4, `CityStateMath` tests |
 | 8 | Ruin wand loot untouched; player charge economy untouched | no diff in those files |
 | 9 | Build + pure tests green; version bumped in 4 places; changelog written | Phase 5 |
