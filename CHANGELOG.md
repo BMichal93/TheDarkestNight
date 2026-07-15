@@ -2,6 +2,16 @@
 
 ---
 
+## v0.4.0 — The Camp
+
+### The Camp
+- Revyl no longer falls into the generic "Clan <X>" city-state that every other orphaned town gets when its kingdom scopes down to its named seats (Requirement 11/24's ordinary city-state path, `CityStates/CityStateSystem.cs`). It is now special-cased, matched by settlement name, into **The Camp**: a permanent one-city kingdom named accordingly, ruled under the informal title "First Among Equals," flying a fixed black-field/white-device banner on both the kingdom and its ruling clan (no random banner, no colour drift), and kept out of every war — an extended `AshenDiplomacyModel` discourages any declaration touching it and a daily-tick backstop force-makes-peace if one ever slips through. Unlike the ordinary "wretched free towns," The Camp keeps its original culture's troop tree rather than the deliberately weak bandit-culture swap, so it can hold a real garrison. A save that already holds Revyl's generic city-state is rebranded in place on session launch — idempotent, no new mandatory save keys.
+
+### Expeditions move to The Camp
+- The Antiquarian Charter (formerly a Legion/Western Empire town-menu offer) now runs out of The Camp instead, gated on `CityStateSystem.IsCampSettlement` rather than Legion ownership. It is now paid in gold rather than clan influence (`ExpeditionMath.GoldCost`, a flat multiplier of the existing influence-cost curve), with two of its team rosters reflavoured to the Camp's mercenary voice (Legion Veterans → Retired Sellswords, Imperial Scholars → Wandering Scholars). Success chance, duration, and reward math are unchanged; an in-flight expedition from a pre-v0.4.0 save resolves exactly as it would have — its cost was already spent at launch and is never re-read from state.
+
+---
+
 ## v0.3.0 — The Keepsake
 
 ### Character creation: The Keepsake
