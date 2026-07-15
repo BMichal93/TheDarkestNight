@@ -4609,6 +4609,36 @@ namespace AshAndEmber.Tests
             Assert.AreEqual("steppe_bandits", CityStateMath.BanditCultureIdFor("KHUZAIT"));
         }
 
+        // ── CityStateMath tests — The Camp (Revyl special-case) ─────────────────
+
+        [Test]
+        public void CityStateMath_IsRevylHomeSettlement_MatchesByNameCaseInsensitive()
+        {
+            Assert.IsTrue(CityStateMath.IsRevylHomeSettlement("Revyl"));
+            Assert.IsTrue(CityStateMath.IsRevylHomeSettlement("REVYL"));
+            Assert.IsTrue(CityStateMath.IsRevylHomeSettlement("revyl"));
+            Assert.IsFalse(CityStateMath.IsRevylHomeSettlement("Sibir"));
+            Assert.IsFalse(CityStateMath.IsRevylHomeSettlement(null));
+            Assert.IsFalse(CityStateMath.IsRevylHomeSettlement(""));
+        }
+
+        [Test]
+        public void CityStateMath_CampIdentity_IsFixedAndDistinctFromGenericCityStates()
+        {
+            Assert.AreEqual("The Camp", CityStateMath.CampKingdomName);
+            Assert.AreNotEqual(CityStateMath.CampKingdomName, CityStateMath.CityStateKingdomName("Revyl"),
+                "The Camp must never fall back to the generic \"Clan <X>\" naming convention.");
+            Assert.IsFalse(string.IsNullOrEmpty(CityStateMath.CampRulerTitle));
+            Assert.IsFalse(string.IsNullOrEmpty(CityStateMath.CampEncyclopediaText));
+        }
+
+        [Test]
+        public void CityStateMath_CampColors_AreBlackAndWhite()
+        {
+            Assert.AreEqual(0xFF141414u, CityStateMath.CampPrimaryColor);
+            Assert.AreEqual(0xFFF2F2F2u, CityStateMath.CampSecondaryColor);
+        }
+
         // ── RuinsMath tests (Phase 9 — the ruins) ───────────────────────────────
 
         [Test]

@@ -91,9 +91,69 @@ namespace AshAndEmber
             // city-state that already exists must never be allowed to drift.
             try { ReassertCityStateMembership(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
+            // The Camp's peace stays enforced every tick, same as the
+            // membership reassert above — a cheap, always-safe backstop
+            // regardless of what triggered a war against/from it.
+            try { ReassertCampPeace(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
             if (!CityStateMath.ShouldBeginConversion(_daysSinceStart)) return;
 
             try { ConvertOwnerlessTowns(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // ── Session launch: rebrand a pre-existing Revyl city-state ────────────
+        // A save made before this feature shipped may already hold Revyl's
+        // city-state under the generic "Clan <X>" identity (or, on a fresh
+        // conversion this same session, CreateCityState below already gave it
+        // the right identity and this is a harmless no-op). Idempotent, fully
+        // re-derived from live state — no new mandatory save keys.
+        public static void OnSessionLaunched()
+        {
+            try { RebrandCampIfPresent(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        private static void RebrandCampIfPresent()
+        {
+            foreach (Kingdom kingdom in Kingdom.All.ToList())
+            {
+                try
+                {
+                    if (kingdom == null || kingdom.IsEliminated) continue;
+                    if (!CityStateMath.IsCityStateKingdomId(kingdom.StringId)) continue;
+                    if (kingdom.Name?.ToString() == CityStateMath.CampKingdomName) continue; // already rebranded
+
+                    string homeName = kingdom.InitialHomeSettlement?.Name?.ToString();
+                    if (!CityStateMath.IsRevylHomeSettlement(homeName)) continue;
+
+                    ApplyCampIdentity(kingdom);
+                }
+                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            }
+        }
+
+        // Public so IsCampKingdom callers (the diplomacy model) have a single
+        // source of truth for "is this The Camp" without duplicating the
+        // name/settlement match.
+        public static bool IsCampKingdom(IFaction faction)
+        {
+            try { return (faction as Kingdom)?.Name?.ToString() == CityStateMath.CampKingdomName; }
+            catch { return false; }
+        }
+
+        // The Camp stays out of every war, in or out — see AshenDiplomacyModel
+        // for the score-side discouragement; this is the belt-and-suspenders
+        // backstop that actually forces peace if a war ever slips through
+        // (a scheme, a quest trigger, a player declaration).
+        private static void ReassertCampPeace()
+        {
+            Kingdom camp = Kingdom.All.FirstOrDefault(k => !k.IsEliminated && IsCampKingdom(k));
+            if (camp == null) return;
+
+            foreach (IFaction enemy in camp.FactionsAtWarWith.ToList())
+            {
+                try { MakePeaceAction.Apply(camp, enemy); }
+                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            }
         }
 
         // ── Kingdom-join guard ───────────────────────────────────────────────────
@@ -181,25 +241,142 @@ namespace AshAndEmber
         {
             try
             {
-                string kingdomName = CityStateMath.CityStateKingdomName(clan.Name?.ToString());
+                bool isCamp = CityStateMath.IsRevylHomeSettlement(homeSettlement.Name?.ToString());
+
+                string kingdomName = isCamp
+                    ? CityStateMath.CampKingdomName
+                    : CityStateMath.CityStateKingdomName(clan.Name?.ToString());
                 var culture = clan.Culture ?? homeSettlement.Culture;
+
+                Banner banner = isCamp ? BuildCampBanner() : (clan.Banner ?? Banner.CreateRandomBanner());
+                uint color1 = isCamp ? CityStateMath.CampPrimaryColor : clan.Color;
+                uint color2 = isCamp ? CityStateMath.CampSecondaryColor : clan.Color2;
+                string description = isCamp
+                    ? CityStateMath.CampEncyclopediaText
+                    : "A free town that bends its knee to no crown.";
+                string rulerTitle = isCamp
+                    ? CityStateMath.CampRulerTitle
+                    : "Lord of " + homeSettlement.Name;
 
                 var kingdom = Kingdom.CreateKingdom(kingdomId);
                 kingdom.InitializeKingdom(
                     new TextObject(kingdomName),
                     new TextObject(kingdomName),
                     culture,
-                    clan.Banner ?? Banner.CreateRandomBanner(),
-                    clan.Color,
-                    clan.Color2,
+                    banner,
+                    color1,
+                    color2,
                     homeSettlement,
-                    new TextObject("A free town that bends its knee to no crown."),
+                    new TextObject(description),
                     new TextObject(kingdomName),
-                    new TextObject("Lord of " + homeSettlement.Name));
+                    new TextObject(rulerTitle));
 
                 ChangeKingdomAction.ApplyByCreateKingdom(clan, kingdom, false);
 
-                ApplyBanditCulture(homeSettlement);
+                if (isCamp)
+                {
+                    // Banner/colours must match on both the kingdom and its
+                    // ruling clan — no random clan banner sitting under The
+                    // Camp's black-and-white kingdom identity.
+                    try
+                    {
+                        clan.Banner = banner;
+                        clan.Color = color1;
+                        clan.Color2 = color2;
+                    }
+                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                }
+
+                // Requirement 24's bandit-culture reassignment (and its
+                // deliberately weak two-rung troop pool) is for the ordinary
+                // "wretched free towns" — Revyl reads as a mercenary hub, not
+                // a bandit camp, and skipping the swap keeps its original
+                // (Sturgia) troop tree so the town can actually field a
+                // non-trivial garrison of its own.
+                if (!isCamp) ApplyBanditCulture(homeSettlement);
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // Black field, white device — verified against TaleWorlds.Core.Banner:
+        // CreateOneColoredBannerWithOneIcon(uint backgroundColor, uint
+        // iconColor, int iconMeshId) builds a banner directly from raw ARGB
+        // colours plus a native banner_icons.xml icon id, no palette-index
+        // lookup involved.
+        private static Banner BuildCampBanner() =>
+            Banner.CreateOneColoredBannerWithOneIcon(
+                CityStateMath.CampPrimaryColor,
+                CityStateMath.CampSecondaryColor,
+                CityStateMath.CampBannerIconMeshId);
+
+        // Rewrites an already-existing city-state kingdom (and its ruling
+        // clan) into The Camp's identity. Used both by RebrandCampIfPresent
+        // (an older save that predates this feature) and is safe to call
+        // repeatedly — every field it touches is simply overwritten, nothing
+        // accumulates.
+        //
+        // Kingdom.Name/InformalName/EncyclopediaText/EncyclopediaRulerTitle/
+        // Color/Color2 are all PRIVATE-set auto-properties (verified against
+        // TaleWorlds.CampaignSystem.dll) — InitializeKingdom can set them at
+        // creation time but nothing public can rewrite them on a live Kingdom
+        // afterwards. Name/InformalName have a public Kingdom.ChangeKingdomName
+        // method; the rest fall back to the same cached-backing-field
+        // reflection pattern AshenCitySystem.Renaming.cs already uses for its
+        // own kingdom renames (SetKingdomField). Banner is the only one of
+        // these with a genuinely public setter.
+        private static void ApplyCampIdentity(Kingdom kingdom)
+        {
+            try
+            {
+                var banner = BuildCampBanner();
+                var nameText = new TextObject(CityStateMath.CampKingdomName);
+
+                try { kingdom.ChangeKingdomName(nameText, nameText); }
+                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
+                SetKingdomField(kingdom,
+                    new[] { "<EncyclopediaText>k__BackingField" },
+                    new TextObject(CityStateMath.CampEncyclopediaText));
+                SetKingdomField(kingdom,
+                    new[] { "<EncyclopediaRulerTitle>k__BackingField" },
+                    new TextObject(CityStateMath.CampRulerTitle));
+                SetKingdomColorField(kingdom, "<Color>k__BackingField", CityStateMath.CampPrimaryColor);
+                SetKingdomColorField(kingdom, "<Color2>k__BackingField", CityStateMath.CampSecondaryColor);
+
+                kingdom.Banner = banner;
+
+                Clan ruler = kingdom.RulingClan;
+                if (ruler != null)
+                {
+                    ruler.Banner = banner;
+                    ruler.Color = CityStateMath.CampPrimaryColor;
+                    ruler.Color2 = CityStateMath.CampSecondaryColor;
+                }
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        private static void SetKingdomField(Kingdom kingdom, string[] backingFieldCandidates, TextObject value)
+        {
+            foreach (var fieldName in backingFieldCandidates)
+            {
+                try
+                {
+                    var f = typeof(Kingdom).GetField(fieldName,
+                        System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    if (f != null) { f.SetValue(kingdom, value); return; }
+                }
+                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            }
+        }
+
+        private static void SetKingdomColorField(Kingdom kingdom, string backingFieldName, uint value)
+        {
+            try
+            {
+                var f = typeof(Kingdom).GetField(backingFieldName,
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                f?.SetValue(kingdom, value);
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }

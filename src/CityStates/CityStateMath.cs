@@ -65,5 +65,45 @@ namespace AshAndEmber
                 default:         return "looters";          // safe fallback
             }
         }
+
+        // ── The Camp (Requirement: Revyl special-case) ──────────────────────────
+        // Wolf Brothers scopes Sturgia down to Tyal + Sibir only (see
+        // WolfBrothersSettlements.ScopeToStartingTowns), so Revyl's clan is
+        // ejected and would otherwise fall through the ordinary "Clan <X>"
+        // city-state path above. Revyl instead gets a fixed identity: a
+        // mercenary free-camp that flies every banner's colours, and none.
+        //
+        // Matched by settlement name (case-insensitive), not a hardcoded
+        // StringId guess — confirmed at runtime by CityStateSystem against the
+        // settlement actually being converted, exactly like every other
+        // name-matched lookup in this codebase (see SeaCampaignBehavior's
+        // harbor towns).
+        public const string RevylSettlementName = "Revyl";
+
+        public static bool IsRevylHomeSettlement(string settlementName) =>
+            !string.IsNullOrEmpty(settlementName)
+            && settlementName.Equals(RevylSettlementName, StringComparison.OrdinalIgnoreCase);
+
+        public const string CampKingdomName = "The Camp";
+        public const string CampInformalName = "The Camp";
+        public const string CampRulerTitle = "First Among Equals";
+
+        public const string CampEncyclopediaText =
+            "No crown claims this ground, and none of the eight will bother trying. " +
+            "Adventurers, deserters, and the plainly unaffiliated make their trade here — " +
+            "every banner's colours pass through the gate, and none of them fly over it. " +
+            "The camp keeps one law: business is business, settled before you leave, " +
+            "and nobody's war is worth the coin lost minding it.";
+
+        // Black field, white device — they fly everyone's colours by flying
+        // none of their own.
+        public const uint CampPrimaryColor = 0xFF141414;
+        public const uint CampSecondaryColor = 0xFFF2F2F2;
+
+        // Native banner_icons.xml — BannerIconGroup id=5 ("Sign"), first icon.
+        // A plain mark rather than a house device, fitting a camp that claims
+        // no lineage. See CityStateSystem.BuildCampBanner for the verified
+        // Banner.CreateOneColoredBannerWithOneIcon construction.
+        public const int CampBannerIconMeshId = 400;
     }
 }

@@ -103,6 +103,15 @@ namespace AshAndEmber
             return (f1IsEmpire && f2IsLord) || (f2IsEmpire && f1IsLord);
         }
 
+        // The Camp (Phase 8's Revyl special-case, CityStateSystem.IsCampKingdom)
+        // is neutral ground by design — it must never end up on either side of
+        // a declaration. This is a real absence-of-war, not a permanent one, so
+        // it is handled entirely in the score overrides below (not
+        // IsAtConstantWar, which is for wars that must stay ACTIVE forever).
+        // CityStateSystem.ReassertCampPeace is the belt-and-suspenders backstop
+        // that forces an actual MakePeaceAction if a war ever slips past this.
+        private static bool IsCampFaction(IFaction f) => CityStateSystem.IsCampKingdom(f);
+
         // Marks Ashen-vs-faction wars as constant so the engine excludes them from
         // overcommitment checks and never generates peace proposals for them.
         // Also locks all wars involving Arenicos's empire after the Ashen merger.
@@ -136,6 +145,12 @@ namespace AshAndEmber
         public override float GetScoreOfDeclaringWar(IFaction factionDeclaresWar, IFaction factionDeclaredWar,
             Clan evaluatingClan, out TextObject reason, bool includeReason = false)
         {
+            if (IsCampFaction(factionDeclaresWar) || IsCampFaction(factionDeclaredWar))
+            {
+                reason = new TextObject(includeReason ? "The Camp answers to no crown's war." : "");
+                return -10000f;
+            }
+
             float score = base.GetScoreOfDeclaringWar(factionDeclaresWar, factionDeclaredWar,
                 evaluatingClan, out reason, includeReason);
             try
@@ -149,6 +164,8 @@ namespace AshAndEmber
 
         public override float GetScoreOfDeclaringPeace(IFaction factionDeclaresPeace, IFaction factionDeclaredPeace)
         {
+            if (IsCampFaction(factionDeclaresPeace) || IsCampFaction(factionDeclaredPeace))
+                return 10000f;
             if (IsAshenFaction(factionDeclaresPeace) || IsAshenFaction(factionDeclaredPeace))
                 return -10000f;
             if (IsArenicosPostMerger(factionDeclaresPeace) || IsArenicosPostMerger(factionDeclaredPeace))

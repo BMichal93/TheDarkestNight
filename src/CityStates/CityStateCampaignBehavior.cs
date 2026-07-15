@@ -17,6 +17,7 @@ namespace AshAndEmber
         {
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
             CampaignEvents.OnClanChangedKingdomEvent.AddNonSerializedListener(this, OnClanChangedKingdom);
+            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
         }
 
         public override void SyncData(IDataStore store)
@@ -37,6 +38,11 @@ namespace AshAndEmber
             ChangeKingdomAction.ChangeKingdomActionDetail detail, bool showNotification)
         {
             CityStateSystem.OnClanChangedKingdom(clan, oldKingdom, newKingdom, detail, showNotification);
+        }
+
+        private void OnSessionLaunched(CampaignGameStarter starter)
+        {
+            CityStateSystem.OnSessionLaunched();
         }
 
         public static void ResetForNewGame()
