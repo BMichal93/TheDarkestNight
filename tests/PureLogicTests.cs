@@ -3069,7 +3069,37 @@ namespace AshAndEmber.Tests
         public void EconomyMath_TownWeaponSaleQuantity_RemovesFineGearKeepsFewCrude()
         {
             Assert.AreEqual(0, EconomyMath.TownWeaponSaleQuantity(20, EconomyMath.CrudeWeaponTierCap + 1));
-            Assert.AreEqual(4, EconomyMath.TownWeaponSaleQuantity(10, EconomyMath.CrudeWeaponTierCap));
+            Assert.AreEqual(1, EconomyMath.TownWeaponSaleQuantity(10, EconomyMath.CrudeWeaponTierCap));
+        }
+
+        [Test]
+        public void EconomyMath_ForestWeaponSaleQuantity_IsAlwaysZero()
+        {
+            Assert.AreEqual(0, EconomyMath.ForestWeaponSaleQuantity(100));
+            Assert.AreEqual(0, EconomyMath.ForestWeaponSaleQuantity(1));
+        }
+
+        [Test]
+        public void EconomyMath_TownArmorSaleQuantity_RemovesFineArmorThinsRest()
+        {
+            Assert.AreEqual(0, EconomyMath.TownArmorSaleQuantity(20, EconomyMath.ArmorTierCap + 1));
+            Assert.AreEqual(3, EconomyMath.TownArmorSaleQuantity(10, EconomyMath.ArmorTierCap));
+            Assert.AreEqual(0, EconomyMath.TownArmorSaleQuantity(0, 1));
+        }
+
+        [Test]
+        public void EconomyMath_TownSellsHorsesToday_IsDeterministicAndVariesByDay()
+        {
+            bool a = EconomyMath.TownSellsHorsesToday("town_A", 10);
+            bool b = EconomyMath.TownSellsHorsesToday("town_A", 10);
+            Assert.AreEqual(a, b);
+
+            // Roughly 1 in HorseAvailableTownFraction days/towns should sell horses.
+            int trueCount = 0;
+            for (int day = 0; day < 300; day++)
+                if (EconomyMath.TownSellsHorsesToday("town_test", day)) trueCount++;
+            Assert.Greater(trueCount, 0);
+            Assert.Less(trueCount, 300);
         }
 
         [Test]

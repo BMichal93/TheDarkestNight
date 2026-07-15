@@ -84,11 +84,25 @@ namespace AshAndEmber
         public const int TownTraderGoldCap = 800;
         // ...almost no food for sale...
         public const float TownFoodSaleFactor = 0.05f;
-        // ...horses are almost unavailable...
+        // ...horses are almost unavailable — most towns show none at all, the
+        // rest gate what few they have behind a per-town-per-day roll (see
+        // TownSellsHorsesToday) so finding one reads as a lucky day, not a
+        // guarantee...
         public const int TownHorseSaleCap = 1;
-        // ...and only crude (low-tier) weapons remain, in reduced numbers.
-        public const int CrudeWeaponTierCap = 3;
-        public const float TownWeaponSaleFactor = 0.40f;
+        public const int HorseAvailableTownFraction = 3; // roughly 1 town in 3, on any given day
+        // ...and only the crudest weapons remain, in far reduced numbers
+        // (Children of the Forest prompt — tightened from tier 3 / ×0.40)...
+        public const int CrudeWeaponTierCap = 2;
+        public const float TownWeaponSaleFactor = 0.15f;
+        // ...and armour above a middling tier vanishes too — previously
+        // untouched by market scarcity at all.
+        public const int ArmorTierCap = 3;
+        public const float TownArmorSaleFactor = 0.30f;
+
+        // The Children of the Forest sell almost no weapons at all — their
+        // wandwright deals in wands, not blades (Pen Cannoc, see
+        // CityStateMath/CityStateSystem's Children of the Forest wiring).
+        public const float ForestWeaponSaleFactor = 0f;
 
         // Villages become the main food source: their stalls run fuller than
         // a town's, up to a cap so a single village can't feed an army alone.
@@ -161,6 +175,38 @@ namespace AshAndEmber
             if (currentAmount <= 0) return 0;
             if (tier > CrudeWeaponTierCap) return 0;
             return (int)Math.Floor(currentAmount * TownWeaponSaleFactor);
+        }
+
+        /// <summary>Children of the Forest markets: no weapons at all, regardless of tier.</summary>
+        public static int ForestWeaponSaleQuantity(int currentAmount)
+        {
+            if (currentAmount <= 0) return 0;
+            return (int)Math.Floor(currentAmount * ForestWeaponSaleFactor);
+        }
+
+        public static int TownArmorSaleQuantity(int currentAmount, int tier)
+        {
+            if (currentAmount <= 0) return 0;
+            if (tier > ArmorTierCap) return 0;
+            return (int)Math.Floor(currentAmount * TownArmorSaleFactor);
+        }
+
+        /// <summary>
+        /// Deterministic per-town-per-day gate for horse availability: roughly
+        /// one town in HorseAvailableTownFraction shows any horses at all on a
+        /// given day, so a horse for sale reads as a lucky find. Pure — no
+        /// TaleWorlds types, hashes the settlement id together with the day.
+        /// </summary>
+        public static bool TownSellsHorsesToday(string settlementStringId, int currentDay)
+        {
+            unchecked
+            {
+                int h = 17;
+                h = h * 397 + (settlementStringId ?? string.Empty).GetHashCode();
+                h = h * 397 + currentDay;
+                if (h < 0) h = ~h;
+                return h % HorseAvailableTownFraction == 0;
+            }
         }
 
         public static int VillageFoodQuantity(int currentAmount)

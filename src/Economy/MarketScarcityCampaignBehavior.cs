@@ -83,19 +83,23 @@ namespace AshAndEmber
             try { town.FoodStocks = Math.Min(town.FoodStocks, EconomyMath.MaxFoodStocks(town.Prosperity)); }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
-            AdjustRoster(town.Settlement?.ItemRoster, isVillage: false);
+            AdjustRoster(town.Settlement, isVillage: false);
         }
 
         private static void BoostVillageFood(Village village)
         {
-            AdjustRoster(village.Settlement?.ItemRoster, isVillage: true);
+            AdjustRoster(village.Settlement, isVillage: true);
         }
 
-        private static void AdjustRoster(ItemRoster roster, bool isVillage)
+        private static void AdjustRoster(Settlement settlement, bool isVillage)
         {
+            ItemRoster roster = settlement?.ItemRoster;
             if (roster == null) return;
             try
             {
+                bool sellsHorsesToday = !isVillage
+                    && EconomyMath.TownSellsHorsesToday(settlement.StringId, CurrentDay());
+
                 // Snapshot first: mutating an ItemRoster mid-enumeration is unsafe.
                 var snapshot = new List<(ItemObject item, int amount)>();
                 for (int i = 0; i < roster.Count; i++)
@@ -113,9 +117,11 @@ namespace AshAndEmber
                             ? EconomyMath.VillageFoodQuantity(amount)
                             : EconomyMath.TownFoodSaleQuantity(amount);
                     else if (!isVillage && item.HasHorseComponent)
-                        target = EconomyMath.TownHorseSaleQuantity(amount);
-                    else if (!isVillage && item.HasWeaponComponent)
+                        target = sellsHorsesToday ? EconomyMath.TownHorseSaleQuantity(amount) : 0;
+                    else if (!isVillage && item.HasWeaponComponent && !WandsCatalog.IsWandItemId(item.StringId))
                         target = EconomyMath.TownWeaponSaleQuantity(amount, (int)item.Tier);
+                    else if (!isVillage && item.HasArmorComponent)
+                        target = EconomyMath.TownArmorSaleQuantity(amount, (int)item.Tier);
                     else
                         continue;
 
@@ -124,6 +130,11 @@ namespace AshAndEmber
                 }
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        private static int CurrentDay()
+        {
+            try { return (int)CampaignTime.Now.ToDays; } catch { return 0; }
         }
     }
 }
