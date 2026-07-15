@@ -484,6 +484,12 @@
     <Compile Include="Expeditions\ExpeditionMath.cs"/>
     <Compile Include="Expeditions\ExpeditionCampaignBehavior.cs"/>
     <Compile Include="Expeditions\ExpeditionCampaignBehavior.Menus.cs"/>
+    <Compile Include="ForeignMuster\ForeignMusterMath.cs"/>
+    <Compile Include="ForeignMuster\ForeignMusterCampaignBehavior.cs"/>
+    <Compile Include="ForeignMuster\ForeignMusterCampaignBehavior.Menus.cs"/>
+    <Compile Include="BeastsOfTheNorth\BeastsOfTheNorthMath.cs"/>
+    <Compile Include="BeastsOfTheNorth\BeastsOfTheNorthCampaignBehavior.cs"/>
+    <Compile Include="BeastsOfTheNorth\BeastsOfTheNorthCampaignBehavior.Menus.cs"/>
     <Compile Include="Apprentice\ApprenticeSystem.cs"/>
     <Compile Include="Spells\SpellEffects.cs"/>
     <Compile Include="Spells\SpellEffects.Combat.cs"/>

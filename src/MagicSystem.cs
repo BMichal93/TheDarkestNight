@@ -216,6 +216,14 @@ namespace AshAndEmber
                 // Charter), a background ruin-expedition system in Legion
                 // (empire_w) towns. See Expeditions/ExpeditionCampaignBehavior.cs.
                 try { campaignStarter.AddBehavior(new ExpeditionCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // The Foreign Muster — Legion (empire_w) towns offer one other
+                // main culture's tier-1 recruit, rotating weekly. See
+                // ForeignMuster/ForeignMusterCampaignBehavior.cs.
+                try { campaignStarter.AddBehavior(new ForeignMusterCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Beasts of the North — Sturgia (Wolf Brothers) towns offer
+                // costly Jotunn-Blooded / Ulfhednar recruits, paid in fish and
+                // gold. See BeastsOfTheNorth/BeastsOfTheNorthCampaignBehavior.cs.
+                try { campaignStarter.AddBehavior(new BeastsOfTheNorthCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
