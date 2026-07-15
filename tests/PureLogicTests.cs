@@ -3574,6 +3574,79 @@ namespace AshAndEmber.Tests
             Assert.LessOrEqual(WandsMath.PlayerMaxCharges, 20);
         }
 
+        // ── WandsMath shop scarcity tests (Children of the Forest prompt) ──────
+
+        [Test]
+        public void WandsMath_ShopStockSize_IsSmallerThanWholeCatalog()
+        {
+            Assert.Less(WandsMath.ShopStockSize, WandsCatalog.All.Count);
+            Assert.Less(WandsMath.ForestShopStockSize, WandsCatalog.All.Count);
+        }
+
+        [Test]
+        public void WandsMath_ForestShopStockSize_IsLargerThanOrdinaryShop()
+        {
+            Assert.Greater(WandsMath.ForestShopStockSize, WandsMath.ShopStockSize);
+        }
+
+        [Test]
+        public void WandsMath_ShouldRestock_RespectsCadence()
+        {
+            Assert.IsFalse(WandsMath.ShouldRestock(0, WandsMath.ShopRestockDays - 1));
+            Assert.IsTrue(WandsMath.ShouldRestock(0, WandsMath.ShopRestockDays));
+            Assert.IsTrue(WandsMath.ShouldRestock(0, WandsMath.ShopRestockDays + 5));
+        }
+
+        [Test]
+        public void WandsMath_RestockSeed_IsDeterministicAndVaries()
+        {
+            int a = WandsMath.RestockSeed("town_A", 3);
+            int b = WandsMath.RestockSeed("town_A", 3);
+            int c = WandsMath.RestockSeed("town_A", 4);
+            int d = WandsMath.RestockSeed("town_B", 3);
+            Assert.AreEqual(a, b);
+            Assert.AreNotEqual(a, c);
+            Assert.AreNotEqual(a, d);
+        }
+
+        [Test]
+        public void WandsMath_PickShopStock_StaysInBoundsAndHasNoDuplicates()
+        {
+            for (int seed = 0; seed < 50; seed++)
+            {
+                var stock = WandsMath.PickShopStock(seed, WandsCatalog.All.Count, WandsMath.ForestShopStockSize);
+                Assert.AreEqual(WandsMath.ForestShopStockSize, stock.Count);
+                Assert.AreEqual(stock.Count, stock.Distinct().Count(), "shop stock must not contain duplicate wands");
+                foreach (int idx in stock)
+                {
+                    Assert.GreaterOrEqual(idx, 0);
+                    Assert.Less(idx, WandsCatalog.All.Count);
+                }
+            }
+        }
+
+        [Test]
+        public void WandsMath_PickShopStock_IsDeterministicForSameSeed()
+        {
+            var a = WandsMath.PickShopStock(42, WandsCatalog.All.Count, WandsMath.ShopStockSize);
+            var b = WandsMath.PickShopStock(42, WandsCatalog.All.Count, WandsMath.ShopStockSize);
+            CollectionAssert.AreEqual(a, b);
+        }
+
+        [Test]
+        public void WandsMath_PickShopStock_ZeroInputs_ReturnsEmpty()
+        {
+            Assert.AreEqual(0, WandsMath.PickShopStock(1, 0, 3).Count);
+            Assert.AreEqual(0, WandsMath.PickShopStock(1, 16, 0).Count);
+        }
+
+        [Test]
+        public void WandsMath_PickShopStock_CapsAtCatalogCount()
+        {
+            var stock = WandsMath.PickShopStock(7, 3, 10);
+            Assert.AreEqual(3, stock.Count);
+        }
+
         [Test]
         public void WandsCatalog_HasSixteenEntries()
         {

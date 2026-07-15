@@ -36,6 +36,7 @@
 // =============================================================================
 
 using System;
+using System.Collections.Generic;
 
 namespace AshAndEmber
 {
@@ -105,5 +106,54 @@ namespace AshAndEmber
         // so this constant is test-covered documentation of that XML ratio,
         // not a value actually read at runtime.
         public const double HollowMagusWandRosterFraction = 0.25;
+
+        // ── Shop scarcity (The Children of the Forest prompt) ────────────────
+        // The wandwright no longer stocks the whole catalog — each shop town
+        // holds a small rotating case, re-rolled on a slow cadence, and every
+        // slot sells once before it needs to be restocked.
+        public const int ShopStockSize = 3;
+        public const int ForestShopStockSize = 5; // Pen Cannoc cuts the wands — their case runs fuller
+        public const int ShopRestockDays = 14;
+
+        public static bool ShouldRestock(int lastRestockDay, int currentDay)
+            => currentDay - lastRestockDay >= ShopRestockDays;
+
+        // Deterministic per-town, per-restock-cycle seed — combines the town's
+        // own identity with which restock cycle this is, so the same town on
+        // the same cycle always rolls the same case (reload-safe) while a new
+        // cycle (or a different town) rolls a different one.
+        public static int RestockSeed(string townStringId, int restockCycle)
+        {
+            unchecked
+            {
+                int h = 17;
+                h = h * 397 + (townStringId ?? string.Empty).GetHashCode();
+                h = h * 397 + restockCycle;
+                return h;
+            }
+        }
+
+        // Picks `stockSize` distinct catalog indices out of `catalogCount`,
+        // deterministic for a given seed — a partial Fisher-Yates shuffle.
+        // Mirrors PickWandIndex's shape: pure, no TaleWorlds types.
+        public static List<int> PickShopStock(int seed, int catalogCount, int stockSize)
+        {
+            var result = new List<int>();
+            if (catalogCount <= 0 || stockSize <= 0) return result;
+            stockSize = Math.Min(stockSize, catalogCount);
+
+            var pool = new List<int>(catalogCount);
+            for (int i = 0; i < catalogCount; i++) pool.Add(i);
+
+            var rng = new Random(seed);
+            for (int i = 0; i < stockSize; i++)
+            {
+                int j = i + rng.Next(pool.Count - i);
+                int tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+            }
+
+            for (int i = 0; i < stockSize; i++) result.Add(pool[i]);
+            return result;
+        }
     }
 }

@@ -13,6 +13,12 @@
 //     re-picked only if the chosen town is lost" technique used elsewhere in
 //     this mod for a single-seat faction selection. See .Menus.cs for the
 //     shop itself.
+//   • Each shop town holds a small ROTATING CASE (WandsMath.ShopStockSize,
+//     re-rolled every WandsMath.ShopRestockDays) rather than the whole
+//     catalog — a stocked wand can be bought once; the slot then sits empty
+//     until the next restock. Stock selection is a pure, deterministic
+//     function of (town id, restock cycle) in WandsMath.PickShopStock, so a
+//     reload never re-rolls the case mid-cycle.
 //   • Persists the player's per-wand-item-id charge pool (owned by
 //     WandEffects, exported/imported here) via the same parallel-list
 //     Dictionary<string,int> save pattern ExchangeCampaignBehavior already
@@ -45,6 +51,11 @@ namespace AshAndEmber
         private static string _towerShopTownId = null;
         private static string _chosenShopTownId = null;
 
+        // Rotating shop stock: town id -> list of WandsCatalog indices
+        // currently on display (a sold slot is left as -1 until restock).
+        private static Dictionary<string, List<int>> _shopStock = new Dictionary<string, List<int>>();
+        private static Dictionary<string, int> _lastRestockDay = new Dictionary<string, int>();
+
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
@@ -62,6 +73,44 @@ namespace AshAndEmber
                 store.SyncData("WND_TowerShopTown", ref _towerShopTownId);
                 store.SyncData("WND_ChosenShopTown", ref _chosenShopTownId);
 
+                var stockTownIds = new List<string>();
+                var stockIndices = new List<int>();
+                foreach (var kv in _shopStock)
+                {
+                    foreach (int idx in kv.Value)
+                    {
+                        stockTownIds.Add(kv.Key);
+                        stockIndices.Add(idx);
+                    }
+                }
+                store.SyncData("WND_StockTownIds", ref stockTownIds);
+                store.SyncData("WND_StockIndices", ref stockIndices);
+                if (store.IsLoading)
+                {
+                    _shopStock = new Dictionary<string, List<int>>();
+                    if (stockTownIds != null && stockIndices != null && stockTownIds.Count == stockIndices.Count)
+                    {
+                        for (int i = 0; i < stockTownIds.Count; i++)
+                        {
+                            string t = stockTownIds[i];
+                            if (!_shopStock.TryGetValue(t, out var list)) { list = new List<int>(); _shopStock[t] = list; }
+                            list.Add(stockIndices[i]);
+                        }
+                    }
+                }
+
+                var restockTownIds = _lastRestockDay.Keys.ToList();
+                var restockDays = restockTownIds.Select(t => _lastRestockDay[t]).ToList();
+                store.SyncData("WND_RestockTownIds", ref restockTownIds);
+                store.SyncData("WND_RestockDays", ref restockDays);
+                if (store.IsLoading)
+                {
+                    _lastRestockDay = new Dictionary<string, int>();
+                    if (restockTownIds != null && restockDays != null && restockTownIds.Count == restockDays.Count)
+                        for (int i = 0; i < restockTownIds.Count; i++)
+                            _lastRestockDay[restockTownIds[i]] = restockDays[i];
+                }
+
                 var chargeKeys = WandEffects.ExportChargeKeys();
                 var chargeVals = WandEffects.ExportChargeVals();
                 store.SyncData("WND_ChargeKeys", ref chargeKeys);
@@ -76,7 +125,61 @@ namespace AshAndEmber
             _rolledLordIds = new HashSet<string>();
             _towerShopTownId = null;
             _chosenShopTownId = null;
+            _shopStock = new Dictionary<string, List<int>>();
+            _lastRestockDay = new Dictionary<string, int>();
             WandEffects.ResetForNewGame();
+        }
+
+        // ── Rotating shop stock ─────────────────────────────────────────────────
+        private static int CurrentDay()
+        {
+            try { return (int)CampaignTime.Now.ToDays; } catch { return 0; }
+        }
+
+        // Overridden by the Children of the Forest's fuller case — see
+        // .Menus.cs / IsForestShopTown wiring added alongside CityStates.
+        internal static int StockSizeForTown(string townId)
+        {
+            if (IsForestShopTown(townId)) return WandsMath.ForestShopStockSize;
+            return WandsMath.ShopStockSize;
+        }
+
+        // Town-agnostic hook — false until the Children of the Forest wiring
+        // (Phase 4) sets a permanent forest wandwright town id.
+        internal static bool IsForestShopTown(string townId)
+            => !string.IsNullOrEmpty(townId) && townId == _forestShopTownId;
+
+        private static string _forestShopTownId = null;
+
+        internal static void EnsureStock(string townId)
+        {
+            if (string.IsNullOrEmpty(townId)) return;
+            int day = CurrentDay();
+            int stockSize = StockSizeForTown(townId);
+
+            if (!_shopStock.ContainsKey(townId)
+                || !_lastRestockDay.TryGetValue(townId, out int lastDay)
+                || WandsMath.ShouldRestock(lastDay, day))
+            {
+                RestockTown(townId, stockSize, day);
+            }
+        }
+
+        private static void RestockTown(string townId, int stockSize, int day)
+        {
+            int cycle = WandsMath.ShopRestockDays > 0 ? day / WandsMath.ShopRestockDays : day;
+            int seed = WandsMath.RestockSeed(townId, cycle);
+            _shopStock[townId] = WandsMath.PickShopStock(seed, WandsCatalog.All.Count, stockSize);
+            _lastRestockDay[townId] = day;
+        }
+
+        internal static List<int> GetStock(string townId)
+            => _shopStock.TryGetValue(townId, out var list) ? list : null;
+
+        internal static void MarkSlotSold(string townId, int slot)
+        {
+            if (_shopStock.TryGetValue(townId, out var list) && slot >= 0 && slot < list.Count)
+                list[slot] = -1;
         }
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
