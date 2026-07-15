@@ -140,6 +140,17 @@ namespace AshAndEmber
             catch { return false; }
         }
 
+        // Used by ExpeditionCampaignBehavior.Menus.cs to gate the charter menu
+        // on ownership by The Camp — the same MapFaction-membership check
+        // LegionSettlements.IsLegionSettlement/WolfBrothersSettlements.
+        // IsWolfBrothersSettlement use for their own kingdoms.
+        public static bool IsCampSettlement(Settlement s)
+        {
+            if (s == null || !(s.IsTown || s.IsCastle)) return false;
+            try { return IsCampKingdom(s.MapFaction); }
+            catch { return false; }
+        }
+
         // The Camp stays out of every war, in or out — see AshenDiplomacyModel
         // for the score-side discouragement; this is the belt-and-suspenders
         // backstop that actually forces peace if a war ever slips through

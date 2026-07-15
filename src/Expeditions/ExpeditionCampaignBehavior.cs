@@ -2,10 +2,14 @@
 // THE DARKEST NIGHT — Expeditions/ExpeditionCampaignBehavior.cs
 //
 // "Charter an Expedition" (the Antiquarian Charter) — a background,
-// caravan-like ruin-expedition system available from the town menu in towns
-// held by the Legion (Western Empire, kingdom StringId "empire_w" — see
-// Factions/Legion/LegionCulture.cs). Not gated on MageKnowledge.IsMage —
-// expeditions are mundane politics, open to any player character.
+// caravan-like ruin-expedition system available from the town menu in Revyl,
+// the mercenary free-camp (CityStateSystem.IsCampSettlement — see
+// CityStates/CityStateSystem.cs's Revyl special-case, "The Camp"). Originally
+// a Legion ("empire_w") offer; moved wholesale to The Camp along with a
+// reflavour and an influence-to-gold cost change (ExpeditionMath.GoldCost) —
+// see ExpeditionCampaignBehavior.Menus.cs for the gating and menu flow. Not
+// gated on MageKnowledge.IsMage — expeditions are mundane business, open to
+// any player character.
 //
 // State/tick machinery lives here; the town-menu selection flow (leader →
 // team → destination → confirm) lives in the .Menus.cs partial. Numeric
@@ -240,8 +244,8 @@ namespace AshAndEmber
                                  : "";
 
                 title = "The Charter Returns";
-                body  = $"{leaderName} brings the charter back from {ruinName}, {keptGold} denars richer and the Legion's "
-                       + $"name a little further spoken. (+{(int)renown} renown){itemLine}{absconLine}";
+                body  = $"{leaderName} brings the charter back from {ruinName}, {keptGold} denars richer and the Camp's "
+                       + $"ledger a little heavier. (+{(int)renown} renown){itemLine}{absconLine}";
                 color = new Color(0.75f, 0.65f, 0.35f);
 
                 if (specialty == ExpeditionLeaderSpecialty.ZealousAntiquarian

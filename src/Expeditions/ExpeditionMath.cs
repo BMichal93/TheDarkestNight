@@ -1,11 +1,14 @@
 // =============================================================================
 // THE DARKEST NIGHT — Expeditions/ExpeditionMath.cs
 //
-// Pure numeric logic for Legion Expeditions ("Antiquarian Charter") — the
-// Western Empire's ("empire_w") town-menu ruin-expedition system. No
-// TaleWorlds types; covered directly by PureLogicTests. See
-// ExpeditionCampaignBehavior.cs for the state/tick machinery and
-// ExpeditionCampaignBehavior.Menus.cs for the town-menu flow.
+// Pure numeric logic for the Expeditions ("Antiquarian Charter") — Revyl's
+// mercenary free-camp ("The Camp", CityStateSystem.IsCampSettlement)
+// town-menu ruin-expedition system. Originally a Legion ("empire_w") offer,
+// paid in influence; moved to The Camp and repriced in gold (GoldCost below)
+// while every other formula here is untouched. No TaleWorlds types; covered
+// directly by PureLogicTests. See ExpeditionCampaignBehavior.cs for the
+// state/tick machinery and ExpeditionCampaignBehavior.Menus.cs for the
+// town-menu flow.
 // =============================================================================
 
 using System;
@@ -129,6 +132,20 @@ namespace AshAndEmber
             int cost = (int)Math.Round(baseCost * mult, MidpointRounding.AwayFromZero);
             return Math.Max(MinInfluenceCost, Math.Min(MaxInfluenceCost, cost));
         }
+
+        // ── Gold cost (The Camp) ─────────────────────────────────────────────
+        // The charter moved from the Legion's town menu to The Camp
+        // (CityStateSystem.IsCampSettlement) — a mercenary free-camp with no
+        // access to a clan's influence ledger, so it charges coin instead.
+        // Derived straight from InfluenceCost (never duplicated/re-tuned) times
+        // a flat multiplier: with InfluenceCost clamped to [20, 150], a tier-1
+        // dig with a cheap team lands well inside what a mid-game party can
+        // spare, while a top-tier Legendary charter with a premium team stings
+        // hard without needing its own separate tuning curve.
+        public const int GoldPerInfluenceUnit = 8;
+
+        public static int GoldCost(RuinTier tier, ExpeditionTeamType team) =>
+            InfluenceCost(tier, team) * GoldPerInfluenceUnit;
 
         // ── Reward composition (success) ─────────────────────────────────────
         public static int SuccessGold(RuinTier tier, ExpeditionLeaderSpecialty leader, int roll0To99)

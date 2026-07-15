@@ -2216,6 +2216,31 @@ namespace AshAndEmber.Tests
             Assert.Less(blades, veterans);
         }
 
+        // ── ExpeditionMath.GoldCost (The Camp — moved off influence) ───────────
+
+        [Test]
+        public void ExpeditionMath_GoldCost_IsInfluenceCostTimesTheFlatMultiplier()
+        {
+            foreach (RuinTier tier in System.Enum.GetValues(typeof(RuinTier)))
+            {
+                foreach (ExpeditionTeamType team in System.Enum.GetValues(typeof(ExpeditionTeamType)))
+                {
+                    int expected = ExpeditionMath.InfluenceCost(tier, team) * ExpeditionMath.GoldPerInfluenceUnit;
+                    Assert.AreEqual(expected, ExpeditionMath.GoldCost(tier, team));
+                }
+            }
+        }
+
+        [Test]
+        public void ExpeditionMath_GoldCost_TierOneIsAffordableAndTopTierStings()
+        {
+            int cheapest  = ExpeditionMath.GoldCost(RuinTier.Easy, ExpeditionTeamType.HiredBlades);
+            int priciest  = ExpeditionMath.GoldCost(RuinTier.Legendary, ExpeditionTeamType.LegionVeterans);
+            Assert.Less(cheapest, priciest);
+            Assert.GreaterOrEqual(cheapest, ExpeditionMath.MinInfluenceCost * ExpeditionMath.GoldPerInfluenceUnit);
+            Assert.LessOrEqual(priciest, ExpeditionMath.MaxInfluenceCost * ExpeditionMath.GoldPerInfluenceUnit);
+        }
+
         [Test]
         public void ExpeditionMath_SuccessGold_ScalesWithTierAndLeaderTrait()
         {

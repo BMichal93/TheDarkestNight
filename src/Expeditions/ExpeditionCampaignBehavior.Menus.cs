@@ -9,10 +9,14 @@
 //           AshenRuinSystem.IsOnCooldown / IsContested)
 //           → confirmation (InquiryData) → LaunchExpedition
 //
-// Gated on the settlement belonging to the Legion kingdom (Western Empire,
-// StringId "empire_w") via LegionSettlements.IsLegionSettlement — the same
-// engine-StringId check LegionCampaignBehavior/LegionSettlements already use
-// for kingdom membership. NOT gated on MageKnowledge.IsMage.
+// Gated on the settlement belonging to The Camp (Revyl's mercenary
+// city-state kingdom) via CityStateSystem.IsCampSettlement — the same
+// MapFaction-membership check LegionSettlements.IsLegionSettlement/
+// WolfBrothersSettlements.IsWolfBrothersSettlement use for their own
+// kingdoms. Formerly gated on Legion ownership; moved here wholesale
+// (mechanics unchanged, cost now gold instead of influence — see
+// ExpeditionMath.GoldCost — and text reflavoured to the Camp's mercenary
+// voice). NOT gated on MageKnowledge.IsMage.
 // =============================================================================
 
 using System;
@@ -43,7 +47,7 @@ namespace AshAndEmber
                         {
                             var s = Settlement.CurrentSettlement;
                             if (s == null || !s.IsTown) return false;
-                            if (!LegionSettlements.IsLegionSettlement(s)) return false;
+                            if (!CityStateSystem.IsCampSettlement(s)) return false;
 
                             string note = _active ? "  [charter already under way]" : "";
                             MBTextManager.SetTextVariable("EXP_CHARTER_ENTER", $"Charter an Expedition{note}");
@@ -67,8 +71,9 @@ namespace AshAndEmber
                         string hdr = _active
                             ? $"The Antiquarian Charter\n\nA charter is already in the field. Word will come back in "
                             + $"{_activeDaysLeft} day{(_activeDaysLeft != 1 ? "s" : "")}, one way or another."
-                            : "The Antiquarian Charter\n\nThe Legion keeps a standing offer for anyone willing to fund a dig: "
-                            + "name a leader, fund a team, choose a ruin, and wait for what comes back — if anything does.";
+                            : "The Antiquarian Charter\n\nThe Camp doesn't care whose ruin it was, only what it's worth: "
+                            + "pay in coin, not favors, and name a leader, fund a team, choose a ruin, and wait for what "
+                            + "comes back — if anything does. Business is business.";
                         MBTextManager.SetTextVariable("EXP_CHARTER_HDR", hdr);
                     }
                     catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -212,9 +217,9 @@ namespace AshAndEmber
                 {
                     int chance = ExpeditionMath.SuccessChance(r.Tier, leader.Specialty, team, leader.Proven);
                     int days   = ExpeditionMath.DurationDays(r.Tier, leader.Specialty, team);
-                    int cost   = ExpeditionMath.InfluenceCost(r.Tier, team);
+                    int cost   = ExpeditionMath.GoldCost(r.Tier, team);
                     string label = $"{r.RuinName}  [{TierRiskLabel(r.Tier)}]";
-                    string hint  = $"Success: {chance}%  |  Duration: {days} day(s)  |  Cost: {cost} influence";
+                    string hint  = $"Success: {chance}%  |  Duration: {days} day(s)  |  Cost: {cost} denars";
                     return new InquiryElement(r.VillageName, label, null, true, hint);
                 }).ToList();
 
@@ -248,15 +253,15 @@ namespace AshAndEmber
 
                 int chance = ExpeditionMath.SuccessChance(def.Tier, leader.Specialty, team, leader.Proven);
                 int days   = ExpeditionMath.DurationDays(def.Tier, leader.Specialty, team);
-                int cost   = ExpeditionMath.InfluenceCost(def.Tier, team);
+                int cost   = ExpeditionMath.GoldCost(def.Tier, team);
 
-                float influence = 0f;
-                try { influence = Hero.MainHero?.Clan?.Influence ?? 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                int gold = 0;
+                try { gold = Hero.MainHero?.Gold ?? 0; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 string body = $"{leader.Name} will lead {TeamName(team)} to {def.RuinName}  [{TierRiskLabel(def.Tier)}].\n\n"
-                            + $"Success chance: {chance}%\nDuration: {days} day(s)\nCost: {cost} influence "
-                            + "(spent now, not refunded on failure)\n\n"
-                            + $"Your influence: {(int)influence}";
+                            + $"Success chance: {chance}%\nDuration: {days} day(s)\nCost: {cost} denars "
+                            + "(paid now, not refunded on failure)\n\n"
+                            + $"Your denars: {gold}";
 
                 InformationManager.ShowInquiry(new InquiryData(
                     "Seal the Charter", body, true, true, "Seal the Charter", "Back",
@@ -275,16 +280,18 @@ namespace AshAndEmber
                     MBInformationManager.AddQuickInformation(new TextObject("A charter is already under way — wait for it to resolve."));
                     return;
                 }
-                if (Hero.MainHero?.Clan == null) return;
+                if (Hero.MainHero == null) return;
 
-                // Guarded exactly like SchemeSystem.Api's influence spend: check
-                // affordability, THEN deduct — never overdraw Clan.Influence.
-                if (Hero.MainHero.Clan.Influence < cost)
+                // The Camp trades in coin, not clan influence — check
+                // affordability, THEN deduct, same guard-before-spend pattern
+                // every other gold-cost menu in the mod uses (Wands/Talismans/
+                // ForeignMuster/Sanctuary).
+                if (Hero.MainHero.Gold < cost)
                 {
-                    MBInformationManager.AddQuickInformation(new TextObject("Insufficient influence — the charter cannot be sealed."));
+                    MBInformationManager.AddQuickInformation(new TextObject("Insufficient denars — the charter cannot be sealed."));
                     return;
                 }
-                try { Hero.MainHero.Clan.Influence -= cost; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { Hero.MainHero.ChangeHeroGold(-cost); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 _active         = true;
                 _activeLeaderId = leaderId;
@@ -320,10 +327,15 @@ namespace AshAndEmber
             _ => "",
         };
 
+        // Display names only — the underlying ExpeditionTeamType enum (and its
+        // mechanical profile in ExpeditionMath) is unchanged by the move to
+        // The Camp. LegionVeterans/ImperialScholars read as Legion-owned
+        // branding that no longer fits a mercenary free-camp; HiredBlades and
+        // TempleWardens already read as outside talent the Camp is buying in.
         private static string TeamName(ExpeditionTeamType t) => t switch
         {
-            ExpeditionTeamType.LegionVeterans   => "Legion Veterans",
-            ExpeditionTeamType.ImperialScholars => "Imperial Scholars",
+            ExpeditionTeamType.LegionVeterans   => "Retired Sellswords",
+            ExpeditionTeamType.ImperialScholars => "Wandering Scholars",
             ExpeditionTeamType.HiredBlades      => "Hired Blades",
             ExpeditionTeamType.TempleWardens    => "Temple Wardens",
             _ => t.ToString(),
@@ -331,7 +343,7 @@ namespace AshAndEmber
 
         private static string TeamBlurb(ExpeditionTeamType t) => t switch
         {
-            ExpeditionTeamType.LegionVeterans   => "Hardened professionals. Steadier under pressure, less likely to lose the leader — but they do not come cheap.",
+            ExpeditionTeamType.LegionVeterans   => "Old company men who took their discharge in coin, not a pension. Steadier under pressure, less likely to lose the leader — but they do not come cheap.",
             ExpeditionTeamType.ImperialScholars => "Sharper against the deepest sites, but the first thing to break when it goes wrong.",
             ExpeditionTeamType.HiredBlades      => "Cheap, quick, and loyal exactly as far as the coin reaches.",
             ExpeditionTeamType.TempleWardens    => "Steady against the cold and the Ashen — and unwilling to go anywhere truly dark.",
