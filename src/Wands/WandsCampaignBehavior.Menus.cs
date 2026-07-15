@@ -69,12 +69,19 @@ namespace AshAndEmber
                 {
                     try
                     {
-                        EnsureStock(GetCurrentTownId());
-                        MBTextManager.SetTextVariable("WAND_SHOP_MAIN_TEXT",
-                            "A locked case holds a handful of rods, each one a single working caught and bound "
-                          + "into wood and wire — most of the slots stand empty today. \"Each answers only to the "
-                          + "one thing it was made to say,\" the wandwright tells you, \"and each will only say it "
-                          + "so many times before you. The case fills slow — come back another season.\"");
+                        string townId = GetCurrentTownId();
+                        EnsureStock(townId);
+
+                        MBTextManager.SetTextVariable("WAND_SHOP_MAIN_TEXT", IsForestShopTown(townId)
+                            ? "The wandwright here is a Child of the Forest, and speaks of the wood the way others "
+                            + "speak of kin. The case behind them holds more rods than you've seen anywhere else — "
+                            + "cut, they say, from branches that answered back. \"Each answers only to the one "
+                            + "thing it was made to say,\" they tell you, \"and each will only say it so many times "
+                            + "before you.\""
+                            : "A locked case holds a handful of rods, each one a single working caught and bound "
+                            + "into wood and wire — most of the slots stand empty today. \"Each answers only to the "
+                            + "one thing it was made to say,\" the wandwright tells you, \"and each will only say it "
+                            + "so many times before you. The case fills slow — come back another season.\"");
                     }
                     catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 });

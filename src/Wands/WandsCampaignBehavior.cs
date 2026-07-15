@@ -125,6 +125,7 @@ namespace AshAndEmber
             _rolledLordIds = new HashSet<string>();
             _towerShopTownId = null;
             _chosenShopTownId = null;
+            _forestShopTownId = null;
             _shopStock = new Dictionary<string, List<int>>();
             _lastRestockDay = new Dictionary<string, int>();
             WandEffects.ResetForNewGame();
@@ -144,11 +145,15 @@ namespace AshAndEmber
             return WandsMath.ShopStockSize;
         }
 
-        // Town-agnostic hook — false until the Children of the Forest wiring
-        // (Phase 4) sets a permanent forest wandwright town id.
         internal static bool IsForestShopTown(string townId)
             => !string.IsNullOrEmpty(townId) && townId == _forestShopTownId;
 
+        // Pen Cannoc — the Children's own seat. Unlike the Tower/Chosen shop
+        // towns (imported stock, re-picked if lost), this one is PERMANENT:
+        // they make the wands, so as long as the Children of the Forest hold
+        // any town at all (a one-city kingdom, so that town is always Pen
+        // Cannoc) it is re-derived fresh every session/weekly tick from live
+        // CityStateSystem.IsForestSettlement state — no separate save key.
         private static string _forestShopTownId = null;
 
         internal static void EnsureStock(string townId)
@@ -211,6 +216,17 @@ namespace AshAndEmber
                     _chosenShopTownId = PickRandomHeldTown(ChosenCulture.KingdomId);
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
+            // Pen Cannoc — always re-derived, never randomly re-picked: the
+            // Children of the Forest are a one-city kingdom, so whichever
+            // town they currently hold (if any) IS Pen Cannoc.
+            try
+            {
+                _forestShopTownId = Settlement.All
+                    .FirstOrDefault(s => s != null && s.IsTown && CityStateSystem.IsForestSettlement(s))
+                    ?.StringId;
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
         private static bool IsHeldBy(string settlementId, string kingdomId)
@@ -236,9 +252,15 @@ namespace AshAndEmber
 
         internal static bool IsWandShopTown(Settlement s)
             => s != null && !string.IsNullOrEmpty(s.StringId)
-            && (s.StringId == _towerShopTownId || s.StringId == _chosenShopTownId);
+            && (s.StringId == _towerShopTownId || s.StringId == _chosenShopTownId || s.StringId == _forestShopTownId);
 
         // ── Lord distribution — rolled once per hero, ever ──────────────────────
+        // Also carries two Children-of-the-Forest-only concerns that need to
+        // run EVERY week regardless of the once-per-hero roll: re-asserting a
+        // granted wand into BattleEquipment (agents spawn from BattleEquipment,
+        // never the roster — see the header note) and re-anchoring their age
+        // back into the young-adult window (CityStateSystem.ReanchorForestLordAge).
+        // Both are idempotent no-ops once already correct.
         private static void SweepGrantWandsToLords()
         {
             try
@@ -248,24 +270,79 @@ namespace AshAndEmber
                     try
                     {
                         if (hero == null || !hero.IsLord) continue;
-                        if (_rolledLordIds.Contains(hero.StringId)) continue;
 
                         bool isTower = TowerCulture.IsTowerLord(hero);
                         bool isChosen = !isTower && ChosenCulture.IsChosenLord(hero);
-                        if (!isTower && !isChosen) continue;
+                        bool isForest = !isTower && !isChosen && CityStateSystem.IsForestKingdom(hero.Clan?.Kingdom);
+
+                        if (isForest)
+                        {
+                            try { CityStateSystem.ReanchorForestLordAge(hero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        }
+
+                        // Self-heal: any lord (Tower/Chosen/Forest alike)
+                        // already carrying a wand in their roster gets it
+                        // re-asserted as their equipped weapon every week —
+                        // this is what actually makes the wand FIRE in battle
+                        // (WandEffects.OnAgentHit reads the wielded weapon,
+                        // not the roster) and survives LordGearWeathering's
+                        // one-time session-launch pass without needing exact
+                        // ordering between the two systems (LordGearWeathering
+                        // also now exempts wand items directly — see its
+                        // IsOrnateLordGear check).
+                        try { EnsureLordWandEquipped(hero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
+                        if (_rolledLordIds.Contains(hero.StringId)) continue;
+                        if (!isTower && !isChosen && !isForest) continue;
 
                         _rolledLordIds.Add(hero.StringId);
 
-                        double chance = isTower ? WandsMath.TowerLordWandChance : WandsMath.ChosenLordWandChance;
+                        double chance = isTower ? WandsMath.TowerLordWandChance
+                            : isChosen ? WandsMath.ChosenLordWandChance
+                            : WandsMath.ForestLordWandChance;
                         if (!WandsMath.ShouldGrantLordWand(_rng.NextDouble(), chance)) continue;
 
                         var def = WandsCatalog.All[_rng.Next(WandsCatalog.All.Count)];
                         GrantWandToHero(hero, def);
+                        try { EnsureLordWandEquipped(hero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                     }
                     catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 }
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // Writes a wand the hero's roster already carries into their
+        // BattleEquipment Weapon0 slot — same indexer-write pattern
+        // CrystallinesCampaignBehavior uses for hero equipment. Only Weapon0
+        // is touched, so whatever occupies Weapon1-3 (a real sidearm) is left
+        // alone — "wands mostly, not helplessly wand-only when it breaks."
+        // A no-op if the hero already has that exact wand equipped.
+        private static void EnsureLordWandEquipped(Hero hero)
+        {
+            if (hero == null || !hero.IsAlive) return;
+            var roster = hero.PartyBelongedTo?.ItemRoster;
+            if (roster == null) return;
+
+            ItemObject wandItem = null;
+            for (int i = 0; i < roster.Count; i++)
+            {
+                var item = roster.GetItemAtIndex(i);
+                if (item != null && WandsCatalog.IsWandItemId(item.StringId) && roster.GetElementNumber(i) > 0)
+                {
+                    wandItem = item;
+                    break;
+                }
+            }
+            if (wandItem == null) return;
+
+            var equipment = hero.BattleEquipment;
+            if (equipment == null) return;
+
+            var current = equipment[EquipmentIndex.Weapon0];
+            if (!current.IsEmpty && current.Item != null && current.Item.StringId == wandItem.StringId) return;
+
+            equipment[EquipmentIndex.Weapon0] = new EquipmentElement(wandItem);
         }
 
         private static void GrantWandToHero(Hero hero, WandDef def)

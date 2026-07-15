@@ -57,6 +57,12 @@ namespace AshAndEmber
             {
                 var elem = equipment[slot];
                 if (elem.IsEmpty || elem.Item == null) continue;
+                // Wands are expensive by design (12000-20000 denars) but are
+                // never "ornate lord finery" — exempting them here means the
+                // Children of the Forest / Tower / Chosen wand-equip sweep
+                // (WandsCampaignBehavior.EnsureLordWandEquipped) never races
+                // this one-time session-launch pass.
+                if (WandsCatalog.IsWandItemId(elem.Item.StringId)) continue;
                 if (!UnitsMath.IsOrnateLordGear(elem.ItemValue, elem.ItemModifier != null)) continue;
 
                 var replacement = GearWeathering.CheapestOfType(elem.Item.ItemType);

@@ -145,5 +145,40 @@ namespace AshAndEmber
         // the diplomacy model behind it) has one shared list to extend for any
         // future sanctuary kingdom.
         public static readonly string[] SanctuaryKingdomNames = { CampKingdomName, ForestKingdomName };
+
+        // ── Forest lords — young adults, held there for the whole campaign ──
+        // The brief asks for "16-18, Bannerlord's young-adult band." Verified
+        // against TaleWorlds.CampaignSystem.dll's DefaultAgeModel:
+        // HeroComesOfAge = 18 (BecomeTeenagerAge = 14, MiddleAdultHoodAge = 35)
+        // — 16 is BELOW coming-of-age and would risk breaking party leadership/
+        // command eligibility, which the brief itself says must never happen.
+        // The window is shifted to sit AT and just past coming-of-age instead
+        // (18-20): still unmistakably "young adult" against a 35+ middle-
+        // adulthood baseline, never below the safety floor.
+        public const float ForestLordMinAge = 18f; // == DefaultAgeModel.HeroComesOfAge
+        public const float ForestLordMaxAge = 20f;
+
+        public static bool ForestLordAgeDrifted(double currentAgeYears) =>
+            currentAgeYears < ForestLordMinAge || currentAgeYears > ForestLordMaxAge;
+
+        // Deterministic per-hero target age within the window, from a hash of
+        // the hero's own StringId — stable across reloads (never re-rolled),
+        // varies lord to lord so the whole ruling clan isn't one identical age.
+        public static double ForestLordTargetAge(string heroStringId)
+        {
+            int h = (heroStringId ?? string.Empty).GetHashCode();
+            if (h == int.MinValue) h = 0; else if (h < 0) h = -h;
+            double t = (h % 1000) / 1000.0; // 0..1, deterministic
+            return ForestLordMinAge + t * (ForestLordMaxAge - ForestLordMinAge);
+        }
+
+        // How many days to shift a hero's BirthDay forward so their age lands
+        // back on targetAgeYears — mirrors AshenCitySystem.Tick.cs's "keep age
+        // at 35" anchor (excessDays = (currentAge - targetAge) * 365), reused
+        // here as a pure helper so it's independently testable.
+        public const double DaysPerYear = 365.0;
+
+        public static double ForestLordReanchorShiftDays(double currentAgeYears, double targetAgeYears) =>
+            (currentAgeYears - targetAgeYears) * DaysPerYear;
     }
 }

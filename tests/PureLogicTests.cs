@@ -3591,6 +3591,14 @@ namespace AshAndEmber.Tests
         }
 
         [Test]
+        public void WandsMath_ForestLordWandChance_IsMostlyNotUniversal()
+        {
+            Assert.Greater(WandsMath.ForestLordWandChance, WandsMath.TowerLordWandChance);
+            Assert.Greater(WandsMath.ForestLordWandChance, WandsMath.ChosenLordWandChance);
+            Assert.Less(WandsMath.ForestLordWandChance, 1.0);
+        }
+
+        [Test]
         public void WandsMath_ShouldGrantLordWand_RespectsChanceBoundary()
         {
             Assert.IsTrue(WandsMath.ShouldGrantLordWand(0.05, 0.15));
@@ -4803,6 +4811,53 @@ namespace AshAndEmber.Tests
         {
             CollectionAssert.Contains(CityStateMath.SanctuaryKingdomNames, CityStateMath.CampKingdomName);
             CollectionAssert.Contains(CityStateMath.SanctuaryKingdomNames, CityStateMath.ForestKingdomName);
+        }
+
+        [Test]
+        public void CityStateMath_ForestLordAgeWindow_NeverBelowComingOfAge()
+        {
+            // DefaultAgeModel.HeroComesOfAge is 18 — verified against the DLL.
+            Assert.GreaterOrEqual(CityStateMath.ForestLordMinAge, 18f);
+            Assert.Greater(CityStateMath.ForestLordMaxAge, CityStateMath.ForestLordMinAge);
+            // Well below MiddleAdultHoodAge (35) — reads as young, not middle-aged.
+            Assert.Less(CityStateMath.ForestLordMaxAge, 35f);
+        }
+
+        [Test]
+        public void CityStateMath_ForestLordAgeDrifted_RespectsWindow()
+        {
+            Assert.IsFalse(CityStateMath.ForestLordAgeDrifted(CityStateMath.ForestLordMinAge));
+            Assert.IsFalse(CityStateMath.ForestLordAgeDrifted(CityStateMath.ForestLordMaxAge));
+            Assert.IsTrue(CityStateMath.ForestLordAgeDrifted(CityStateMath.ForestLordMinAge - 0.1));
+            Assert.IsTrue(CityStateMath.ForestLordAgeDrifted(CityStateMath.ForestLordMaxAge + 0.1));
+            Assert.IsTrue(CityStateMath.ForestLordAgeDrifted(50.0));
+        }
+
+        [Test]
+        public void CityStateMath_ForestLordTargetAge_StaysInWindowAndIsDeterministic()
+        {
+            string[] ids = { "hero_a", "hero_b", "hero_c", "", null };
+            foreach (var id in ids)
+            {
+                double age = CityStateMath.ForestLordTargetAge(id);
+                Assert.GreaterOrEqual(age, CityStateMath.ForestLordMinAge);
+                Assert.LessOrEqual(age, CityStateMath.ForestLordMaxAge);
+                Assert.AreEqual(age, CityStateMath.ForestLordTargetAge(id));
+            }
+        }
+
+        [Test]
+        public void CityStateMath_ForestLordReanchorShiftDays_ZeroWhenAlreadyAtTarget()
+        {
+            Assert.AreEqual(0.0, CityStateMath.ForestLordReanchorShiftDays(19.0, 19.0), 1e-9);
+        }
+
+        [Test]
+        public void CityStateMath_ForestLordReanchorShiftDays_PositiveWhenOlderThanTarget()
+        {
+            double shift = CityStateMath.ForestLordReanchorShiftDays(50.0, 18.0);
+            Assert.Greater(shift, 0.0);
+            Assert.AreEqual((50.0 - 18.0) * CityStateMath.DaysPerYear, shift, 1e-6);
         }
 
         // ── RuinsMath tests (Phase 9 — the ruins) ───────────────────────────────

@@ -133,9 +133,12 @@ namespace AshAndEmber
                             CityStateMath.CampEncyclopediaText, CityStateMath.CampRulerTitle,
                             BuildCampBanner(), CityStateMath.CampPrimaryColor, CityStateMath.CampSecondaryColor);
                     else if (CityStateMath.IsPenCannocHomeSettlement(homeName))
+                    {
                         ApplySanctuaryIdentity(kingdom, CityStateMath.ForestKingdomName,
                             CityStateMath.ForestEncyclopediaText, CityStateMath.ForestRulerTitle,
                             BuildForestBanner(), CityStateMath.ForestPrimaryColor, CityStateMath.ForestSecondaryColor);
+                        if (kingdom.RulingClan != null) ApplyForestLordAges(kingdom.RulingClan);
+                    }
                 }
                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             }
@@ -336,6 +339,14 @@ namespace AshAndEmber
 
                 ChangeKingdomAction.ApplyByCreateKingdom(clan, kingdom, false);
 
+                // The wood keeps its own — every lord of the founding
+                // (ruling) clan is aged into the young-adult window at the
+                // moment the Children of the Forest come into being. The
+                // weekly wand sweep (WandsCampaignBehavior.SweepGrantWandsToLords)
+                // re-anchors this every week so campaign time never carries
+                // them back out of it.
+                if (isForest) ApplyForestLordAges(clan);
+
                 if (isSanctuary)
                 {
                     // Banner/colours must match on both the kingdom and its
@@ -455,6 +466,36 @@ namespace AshAndEmber
                 f?.SetValue(kingdom, value);
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // The wood keeps its own — ages every hero of the given clan into the
+        // young-adult window (CityStateMath.ForestLordMinAge/MaxAge) if they
+        // aren't already inside it. Idempotent: a hero already in-window is
+        // left alone. See WandsCampaignBehavior.SweepGrantWandsToLords for the
+        // weekly re-anchor that keeps them there for the life of the campaign.
+        internal static void ApplyForestLordAges(Clan clan)
+        {
+            if (clan == null) return;
+            try
+            {
+                foreach (Hero hero in clan.Heroes.ToList())
+                {
+                    try { ReanchorForestLordAge(hero); }
+                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                }
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        internal static void ReanchorForestLordAge(Hero hero)
+        {
+            if (hero == null || !hero.IsAlive) return;
+            double ageYears = hero.Age;
+            if (!CityStateMath.ForestLordAgeDrifted(ageYears)) return;
+
+            double targetAge = CityStateMath.ForestLordTargetAge(hero.StringId);
+            double shiftDays = CityStateMath.ForestLordReanchorShiftDays(ageYears, targetAge);
+            hero.SetBirthDay(hero.BirthDay + CampaignTime.Days((float)shiftDays));
         }
 
         // Requirement 24 — reassigns the settlement's culture (and its bound

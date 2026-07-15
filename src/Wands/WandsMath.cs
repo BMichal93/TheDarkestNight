@@ -96,6 +96,13 @@ namespace AshAndEmber
         public const double TowerLordWandChance  = 0.15;
         public const double ChosenLordWandChance = 0.15;
 
+        // The Children of the Forest have no army of their own — the wand IS
+        // their soldiery, so the overwhelming majority of their lords carry
+        // (and, per WandsCampaignBehavior.EnsureLordWandEquipped, actually
+        // wield) one. "Mostly," not universally — a few still ride to battle
+        // bare-handed of it.
+        public const double ForestLordWandChance = 0.85;
+
         public static bool ShouldGrantLordWand(double roll01, double chance) => roll01 < chance;
 
         // ── NPC distribution (Hollow Choir) ──────────────────────────────────

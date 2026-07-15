@@ -99,6 +99,9 @@ namespace AshAndEmber
             {
                 bool sellsHorsesToday = !isVillage
                     && EconomyMath.TownSellsHorsesToday(settlement.StringId, CurrentDay());
+                // The Children of the Forest deal in wands, not blades — their
+                // market strips weapons entirely, regardless of tier.
+                bool isForestMarket = !isVillage && CityStateSystem.IsForestSettlement(settlement);
 
                 // Snapshot first: mutating an ItemRoster mid-enumeration is unsafe.
                 var snapshot = new List<(ItemObject item, int amount)>();
@@ -119,7 +122,9 @@ namespace AshAndEmber
                     else if (!isVillage && item.HasHorseComponent)
                         target = sellsHorsesToday ? EconomyMath.TownHorseSaleQuantity(amount) : 0;
                     else if (!isVillage && item.HasWeaponComponent && !WandsCatalog.IsWandItemId(item.StringId))
-                        target = EconomyMath.TownWeaponSaleQuantity(amount, (int)item.Tier);
+                        target = isForestMarket
+                            ? EconomyMath.ForestWeaponSaleQuantity(amount)
+                            : EconomyMath.TownWeaponSaleQuantity(amount, (int)item.Tier);
                     else if (!isVillage && item.HasArmorComponent)
                         target = EconomyMath.TownArmorSaleQuantity(amount, (int)item.Tier);
                     else
