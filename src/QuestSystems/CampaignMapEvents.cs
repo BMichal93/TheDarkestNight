@@ -6,23 +6,23 @@
 // ┌──────────────────────┬─────────────────────────────────────────────────────┐
 // │ Event                │ Effect                                              │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
-// │ Ashen Plague         │ Wounds garrison of a random city/castle; spawns     │
-// │                      │ several Ashen Spawn parties near the settlement.    │
+// │ cult Plague         │ Wounds garrison of a random city/castle; spawns     │
+// │                      │ several demons parties near the settlement.    │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
 // │ Great Withering      │ Destroys 80% of a random village hearth, OR halves  │
 // │                      │ the prosperity of a random city.                    │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
-// │ Ashen March          │ Spawns Ashen Spawn parties across a random non-Ashen│
+// │ cult March          │ Spawns demons parties across a random non-Ashen│
 // │                      │ kingdom.                                            │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
 // │ Long Night           │ Forces Dark light-level for 7 days; bleeds town     │
 // │                      │ prosperity daily.                                   │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
-// │ Ashen Tide           │ A random castle falls to an Ashen lord instantly.   │
+// │ cult Tide           │ A random castle falls to a demon-cult lord instantly.   │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
-// │ Fire Fades           │ 2–4 non-Ashen, non-leader lords die quietly.        │
+// │ Fire Fades           │ 2–4 non-cult, non-leader lords die quietly.        │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
-// │ Darkened Roads       │ All caravans in a random kingdom vanish; Ashen      │
+// │ Darkened Roads       │ All caravans in a random kingdom vanish; cult      │
 // │                      │ ambushers fill the roads.                           │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
 // │ Seeds of Betrayal    │ (Very rare) A faction leader is murdered by their   │
@@ -31,36 +31,36 @@
 // │ Broken Will          │ (Once/twice, after day 60) A faction is drawn into  │
 // │                      │ the cold — declares war on all others.              │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
-// │ The Long March       │ (Rare) 4 massive Ashen warbands (100+ troops each)  │
+// │ The Long March       │ (Rare) 4 massive cult warbands (100+ troops each)  │
 // │                      │ appear in one of Aserai/Khuzait/Sturgia. (Vlandia — │
 // │                      │ The Holy Temple — is never the target.)             │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
 // │ Whispers from the Ash│ (Very rare) 1–3 mage lords abandon their factions  │
-// │                      │ and join the Ashen.                                 │
+// │                      │ and join the demon-cult.                                 │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
 // │ Tyranny              │ (Very rare) A faction leader executes their highest- │
 // │                      │ tier clan heads. Ruling clan loses all influence.   │
 // │                      │ One executed clan defects.                          │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
 // │ The First Green      │ (Spring only, rare) The world stirs back to life.   │
-// │                      │ All non-Ashen lord parties gain a small morale boost.│
+// │                      │ All non-cult lord parties gain a small morale boost.│
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
 // │ The Amber Harvest    │ (Autumn only, rare) Crops gathered before the cold. │
-// │                      │ All non-Ashen villages gain hearth.                 │
+// │                      │ All non-cult villages gain hearth.                 │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
-// │ The Ashen Gambit     │ (Once per campaign, day 120+) Ashen assassins strike │
+// │ The demon-cult Gambit     │ (Once per campaign, day 120+) cult assassins strike │
 // │                      │ every Imperial throne in a single night. Empire     │
 // │                      │ leaders die, lords suffer −30 morale, cities −30   │
-// │                      │ security. Ashen Spawn flood the heartlands and the  │
+// │                      │ security. demons flood the heartlands and the  │
 // │                      │ cold armies march.                                  │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
 // │ The Dead March       │ (Day 50, then ~every 110 days) A necromantic rite   │
-// │                      │ raises the Ashen fallen. Every Ashen garrison and   │
+// │                      │ raises the demon-cult fallen. Every cult garrison and   │
 // │                      │ lord party is reinforced with 40–80 troops spread   │
 // │                      │ across tiers 2, 3, and 4 (~⅓ each).               │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
 // │ The Undying Host     │ (Once per campaign, day 80+, growing chance after   │
-// │                      │ day 200) The Ashen's greatest lord is chosen. 5 000 │
+// │                      │ day 200) The demon-cult's greatest lord is chosen. 5 000 │
 // │                      │ troops are forged into their party. Their clan      │
 // │                      │ receives crushing influence. The host marches.      │
 // └──────────────────────┴─────────────────────────────────────────────────────┘
@@ -125,8 +125,8 @@ namespace AshAndEmber
         public const float ChanceScorchingSun    = 0.04f;  // ~every 25 weeks  (rare, summer only)
         public const float ChanceFirstGreen      = 0.04f;  // ~every 25 weeks  (rare, spring only)
         public const float ChanceAmberHarvest    = 0.04f;  // ~every 25 weeks  (rare, autumn only)
-        public const float ChanceEmbersOfHope    = 0.06f;  // ~every 17 weeks  (once Ashen hold EmbersOfHopeMinTowns+ towns)
-        public const int   EmbersOfHopeMinTowns  = 13;     // Ashen must hold this many towns to trigger
+        public const float ChanceEmbersOfHope    = 0.06f;  // ~every 17 weeks  (once cult hold EmbersOfHopeMinTowns+ towns)
+        public const int   EmbersOfHopeMinTowns  = 13;     // cult must hold this many towns to trigger
         public const int   EmbersOfHopePeaceCount = 3;     // max wars ended per firing
         public const float ChanceASlightAtCourt   = 0.05f;  // ~every 20 weeks  (diplomatic incident → war or cold shoulder)
         public const float ChanceBorderTorches   = 0.05f;  // ~every 20 weeks  (border raid → war or tense standoff)
@@ -137,8 +137,8 @@ namespace AshAndEmber
         public const int   AshenGambitEarliestDay = 120;
         // Minimum elapsed days between any two world events. Prevents back-to-back clustering.
         public const int   EventCooldownDays      = 14;
-        public const int   AshenGambitSpawnCount  = 18;    // Ashen Spawn warbands seeded across the Empire
-        public const int   AshenGambitCastleCount = 3;     // Empire castles seized by Ashen lords on the night
+        public const int   AshenGambitSpawnCount  = 18;    // demons warbands seeded across the Empire
+        public const int   AshenGambitCastleCount = 3;     // Empire castles seized by cult lords on the night
 
         // The Dead March: first fire forced on day 50; recurs every ~110 days (chance-based, 95-day gap)
         public const float ChanceDeadMarch        = 0.15f; // ~7 weeks after eligible → ~110d avg cycle
@@ -153,16 +153,16 @@ namespace AshAndEmber
         public const int   UndyingHostRampEndDay     = 200;    // ramp reaches full ChanceUndyingHostBase by this day
         public const int   UndyingHostNearCertainDay = 400;    // chance spikes to ChanceUndyingHostLatent after this day
         public const float ChanceUndyingHostLatent   = 0.60f;  // ~60% per week — fires within 1–2 weeks past day 400
-        public const int   UndyingHostTroopCount     = 5000;   // troops added to the chosen Ashen lord's party
-        public const float UndyingHostInfluenceGrant = 50000f; // influence floored to this for the Ashen ruling clan
+        public const int   UndyingHostTroopCount     = 5000;   // troops added to the chosen cult lord's party
+        public const float UndyingHostInfluenceGrant = 50000f; // influence floored to this for the demon-cult ruling clan
 
-        // Ashen Plague: parties spawned near the afflicted settlement
+        // cult Plague: parties spawned near the afflicted settlement
         public const int AshenPlagueSpawnCount  = 3;
 
-        // Ashen March: parties spawned across the target kingdom
+        // cult March: parties spawned across the target kingdom
         public const int AshenMarchPartyCount   = 6;
 
-        // Ashen March: minimum party strength per spawned party
+        // cult March: minimum party strength per spawned party
         public const float MinAshenMarchStrength = 70f;
 
         // Long Night: duration in campaign days
@@ -193,7 +193,7 @@ namespace AshAndEmber
         // Scorching Sun: desert kingdoms — Aserai and the Southern Empire bake in the heat.
         private static readonly string[] DesertKingdoms = { "aserai", "empire_s" };
 
-        // The Ashen Gambit: all vanilla Empire splits plus base "empire" ID for safety.
+        // The demon-cult Gambit: all vanilla Empire splits plus base "empire" ID for safety.
         private static readonly string[] EmpireKingdomIds = { "empire_w", "empire_s", "empire_n", "empire" };
 
         // ── Runtime state ─────────────────────────────────────────────────────
@@ -267,11 +267,11 @@ namespace AshAndEmber
         // ── Called from CampaignBehavior.OnHeroKilled ────────────────────────
         // Triggered when a faction leader dies. Rolls 5% chance and queues a
         // 2-day delayed Game of Thrones event for that kingdom.
-        // Ashen do not fracture — their will is cold and singular.
+        // cult do not fracture — their will is cold and singular.
         public static void OnFactionLeaderKilled(Kingdom kingdom)
         {
             if (kingdom == null || kingdom.IsEliminated) return;
-            if (kingdom.StringId == AshenKingdomId) return;         // Ashen never fracture
+            if (kingdom.StringId == AshenKingdomId) return;         // cult never fracture
             if (Hero.MainHero?.Clan?.Kingdom == kingdom) return;    // never fracture the player's faction
             // Unified cultures have strong succession traditions — courts don't splinter on a leader's death
             if ((kingdom.StringId == TempleKingdomId || kingdom.StringId == TribesKingdomId)
@@ -288,7 +288,7 @@ namespace AshAndEmber
         /// Decrements ongoing timed effects (Long Night).
         public static void DailyTick()
         {
-            // Battlefield echo: spawn small Ashen presence near a spell-heavy battle site
+            // Battlefield echo: spawn small cult presence near a spell-heavy battle site
             if (_battleEchoPending)
             {
                 _battleEchoPending = false;
@@ -338,7 +338,7 @@ namespace AshAndEmber
             {
                 _longNightDaysRemaining--;
 
-                // Each day of Long Night bleeds prosperity from every town not under Ashen rule
+                // Each day of Long Night bleeds prosperity from every town not under cult rule
                 try
                 {
                     foreach (var s in Settlement.All)
@@ -402,7 +402,7 @@ namespace AshAndEmber
                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             }
 
-            // The Holy Temple (Vlandia) is permanently at war with the Ashen — re-declare if peace is made
+            // The Holy Temple (Vlandia) is permanently at war with the demon-cult — re-declare if peace is made
             try
             {
                 var temple = Kingdom.All.FirstOrDefault(k =>
@@ -481,7 +481,7 @@ namespace AshAndEmber
             if (day < 30) return;
             if (day - _lastConflictSeedDay < 21) return;
 
-            // Count active non-Ashen inter-faction wars
+            // Count active non-cult inter-faction wars
             int warCount = 0;
             try
             {

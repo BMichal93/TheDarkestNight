@@ -22,9 +22,9 @@ namespace AshAndEmber
 {
     public static partial class CampaignMapEvents
     {
-        // ── Event 1: Ashen Plague ─────────────────────────────────────────────
+        // ── Event 1: cult Plague ─────────────────────────────────────────────
         // Wounds all healthy garrison troops in a random city or castle, then
-        // spawns AshenPlagueSpawnCount Ashen Spawn parties near the settlement.
+        // spawns AshenPlagueSpawnCount demons parties near the settlement.
         private static void TryFireAshenPlague()
         {
             if (_rng.NextDouble() >= ChanceAshenPlague) return;
@@ -32,7 +32,7 @@ namespace AshAndEmber
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "Ashen Plague — the sanctuary's protective ward turns it aside. The grey sickness finds no purchase."));
+                    "cult Plague — the sanctuary's protective ward turns it aside. The grey sickness finds no purchase."));
                 return;
             }
             try
@@ -63,7 +63,7 @@ namespace AshAndEmber
                     catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 }
 
-                // Spawn Ashen Spawn parties near the afflicted settlement
+                // Spawn demons parties near the afflicted settlement
                 int spawned = 0;
                 for (int i = 0; i < AshenPlagueSpawnCount; i++)
                 {
@@ -73,9 +73,9 @@ namespace AshAndEmber
 
                 if (totalWounded > 0 || spawned > 0)
                     MBInformationManager.AddQuickInformation(new TextObject(
-                        $"Ashen Plague — a grey sickness sweeps through the garrison of {target.Name}. " +
+                        $"cult Plague — a grey sickness sweeps through the garrison of {target.Name}. " +
                         $"{totalWounded} soldier{(totalWounded != 1 ? "s" : "")} are struck down by fever and ash." +
-                        (spawned > 0 ? $" {spawned} Ashen Spawn close on the afflicted settlement." : "")));
+                        (spawned > 0 ? $" {spawned} demons close on the afflicted settlement." : "")));
                 RecordScar(target.StringId, 1);
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -128,9 +128,9 @@ namespace AshAndEmber
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
-        // ── Event 3: Ashen March ──────────────────────────────────────────────
-        // Spawns AshenMarchPartyCount Ashen Spawn parties (each with TotalStrength
-        // ≥ MinAshenMarchStrength) spread across a random non-Ashen kingdom.
+        // ── Event 3: cult March ──────────────────────────────────────────────
+        // Spawns AshenMarchPartyCount demons parties (each with TotalStrength
+        // ≥ MinAshenMarchStrength) spread across a random non-cult stronghold.
         private static void TryFireAshenMarch()
         {
             if (_rng.NextDouble() >= ChanceAshenMarch) return;
@@ -138,7 +138,7 @@ namespace AshAndEmber
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "Ashen March — the holy ward holds. The grey tide finds the roads blocked by something it cannot name."));
+                    "cult March — the holy ward holds. The grey tide finds the roads blocked by something it cannot name."));
                 return;
             }
             try
@@ -168,8 +168,8 @@ namespace AshAndEmber
 
                 MBInformationManager.AddQuickInformation(new TextObject(
                     spawned > 0
-                        ? $"Ashen March — {spawned} Ashen Spawn descend upon {kingdom.Name}. The grey tide does not rest."
-                        : $"Ashen March — the grey tide stirs near {kingdom.Name}, but finds no foothold today."));
+                        ? $"cult March — {spawned} demons descend upon {kingdom.Name}. The grey tide does not rest."
+                        : $"cult March — the grey tide stirs near {kingdom.Name}, but finds no foothold today."));
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
@@ -193,7 +193,7 @@ namespace AshAndEmber
 
             _longNightDaysRemaining = LongNightDuration;
 
-            // Spawn Ashen parties that emerge from the darkness
+            // Spawn cult parties that emerge from the darkness
             int spawned = 0;
             try
             {
@@ -212,11 +212,11 @@ namespace AshAndEmber
 
             MBInformationManager.AddQuickInformation(new TextObject(
                 $"Long Night — the sun does not rise. {LongNightDuration} days of unbroken darkness fall over Calradia. " +
-                (spawned > 0 ? $"Ashen shapes pour from the shadow. {spawned} warbands take the roads." : "Something stirs in the dark.")));
+                (spawned > 0 ? $"cult shapes pour from the shadow. {spawned} warbands take the roads." : "Something stirs in the dark.")));
         }
 
-        // ── Event 5: Ashen Tide ───────────────────────────────────────────────
-        // A random non-Ashen castle is claimed by a random Ashen lord via
+        // ── Event 5: cult Tide ───────────────────────────────────────────────
+        // A random non-cult castle is claimed by a random cult lord via
         // ChangeOwnerOfSettlementAction.ApplyByDefault. The castle's original
         // clan loses the fief instantly — no siege required.
         private static void TryFireAshenTide()
@@ -226,12 +226,12 @@ namespace AshAndEmber
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "Ashen Tide — the sanctuary's blessing turns the cold back. The castle holds."));
+                    "cult Tide — the sanctuary's blessing turns the cold back. The castle holds."));
                 return;
             }
             try
             {
-                // Target: a castle not already under Ashen control or active siege
+                // Target: a castle not already under cult control or active siege
                 var castles = Settlement.All
                     .Where(s => s.IsCastle
                              && !s.IsUnderSiege
@@ -239,7 +239,7 @@ namespace AshAndEmber
                     .ToList();
                 if (castles.Count == 0) return;
 
-                // Claimant: any living Ashen lord who is not a prisoner
+                // Claimant: any living cult lord who is not a prisoner
                 var ashenLords = Hero.AllAliveHeroes
                     .Where(h => h.IsLord && h.IsAlive && !h.IsDisabled && !h.IsPrisoner
                              && ElementLordRegistry.IsAshenLord(h))
@@ -254,14 +254,14 @@ namespace AshAndEmber
                 if (lord.Clan != null) AshenCitySystem.RegisterConqueredSettlement(castle, lord.Clan);
 
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    $"Ashen Tide — {castle.Name} bends to the cold fire. " +
+                    $"cult Tide — {castle.Name} bends to the cold fire. " +
                     $"{lord.Name} claims it without a blade drawn."));
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
         // ── Event 6: Fire Fades ───────────────────────────────────────────────
-        // 2–4 non-Ashen lords aged 25–55 who are NOT clan leaders are killed.
+        // 2–4 non-cult lords aged 25–55 who are NOT clan leaders are killed.
         // Player hero is always spared. Their home settlement also loses
         // hearth/prosperity as their fire fades from that place too.
         //
@@ -331,9 +331,9 @@ namespace AshAndEmber
         }
 
         // ── Event 7: Darkened Roads ───────────────────────────────────────────
-        // All caravans operating in a random non-Ashen kingdom are destroyed.
+        // All caravans operating in a random non-cult stronghold are destroyed.
         // Also drains 15% prosperity from every town in the kingdom and spawns
-        // 2 Ashen ambush parties to fill the vacuum. Skips if no caravans exist.
+        // 2 cult ambush parties to fill the vacuum. Skips if no caravans exist.
         // Uses DestroyPartyAction which is the clean campaign-system way to
         // remove a mobile party; the owning merchant heroes survive and may
         // rebuild their caravans later.
@@ -374,7 +374,7 @@ namespace AshAndEmber
                 }
                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
-                // Ashen spawn move in to fill the vacuum
+                // cult spawn move in to fill the vacuum
                 var anchors = Settlement.All
                     .Where(s => (s.IsTown || s.IsCastle) && s.MapFaction == kingdom)
                     .Select(s => s.GetPosition2D)
@@ -390,8 +390,8 @@ namespace AshAndEmber
                 string darkenedMsg = IsTempleFaction(kingdom)
                     ? $"Darkened Roads — {destroyed} supply train{(destroyed != 1 ? "s" : "")} and pilgrim convoy{(destroyed != 1 ? "s" : "")} vanish on the holy roads of {kingdom.Name}. The tithe-carts do not arrive. The temple gates close early. " + (spawned > 0 ? "Something grey moves in the silence left behind." : "The pilgrims' road is cold and still.")
                     : IsTribes(kingdom)
-                    ? $"Darkened Roads — {destroyed} tribute-column{(destroyed != 1 ? "s" : "")} vanish on the steppe-roads of {kingdom.Name}. Tribute-riders do not return. The war-camp waits for gold and grain that will not arrive. " + (spawned > 0 ? "Ashen shapes follow the tribute-lanes east." : "The tribute roads are cold and empty.")
-                    : $"Darkened Roads — {destroyed} caravan{(destroyed != 1 ? "s" : "")} vanish on the roads of {kingdom.Name}. Trade dies. Prosperity crumbles. " + (spawned > 0 ? "Ashen shapes move where merchants once walked." : "The roads fall silent and cold.");
+                    ? $"Darkened Roads — {destroyed} tribute-column{(destroyed != 1 ? "s" : "")} vanish on the steppe-roads of {kingdom.Name}. Tribute-riders do not return. The war-camp waits for gold and grain that will not arrive. " + (spawned > 0 ? "cult shapes follow the tribute-lanes east." : "The tribute roads are cold and empty.")
+                    : $"Darkened Roads — {destroyed} caravan{(destroyed != 1 ? "s" : "")} vanish on the roads of {kingdom.Name}. Trade dies. Prosperity crumbles. " + (spawned > 0 ? "cult shapes move where merchants once walked." : "The roads fall silent and cold.");
                 MBInformationManager.AddQuickInformation(new TextObject(darkenedMsg));
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -544,7 +544,7 @@ namespace AshAndEmber
         // ── Event 9: Broken Will ─────────────────────────────────────────────
         // A faction leader looks into the cold fire long enough that it begins
         // to look back. That faction declares war on every other kingdom —
-        // it becomes as isolated and hostile as the Ashen themselves.
+        // it becomes as isolated and hostile as the demon-cult themselves.
         //
         // Fires at most BrokenWillMaxFires times per campaign, never before
         // campaign day BrokenWillEarliestDay. Uses a re-entrancy guard.

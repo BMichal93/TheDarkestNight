@@ -23,7 +23,7 @@ namespace AshAndEmber
     public static partial class CampaignMapEvents
     {
         // ── Event 10: The Long March ─────────────────────────────────────────
-        // Four massive Ashen warbands (100+ troops each) materialise within
+        // Four massive cult warbands (100+ troops each) materialise within
         // one of the southern, eastern, or northern realms:
         // Aserai, the Khuzait Khanate, or Sturgia (see LongMarchTargets).
         // Vlandia — The Holy Temple — is never the target: the grey tide does
@@ -71,7 +71,7 @@ namespace AshAndEmber
 
                 MBInformationManager.AddQuickInformation(new TextObject(
                     spawned > 0
-                        ? $"The Long March — {spawned} great columns of Ashen Spawn set foot in {kingdom.Name}. " +
+                        ? $"The Long March — {spawned} great columns of demons set foot in {kingdom.Name}. " +
                           $"These are not raiders. They do not break and scatter. They march."
                         : $"The Long March — something moved through {kingdom.Name}. The roads show it. The villages show it. But whatever passed has gone."));
             }
@@ -80,7 +80,7 @@ namespace AshAndEmber
 
         // ── Event 11: Whispers from the Ash ──────────────────────────────────
         // 1–3 mage lords hear the cold calling them by name. They abandon their
-        // factions and join the Ashen, gaining Ashen lord status, personality,
+        // factions and join the demon-cult, gaining cult lord status, personality,
         // and the cold fire's mark.
         //
         // Safety constraints:
@@ -146,7 +146,7 @@ namespace AshAndEmber
                     $"that they cannot explain and cannot forget. They have gone north. " +
                     $"Their banners are cold. Their eyes are grey. " +
                     $"Their former lords received only a letter — unsigned, unaddressed, already cold. " +
-                    $"[{names.Count} mage lord{(names.Count != 1 ? "s" : "")} defected to the Ashen.]"));
+                    $"[{names.Count} mage lord{(names.Count != 1 ? "s" : "")} defected to the demon-cult.]"));
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
@@ -367,7 +367,7 @@ namespace AshAndEmber
         // ruling-clan transition. Falls back to a no-op if the action throws.
         //
         // Safety constraints:
-        //   • Excludes the Ashen kingdom.
+        //   • Excludes the demon-cult kingdom.
         //   • Requires ≥ 2 non-eliminated clans in the kingdom.
         //   • The new ruling clan must already be a member of the kingdom.
         //   • Wrapped entirely in try/catch; a failure is silent and harmless.
@@ -595,7 +595,7 @@ namespace AshAndEmber
         // ── Event 16: The First Green ─────────────────────────────────────────
         // Spring only. The world stirs back to life — flowers push through the
         // soil, rivers run clear. Ash has not yet smothered the season.
-        // All active lord parties outside the Ashen kingdom receive a small
+        // All active lord parties outside the demon-cult kingdom receive a small
         // morale boost (+10 RecentEventsMorale).
         private static void TryFireFirstGreen()
         {
@@ -624,7 +624,7 @@ namespace AshAndEmber
 
         // ── Event 17: The Amber Harvest ───────────────────────────────────────
         // Autumn only. The crops gave what they promised before the cold comes.
-        // All villages not under the Ashen banner gain +20 hearth as granaries
+        // All villages not under the demon-cult banner gain +20 hearth as granaries
         // fill and hearths are stocked for winter.
         private static void TryFireAmberHarvest()
         {
@@ -656,7 +656,7 @@ namespace AshAndEmber
         // They keep their fiefs — the kingdom fractures.
         //
         // Safety constraints:
-        //   • Never fires for the Ashen (excluded at trigger).
+        //   • Never fires for the demon-cult (excluded at trigger).
         //   • Never fires for the player's faction.
         //   • Never ejects the current ruling clan or the player's clan.
         //   • Each ejection in its own try/catch; a bad clan can't abort others.

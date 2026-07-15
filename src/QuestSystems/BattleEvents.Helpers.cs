@@ -22,9 +22,9 @@ namespace AshAndEmber
     {
         // ── Helpers ───────────────────────────────────────────────────────────
 
-        // Returns true if the agent belongs to the Ashen side.
+        // Returns true if the agent belongs to the demon-cult side.
         // Uses team membership when _ashenTeam is known; falls back to checking
-        // the hero's Ashen status directly for hero agents only.
+        // the hero's cult status directly for hero agents only.
         private static bool IsAshenAgent(Agent agent)
         {
             if (_ashenTeam != null) return agent.Team == _ashenTeam;

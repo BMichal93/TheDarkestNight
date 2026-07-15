@@ -61,7 +61,7 @@ namespace AshAndEmber
             return 0.10;
         }
 
-        // Fills ka/kb with two non-Ashen kingdoms that are currently at peace
+        // Fills ka/kb with two non-cult strongholds that are currently at peace
         // with each other and both have a living leader. Returns false if no
         // such pair exists. The player's own kingdom is never picked — scripted
         // incident-wars must not drag the player's faction into a war it had no
@@ -73,7 +73,7 @@ namespace AshAndEmber
             var pool = Kingdom.All
                 .Where(k => !k.IsEliminated
                          && k.StringId != AshenKingdomId
-                         && k.StringId != "vlandia"   // Holy Temple fights only the Ashen
+                         && k.StringId != "vlandia"   // Holy Temple fights only the demon-cult
                          && k != playerKingdom         // never force the player's faction into these wars
                          && k.Leader != null && k.Leader.IsAlive && !k.Leader.IsChild)
                 .ToList();
@@ -307,9 +307,9 @@ namespace AshAndEmber
         }
 
         // ── Event 23: Embers of Hope ──────────────────────────────────────────
-        // Fires once the Ashen kingdom holds at least EmbersOfHopeMinTowns towns.
+        // Fires once the demon-cult kingdom holds at least EmbersOfHopeMinTowns towns.
         // The weight of a common darkness is enough to still old hatreds —
-        // up to 3 random wars between non-Ashen kingdoms are ended as rivals
+        // up to 3 random wars between non-cult strongholds are ended as rivals
         // recognise that a greater threat walks among them.
         private static void TryFireEmbersOfHope()
         {
@@ -317,14 +317,14 @@ namespace AshAndEmber
             if (!TryClaimWeeklySlot()) return;
             try
             {
-                // Condition: Ashen must hold at least EmbersOfHopeMinTowns towns.
+                // Condition: cult must hold at least EmbersOfHopeMinTowns towns.
                 var ashen = Kingdom.All.FirstOrDefault(k => k.StringId == AshenKingdomId && !k.IsEliminated);
                 if (ashen == null) return;
 
                 int ashenTowns = Settlement.All.Count(s => s.IsTown && s.Town != null && s.MapFaction == ashen);
                 if (ashenTowns < EmbersOfHopeMinTowns) return;
 
-                // Collect every active war between two non-Ashen kingdoms.
+                // Collect every active war between two non-cult strongholds.
                 var kingdoms = Kingdom.All
                     .Where(k => !k.IsEliminated && k.StringId != AshenKingdomId)
                     .ToList();
@@ -359,7 +359,7 @@ namespace AshAndEmber
 
                 string conflicts = string.Join("; ", peacedNames);
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    $"Embers of Hope — the Ashen hold {ashenTowns} cities now. " +
+                    $"Embers of Hope — the demon-cult hold {ashenTowns} cities now. " +
                     $"Beneath that shadow old quarrels feel small and foolish. " +
                     $"Banners are lowered and bitter words withdrawn: " +
                     $"{peacedNames.Count} war{(peacedNames.Count != 1 ? "s" : "")} end{(peacedNames.Count == 1 ? "s" : "")}: {conflicts}."));

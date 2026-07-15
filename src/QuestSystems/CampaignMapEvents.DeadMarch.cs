@@ -24,8 +24,8 @@ namespace AshAndEmber
     public static partial class CampaignMapEvents
     {
         // ── Event: The Dead March ─────────────────────────────────────────────
-        // On campaign day 50 the Ashen perform a cold necromantic rite — the
-        // fallen of old campaigns answer. Every Ashen garrison and lord party
+        // On campaign day 50 the demon-cult perform a cold necromantic rite — the
+        // fallen of old campaigns answer. Every cult garrison and lord party
         // is reinforced with 40–80 troops spread across tiers 2, 3, and 4
         // (~⅓ each) from that settlement or lord's culture. After the first
         // fire the event recurs roughly every 110 days (chance-based, minimum
@@ -66,7 +66,7 @@ namespace AshAndEmber
                 int garrisonsBoosted = 0;
                 int armiesBoosted    = 0;
 
-                // Reinforce every Ashen garrison
+                // Reinforce every cult garrison
                 foreach (var s in Settlement.All)
                 {
                     try
@@ -82,7 +82,7 @@ namespace AshAndEmber
                     catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 }
 
-                // Reinforce every Ashen lord's mobile party
+                // Reinforce every cult lord's mobile party
                 foreach (var party in MobileParty.All.ToList())
                 {
                     try
@@ -101,10 +101,10 @@ namespace AshAndEmber
 
                 string flavour = isFirstFire
                     ? "On the fiftieth day the ash stirs in the mountain passes. Shapes walk that do not breathe. " +
-                      "The Ashen do not mourn their fallen — they call them back. " +
+                      "The demon-cult do not mourn their fallen — they call them back. " +
                       "The dead answer because they were never truly released."
                     : "A grey wind descends from the north carrying no warmth and no sound. " +
-                      "The Ashen count their fallen, and find them present. " +
+                      "The demon-cult count their fallen, and find them present. " +
                       "The dead march because the cold permits nothing else.";
 
                 MBInformationManager.AddQuickInformation(new TextObject(
@@ -116,12 +116,12 @@ namespace AshAndEmber
         }
 
         // ── Event: The Undying Host ───────────────────────────────────────────
-        // Once per campaign, the Ashen forge a conquest army of UndyingHostTroopCount
-        // elite troops. The strongest active Ashen lord is chosen as its vanguard;
+        // Once per campaign, the demon-cult forge a conquest army of UndyingHostTroopCount
+        // elite troops. The strongest active cult lord is chosen as its vanguard;
         // their party roster is packed with high-tier troops and their clan receives
         // crushing influence so army cohesion is never a limiting factor. A massive
         // morale surge keeps the oversized party from bleeding troops to desertion.
-        // The Ashen kingdom is guaranteed to be at war when the host marches.
+        // The demon-cult kingdom is guaranteed to be at war when the host marches.
         //
         // Probability curve:
         //   Day < 80   : impossible
@@ -169,7 +169,7 @@ namespace AshAndEmber
                     k.StringId == AshenKingdomId && !k.IsEliminated);
 
                 // ── Choose the vanguard lord ──────────────────────────────────
-                // Prefer the highest-tier active Ashen lord with their own mobile party.
+                // Prefer the highest-tier active cult lord with their own mobile party.
                 var vanguard = Hero.AllAliveHeroes
                     .Where(h => h.IsLord && !h.IsChild && !h.IsPrisoner && !h.IsDisabled
                              && ElementLordRegistry.IsAshenLord(h)
@@ -222,7 +222,7 @@ namespace AshAndEmber
                 }
                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
-                // Also flood every other Ashen lord clan with generous influence so
+                // Also flood every other cult lord clan with generous influence so
                 // they can sustain secondary armies and reinforce the vanguard freely.
                 try
                 {
@@ -235,9 +235,9 @@ namespace AshAndEmber
                 }
                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
-                // ── Guarantee the Ashen are at war ────────────────────────────
-                // If the Ashen somehow have no active wars, declare on the strongest
-                // non-player, non-Ashen kingdom so the host immediately has a march target.
+                // ── Guarantee the demon-cult are at war ────────────────────────────
+                // If the demon-cult somehow have no active wars, declare on the strongest
+                // non-player, non-cult stronghold so the host immediately has a march target.
                 try
                 {
                     if (ashenKingdom != null)
@@ -261,7 +261,7 @@ namespace AshAndEmber
                 }
                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
-                // ── Morale surge across all Ashen lord parties ────────────────
+                // ── Morale surge across all cult lord parties ────────────────
                 try
                 {
                     foreach (var party in MobileParty.All)

@@ -34,7 +34,7 @@ namespace AshAndEmber
         }
 
         // War-triggering events use their own slot so they never compete with
-        // Ashen / political / seasonal events for the main weekly slot.
+        // cult / political / seasonal events for the main weekly slot.
         private static bool TryClaimWarSlot()
         {
             if (_warSlotFilled) return false;
@@ -110,7 +110,7 @@ namespace AshAndEmber
         }
 
         // ── Public spawn entry point ──────────────────────────────────────────
-        // Allows SettlementEncounters to spawn a gate-ambush Ashen party near a
+        // Allows SettlementEncounters to spawn a gate-ambush cult party near a
         // settlement without duplicating the spawn logic.
         public static void SpawnAshenAmbushNear(Vec2 pos, int troops, float minStrength)
             => SpawnAshenSpawnParty(pos, troops, minStrength);
@@ -120,16 +120,16 @@ namespace AshAndEmber
         // `troops` here is the EXACT number of soldiers added (no 10× scaling) —
         // encounter battles describe small groups, not warbands.
         //
-        // `ashen` selects the flavour of the foe: true → a renamed Ashen Spawn
+        // `ashen` selects the flavour of the foe: true → a renamed demons
         // party of thralls and invokers (the Cold Embrace circle); false → an
         // ordinary bandit band (the drunk retainer at the gate), never marked as
-        // Ashen. Either way the roster is wiped to exactly `troops` so the looter
+        // cult. Either way the roster is wiped to exactly `troops` so the looter
         // bandit-clan's default template can't pad it with stray looters.
         public static MobileParty SpawnCombatPartyAt(Vec2 pos, int troops, bool ashen = false)
             => SpawnAshenSpawnParty(pos, troops, 0f, exactTroops: true, ashen: ashen);
 
         // ── Party spawning helper ─────────────────────────────────────────────
-        // Creates a single Ashen Spawn bandit party near anchorPos, registers
+        // Creates a single demons bandit party near anchorPos, registers
         // it with FireWorshippersSystem, and returns it (or null on failure).
         //
         // baseTroops   — starting sea_raider / mountain_bandit count
@@ -188,7 +188,7 @@ namespace AshAndEmber
                 if (exactTroops)
                     try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
-                // Ashen parties march as their own thralls; ordinary bandit bands use
+                // cult parties march as their own thralls; ordinary bandit bands use
                 // looters. Each falls back through the vanilla bandit troops so the
                 // spawn still succeeds if a custom troop is missing.
                 CharacterObject troop = ashen
@@ -210,7 +210,7 @@ namespace AshAndEmber
                 }
 
                 // Register with FireWorshippersSystem so IsAshenSpawn() returns true
-                // and the party is renamed "Ashen Spawn" with invokers mixed in.
+                // and the party is renamed "demons" with invokers mixed in.
                 // Ordinary bandit bands are left as the looter clan's own party.
                 if (ashen)
                     FireWorshippersSystem.ForceMarkAsAshenSpawn(party);

@@ -29,7 +29,7 @@ namespace AshAndEmber
         {
             int day = (int)ElapsedCampaignDays();
 
-            // Ashen Gambit: fires 14 days before the earliest possible trigger
+            // cult Gambit: fires 14 days before the earliest possible trigger
             if (!_ashenGambitFired && !_ashenGambitPortentShown
                 && day >= AshenGambitEarliestDay - 14)
             {
@@ -47,7 +47,7 @@ namespace AshAndEmber
                 _undyingHostPortentShown = true;
                 InformationManager.DisplayMessage(new InformationMessage(
                     "A herald found cold on the northern road — no wounds, no horse, no name. " +
-                    "The Ashen have stopped raiding the villages. " +
+                    "The demon-cult have stopped raiding the villages. " +
                     "When your enemies go quiet, they are not retreating.",
                     new Color(0.38f, 0.50f, 0.75f)));
             }

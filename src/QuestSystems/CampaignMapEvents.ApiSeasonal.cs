@@ -1,6 +1,6 @@
 // =============================================================================
 // ASH AND EMBER — CampaignMapEvents.ApiSeasonal.cs
-// Sanctuary/protective public API and Ashen-altar seasonal events.
+// Sanctuary/protective public API and cult-altar seasonal events.
 // Partial of CampaignMapEvents (shared state lives in CampaignMapEvents.cs).
 // =============================================================================
 
@@ -28,9 +28,9 @@ namespace AshAndEmber
         internal static void StartProtection(int days)
             => _protectedDaysRemaining = Math.Max(_protectedDaysRemaining, days);
 
-        // ── Ashen Altar forced seasonal events ───────────────────────────────
+        // ── cult Altar forced seasonal events ───────────────────────────────
         // Called by AshenAltarsCampaignBehavior when a player performs the
-        // Ashen Solstice rite. The season-check guard is intentionally omitted —
+        // cult Solstice rite. The season-check guard is intentionally omitted —
         // the sacrifice is what makes it possible regardless of the calendar.
         public static void ForceIronWinter()
         {
@@ -60,7 +60,7 @@ namespace AshAndEmber
                 }
 
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    $"Iron Winter (Ashen Altar) — the cold called by the altar has descended on {kingdom.Name}. " +
+                    $"Iron Winter (cult Altar) — the cold called by the altar has descended on {kingdom.Name}. " +
                     $"{villages} village{(villages != 1 ? "s" : "")} cannot keep their fires lit. " +
                     $"{towns} cit{(towns != 1 ? "ies" : "y")} ha{(towns != 1 ? "ve" : "s")} halved their stores."));
             }
@@ -95,7 +95,7 @@ namespace AshAndEmber
                 }
 
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    $"Scorching Sun (Ashen Altar) — the heat called by the altar burns {kingdom.Name}. " +
+                    $"Scorching Sun (cult Altar) — the heat called by the altar burns {kingdom.Name}. " +
                     $"The wells in {villages} village{(villages != 1 ? "s" : "")} are low or dry. " +
                     $"{towns} cit{(towns != 1 ? "ies" : "y")} ha{(towns != 1 ? "ve" : "s")} rationed their stores."));
             }
