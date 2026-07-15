@@ -118,10 +118,10 @@ Write-OK "Platform:   $detectedBin"
 # ─────────────────────────────────────────────────────────────────────────────
 Write-Step 2 "Preparing DLL..."
 
-$csprojPath = Join-Path $ScriptRoot "src\TheWitheringArt.csproj"
+$csprojPath = Join-Path $ScriptRoot "src\TheDarkestNight.csproj"
 
 if ($BuildFirst) {
-    if (-not (Test-Path $csprojPath)) { Write-Fail "src\TheWitheringArt.csproj not found. Cannot build." }
+    if (-not (Test-Path $csprojPath)) { Write-Fail "src\TheDarkestNight.csproj not found. Cannot build." }
     $dotnetExe = (Get-Command dotnet -EA SilentlyContinue)?.Source
     if (-not $dotnetExe) { Write-Fail ".NET SDK not found. Install from https://dot.net or omit -BuildFirst." }
 
@@ -152,7 +152,7 @@ if (-not $sourceDll) {
 No DLL found. Options:
   a) Run with -BuildFirst to compile from source (needs .NET SDK).
   b) Download a release package that includes the pre-built DLL.
-  c) Build manually:  dotnet build src\TheWitheringArt.csproj -c Release
+  c) Build manually:  dotnet build src\TheDarkestNight.csproj -c Release
 "@
 }
 Write-OK "DLL:        $sourceDll"

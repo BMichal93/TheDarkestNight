@@ -22,6 +22,6 @@
     <Reference Include="TaleWorlds.Engine"><HintPath>$(_BL)\TaleWorlds.Engine.dll</HintPath><Private>false</Private></Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\TheWitheringArt.csproj"/>
+    <ProjectReference Include="..\src\TheDarkestNight.csproj"/>
   </ItemGroup>
 </Project>

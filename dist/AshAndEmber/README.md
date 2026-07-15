@@ -1099,7 +1099,7 @@ All transferred settlements have loyalty and security set to 100 immediately.
 
 ```powershell
 $env:BannerlordPath = "C:\Program Files (x86)\Steam\steamapps\common\Mount & Blade II Bannerlord"
-dotnet build src\TheWitheringArt.csproj
+dotnet build src\TheDarkestNight.csproj
 ```
 
 Output: `src\bin\Debug\AshAndEmber.dll`. The build copies it to the Modules folder automatically.

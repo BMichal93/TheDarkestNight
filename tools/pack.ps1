@@ -63,7 +63,7 @@ Write-Host "Building..."
 $env:BannerlordPath = $BannerlordPath
 $env:BannerlordBin  = $BannerlordBin
 
-$buildResult = & dotnet build "$RepoRoot\src\TheWitheringArt.csproj" -c Release -v quiet 2>&1
+$buildResult = & dotnet build "$RepoRoot\src\TheDarkestNight.csproj" -c Release -v quiet 2>&1
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Build failed:`n$buildResult"
     exit 1

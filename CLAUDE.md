@@ -18,7 +18,7 @@ Phase 15 of the build (see `PROMPT_THE_DARKEST_NIGHT.md`) explicitly named a ful
 
 **Build** (requires `BannerlordPath` env var or Steam default):
 ```bash
-dotnet build src/TheWitheringArt.csproj
+dotnet build src/TheDarkestNight.csproj
 ```
 Post-build automatically copies the DLL to `<BannerlordPath>/Modules/AshAndEmber/bin/<BannerlordBin>/`.
 

@@ -30,7 +30,7 @@ certain about, confirm it against the actual DLLs rather than assuming.
 
 ## Build, test, and the version bump
 
-- Build: `dotnet build src/TheWitheringArt.csproj` (auto-deploys the DLL into the Modules folder).
+- Build: `dotnet build src/TheDarkestNight.csproj` (auto-deploys the DLL into the Modules folder).
 - Tests: `dotnet test tests/AshAndEmber.Tests.csproj`. **Run these after any change** —
   the test project failing to *compile* silently disables the whole suite, so a
   green `dotnet build` of the mod is not enough on its own.
@@ -42,7 +42,7 @@ certain about, confirm it against the actual DLLs rather than assuming.
   `try/catch` around a `Hero` access does **not** make the method loadable in the
   test runner.)
 - A version bump touches **four** places — keep them in sync:
-  1. `src/TheWitheringArt.csproj` (`Version` / `AssemblyVersion` / `FileVersion`)
+  1. `src/TheDarkestNight.csproj` (`Version` / `AssemblyVersion` / `FileVersion`)
   2. `SubModule.xml` (the launcher-visible `<Version value="vX.Y.Z.0"/>`)
   3. `dist/AshAndEmber/SubModule.xml`
   4. `CHANGELOG.md` (promote the `## Unreleased` section to the new version)
