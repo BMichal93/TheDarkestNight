@@ -2,6 +2,31 @@
 
 ---
 
+## v0.2.0 — Legion Roads, the Old Blood, and a cleaner house
+
+### Legion Expeditions
+- Western Empire ("empire_w"/Legion) towns can charter an Antiquarian Charter: pick one of 3 (of a persistent pool of 10) procedurally generated leaders, a core team (Legion Veterans, Imperial Scholars, Hired Blades, or Temple Wardens), and a ruin destination, then pay influence to send them into the ruins for several days. Success yields gold, equipment, crystals, and renown; failure can cost the leader outright. One expedition runs at a time. Not gated on the player carrying magic — this is Legion's own politics.
+
+### Ruins recover over time
+- A fully-cleared ruin no longer stays cleared forever: every clear (player, NPC lord race, or a successful Expedition) now sets a randomized 30–120 day cooldown instead of a fixed one, and an expired cooldown reopens the ruin to exploration even if it was cleared before. One-time unique rewards (grimoire fragments, ancient artifacts) still never repeat — a revisited ruin substitutes a repeatable reward instead, with flavour text acknowledging it was "picked over, yet the dark refills it."
+
+### The Foreign Muster
+- Western Empire towns offer a weekly rotating tier-1 recruit from a random non-Empire culture (deterministic per town-and-week, no save state needed), priced identically to the town's own culture's recruit, capped at 10 per town per week.
+
+### Beasts of the North
+- Sturgia (Wolf Brothers) towns can recruit two costly troops paid in fish and gold: **the Jotunn-Blooded**, a giant built on maxed body proportions and heavy gear (true agent rescaling was investigated and found to have no safe public modding surface — documented fallback), and **Ulfhednar**, a wolf-rider mounted on a re-tinted, darkest-available vanilla horse rather than an invented, unverifiable wolf mesh. Both capped per town per month.
+
+### Bloodbound: blood attunement
+- Bloodbound (Khuzait) can drink Demon Blood to permanently bind one of Fire/Water/Earth/Wind, cast it in battle by holding a dedicated focus key (distinct from the Spellbook's own), only outside full daylight. Cost escalates per element learned, each new binding costs relation with every other faction (worse with the Temple), and carries a random permanent penalty. Bloodbound lords share the same power and the same cost.
+
+### Schemes, gated
+- The Empire (Northern Empire) now grants access to Schemes, the covert-operations system, in exchange for the demons' patience elsewhere costing them nothing — priced entirely in influence.
+
+### Housekeeping
+- The project file is `TheDarkestNight.csproj` (was `TheWitheringArt.csproj`); the old baseline's "Colour Magic" NPC-caster classes are `ElementLordAI`/`ElementLordRegistry`; the Ashen Ruins "cursed relics" mini-game challenge is `CursedHoard`, so it no longer shares a name with the unrelated Relics item system. The C# namespace remains `AshAndEmber` internally — a deliberately deferred, purely cosmetic gap (see `CLAUDE.md`).
+
+---
+
 ## v0.1.0 — The Darkest Night
 
 The initial release of **The Darkest Night**, a total-conversion of Bannerlord built on the Ash and Ember codebase (whose own history continues below this entry as the baseline this mod forked from). The world shattered overnight; this is everything that changed to tell that story.
@@ -30,7 +55,7 @@ The initial release of **The Darkest Night**, a total-conversion of Bannerlord b
 - Relics, wands, and talismans — weakened, permanent versions of the Crystal and Dark Gift effects, with generated evocative names for relics — drop rarely from demon fights and from the ruins below. Spells and magical weapons deal bonus damage to demons.
 
 ### The eight factions
-- Every kingdom was rebuilt into its own desperate answer to the Long Night, each with a culture rename, a vassal title, a joining ritual, and lord-shared city mechanics: **Wolf Brothers** (Sturgia — cannibal survivalism), **Tower** (Aserai — spell teaching and transmutation), **Forest Widows** (Battania — a fungal hive-mind speaking as "we", possession on player death), **Bloodbound** (Khuzait — Demon Blood economy and blood attunement), **Temple** (Vlandia — Holy Sigils and prayer), **The Empire** (Northern Empire — free grain, Schemes access), **Legion** (Western Empire — heightened aggression, training fields), and **The Chosen** (Southern Empire — matriarchal succession, sacrifice for demon immunity).
+- Every kingdom was rebuilt into its own desperate answer to the Long Night, each with a culture rename, a vassal title, a joining ritual, and lord-shared city mechanics: **Wolf Brothers** (Sturgia — cannibal survivalism), **Tower** (Aserai — spell teaching and transmutation), **Forest Widows** (Battania — female-only leadership and a sacrifice altar bought in demon immunity), **Bloodbound** (Khuzait — Demon Blood economy and blood attunement), **Temple** (Vlandia — Holy Sigils and prayer), **The Empire** (Northern Empire — free grain, Schemes access), **Legion** (Western Empire — heightened aggression, training fields), and **The Chosen** (Southern Empire — a PriestKing's absolute rule, wives of conquest, and the cursed Rod of the Apostle).
 - Schemes (the covert-operations system) is now gated to Empire membership and paid entirely in influence; the influence costs absorbed the old gold prices so the relative cost hierarchy between schemes is unchanged.
 - Every town outside the eight factions' starting lists became a permanent, clan-named city-state that never joins a kingdom and recruits Looter/Bandit-culture rabble.
 
