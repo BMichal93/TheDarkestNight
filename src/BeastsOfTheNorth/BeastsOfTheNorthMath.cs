@@ -47,6 +47,15 @@ namespace AshAndEmber
         public const int GiantGoldCost = 400;
         public const int GiantMonthlyCap = 2;
 
+        // Real battle-time height, applied through the engine's own skeleton-
+        // scale hook (Agent.SetInitialAgentScale via DemonFactory.SetAgentScale
+        // — the hook the Jotunn-Blooded's original troops.xml note believed
+        // did not exist; verified real against the shipped DLLs when the demon
+        // tiers gained it). Sits between the Ravager (1.28) and the Demon Lord
+        // (1.45): a giant should loom over any demon a common soldier meets,
+        // but never crowd the endgame boss's silhouette.
+        public const float GiantAgentScale = 1.32f;
+
         // ── The Ulfhednar (wolf-rider) ───────────────────────────────────────
         public const int WolfRiderFishCost = 32; // asked range: 25-40
         public const int WolfRiderGoldCost = 220;

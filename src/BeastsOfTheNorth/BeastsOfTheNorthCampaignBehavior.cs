@@ -26,6 +26,27 @@ namespace AshAndEmber
         internal const string GiantTroopId     = "aae_jotunn_blooded";
         internal const string WolfRiderTroopId = "aae_ulfhednar";
 
+        // Mission-side: the Jotunn-Blooded stands a true head-and-shoulders
+        // above other men — a real skeleton scale (BeastsOfTheNorthMath.
+        // GiantAgentScale), not just the maxed body sliders troops.xml gives
+        // it. Called from MagicMissionBehavior.OnAgentBuild for every agent;
+        // no-op unless the troop id matches. (troops.xml's original note that
+        // "there is no runtime agent-scale hook in this build" predates the
+        // demon tiers proving Agent.SetInitialAgentScale real — see
+        // DemonFactory.SetAgentScale.)
+        internal static void TryApplyGiantScale(TaleWorlds.MountAndBlade.Agent agent)
+        {
+            try
+            {
+                if (agent == null || agent.IsMount) return;
+                string id = null;
+                try { id = agent.Character?.StringId; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                if (!string.Equals(id, GiantTroopId, StringComparison.OrdinalIgnoreCase)) return;
+                DemonFactory.SetAgentScale(agent, BeastsOfTheNorthMath.GiantAgentScale);
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
         // Per-town monthly purchase tally, one set of parallel lists per
         // recruit kind — same shape as ForeignMusterCampaignBehavior's weekly
         // tally (a stored month number that no longer matches the current

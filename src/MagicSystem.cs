@@ -798,6 +798,9 @@ namespace AshAndEmber
             // DemonVisuals, scales its health for its region, and forces it to
             // charge. No-op for every other troop.
             try { DemonBattleBehavior.OnAgentBuild(agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // Beasts of the North: the Jotunn-Blooded stands giant-tall in the
+            // flesh (real skeleton scale). No-op for every other troop.
+            try { BeastsOfTheNorthCampaignBehavior.TryApplyGiantScale(agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // The Great Awakening: the one Great Other champion, the moment its
             // own party's mission builds it. No-op unless this mission actually
             // involves that party (GreatOtherParty.OnMapEventStarted).

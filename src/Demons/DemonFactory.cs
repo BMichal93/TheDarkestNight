@@ -197,8 +197,70 @@ namespace AshAndEmber
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
+        // ── The warp — per-bone disfigurement + the snarl ──────────────────────
+        // Called by DemonBattleBehavior the first tick a demon's visuals exist
+        // (same lazy timing as the DemonVisuals shroud — the skeleton is
+        // guaranteed built there, which OnAgentBuild cannot promise). Applies
+        // the tier's DemonMath.BoneWarps through the engine's own per-bone
+        // skeleton-scale channel — MBAgentVisuals.ApplySkeletonScale(Vec3,
+        // float, sbyte[], Vec3[]), the exact call Native's skeleton_scales.xml
+        // horse entries ride through (verified against the shipped DLLs) — and
+        // sets the permanent bared-teeth facial animation. UseScaledWeapons(false)
+        // keeps the wielded cleaver from ballooning with the scaled hand bones.
+        internal static void ApplyBeastWarp(Agent agent, DemonMath.DemonTier tier)
+        {
+            if (agent == null) return;
+            try
+            {
+                DemonMath.BoneWarp[] warps = DemonMath.BoneWarps(tier);
+                var visuals = agent.AgentVisuals;
+                if (warps.Length > 0 && visuals != null)
+                {
+                    Monster m = null;
+                    try { m = agent.Monster; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    if (m != null)
+                    {
+                        var indices = new System.Collections.Generic.List<sbyte>(warps.Length);
+                        var scales  = new System.Collections.Generic.List<Vec3>(warps.Length);
+                        foreach (DemonMath.BoneWarp w in warps)
+                        {
+                            sbyte bone = BoneIndexFor(m, w.Part);
+                            if (bone < 0) continue;
+                            indices.Add(bone);
+                            scales.Add(new Vec3(w.X, w.Y, w.Z));
+                        }
+                        if (indices.Count > 0)
+                        {
+                            try { visuals.UseScaledWeapons(false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            visuals.ApplySkeletonScale(Vec3.One, 0f, indices.ToArray(), scales.ToArray());
+                        }
+                    }
+                }
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { agent.SetAgentFacialAnimation(Agent.FacialAnimChannel.Mid, DemonMath.FacialAnimation(tier), true); }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        private static sbyte BoneIndexFor(Monster m, DemonMath.BonePart part)
+        {
+            switch (part)
+            {
+                case DemonMath.BonePart.Head:       return m.HeadLookDirectionBoneIndex;
+                case DemonMath.BonePart.Neck:       return m.NeckRootBoneIndex;
+                case DemonMath.BonePart.SpineUpper: return m.SpineUpperBoneIndex;
+                case DemonMath.BonePart.Pelvis:     return m.PelvisBoneIndex;
+                case DemonMath.BonePart.LeftArm:    return m.LeftUpperArmBoneIndex;
+                case DemonMath.BonePart.RightArm:   return m.RightUpperArmBoneIndex;
+                case DemonMath.BonePart.MainHand:   return m.MainHandBoneIndex;
+                case DemonMath.BonePart.OffHand:    return m.OffHandBoneIndex;
+                default:                            return -1;
+            }
+        }
+
         // Also used for the Hellsteed's mount (DemonBattleBehavior dresses the
-        // horse lazily on the first tick it exists alongside its rider).
+        // horse lazily on the first tick it exists alongside its rider) and the
+        // Wolf Brothers' Jotunn-Blooded giant (BeastsOfTheNorthCampaignBehavior).
         internal static void SetAgentScale(Agent agent, float scale)
         {
             try

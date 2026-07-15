@@ -208,6 +208,11 @@ namespace AshAndEmber
                 {
                     try { DemonVisuals.Attach(b.Agent, b.Tier); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                     b.Shrouded = DemonVisuals.IsShrouded(b.Agent);
+                    // The warp (per-bone disfigurement + the permanent snarl)
+                    // rides the same lazy first-tick timing as the shroud —
+                    // the skeleton is guaranteed built once Attach succeeds.
+                    if (b.Shrouded)
+                        try { DemonFactory.ApplyBeastWarp(b.Agent, b.Tier); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 }
                 else
                 {

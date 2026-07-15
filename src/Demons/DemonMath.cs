@@ -170,6 +170,101 @@ namespace AshAndEmber
         public static string MonsterIdFor(DemonTier tier)
             => (tier == DemonTier.Ravager || tier == DemonTier.Lord) ? HulkingMonsterId : null;
 
+        // ── The warp — per-bone disfigurement ────────────────────────────────
+        // Each tier's body is WRONG in its own way: not a scaled-up man but a
+        // thing whose proportions never sat right. Applied through the engine's
+        // own per-bone skeleton-scale channel (the same mechanism Native's
+        // skeleton_scales.xml uses to fatten the Sturgian horse — vanilla ships
+        // per-bone values from 0.8 to 2.1, so this range is engine-proven).
+        // Pure data here; the bone-part → skeleton-bone-index mapping and the
+        // MBAgentVisuals.ApplySkeletonScale call live in DemonFactory.
+        //
+        // Axis convention (from Native's own horse entries — the tail grows
+        // LONGER via Y): Y runs along the bone, X/Z are girth.
+        public enum BonePart
+        {
+            Head = 0, Neck = 1, SpineUpper = 2, Pelvis = 3,
+            LeftArm = 4, RightArm = 5, MainHand = 6, OffHand = 7,
+        }
+
+        public struct BoneWarp
+        {
+            public BonePart Part;
+            public float X, Y, Z;
+            public BoneWarp(BonePart part, float x, float y, float z)
+            { Part = part; X = x; Y = y; Z = z; }
+        }
+
+        public static BoneWarp[] BoneWarps(DemonTier tier)
+        {
+            switch (tier)
+            {
+                // The Starved — a swollen head on a wasted frame, grasping
+                // overgrown hands, and arms that never grew to match each
+                // other. The asymmetry is the point: lopsided reads wrong in
+                // a way symmetric bulk never does.
+                case DemonTier.Fiend: return new[]
+                {
+                    new BoneWarp(BonePart.Head,     1.20f, 1.20f, 1.20f),
+                    new BoneWarp(BonePart.MainHand, 1.30f, 1.30f, 1.30f),
+                    new BoneWarp(BonePart.OffHand,  1.30f, 1.30f, 1.30f),
+                    new BoneWarp(BonePart.LeftArm,  1.12f, 1.18f, 1.12f),
+                    new BoneWarp(BonePart.RightArm, 0.90f, 0.94f, 0.90f),
+                };
+                // The Long-Armed — a hunting thing: stretched neck, arms a
+                // hand too long, claw-splayed hands, a chest gone gaunt.
+                case DemonTier.Stalker: return new[]
+                {
+                    new BoneWarp(BonePart.Neck,       1.10f, 1.25f, 1.10f),
+                    new BoneWarp(BonePart.LeftArm,    1.10f, 1.25f, 1.10f),
+                    new BoneWarp(BonePart.RightArm,   1.10f, 1.25f, 1.10f),
+                    new BoneWarp(BonePart.MainHand,   1.35f, 1.35f, 1.35f),
+                    new BoneWarp(BonePart.OffHand,    1.35f, 1.35f, 1.35f),
+                    new BoneWarp(BonePart.SpineUpper, 0.92f, 1.00f, 0.92f),
+                };
+                // The Mass — all shoulders and forelimb, a head too small for
+                // the body it crowns; a thing built to break lines, not to think.
+                case DemonTier.Ravager: return new[]
+                {
+                    new BoneWarp(BonePart.SpineUpper, 1.30f, 1.10f, 1.30f),
+                    new BoneWarp(BonePart.LeftArm,    1.25f, 1.15f, 1.25f),
+                    new BoneWarp(BonePart.RightArm,   1.25f, 1.15f, 1.25f),
+                    new BoneWarp(BonePart.MainHand,   1.25f, 1.25f, 1.25f),
+                    new BoneWarp(BonePart.OffHand,    1.25f, 1.25f, 1.25f),
+                    new BoneWarp(BonePart.Head,       0.90f, 0.90f, 0.90f),
+                    new BoneWarp(BonePart.Pelvis,     1.10f, 1.00f, 1.10f),
+                };
+                // The rider — gaunt and drawn-out, stretched thin over the
+                // saddle like something pulled from its grave by the reins.
+                case DemonTier.Hellsteed: return new[]
+                {
+                    new BoneWarp(BonePart.SpineUpper, 0.90f, 1.12f, 0.90f),
+                    new BoneWarp(BonePart.Neck,       0.95f, 1.18f, 0.95f),
+                    new BoneWarp(BonePart.LeftArm,    0.95f, 1.12f, 0.95f),
+                    new BoneWarp(BonePart.RightArm,   0.95f, 1.12f, 0.95f),
+                };
+                // The Lord — the Ravager's mass without the Ravager's smallness
+                // of mind: everything larger, nothing starved, a crowned horror.
+                case DemonTier.Lord: return new[]
+                {
+                    new BoneWarp(BonePart.SpineUpper, 1.30f, 1.12f, 1.30f),
+                    new BoneWarp(BonePart.LeftArm,    1.30f, 1.20f, 1.30f),
+                    new BoneWarp(BonePart.RightArm,   1.30f, 1.20f, 1.30f),
+                    new BoneWarp(BonePart.MainHand,   1.40f, 1.40f, 1.40f),
+                    new BoneWarp(BonePart.OffHand,    1.40f, 1.40f, 1.40f),
+                    new BoneWarp(BonePart.Head,       1.05f, 1.05f, 1.05f),
+                    new BoneWarp(BonePart.Pelvis,     1.12f, 1.00f, 1.12f),
+                };
+                default: return new BoneWarp[0];
+            }
+        }
+
+        // The face never rests — a permanent bared-teeth snarl (a real SandBox
+        // facial-animation id, confirmed against the shipped DLLs), looped for
+        // the demon's whole life. The Lord alone wears fury rather than hunger.
+        public static string FacialAnimation(DemonTier tier)
+            => tier == DemonTier.Lord ? "convo_furious" : "convo_bared_teeth";
+
         // ── Unnatural movement ───────────────────────────────────────────────
         // A relative multiplier on top of the troop's own walking speed
         // (Agent.SetMaximumSpeedLimit(mult, isMultiplier: true)) — reasserted

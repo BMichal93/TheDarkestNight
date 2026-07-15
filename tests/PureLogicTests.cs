@@ -2841,6 +2841,49 @@ namespace AshAndEmber.Tests
         }
 
         [Test]
+        public void DemonMath_BoneWarps_EveryTierIsWarpedWithinEngineProvenRange()
+        {
+            // Native's own skeleton_scales.xml ships per-bone values 0.8..2.1;
+            // ours stay well inside that proven envelope so nothing shreds.
+            foreach (DemonMath.DemonTier tier in Enum.GetValues(typeof(DemonMath.DemonTier)))
+            {
+                DemonMath.BoneWarp[] warps = DemonMath.BoneWarps(tier);
+                Assert.Greater(warps.Length, 0, $"{tier} should carry a warp");
+                foreach (DemonMath.BoneWarp w in warps)
+                {
+                    Assert.GreaterOrEqual(w.X, 0.8f); Assert.LessOrEqual(w.X, 1.6f);
+                    Assert.GreaterOrEqual(w.Y, 0.8f); Assert.LessOrEqual(w.Y, 1.6f);
+                    Assert.GreaterOrEqual(w.Z, 0.8f); Assert.LessOrEqual(w.Z, 1.6f);
+                }
+            }
+        }
+
+        [Test]
+        public void DemonMath_BoneWarps_FiendIsLopsided()
+        {
+            // The Starved's arms must never match — asymmetry is the read.
+            DemonMath.BoneWarp[] warps = DemonMath.BoneWarps(DemonMath.DemonTier.Fiend);
+            float left = 0f, right = 0f;
+            foreach (DemonMath.BoneWarp w in warps)
+            {
+                if (w.Part == DemonMath.BonePart.LeftArm)  left  = w.Y;
+                if (w.Part == DemonMath.BonePart.RightArm) right = w.Y;
+            }
+            Assert.Greater(left, 0f);
+            Assert.Greater(right, 0f);
+            Assert.AreNotEqual(left, right);
+        }
+
+        [Test]
+        public void DemonMath_FacialAnimation_AllTiersSnarl_LordAloneInFury()
+        {
+            foreach (DemonMath.DemonTier tier in Enum.GetValues(typeof(DemonMath.DemonTier)))
+                Assert.IsFalse(string.IsNullOrEmpty(DemonMath.FacialAnimation(tier)));
+            Assert.AreNotEqual(DemonMath.FacialAnimation(DemonMath.DemonTier.Fiend),
+                               DemonMath.FacialAnimation(DemonMath.DemonTier.Lord));
+        }
+
+        [Test]
         public void DemonMath_NightSpawnPartyCount_StaysWithinConfiguredRange()
         {
             var rng = new Random(42);

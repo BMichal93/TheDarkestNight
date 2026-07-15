@@ -1219,9 +1219,11 @@
        BeastsOfTheNorthCampaignBehavior's town menu.
 
        The Jotunn-Blooded's oversized read comes from body_properties pushed
-       to (and past) the weight/build sliders a normal recruit rolls at —
-       there is no runtime agent-scale hook in this build; see
-       BeastsOfTheNorthCampaignBehavior.cs's header for why. The
+       to (and past) the weight/build sliders a normal recruit rolls at,
+       PLUS a real battle-time skeleton scale (Agent.SetInitialAgentScale,
+       applied via BeastsOfTheNorthCampaignBehavior.TryApplyGiantScale —
+       proven real when the demon tiers gained the same hook; an earlier
+       note here claiming no such hook exists predated that finding). The
        BodyProperties/BodyPropertiesMax key hex below is copied verbatim
        from the vanilla "crazy_man" NPCCharacter (SandBoxCore/ModuleData/
        spnpccharacters.xml), the one shipped example of a build/weight-maxed
