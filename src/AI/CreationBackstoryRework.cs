@@ -16,15 +16,16 @@
 //   are re-themed from "drafted into an army" to "surviving the Long Night in
 //   the city" (RewriteYouthMenu).
 //
-//   Step 6 — Young Adulthood: renamed to demon-scarred equivalents; the
-//   "invested in land" / "invested in a workshop" options both become "you
-//   studied the arcane arts" — no more skill/focus bonus, instead a free
-//   Spellbook unlock plus two random short-formula spells
-//   (RewriteAdulthoodMenu, ApplyPendingBoons). Two options (saved the village
-//   from a flood / saved the city quarter from a fire) are vanilla-gated to
-//   cultures that no longer exist as a pick, so their visibility condition is
-//   forced true alongside the rename (ForceAlwaysVisible) — otherwise a
-//   Step-6 rename the prompt asks for would never be reachable.
+//   Step 6 — Young Adulthood ("narrative_adulthood_menu") is superseded
+//   entirely by "The Keepsake": the vanilla "biggest achievement" framing
+//   and its twelve occupation/register-gated options are replaced with one
+//   fixed question — the one thing you carried out the door the day you
+//   left home — and six always-visible keepsake options. See
+//   CreationBackstoryRework.Keepsakes.cs for the menu rewrite, the six
+//   options, and their pending-boon grants (ApplyPendingBoons calls into
+//   ApplyKeepsakeBoon from that partial). This is a global rewrite (all
+//   cultures, no gating) since Requirement 23 Step 1 already restricts every
+//   campaign to the Empire background regardless.
 //
 // The vanilla backstory options live in the engine's generic
 // CharacterCreationCampaignBehavior. We register as an
@@ -55,7 +56,7 @@ using TaleWorlds.ObjectSystem;
 
 namespace AshAndEmber
 {
-    internal sealed class CreationBackstoryRework : CampaignBehaviorBase, ICharacterCreationContentHandler
+    internal sealed partial class CreationBackstoryRework : CampaignBehaviorBase, ICharacterCreationContentHandler
     {
         // Engine-defined option ids for the two mechanically-changed options.
         private const string KhuzaitApostleOptionId = "khuzait_retainer_option";
@@ -64,15 +65,9 @@ namespace AshAndEmber
         // Requirement 23, Step 1 — the sole surviving background.
         private const string EmpireCultureId = "empire";
 
-        // Requirement 23, Step 6 — the two options that both become "you
-        // studied the arcane arts" and grant the same Magic + spells boon.
-        private const string AdulthoodInvestorOptionId = "adulthood_investor_option";
-        private const string AdulthoodWorkshopOptionId  = "adulthood_workshop_option";
-
         // Pending boons recorded at finalize, applied after the new-game reset.
         private static bool _pendingApostleDarkGift;
         private static bool _pendingSquireBoon;
-        private static bool _pendingArcaneArts;
 
         // The generic option grants (read from the live content so we stay in
         // sync with the engine's defaults rather than hard-coding 1/10/1).
@@ -136,7 +131,7 @@ namespace AshAndEmber
             // Clear any stale pending state from an abandoned creation this session.
             _pendingApostleDarkGift = false;
             _pendingSquireBoon      = false;
-            _pendingArcaneArts      = false;
+            _pendingKeepsake        = KeepsakeId.None;
             _gated.Clear();
             _manager = null;
             try { manager.RegisterCharacterCreationContentHandler(this, 1000); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -167,7 +162,7 @@ namespace AshAndEmber
                 // the old vanilla text — and since Khuzait can never be the live
                 // selection any more, the fallback is what always shows.
                 RewriteYouthMenu(m);                // Requirement 23, Step 5
-                RewriteAdulthoodMenu(m);            // Requirement 23, Step 6
+                RewriteKeepsakeMenu(m);             // "The Keepsake" — see .Keepsakes.cs
                 RewriteMenus(m);
                 ApplyGatedRenames();   // set initial state for the current (or no) selection
             }
@@ -195,8 +190,7 @@ namespace AshAndEmber
                     string id = pair.Value?.StringId;
                     if      (id == KhuzaitApostleOptionId && sel == "khuzait") _pendingApostleDarkGift = true;
                     else if (id == VlandiaSquireOptionId  && sel == "vlandia") _pendingSquireBoon      = true;
-                    else if (id == AdulthoodInvestorOptionId || id == AdulthoodWorkshopOptionId)
-                        _pendingArcaneArts = true;
+                    else if (KeepsakeOptionIds.TryGetValue(id, out var keepsake)) _pendingKeepsake = keepsake;
                 }
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -343,79 +337,18 @@ namespace AshAndEmber
                 + "when something passed close in the dark, and which lords listened when you told them so.");
         }
 
-        // ── Requirement 23, Step 6 — Young Adulthood ─────────────────────────
-        // "adulthood_caravan_leader_option" ("you led a caravan"), "you hunted a
-        // dangerous animal", both escapade registers, and "you treated people
-        // well" are untouched per the brief. "Saved the village from a flood"
-        // and "saved the city quarter from a fire" are vanilla-gated to cultures
-        // (Sturgia/Nord, Battania) that can no longer be picked — their
-        // visibility condition is forced true so the merged rename the brief
-        // asks for is actually reachable.
-        private static void RewriteAdulthoodMenu(CharacterCreationManager m)
-        {
-            const string menu = "narrative_adulthood_menu";
-
-            Edit(m, menu, "adulthood_defeated_enemy_option",
-                "you held your ground against demons.",
-                "The night came for your street and you did not run. Whatever fell in front of you did not rise "
-                + "again, and the ones who saw it happen have not forgotten your name since.");
-            Edit(m, menu, "adulthood_manhunt_option",
-                "you tracked a demon pack to its daylight lair.",
-                "A pack had been raiding the outskirts for a fortnight, and you were the one who followed the "
-                + "drag-marks back to the hollow where it slept out the sun. You did not go in alone, and you "
-                + "made sure the ones who did go with you came back out.");
-            Edit(m, menu, "adulthood_investor_option",
-                "you studied the arcane arts.",
-                "What little your parents left you went, in the end, not into land or trade but into a "
-                + "grimoire-scrap bought off a desperate scholar — and into the long, dangerous nights spent "
-                + "learning to speak what was written there.\n\n"
-                + "(You will begin with the Spellbook unlocked and two spoken formulas already known.)",
-                new GetNarrativeMenuOptionArgsDelegate(ArcaneArtsArgs));
-            Edit(m, menu, "adulthood_workshop_option",
-                "you studied the arcane arts.",
-                "What little your parents left you went, in the end, not into a workshop but into a "
-                + "grimoire-scrap bought off a desperate scholar — and into the long, dangerous nights spent "
-                + "learning to speak what was written there.\n\n"
-                + "(You will begin with the Spellbook unlocked and two spoken formulas already known.)",
-                new GetNarrativeMenuOptionArgsDelegate(ArcaneArtsArgs));
-            Edit(m, menu, "adulthood_saved_village_option",
-                "you saved your kin from the demon.",
-                "It came for your household in the dead of night, and by every right it should have taken them. "
-                + "You stood in the doorway with whatever was in your hands and did not move until it was gone.");
-            ForceAlwaysVisible(m, menu, "adulthood_saved_village_option");
-            Edit(m, menu, "adulthood_saved_city_option",
-                "you saved your kin from the demon.",
-                "It came for your household in the dead of night, and by every right it should have taken them. "
-                + "You stood in the doorway with whatever was in your hands and did not move until it was gone.");
-            ForceAlwaysVisible(m, menu, "adulthood_saved_city_option");
-            Edit(m, menu, "adulthood_siege_survivor_option",
-                "you survived an invasion.",
-                "Your hometown was overrun in a single night, its walls meaning nothing to what came over them. "
-                + "You lived through it while others did not, and you still do not fully understand why.");
-        }
+        // Young Adulthood ("narrative_adulthood_menu") is rewritten as "The
+        // Keepsake" — see RewriteKeepsakeMenu in CreationBackstoryRework.Keepsakes.cs.
 
         // Overrides an option's visibility condition so it always shows, for
         // renamed options whose vanilla condition is gated to a culture that
-        // Requirement 23's single-background restriction has made unreachable.
+        // Requirement 23's single-background restriction (or the Keepsake's
+        // global, no-gating rewrite) has made unreachable.
         private static void ForceAlwaysVisible(CharacterCreationManager m, string menuId, string optionId)
         {
             var o = Find(m, menuId, optionId);
             if (o == null) return;
             try { OnConditionField?.SetValue(o, AlwaysVisible); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-        }
-
-        // No skill/focus/attribute bonus (Requirement 23 explicitly removes it) —
-        // the grant is the Spellbook itself, applied post-reset in
-        // ApplyPendingBoons. SetLevelToAttribute/SetAffectedTraits are still
-        // called with zero/empty values because ApplyFinalEffects reads them
-        // without a null guard (see the header note on _noTraits).
-        private static void ArcaneArtsArgs(NarrativeMenuOptionArgs args)
-        {
-            args.SetAffectedSkills(new SkillObject[0]);
-            args.SetAffectedTraits(_noTraits);
-            args.SetFocusToSkills(0);
-            args.SetLevelToSkills(0);
-            args.SetLevelToAttribute(DefaultCharacterAttributes.Intelligence, 0);
         }
 
         // Registers a culture-gated rename of a shared narrative option: captures the
@@ -526,21 +459,12 @@ namespace AshAndEmber
                 try { MiracleInventory.AddGrace(3); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             }
 
-            // Requirement 23, Step 6 — "you studied the arcane arts": unlock the
-            // Spellbook for free and teach two distinct spells picked at random
-            // from the short-formula subset (Formula.Length <= 7), through the
-            // exact stub hook SpellbookCampaignBehavior left for this phase.
-            if (_pendingArcaneArts)
+            // "The Keepsake" — see CreationBackstoryRework.Keepsakes.cs.
+            if (_pendingKeepsake != KeepsakeId.None)
             {
-                _pendingArcaneArts = false;
-                try
-                {
-                    var pool = SpellbookCatalog.QualifyingForArcaneStart.ToList();
-                    var picks = SpellbookMath.PickDistinctIndices(pool.Count, 2, new Random());
-                    foreach (int i in picks)
-                        SpellbookCampaignBehavior.GrantStartingSpell(pool[i].Id);
-                }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                var keepsake = _pendingKeepsake;
+                _pendingKeepsake = KeepsakeId.None;
+                ApplyKeepsakeBoon(keepsake);
             }
         }
     }

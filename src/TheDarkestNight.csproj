@@ -390,6 +390,7 @@
     <Compile Include="AI\NorthmenDialogue.cs"/>
     <Compile Include="AI\DunebornDialogue.cs"/>
     <Compile Include="AI\CreationBackstoryRework.cs"/>
+    <Compile Include="AI\CreationBackstoryRework.Keepsakes.cs"/>
     <Compile Include="AI\FireWorshippersSystem.cs"/>
     <Compile Include="AI\RivalShadowSystem.cs"/>
     <Compile Include="Markets\SpeculationMath.cs"/>
