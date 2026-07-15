@@ -340,8 +340,8 @@ namespace AshAndEmber
                     Ch_SerpentNest(c, def, isSolo, roomIdx, sharedReward); break;
                 case ChallengeType.PoisonedAir:
                     Ch_PoisonedAir(c, def, isSolo, roomIdx, sharedReward); break;
-                case ChallengeType.CursedRelics:
-                    Ch_CursedRelics(c, def, isSolo, roomIdx, sharedReward); break;
+                case ChallengeType.CursedHoard:
+                    Ch_CursedHoard(c, def, isSolo, roomIdx, sharedReward); break;
                 case ChallengeType.MirrorGate:
                     Ch_MirrorGate(c, def, isSolo, roomIdx, sharedReward); break;
                 case ChallengeType.TemporalCrack:
@@ -681,7 +681,7 @@ namespace AshAndEmber
             }
         }
 
-        private static void Ch_CursedRelics(RuinChallenge c, RuinDef def, bool isSolo, int ri, bool sr)
+        private static void Ch_CursedHoard(RuinChallenge c, RuinDef def, bool isSolo, int ri, bool sr)
         {
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "Cursed Relics",

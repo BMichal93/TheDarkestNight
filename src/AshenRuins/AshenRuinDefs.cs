@@ -17,7 +17,7 @@ namespace AshAndEmber
         AshenSentinel,      // Ashen passes free; light mage rolls vs Ashen spell count
         SerpentNest,        // troops or aging — solo forces aging ×1.5
         PoisonedAir,        // roll vs inner fire proficiency
-        CursedRelics,       // pick 1 of 3; 1 real, 2 cursed
+        CursedHoard,        // pick 1 of 3; 1 real, 2 cursed
 
         // Mandatory — no retreat, cost always paid
         BloodLock,          // 3 aging days, entry toll
@@ -261,7 +261,7 @@ namespace AshAndEmber
                 RuinName  = "The Cursed Reliquary",
                 EntryLore = "A chapel that was locked from the inside, from the inside. You are not sure how that is possible. Everything smells faintly of copper.",
                 Tier      = RuinTier.Standard,
-                Challenges = new[] { Ch(ChallengeType.CursedRelics), Ch(ChallengeType.SpectralGuardian), Ch(ChallengeType.AncientTrap) },
+                Challenges = new[] { Ch(ChallengeType.CursedHoard), Ch(ChallengeType.SpectralGuardian), Ch(ChallengeType.AncientTrap) },
                 MainReward    = Rew(RewardType.WhisperBrand, 25),
                 PartialReward = Rew(RewardType.FocusPoints, 1),
             },
@@ -420,7 +420,7 @@ namespace AshAndEmber
                 {
                     Ch(ChallengeType.SerpentNest),
                     Ch(ChallengeType.SleepingGiant),
-                    Ch(ChallengeType.CursedRelics),
+                    Ch(ChallengeType.CursedHoard),
                     Ch(ChallengeType.BloodLock),
                 },
                 MainReward    = Rew(RewardType.AshenCrownFragment),
