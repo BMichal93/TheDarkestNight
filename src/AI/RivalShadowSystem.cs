@@ -32,7 +32,7 @@ namespace AshAndEmber
         public static string ShadowLordId       => _shadowLordId;
         public static bool   ShadowDefeated     => _shadowDefeated;
 
-        // ColourLordAI consumes this once on the Shadow's next battle cast.
+        // ElementLordAI consumes this once on the Shadow's next battle cast.
         public static bool ConsumeShadowHealPending()
         {
             if (!_shadowHealPending) return false;
@@ -64,7 +64,7 @@ namespace AshAndEmber
             try
             {
                 var ashenLords = Hero.AllAliveHeroes
-                    .Where(h => h.IsLord && h.IsAlive && ColourLordRegistry.IsAshenLord(h))
+                    .Where(h => h.IsLord && h.IsAlive && ElementLordRegistry.IsAshenLord(h))
                     .ToList();
                 if (ashenLords.Count == 0) return;
 
@@ -358,13 +358,13 @@ namespace AshAndEmber
                 {
                     Vec2 pos = MobileParty.MainParty.GetPosition2D;
                     Hero nearest = Hero.AllAliveHeroes
-                        .Where(h => h.IsLord && h.IsAlive && ColourLordRegistry.IsAshenLord(h)
+                        .Where(h => h.IsLord && h.IsAlive && ElementLordRegistry.IsAshenLord(h)
                                  && h.PartyBelongedTo != null)
                         .OrderBy(h => (h.PartyBelongedTo.GetPosition2D - pos).Length)
                         .FirstOrDefault();
                     if (nearest != null)
                     {
-                        ColourLordRegistry.SetAshen(nearest, false);
+                        ElementLordRegistry.SetAshen(nearest, false);
                         InformationManager.DisplayMessage(new InformationMessage(
                             $"{nearest.Name} — the cold breaks in them. Something warmer stirs.",
                             new Color(0.9f, 0.6f, 0.3f)));

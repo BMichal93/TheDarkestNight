@@ -235,7 +235,7 @@ namespace AshAndEmber
             _arenicosIsTrue  = _rng.Next(2) == 0; // 50/50
 
             if (!_arenicosIsTrue)
-                try { ColourLordRegistry.SetFalseEmperor(chosen); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementLordRegistry.SetFalseEmperor(chosen); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
             // Make his clan the ruling clan of the empire
             try { ChangeRulingClanAction.Apply(empire, chosen.Clan); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -568,7 +568,7 @@ namespace AshAndEmber
                 if (anchored >= 2) break;
                 if (clan == null || clan.IsEliminated) continue;
                 if (clan == Clan.PlayerClan) continue; // never forcibly move the player
-                if (clan.Leader == null || !ColourLordRegistry.IsAshenLord(clan.Leader)) continue;
+                if (clan.Leader == null || !ElementLordRegistry.IsAshenLord(clan.Leader)) continue;
                 if (clan.Kingdom == arenicosEmpire) continue;
 
                 MoveClanInto(clan, arenicosEmpire);
@@ -594,7 +594,7 @@ namespace AshAndEmber
                         if (clan == null || clan.IsEliminated) continue;
                         if (clan == Clan.PlayerClan) continue;            // never eject the player
                         if (clan == arenicosEmpire.RulingClan) continue;  // keep the empire's ruler so it endures
-                        if (clan.Leader == null || !ColourLordRegistry.IsAshenLord(clan.Leader)) continue;
+                        if (clan.Leader == null || !ElementLordRegistry.IsAshenLord(clan.Leader)) continue;
                         // Atomic withdrawal back to the Ashen kingdom, fiefs intact
                         // (MoveClanInto seeds the Ashen kingdom if it currently has no ruler).
                         MoveClanInto(clan, ashen);

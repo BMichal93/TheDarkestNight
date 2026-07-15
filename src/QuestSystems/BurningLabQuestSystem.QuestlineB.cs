@@ -162,7 +162,7 @@ namespace AshAndEmber
 
             Hero ashenLord = Hero.AllAliveHeroes.FirstOrDefault(h =>
                 h.IsLord && h.IsAlive && !h.IsPrisoner
-                && ColourLordRegistry.IsAshenLord(h));
+                && ElementLordRegistry.IsAshenLord(h));
             if (ashenLord == null) return;
 
             try

@@ -43,8 +43,8 @@ AshAndEmber/
 │   │   └── NamePrefixes.cs          title/prefix management for mage lords
 │   └── AI/
 │       ├── RivalShadowSystem.cs     Rival Shadow — personal Ashen antagonist system (NEW)
-│       ├── ColourLordRegistry.cs    marks lords as mages or Ashen lords; companion tracking
-│       ├── ColourLordAI.cs          priority-driven battle AI for mage lords
+│       ├── ElementLordRegistry.cs    marks lords as mages or Ashen lords; companion tracking
+│       ├── ElementLordAI.cs          priority-driven battle AI for mage lords
 │       ├── ColourUnitRegistry.cs    unit-level mage tracking (stub)
 │       ├── BanditMageAI.cs          rare bandit unit spellcasters with burnout
 │       ├── BlightSystem.cs          Ashen blight mechanics (stub)

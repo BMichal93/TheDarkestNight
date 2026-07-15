@@ -998,7 +998,7 @@ namespace AshAndEmber
             {
                 if (caster == Agent.Main) return MageKnowledge.IsAshen;
                 var hero = (caster?.Character as TaleWorlds.CampaignSystem.CharacterObject)?.HeroObject;
-                return hero != null && ColourLordRegistry.IsAshenLord(hero);
+                return hero != null && ElementLordRegistry.IsAshenLord(hero);
             }
             catch { return false; }
         }

@@ -39,7 +39,7 @@ namespace AshAndEmber
             if (hero == null || days <= 0) return;
             // Ashen do not age — the cold preserves what remains
             if (hero == Hero.MainHero && MageKnowledge.IsAshen) return;
-            if (hero != Hero.MainHero && ColourLordRegistry.IsAshenLord(hero)) return;
+            if (hero != Hero.MainHero && ElementLordRegistry.IsAshenLord(hero)) return;
             // Aelisar's covenant — the Vessel bears no aging cost from fire
             if (hero == Hero.MainHero && DragonQuestSystem.IsEmperorMerged) return;
             try
@@ -245,11 +245,11 @@ namespace AshAndEmber
             // death age (both lowered from the base 100 by the life their casting spent).
             float threshold = (hero == Hero.MainHero)
                 ? PlayerDeathAge
-                : ColourLordRegistry.LordDeathAge(hero);
+                : ElementLordRegistry.LordDeathAge(hero);
             if (hero.Age < threshold) return;
             // Ashen mages are immune to age-death
             if (hero == Hero.MainHero && MageKnowledge.IsAshen) return;
-            if (hero != Hero.MainHero && ColourLordRegistry.IsAshenLord(hero)) return;
+            if (hero != Hero.MainHero && ElementLordRegistry.IsAshenLord(hero)) return;
             if (hero != Hero.MainHero && BurningLabQuestSystem.IsArenicosHero(hero)) return;
             try
             {
@@ -263,9 +263,9 @@ namespace AshAndEmber
                 }
 
                 // NPC mage: 5% chance to become Ashen instead of dying
-                if (ColourLordRegistry.IsColourLord(hero) && _rng.Next(100) < 5)
+                if (ElementLordRegistry.IsElementLord(hero) && _rng.Next(100) < 5)
                 {
-                    ColourLordRegistry.SetAshen(hero, true);
+                    ElementLordRegistry.SetAshen(hero, true);
                     InformationManager.DisplayMessage(new InformationMessage(
                         $"{hero.Name} — the fire does not die. Something colder burns in its place.",
                         new Color(0.3f, 0.35f, 0.7f)));
@@ -285,7 +285,7 @@ namespace AshAndEmber
         {
             try
             {
-                foreach (Hero h in Hero.AllAliveHeroes.Where(h => h.IsAlive && ColourLordRegistry.IsColourLord(h)).ToList())
+                foreach (Hero h in Hero.AllAliveHeroes.Where(h => h.IsAlive && ElementLordRegistry.IsElementLord(h)).ToList())
                     CheckAgeLimit(h);
                 // Also check player — and, since casting no longer moves current age,
                 // drive the age milestones off natural aging here instead.

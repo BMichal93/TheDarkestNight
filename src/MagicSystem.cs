@@ -71,8 +71,8 @@ namespace AshAndEmber
             try { NatureChargeBar.Reset();               } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { NatureSeerAI.ClearCooldowns();         } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { NatureInputHandler.ResetInputState();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ColourLordAI.ClearCooldowns();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ColourLordAI.FlushBattleCasts();      } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ElementLordAI.ClearCooldowns();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ElementLordAI.FlushBattleCasts();      } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { SpellcasterLords.ClearCooldowns();    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { SpellcasterTroops.ClearBattleState();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { BanditMageAI.OnMissionEnd();           } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -672,7 +672,7 @@ namespace AshAndEmber
             BloodAttunementLordAI.MissionTick(dt);
             SpellburnEffects.Tick(dt);
             ActiveEffectManager.MissionTick(dt);
-            ColourLordAI.MissionTick(dt);
+            ElementLordAI.MissionTick(dt);
             SpellcasterLords.MissionTick(dt);
             SpellcasterTroops.MissionTick(dt);
             SpellEffects.TickGlows(dt);
@@ -728,7 +728,7 @@ namespace AshAndEmber
             try { SpellEffects.ClearGlows();         } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { SpellEffects.ClearColourCooldown();} catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { SpellEffects.ClearMoves();         } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ColourLordAI.ClearCooldowns();            } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ElementLordAI.ClearCooldowns();            } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { BanditMageAI.OnMissionEnd();             } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { AgingSystem.ClearKnockdowns();           } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { ActiveEffectManager.ClearMissionEffects(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }

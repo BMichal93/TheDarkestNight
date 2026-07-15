@@ -1118,7 +1118,7 @@ Damage enchantments are split across the Sear/Force/Shred natures, so one cast o
 - Every 14–21 days the Shadow schemes against a player-owned settlement: loyalty −10 or security −15.
 - After five schemes **The Shadow Approaches** event fires: Leadership or Athletics duel or withdraw (−30 renown).
 - Victory: +5 focus points, +200 renown, nearest Ashen lord converts to regular mage.
-- Loss: −5 days, Shadow heals before the next engagement (ConsumedShadowHealPending flag for ColourLordAI).
+- Loss: −5 days, Shadow heals before the next engagement (ConsumedShadowHealPending flag for ElementLordAI).
 - Shadow designation, scheme count, and pending events all persist through save/load.
 
 ### Mage Companion System

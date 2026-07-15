@@ -33,7 +33,7 @@ namespace AshAndEmber
             if (hero == null) return false;
             return hero == Hero.MainHero
                 ? MageKnowledge.IsAshen
-                : ColourLordRegistry.IsAshenLord(hero);
+                : ElementLordRegistry.IsAshenLord(hero);
         }
 
         private static bool Roll(float chance) => _rng.NextDouble() < chance;

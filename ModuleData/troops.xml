@@ -1009,7 +1009,7 @@
        formulas from the Phase 4 Spellbook (src/Spellbook/
        SpellcasterTroopCatalog.cs is the source of truth for which); battle
        casting is driven by SpellcasterTroops.MissionTick, which sheathes
-       the troop's weapon before every cast the same way ColourLordAI does
+       the troop's weapon before every cast the same way ElementLordAI does
        for lords (SpellEffects.TryFreeHandForCast).
 
        hollow_apprentice (T1) -> hollow_adept (T2) -> hollow_invoker (T3)

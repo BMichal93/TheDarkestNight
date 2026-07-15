@@ -75,7 +75,7 @@ namespace AshAndEmber
             {
                 // Tick up days for each Ashen lord prisoner; release at 3 days.
                 foreach (Hero h in Hero.AllAliveHeroes
-                    .Where(x => x.IsAlive && x.IsPrisoner && ColourLordRegistry.IsAshenLord(x)).ToList())
+                    .Where(x => x.IsAlive && x.IsPrisoner && ElementLordRegistry.IsAshenLord(x)).ToList())
                 {
                     if (!_ashenCaptiveDays.TryGetValue(h.StringId, out int days))
                         days = 0;
@@ -113,8 +113,8 @@ namespace AshAndEmber
             {
                 foreach (Hero h in Hero.AllAliveHeroes
                     .Where(x => x.IsLord && x.IsAlive && !x.IsChild
-                             && !ColourLordRegistry.IsAshenLord(x)
-                             && ColourLordRegistry.IsColourLord(x)
+                             && !ElementLordRegistry.IsAshenLord(x)
+                             && ElementLordRegistry.IsElementLord(x)
                              && x != Hero.MainHero
                              && x.Age >= 80f).ToList())
                 {
@@ -130,15 +130,15 @@ namespace AshAndEmber
         // ── Ashen conversion helper ───────────────────────────────────────────
         private static void TryConvertMageToAshen(Hero h, string reason)
         {
-            if (h == null || !h.IsAlive || ColourLordRegistry.IsAshenLord(h)) return;
+            if (h == null || !h.IsAlive || ElementLordRegistry.IsAshenLord(h)) return;
             // Require clan viability so the conversion doesn't collapse a faction.
             if (h.Clan?.Kingdom != null
                 && h.Clan.Kingdom.Clans.Count(c => c != null && !c.IsEliminated) < 2) return;
             try
             {
-                try { ColourLordRegistry.SetAshen(h, true); }              catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementLordRegistry.SetAshen(h, true); }              catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { AshenCitySystem.ApplyAshenPersonality(h); }          catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ColourLordRegistry.SetMage(h, true); }               catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementLordRegistry.SetMage(h, true); }               catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { AshenCitySystem.OnHeroSetAshen(h); }                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { MageKnowledge.ApplyAshenAppearance(h); }             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 InformationManager.DisplayMessage(new InformationMessage(
@@ -171,16 +171,16 @@ namespace AshAndEmber
                         {
                             Hero leader = meparty?.Party?.LeaderHero;
                             if (leader == null || leader == Hero.MainHero
-                                || !ColourLordRegistry.IsColourLord(leader)) continue;
+                                || !ElementLordRegistry.IsElementLord(leader)) continue;
 
                             // agingCost = sum of ComputeBattleAgingCost(inputs) per spell,
                             // already computed geometrically inside RecordCast.
-                            int agingCost = ColourLordAI.ConsumeBattleCasts(leader);
+                            int agingCost = ElementLordAI.ConsumeBattleCasts(leader);
                             if (agingCost <= 0) continue;
 
-                            if (!ColourLordRegistry.IsAshenLord(leader))
+                            if (!ElementLordRegistry.IsAshenLord(leader))
                             {
-                                ColourLordRegistry.SpendLordLifeExpectancy(leader, agingCost);
+                                ElementLordRegistry.SpendLordLifeExpectancy(leader, agingCost);
                                 // Heavy overexertion: if a lord spent 15+ days of life in one
                                 // battle, the cold whispers to them — 8% chance of Ashen conversion.
                                 if (agingCost >= 15 && _rng.Next(100) < 8)
@@ -197,7 +197,7 @@ namespace AshAndEmber
                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             }
 
-            // Off-screen battles: ColourLordAI never ran, so _battleCasts is empty.
+            // Off-screen battles: ElementLordAI never ran, so _battleCasts is empty.
             // Apply small random aging (80% chance, 1–3 days) to simulate mages casting.
             if (!playerInvolved)
             {
@@ -212,10 +212,10 @@ namespace AshAndEmber
                             {
                                 Hero leader = meparty?.Party?.LeaderHero;
                                 if (leader == null || leader == Hero.MainHero
-                                    || !ColourLordRegistry.IsColourLord(leader)
-                                    || ColourLordRegistry.IsAshenLord(leader)) continue;
+                                    || !ElementLordRegistry.IsElementLord(leader)
+                                    || ElementLordRegistry.IsAshenLord(leader)) continue;
                                 if (_rng.NextDouble() < 0.80)
-                                    ColourLordRegistry.SpendLordLifeExpectancy(leader, 1 + _rng.Next(3));
+                                    ElementLordRegistry.SpendLordLifeExpectancy(leader, 1 + _rng.Next(3));
                             }
                             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                         }
@@ -227,7 +227,7 @@ namespace AshAndEmber
 
             // Also age companion mages travelling in the player's party.
             // ApplyNpcBattleAging only reaches party leaders above; companions are non-leaders
-            // and would never be aged otherwise even though ColourLordAI tracks their casts.
+            // and would never be aged otherwise even though ElementLordAI tracks their casts.
             try
             {
                 var roster = MobileParty.MainParty?.MemberRoster;
@@ -236,18 +236,18 @@ namespace AshAndEmber
                 {
                     Hero companion = entry.Character?.HeroObject;
                     if (companion == null || companion == Hero.MainHero) continue;
-                    if (!ColourLordRegistry.IsColourLord(companion)) continue;
+                    if (!ElementLordRegistry.IsElementLord(companion)) continue;
 
-                    int agingCost = ColourLordAI.ConsumeBattleCasts(companion);
+                    int agingCost = ElementLordAI.ConsumeBattleCasts(companion);
                     if (agingCost <= 0) continue;
 
                     // Companion mages age 25% faster — the fire burns closer, more personally.
-                    if (ColourLordRegistry.IsCompanionMage(companion))
+                    if (ElementLordRegistry.IsCompanionMage(companion))
                         agingCost = (int)Math.Ceiling(agingCost * 1.25);
 
-                    if (!ColourLordRegistry.IsAshenLord(companion))
+                    if (!ElementLordRegistry.IsAshenLord(companion))
                     {
-                        ColourLordRegistry.SpendLordLifeExpectancy(companion, agingCost);
+                        ElementLordRegistry.SpendLordLifeExpectancy(companion, agingCost);
                         InformationManager.DisplayMessage(new InformationMessage(
                             $"{companion.Name} is spent by the working — {agingCost} day{(agingCost > 1 ? "s" : "")} of life given.",
                             new Color(0.5f, 0.4f, 0.7f)));
@@ -277,7 +277,7 @@ namespace AshAndEmber
                     bool hasMage = side.Parties.Any(p =>
                     {
                         Hero leader = p?.Party?.LeaderHero;
-                        return leader != null && ColourLordRegistry.IsColourLord(leader);
+                        return leader != null && ElementLordRegistry.IsElementLord(leader);
                     });
                     if (!hasMage) continue;
 
@@ -334,7 +334,7 @@ namespace AshAndEmber
                     if (leader == null) continue;
 
                     // Count different types of magic users
-                    if (ColourLordRegistry.IsColourLord(leader))
+                    if (ElementLordRegistry.IsElementLord(leader))
                         count++;
                     else if (IsGraceLord(leader))
                         count++;

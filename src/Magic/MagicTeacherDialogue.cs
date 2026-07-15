@@ -54,7 +54,7 @@ namespace AshAndEmber
                 if (!MageKnowledge.IsMage) return false;
                 var h = Hero.OneToOneConversationHero;
                 if (h == null || h == Hero.MainHero) return false;
-                if (ColourLordRegistry.IsAshenLord(h)) return false;   // the Ashen teach nothing
+                if (ElementLordRegistry.IsAshenLord(h)) return false;   // the Ashen teach nothing
                 if (!NatureSeerRegistry.IsNatureSeer(h)) return false;
 
                 MagePower power = PowerOf(h);

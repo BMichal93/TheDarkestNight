@@ -181,7 +181,7 @@ namespace AshAndEmber
                 if (MobileParty.MainParty == null) return null;
                 Vec2 pos = MobileParty.MainParty.GetPosition2D;
                 Hero nearest = Hero.AllAliveHeroes
-                    .Where(h => h.IsLord && h.IsAlive && ColourLordRegistry.IsAshenLord(h)
+                    .Where(h => h.IsLord && h.IsAlive && ElementLordRegistry.IsAshenLord(h)
                              && h.PartyBelongedTo != null)
                     .OrderBy(h => (h.PartyBelongedTo.GetPosition2D - pos).Length)
                     .FirstOrDefault();
@@ -232,7 +232,7 @@ namespace AshAndEmber
             _possessionStrainDays = 0;
             _giftedChildIds.Clear();
             TalentSystem.ResetForNewGame();
-            ColourLordRegistry.ResetForNewGame();
+            ElementLordRegistry.ResetForNewGame();
             AshenCitySystem.ResetForNewGame();
             AgingSystem.ResetForNewGame();
             TempleCovenant.ResetForNewGame();

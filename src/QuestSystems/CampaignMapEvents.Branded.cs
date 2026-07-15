@@ -48,8 +48,8 @@ namespace AshAndEmber
                     .Where(h =>
                         h.IsLord && h.IsAlive && !h.IsChild && !h.IsPrisoner
                         && h != Hero.MainHero
-                        && ColourLordRegistry.IsColourLord(h)
-                        && !ColourLordRegistry.IsAshenLord(h)
+                        && ElementLordRegistry.IsElementLord(h)
+                        && !ElementLordRegistry.IsAshenLord(h)
                         && h.Clan?.Leader != h
                         && h.Clan?.Heroes.Count(x => x.IsAlive && !x.IsChild) >= 2)
                     .ToList();

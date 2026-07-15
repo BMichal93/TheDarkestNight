@@ -3,7 +3,7 @@
 //
 // Requirement 14 — roughly 7% of named lords/companions (excluding the
 // player) know 1-3 spells from the Phase 4 SpellbookCatalog and cast them in
-// battle. Deliberately kept SEPARATE from ColourLordAI (which drives the old
+// battle. Deliberately kept SEPARATE from ElementLordAI (which drives the old
 // unified-element NPC casting and is already a large, intricate file): this
 // is a second, independent population — a lord can be a colour lord, a
 // spellcaster lord, both, or neither. Casting dispatches through the same
@@ -13,7 +13,7 @@
 //
 // Selection is re-rolled once per campaign session (first mission tick that
 // finds it unseeded) rather than persisted — matching the "seeded, not
-// serialized" pattern ColourLordRegistry already uses for the mage-lord
+// serialized" pattern ElementLordRegistry already uses for the mage-lord
 // population. It costs nothing to reseed each session and keeps this system
 // entirely free of new save-format surface.
 // =============================================================================
@@ -105,7 +105,7 @@ namespace AshAndEmber
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
-        // Driven from MagicMissionBehavior.OnMissionTick, alongside ColourLordAI's
+        // Driven from MagicMissionBehavior.OnMissionTick, alongside ElementLordAI's
         // own tick — same 0.5s-effective cadence is unnecessary here since this
         // cooldown is measured in whole seconds, so it ticks every frame cheaply.
         public static void MissionTick(float dt)

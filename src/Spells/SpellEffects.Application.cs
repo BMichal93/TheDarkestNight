@@ -440,8 +440,8 @@ namespace AshAndEmber
             try
             {
                 Hero hero = (caster.Character as TaleWorlds.CampaignSystem.CharacterObject)?.HeroObject;
-                if (hero != null && ColourLordRegistry.IsColourLord(hero))
-                    return ColourLordRegistry.HasTalent(hero, enchantment);
+                if (hero != null && ElementLordRegistry.IsElementLord(hero))
+                    return ElementLordRegistry.HasTalent(hero, enchantment);
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             return false;

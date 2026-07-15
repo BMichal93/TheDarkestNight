@@ -136,7 +136,7 @@ namespace AshAndEmber
                 {
                     Hero leader = meparty?.Party?.LeaderHero;
                     if (leader == null || leader.IsAlive) continue;
-                    if (ColourLordRegistry.IsAshenLord(leader))
+                    if (ElementLordRegistry.IsAshenLord(leader))
                         ashenKilled++;
                 }
                 if (ashenKilled <= 0) return;
@@ -271,7 +271,7 @@ namespace AshAndEmber
 
             foreach (Hero h in Hero.AllAliveHeroes.ToList())
             {
-                if (!ColourLordRegistry.IsAshenLord(h)) continue;
+                if (!ElementLordRegistry.IsAshenLord(h)) continue;
                 var party = h.PartyBelongedTo;
                 if (party == null) continue;
                 Vec2 lPos;

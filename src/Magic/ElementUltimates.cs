@@ -31,7 +31,7 @@
 //                                          → ClearBattleState()
 //   • ElementSpellEffects.CastAttack/Wall  → FireDampAt(...)       (rain vs fire)
 //   • ElementMagicInput (the chord)        → PlayerCanUnbind / CastPlayerUltimate
-//   • ColourLordAI.TryCast                 → TryQueueNpcUltimate(...)
+//   • ElementLordAI.TryCast                 → TryQueueNpcUltimate(...)
 //
 // Nothing here is serialized: all state is mission-scoped and cleared with the
 // rest of the battle state, so saves are untouched (fully backward compatible).
@@ -182,7 +182,7 @@ namespace AshAndEmber
         }
 
         // =====================================================================
-        // NPC ENTRY (called by ColourLordAI.TryCast, before its normal ladder)
+        // NPC ENTRY (called by ElementLordAI.TryCast, before its normal ladder)
         // =====================================================================
 
         // A lord reads the same tactical picture his normal casts use and, once

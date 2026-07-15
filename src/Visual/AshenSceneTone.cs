@@ -45,7 +45,7 @@ namespace AshAndEmber
                         a != null && a.IsActive() && !a.IsMount && a.IsHero &&
                         a.Team != null && Agent.Main.Team != null && a.Team != Agent.Main.Team &&
                         (a.Character as CharacterObject)?.HeroObject is Hero h &&
-                        ColourLordRegistry.IsAshenLord(h));
+                        ElementLordRegistry.IsAshenLord(h));
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 

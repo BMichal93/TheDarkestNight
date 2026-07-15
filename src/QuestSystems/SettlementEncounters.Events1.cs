@@ -209,7 +209,7 @@ namespace AshAndEmber
                     Hero child = HeroCreator.CreateChild(template, birthPlace, Clan.PlayerClan, 18);
                     if (child != null)
                     {
-                        try { ColourLordRegistry.SetMage(child, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { ElementLordRegistry.SetMage(child, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                         ChangeRenown(15f);
                         Msg($"{child.Name} joins your clan. She carries the fire with a steadiness that took her ten years to learn on her own. It shows.", FireColor);
                         return;

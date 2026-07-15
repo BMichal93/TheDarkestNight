@@ -30,7 +30,7 @@ namespace AshAndEmber
         public static void ExecuteNpcElementMapSpell(Hero caster, MagicElement el)
         {
             if (caster == null) return;
-            bool isAshen = ColourLordRegistry.IsAshenLord(caster);
+            bool isAshen = ElementLordRegistry.IsAshenLord(caster);
             string blurb = null;
             try
             {
@@ -58,7 +58,7 @@ namespace AshAndEmber
             }
 
             if (isAshen) ApplyBlightDrain(caster);
-            else ColourLordRegistry.SpendLordLifeExpectancy(caster, 1);
+            else ElementLordRegistry.SpendLordLifeExpectancy(caster, 1);
         }
 
         private static void ApplyBlightDrain(Hero caster)
@@ -103,9 +103,9 @@ namespace AshAndEmber
 
             // Mage-to-mage interference: crossing a fellow mage lord's fire costs both.
             var targetHero = target.LeaderHero;
-            if (targetHero != null && ColourLordRegistry.IsColourLord(targetHero))
+            if (targetHero != null && ElementLordRegistry.IsElementLord(targetHero))
             {
-                try { ColourLordRegistry.SpendLordLifeExpectancy(targetHero, 1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementLordRegistry.SpendLordLifeExpectancy(targetHero, 1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 string casterName = caster.Name?.ToString() ?? "A mage";
                 string targetName = targetHero.Name?.ToString() ?? "another mage";
                 InformationManager.DisplayMessage(new InformationMessage(
@@ -160,9 +160,9 @@ namespace AshAndEmber
 
             // Mage-to-mage interference: crossing a fellow mage lord's fire costs both.
             var targetHero = target.LeaderHero;
-            if (targetHero != null && ColourLordRegistry.IsColourLord(targetHero))
+            if (targetHero != null && ElementLordRegistry.IsElementLord(targetHero))
             {
-                try { ColourLordRegistry.SpendLordLifeExpectancy(targetHero, 1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementLordRegistry.SpendLordLifeExpectancy(targetHero, 1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 string casterName = caster.Name?.ToString() ?? "A mage";
                 string targetName = targetHero.Name?.ToString() ?? "another mage";
                 InformationManager.DisplayMessage(new InformationMessage(

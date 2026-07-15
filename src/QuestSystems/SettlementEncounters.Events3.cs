@@ -290,14 +290,14 @@ namespace AshAndEmber
                             {
                                 try
                                 {
-                                    ColourLordRegistry.SetAshen(child, true);
-                                    ColourLordRegistry.SetMage(child, true);
+                                    ElementLordRegistry.SetAshen(child, true);
+                                    ElementLordRegistry.SetMage(child, true);
                                     try { AshenCitySystem.ApplyAshenPersonality(child); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                                     try { MageKnowledge.ApplyAshenAppearance(child); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                                     // Try to move child to a random Ashen clan
                                     var ashenClans = Clan.All
                                         .Where(c => c != Clan.PlayerClan && c.IsEliminated == false &&
-                                               c.Heroes.Any(h => ColourLordRegistry.IsAshenLord(h)))
+                                               c.Heroes.Any(h => ElementLordRegistry.IsAshenLord(h)))
                                         .ToList();
                                     if (ashenClans.Count > 0)
                                     {

@@ -37,8 +37,8 @@ namespace AshAndEmber
                 }
                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
-                if (ColourLordRegistry.IsColourLord(victim))
-                    try { ColourLordRegistry.OnLordDied(victim); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                if (ElementLordRegistry.IsElementLord(victim))
+                    try { ElementLordRegistry.OnLordDied(victim); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 try { RivalShadowSystem.OnHeroKilled(victim); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { EmberConclaveSystem.OnHeroKilled(victim, killer); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -47,7 +47,7 @@ namespace AshAndEmber
                 // own dying, but fighting the Ashen is the mod's core loop and
                 // must not be the fastest road to corruption.
                 if (killer == Hero.MainHero && MageKnowledge.IsMage
-                    && ColourLordRegistry.IsAshenLord(victim))
+                    && ElementLordRegistry.IsAshenLord(victim))
                     try { MageKnowledge.AddWhispers(1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 if (detail != KillCharacterAction.KillCharacterActionDetail.Executed) return;
@@ -91,8 +91,8 @@ namespace AshAndEmber
             try
             {
                 // Ashen parents cannot produce living children — still the cold.
-                bool motherAshen = hero.Mother != null && ColourLordRegistry.IsAshenLord(hero.Mother);
-                bool fatherAshen = hero.Father != null && ColourLordRegistry.IsAshenLord(hero.Father);
+                bool motherAshen = hero.Mother != null && ElementLordRegistry.IsAshenLord(hero.Mother);
+                bool fatherAshen = hero.Father != null && ElementLordRegistry.IsAshenLord(hero.Father);
                 if (motherAshen || fatherAshen)
                 {
                     try { KillCharacterAction.ApplyByMurder(hero, null, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -101,10 +101,10 @@ namespace AshAndEmber
 
                 bool motherMage = hero.Mother != null && (
                     hero.Mother == Hero.MainHero ? MageKnowledge.IsMage
-                                                 : ColourLordRegistry.IsColourLord(hero.Mother));
+                                                 : ElementLordRegistry.IsElementLord(hero.Mother));
                 bool fatherMage = hero.Father != null && (
                     hero.Father == Hero.MainHero ? MageKnowledge.IsMage
-                                                 : ColourLordRegistry.IsColourLord(hero.Father));
+                                                 : ElementLordRegistry.IsElementLord(hero.Father));
 
                 float chance;
                 if (motherMage && fatherMage)       chance = 0.75f;
@@ -117,7 +117,7 @@ namespace AshAndEmber
                     if (isPlayerChild)
                         MageKnowledge.AddGiftedChild(hero.StringId);
                     else
-                        ColourLordRegistry.SetMage(hero, true);
+                        ElementLordRegistry.SetMage(hero, true);
                 }
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -130,10 +130,10 @@ namespace AshAndEmber
             {
                 if (_rng.Next(100) < 20)
                 {
-                    ColourLordRegistry.RegisterCompanionMage(companion);
+                    ElementLordRegistry.RegisterCompanionMage(companion);
                     // Companions with the gift always carry 1–3 enchantments.
                     int enchants = 1 + _rng.Next(3);
-                    ColourLordRegistry.AssignCompanionEnchantments(companion, enchants);
+                    ElementLordRegistry.AssignCompanionEnchantments(companion, enchants);
                     string[] joinLines =
                     {
                         $"{companion.Name} carries the fire. You felt it before they spoke — the same warmth, the same weight behind the eyes.",
@@ -188,7 +188,7 @@ namespace AshAndEmber
             try { MageKnowledge.Save(dataStore); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { MageElementKnowledge.Save(dataStore); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { RivalShadowSystem.Save(dataStore); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ColourLordRegistry.Save(dataStore); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ElementLordRegistry.Save(dataStore); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { AshenCitySystem.Save(dataStore); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { FireWorshippersSystem.Save(dataStore); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { CampaignMapEvents.Save(dataStore); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }

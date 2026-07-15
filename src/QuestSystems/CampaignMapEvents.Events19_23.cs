@@ -49,8 +49,8 @@ namespace AshAndEmber
                         h.IsLord && h.IsAlive && !h.IsChild && !h.IsPrisoner
                         && h != Hero.MainHero
                         && h.Clan?.Kingdom == k
-                        && ColourLordRegistry.IsColourLord(h)
-                        && !ColourLordRegistry.IsAshenLord(h)
+                        && ElementLordRegistry.IsElementLord(h)
+                        && !ElementLordRegistry.IsAshenLord(h)
                         && h.Clan.Leader != h
                         && h.Clan.Heroes.Count(x => x.IsAlive && !x.IsChild) >= 2))
                     .ToList();
@@ -62,8 +62,8 @@ namespace AshAndEmber
                     .Where(h => h.IsLord && h.IsAlive && !h.IsChild && !h.IsPrisoner
                              && h != Hero.MainHero
                              && h.Clan?.Kingdom == kingdom
-                             && ColourLordRegistry.IsColourLord(h)
-                             && !ColourLordRegistry.IsAshenLord(h)
+                             && ElementLordRegistry.IsElementLord(h)
+                             && !ElementLordRegistry.IsAshenLord(h)
                              && h.Clan.Leader != h
                              && h.Clan.Heroes.Count(x => x.IsAlive && !x.IsChild) >= 2)
                     .OrderBy(_ => _rng.Next())
@@ -354,9 +354,9 @@ namespace AshAndEmber
                                     if (_rng.NextDouble() < 0.33)
                                     {
                                         var traitor = minorLords[_rng.Next(minorLords.Count)];
-                                        try { ColourLordRegistry.SetAshen(traitor, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                        try { ElementLordRegistry.SetAshen(traitor, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                                         try { AshenCitySystem.ApplyAshenPersonality(traitor); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                                        try { ColourLordRegistry.SetMage(traitor, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                        try { ElementLordRegistry.SetMage(traitor, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                                         try { AshenCitySystem.OnHeroSetAshen(traitor); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                                         try { MageKnowledge.ApplyAshenAppearance(traitor); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                                         if (ruler?.IsAlive == true && Hero.MainHero != null)
@@ -533,7 +533,7 @@ namespace AshAndEmber
 
                 var ashenLords = Hero.AllAliveHeroes
                     .Where(h => h.IsLord && h.IsAlive && !h.IsDisabled && !h.IsPrisoner
-                             && ColourLordRegistry.IsAshenLord(h))
+                             && ElementLordRegistry.IsAshenLord(h))
                     .ToList();
 
                 if (ashenLords.Count > 0)
@@ -579,7 +579,7 @@ namespace AshAndEmber
                 {
                     if (!party.IsActive) continue;
                     var leader = party.LeaderHero;
-                    if (leader != null && ColourLordRegistry.IsAshenLord(leader))
+                    if (leader != null && ElementLordRegistry.IsAshenLord(leader))
                     {
                         try { party.RecentEventsMorale += 50f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                     }

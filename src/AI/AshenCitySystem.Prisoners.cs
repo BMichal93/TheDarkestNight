@@ -48,7 +48,7 @@ namespace AshAndEmber
 
                         bool captorIsAshen =
                             (captorParty.LeaderHero != null &&
-                             ColourLordRegistry.IsAshenLord(captorParty.LeaderHero)) ||
+                             ElementLordRegistry.IsAshenLord(captorParty.LeaderHero)) ||
                             captorParty.MapFaction?.StringId == AshenKingdomId;
                         if (!captorIsAshen) continue;
 
@@ -73,7 +73,7 @@ namespace AshAndEmber
 
                         if (_rng.NextDouble() < AshenYieldChance(hero))
                         {
-                            try { ColourLordRegistry.SetAshen(hero, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { ElementLordRegistry.SetAshen(hero, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                             try { EndCaptivityAction.ApplyByReleasedAfterBattle(hero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                             InformationManager.DisplayMessage(new InformationMessage(
                                 $"{hero.Name} has taken the cold. They walk free — and Ashen.",

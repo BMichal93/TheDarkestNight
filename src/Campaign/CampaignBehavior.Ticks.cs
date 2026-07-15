@@ -30,7 +30,7 @@ namespace AshAndEmber
                 try
                 {
                     foreach (var h in Hero.AllAliveHeroes)
-                        if (ColourLordRegistry.IsAshenLord(h))
+                        if (ElementLordRegistry.IsAshenLord(h))
                             try { MageKnowledge.ApplyAshenAppearance(h); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                     if (MageKnowledge.IsAshen)
                         try { MageKnowledge.ApplyAshenAppearance(Hero.MainHero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -42,7 +42,7 @@ namespace AshAndEmber
                 if (!_selectionDone)
                 {
                     _selectionDone = true;
-                    try { ColourLordRegistry.SeedInitialLords(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ElementLordRegistry.SeedInitialLords(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                     // Establish the Ashen claims BEFORE the Empire reassignment —
                     // ReassignImperialSettlements guards on IsAshenSettlement, which
                     // is empty until Initialize() runs, so the reverse order let the
@@ -52,7 +52,7 @@ namespace AshAndEmber
                 }
                 try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { AshenCitySystem.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ColourLordRegistry.DailyMapCast(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementLordRegistry.DailyMapCast(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { TalentSystem.ResetDailyCastCount(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { TalentSystem.EnforceKinship(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { TalentSystem.DailyFadeTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -92,8 +92,8 @@ namespace AshAndEmber
         {
             try
             {
-                try { ColourLordRegistry.CheckPopulationBounds(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ColourLordRegistry.CheckAgeLimit(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementLordRegistry.CheckPopulationBounds(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementLordRegistry.CheckAgeLimit(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { NatureSeerRegistry.CheckPopulationBounds(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { CampaignMapEvents.WeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { BurningLabQuestSystem.WeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -109,7 +109,7 @@ namespace AshAndEmber
         {
             try
             {
-                try { ColourLordAI.ClearCooldowns(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementLordAI.ClearCooldowns(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SpellEffects.ClearAreaEffects(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SpellEffects.ClearSelfEffects(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { SpellEffects.ClearGlows(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -163,7 +163,7 @@ namespace AshAndEmber
                 try { ApplyNpcBattleAging(mapEvent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 // Flush any battle casts not consumed above (NPCs absent from this event).
                 // Must run after aging so _battleCasts still holds data during ApplyNpcBattleAging.
-                try { ColourLordAI.FlushBattleCasts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementLordAI.FlushBattleCasts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ApplyNpcBattleMoraleBonus(mapEvent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ApplyNpcMagicCombatBonus(mapEvent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { CheckReapRaidYield(mapEvent);           } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -196,7 +196,7 @@ namespace AshAndEmber
                 Vec2 pos = Hero.MainHero.PartyBelongedTo.GetPosition2D;
                 Hero nearMage = Hero.AllAliveHeroes.FirstOrDefault(h =>
                     h != Hero.MainHero && h.IsLord && h.IsAlive &&
-                    ColourLordRegistry.IsColourLord(h) &&
+                    ElementLordRegistry.IsElementLord(h) &&
                     h.PartyBelongedTo != null &&
                     (h.PartyBelongedTo.GetPosition2D - pos).Length < 30f);
                 if (nearMage != null)
@@ -233,7 +233,7 @@ namespace AshAndEmber
             {
                 var lords = Hero.AllAliveHeroes
                     .Where(h => h.IsLord && h != Hero.MainHero && h.IsAlive
-                             && ColourLordRegistry.IsColourLord(h))
+                             && ElementLordRegistry.IsElementLord(h))
                     .ToList();
                 if (lords.Count == 0) return;
 

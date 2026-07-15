@@ -89,7 +89,7 @@ namespace AshAndEmber
         //     so the source clan is never left headless mid-event.
         //   • Requires the source kingdom to retain at least 2 clans after the
         //     defection, to prevent immediate faction extinction.
-        //   • ColourLordRegistry.SetAshen + OnHeroSetAshen handle clan movement
+        //   • ElementLordRegistry.SetAshen + OnHeroSetAshen handle clan movement
         //     and kingdom placement safely.
         private static void TryFireWhispersFromTheAsh()
         {
@@ -107,8 +107,8 @@ namespace AshAndEmber
                 var candidates = Hero.AllAliveHeroes
                     .Where(h => h.IsLord && h.IsAlive && !h.IsChild && !h.IsPrisoner
                              && h != Hero.MainHero
-                             && ColourLordRegistry.IsColourLord(h)
-                             && !ColourLordRegistry.IsAshenLord(h)
+                             && ElementLordRegistry.IsElementLord(h)
+                             && !ElementLordRegistry.IsAshenLord(h)
                              && h.Clan != null && h.Clan.Leader == h   // clan leader only
                              && h.Clan.Heroes.Count(x => x.IsAlive && !x.IsChild) >= 2
                              && h.Clan.Kingdom != null
@@ -127,9 +127,9 @@ namespace AshAndEmber
                     try
                     {
                         names.Add(hero.Name?.ToString() ?? "a lord");
-                        try { ColourLordRegistry.SetAshen(hero, true); }              catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { ElementLordRegistry.SetAshen(hero, true); }              catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                         try { AshenCitySystem.ApplyAshenPersonality(hero); }          catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                        try { ColourLordRegistry.SetMage(hero, true); }               catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { ElementLordRegistry.SetMage(hero, true); }               catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                         try { AshenCitySystem.OnHeroSetAshen(hero); }                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                         try { MageKnowledge.ApplyAshenAppearance(hero); }             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                     }

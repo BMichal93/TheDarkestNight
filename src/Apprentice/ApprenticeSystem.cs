@@ -80,7 +80,7 @@ namespace AshAndEmber
                 // Look for a young noble not already a mage and not the player
                 return Hero.AllAliveHeroes
                     .Where(h => h != Hero.MainHero && h.IsAlive
-                             && !ColourLordRegistry.IsColourLord(h)
+                             && !ElementLordRegistry.IsElementLord(h)
                              && h.Age is > 16 and < 30
                              && h.Clan != null)
                     .OrderBy(_ => _rng.Next())
@@ -214,8 +214,8 @@ namespace AshAndEmber
         {
             try
             {
-                ColourLordRegistry.SetMage(h, true);
-                if (ashen) ColourLordRegistry.SetAshen(h, true);
+                ElementLordRegistry.SetMage(h, true);
+                if (ashen) ElementLordRegistry.SetAshen(h, true);
                 string kind = ashen ? "Ashen" : "mage";
                 InformationManager.ShowInquiry(new InquiryData(
                     "A New Fire in the World",

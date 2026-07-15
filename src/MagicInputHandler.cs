@@ -386,7 +386,7 @@ namespace AshAndEmber
                 {
                     if (!a.IsActive() || !a.IsHero || a == Agent.Main || a.Team != Agent.Main.Team) continue;
                     Hero h = (a.Character as TaleWorlds.CampaignSystem.CharacterObject)?.HeroObject;
-                    if (h != null && ColourLordRegistry.IsColourLord(h)) count++;
+                    if (h != null && ElementLordRegistry.IsElementLord(h)) count++;
                 }
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }

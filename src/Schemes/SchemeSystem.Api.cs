@@ -416,10 +416,10 @@ namespace AshAndEmber
 
                 // Ashen targets are valid but rare — weight pool 85% non-Ashen / 15% Ashen.
                 var nonAshenTargets = lordTargets
-                    .Where(t => !ColourLordRegistry.IsAshenLord(t)
+                    .Where(t => !ElementLordRegistry.IsAshenLord(t)
                              && t.Clan?.Kingdom?.StringId != AshenKingdomId).ToList();
                 var ashenTargets = lordTargets
-                    .Where(t => ColourLordRegistry.IsAshenLord(t)
+                    .Where(t => ElementLordRegistry.IsAshenLord(t)
                              || t.Clan?.Kingdom?.StringId == AshenKingdomId).ToList();
 
                 List<Hero> targetPool;

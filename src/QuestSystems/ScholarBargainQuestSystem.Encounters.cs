@@ -279,7 +279,7 @@ namespace AshAndEmber
             var candidates = Hero.AllAliveHeroes
                 .Where(h => h.IsLord && h.IsAlive && !h.IsPrisoner && h != Hero.MainHero
                          && h.Clan != null && h.Clan != Hero.MainHero?.Clan
-                         && !ColourLordRegistry.IsAshenLord(h)
+                         && !ElementLordRegistry.IsAshenLord(h)
                          && h.Clan.Settlements.Any(cs => cs.IsCastle))
                 .ToList();
 
@@ -297,7 +297,7 @@ namespace AshAndEmber
                 }
                 else if (roll < 0.33)
                 {
-                    ColourLordRegistry.SetAshen(lord, true);
+                    ElementLordRegistry.SetAshen(lord, true);
                     body = $"Word reaches you that {lord.Name} has gone still and grey, and that {(lord.Clan?.Name?.ToString() ?? "their")} " +
                            "banners over one of their castles now fly the colour of cold ash. A scholar's name is " +
                            $"mentioned in the same breath as the change — {ScholarName}. You never learn exactly what " +

@@ -165,7 +165,7 @@ namespace AshAndEmber
                 if (kingdom == null || kingdom.IsEliminated) return false;
 
                 // (11) Never the Ashen.
-                if (IsAshenFaction(kingdom) || ColourLordRegistry.IsAshenLord(lord)) return false;
+                if (IsAshenFaction(kingdom) || ElementLordRegistry.IsAshenLord(lord)) return false;
 
                 // (8) The realm only takes on soldiers while at war with a real
                 // rival (not merely the Ashen).

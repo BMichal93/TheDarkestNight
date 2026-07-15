@@ -68,7 +68,7 @@ namespace AshAndEmber
                 if (wasNotMage)
                 {
                     try { MageKnowledge.SetMage(true); }         catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { ColourLordRegistry.SetMage(Hero.MainHero, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ElementLordRegistry.SetMage(Hero.MainHero, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                     try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints += 10; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 }
 
@@ -209,7 +209,7 @@ namespace AshAndEmber
                 {
                     if (killed >= cap) break;
                     if (!h.IsAlive || h.IsChild || h == Hero.MainHero) continue;
-                    if (!ColourLordRegistry.IsAshenLord(h)) continue;
+                    if (!ElementLordRegistry.IsAshenLord(h)) continue;
                     try { KillCharacterAction.ApplyByMurder(h, null, false); killed++; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 }
             }
@@ -225,7 +225,7 @@ namespace AshAndEmber
                 {
                     if (killed >= cap) break;
                     if (!h.IsAlive || h.IsChild || h == Hero.MainHero) continue;
-                    if (!ColourLordRegistry.IsColourLord(h)) continue;
+                    if (!ElementLordRegistry.IsElementLord(h)) continue;
                     try { KillCharacterAction.ApplyByMurder(h, null, false); killed++; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 }
             }
@@ -242,7 +242,7 @@ namespace AshAndEmber
                 {
                     Hero companion = entry.Character?.HeroObject;
                     if (companion == null || companion == Hero.MainHero) continue;
-                    if (!ColourLordRegistry.IsColourLord(companion)) continue;
+                    if (!ElementLordRegistry.IsElementLord(companion)) continue;
                     try { KillCharacterAction.ApplyByMurder(companion, null, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 }
             }

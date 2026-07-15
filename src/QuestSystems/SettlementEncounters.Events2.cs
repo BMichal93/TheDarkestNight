@@ -370,14 +370,14 @@ namespace AshAndEmber
         private static void BecomeAshen()
         {
             // Sync MageKnowledge player flags first so grimoire + spell aging work correctly.
-            // ColourLordRegistry.SetAshen only updates the NPC-tracking sets; MageKnowledge
+            // ElementLordRegistry.SetAshen only updates the NPC-tracking sets; MageKnowledge
             // has its own _isMage / _isAshen flags that drive the player-facing UI and mechanics.
             try { MageKnowledge.SetMage(true); }  catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { MageKnowledge.SetAshen(true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
-            try { ColourLordRegistry.SetAshen(Hero.MainHero, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ElementLordRegistry.SetAshen(Hero.MainHero, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { AshenCitySystem.ApplyAshenPersonality(Hero.MainHero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ColourLordRegistry.SetMage(Hero.MainHero, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ElementLordRegistry.SetMage(Hero.MainHero, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { AshenCitySystem.OnPlayerBecameAshen(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             try { MageKnowledge.ApplyAshenAppearance(Hero.MainHero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             // Queue the frenzy event for the next daily tick if there's someone to lose

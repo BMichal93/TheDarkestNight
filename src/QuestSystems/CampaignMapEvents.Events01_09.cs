@@ -242,7 +242,7 @@ namespace AshAndEmber
                 // Claimant: any living Ashen lord who is not a prisoner
                 var ashenLords = Hero.AllAliveHeroes
                     .Where(h => h.IsLord && h.IsAlive && !h.IsDisabled && !h.IsPrisoner
-                             && ColourLordRegistry.IsAshenLord(h))
+                             && ElementLordRegistry.IsAshenLord(h))
                     .ToList();
                 if (ashenLords.Count == 0) return;
 
@@ -284,7 +284,7 @@ namespace AshAndEmber
                              && h.Age >= 25f && h.Age < 56f
                              && (h.Clan == null || h.Clan.Leader != h)
                              && h != Hero.MainHero
-                             && !ColourLordRegistry.IsAshenLord(h))
+                             && !ElementLordRegistry.IsAshenLord(h))
                     .ToList();
                 if (candidates.Count == 0) return;
 

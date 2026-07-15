@@ -64,7 +64,7 @@ namespace AshAndEmber
             try
             {
                 var h = Hero.OneToOneConversationHero;
-                if (h == null || ColourLordRegistry.IsAshenLord(h)) return false;
+                if (h == null || ElementLordRegistry.IsAshenLord(h)) return false;
                 if (!h.IsLord) return false;   // lord dialogue only — never notables or wanderers
                 if (requireMet && !h.HasMet) return false; // let vanilla handle the first-meeting introduction
                 if (guardPostBattle && LordDialogueGuard.MustYieldToVanilla()) return false; // vanilla owns capture/prisoner talks

@@ -323,8 +323,8 @@ namespace AshAndEmber
                 if (godKing == null || !godKing.IsAlive) return;
 
                 // Mark as Pyrelord — fire and ruin archetype.
-                if (!ColourLordRegistry.IsColourLord(godKing))
-                    ColourLordRegistry.SetGodKing(godKing);
+                if (!ElementLordRegistry.IsElementLord(godKing))
+                    ElementLordRegistry.SetGodKing(godKing);
 
                 // Ensure the evil alignment that activates dark gifts.
                 try

@@ -44,7 +44,7 @@ These rules exist to keep you from making errors. Follow all of them, always.
 | Spell casting by keystroke/stick sequence | `src/Miracles/MiracleInputHandler` (hold key, tap U/L/R/D sequence, release to cast) + `MiracleMinigame` |
 | Spellbook / codex UI + keybind | `MagicLearning` codex (Alt+L), litany list (Shift+X), grimoire reference (Ctrl+X) — see `MagicSystem.OnApplicationTick` and `MiracleInputHandler` header comments |
 | Battle spell effects (fire bolt, walls, gale, torrent, entangle, nova, ultimates) | `src/Magic/ElementSpellEffects` (`CastAttack` is the single dispatch choke point), `ElementWallWards`, `ElementUltimates`, `src/Nature/NatureEffects` |
-| NPC lords casting in battle | `src/AI/ColourLordAI`, `NpcCastPlanner`, `BanditMageAI` |
+| NPC lords casting in battle | `src/AI/ElementLordAI`, `NpcCastPlanner`, `BanditMageAI` |
 | Caster troops in the field | `src/Miracles/PriestTroops` |
 | Magical item effects | `src/Crystals/CrystalCatalog` + `CrystalEffects` (consumable → make permanent-but-weaker), `src/DarkGifts/DarkGiftBattleEffects` (per-hero → make per-item-and-weaker) |
 | Ruins/dungeon crawling | `src/AshenRuins/` — `AshenRuinDefs` (chamber catalog), `AshenRuinSystem`, `AshenRuinMenus`, `AshenRuinMath` |
@@ -179,7 +179,7 @@ These rules exist to keep you from making errors. Follow all of them, always.
 
 **Goal:** casters are rare and precious, on both sides of the battle line.
 
-**Reuse:** `ColourLordAI` + `NpcCastPlanner` (NPC lords already cast in battle on personality cooldowns), `ColourLordRegistry` (how lords are chosen as mages), `BanditMageAI`, `PriestTroops` (caster troop trees + battle AI).
+**Reuse:** `ElementLordAI` + `NpcCastPlanner` (NPC lords already cast in battle on personality cooldowns), `ElementLordRegistry` (how lords are chosen as mages), `BanditMageAI`, `PriestTroops` (caster troop trees + battle AI).
 
 1. **Requirement 14:** roughly **7% of named lords/companions** know 1–3 spells and cast them in battle through the existing NPC cast path. **No campaign-map spells** (already disabled in Phase 4 — verify).
 2. **Requirement 15:** a **spellcaster troop tree** — a full tree (recruit → tier 5), very rare to encounter/recruit, each tier knowing 2–3 battle spells and using them in combat (follow `PriestTroops` end-to-end: definition, spawning, battle AI).

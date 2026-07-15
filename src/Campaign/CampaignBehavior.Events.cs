@@ -188,7 +188,7 @@ namespace AshAndEmber
                             new Color(0.6f, 0.6f, 0.6f)));
                     }
                     _selectionDone = true;
-                    try { ColourLordRegistry.SeedInitialLords(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ElementLordRegistry.SeedInitialLords(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                     // Seed the attuned seers — now the mage's TEACHERS — for every new
                     // campaign (was previously tied to the removed Living-Ember choice).
                     try { NatureCampaignBehavior.EstablishForNewCampaign(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -204,7 +204,7 @@ namespace AshAndEmber
                 {
                     MageKnowledge.SetMage(false);
                     _selectionDone = true;
-                    try { ColourLordRegistry.SeedInitialLords(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ElementLordRegistry.SeedInitialLords(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                     try { NatureCampaignBehavior.EstablishForNewCampaign(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                     try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                     try { AshenCitySystem.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -252,9 +252,9 @@ namespace AshAndEmber
                 // every transfer below would hand the border cities to the Ashen
                 // instead of the Empire. Better to skip that Empire's assignments
                 // entirely than to feed the cold.
-                if (AshenCitySystem.IsAshenClanMember(northLeader) || ColourLordRegistry.IsAshenLord(northLeader)) northLeader = null;
-                if (AshenCitySystem.IsAshenClanMember(westLeader)  || ColourLordRegistry.IsAshenLord(westLeader))  westLeader  = null;
-                if (AshenCitySystem.IsAshenClanMember(southLeader) || ColourLordRegistry.IsAshenLord(southLeader)) southLeader = null;
+                if (AshenCitySystem.IsAshenClanMember(northLeader) || ElementLordRegistry.IsAshenLord(northLeader)) northLeader = null;
+                if (AshenCitySystem.IsAshenClanMember(westLeader)  || ElementLordRegistry.IsAshenLord(westLeader))  westLeader  = null;
+                if (AshenCitySystem.IsAshenClanMember(southLeader) || ElementLordRegistry.IsAshenLord(southLeader)) southLeader = null;
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 

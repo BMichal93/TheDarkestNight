@@ -123,7 +123,7 @@ namespace AshAndEmber
             // Pick a mage lord that is alive and not the player
             var lords = Hero.AllAliveHeroes
                 .Where(h => h.IsLord && h != Hero.MainHero && h.IsAlive
-                         && ColourLordRegistry.IsColourLord(h))
+                         && ElementLordRegistry.IsElementLord(h))
                 .ToList();
             if (lords.Count == 0) return;
 

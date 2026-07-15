@@ -52,7 +52,7 @@ namespace AshAndEmber
             try
             {
                 Hero owner = settlement.OwnerClan?.Leader;
-                if (owner == null || !ColourLordRegistry.IsAshenLord(owner)) return;
+                if (owner == null || !ElementLordRegistry.IsAshenLord(owner)) return;
 
                 string msg = _settlementMessages[_rng.Next(_settlementMessages.Length)];
                 InformationManager.DisplayMessage(new InformationMessage(msg, new Color(0.45f, 0.45f, 0.65f)));
@@ -76,7 +76,7 @@ namespace AshAndEmber
                 bool nearAshen = Settlement.All.Any(s =>
                     (s.IsTown || s.IsCastle) &&
                     s.OwnerClan?.Leader != null &&
-                    ColourLordRegistry.IsAshenLord(s.OwnerClan.Leader) &&
+                    ElementLordRegistry.IsAshenLord(s.OwnerClan.Leader) &&
                     (s.GetPosition2D - pos).Length <= 30f);
 
                 if (!nearAshen) return;

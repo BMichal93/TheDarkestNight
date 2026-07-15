@@ -34,7 +34,7 @@ namespace AshAndEmber
                     if (h == Hero.MainHero) continue;
                     if (h.CurrentSettlement != settlement) continue;
                     bool qualifies =
-                        ColourLordRegistry.IsAshenLord(h) ||
+                        ElementLordRegistry.IsAshenLord(h) ||
                         isAshenSettlement ||
                         h.MapFaction?.StringId == AshenKingdomId;
                     if (!qualifies) continue;
@@ -46,7 +46,7 @@ namespace AshAndEmber
 
         // Apply Ashen appearance (grey skin, hair, eyes) to any hero (lord/wanderer/notable)
         // that meets at least one of the following conditions:
-        //   1. Is registered as an Ashen lord (ColourLordRegistry.IsAshenLord)
+        //   1. Is registered as an Ashen lord (ElementLordRegistry.IsAshenLord)
         //   2. Currently resides in an Ashen settlement
         //   3. Belongs to the Ashen faction/kingdom
         //   4. Belongs to an Ashen Spawn party
@@ -60,7 +60,7 @@ namespace AshAndEmber
                     if (!h.IsLord && !h.IsWanderer && !h.IsNotable) continue;
 
                     bool qualifies =
-                        ColourLordRegistry.IsAshenLord(h) ||
+                        ElementLordRegistry.IsAshenLord(h) ||
                         (h.CurrentSettlement != null && _settlementClanMap.ContainsKey(h.CurrentSettlement.StringId)) ||
                         h.MapFaction?.StringId == AshenKingdomId ||
                         (h.PartyBelongedTo != null && FireWorshippersSystem.IsAshenSpawn(h.PartyBelongedTo));

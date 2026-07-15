@@ -116,8 +116,8 @@ namespace AshAndEmber
                 {
                     if (killed >= cap) break;
                     if (!h.IsAlive || h.IsChild || h == Hero.MainHero) continue;
-                    if (!ColourLordRegistry.IsColourLord(h)) continue;
-                    if (ColourLordRegistry.IsAshenLord(h)) continue;
+                    if (!ElementLordRegistry.IsElementLord(h)) continue;
+                    if (ElementLordRegistry.IsAshenLord(h)) continue;
                     try { KillCharacterAction.ApplyByMurder(h, null, false); killed++; }
                     catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 }
@@ -135,8 +135,8 @@ namespace AshAndEmber
                 {
                     Hero companion = entry.Character?.HeroObject;
                     if (companion == null || companion == Hero.MainHero) continue;
-                    if (!ColourLordRegistry.IsColourLord(companion)) continue;
-                    if (ColourLordRegistry.IsAshenLord(companion)) continue;
+                    if (!ElementLordRegistry.IsElementLord(companion)) continue;
+                    if (ElementLordRegistry.IsAshenLord(companion)) continue;
                     try { KillCharacterAction.ApplyByMurder(companion, null, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 }
             }

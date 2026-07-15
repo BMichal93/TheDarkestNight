@@ -214,7 +214,7 @@ namespace AshAndEmber
 
         // Scan hero agents to find which team (if any) represents the Ashen side.
         // Player Ashen status comes from MageKnowledge.IsAshen;
-        // NPC Ashen status comes from ColourLordRegistry.IsAshenLord.
+        // NPC Ashen status comes from ElementLordRegistry.IsAshenLord.
         private static void FindAshenTeam()
         {
             _ashenTeam = null;
@@ -228,7 +228,7 @@ namespace AshAndEmber
                     if (hero == null) continue;
                     bool isAshen = hero == Hero.MainHero
                         ? MageKnowledge.IsAshen
-                        : ColourLordRegistry.IsAshenLord(hero);
+                        : ElementLordRegistry.IsAshenLord(hero);
                     if (!isAshen) continue;
                     _ashenTeam = agent.Team;
                     break;

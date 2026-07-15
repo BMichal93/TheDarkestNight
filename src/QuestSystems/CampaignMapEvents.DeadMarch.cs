@@ -172,7 +172,7 @@ namespace AshAndEmber
                 // Prefer the highest-tier active Ashen lord with their own mobile party.
                 var vanguard = Hero.AllAliveHeroes
                     .Where(h => h.IsLord && !h.IsChild && !h.IsPrisoner && !h.IsDisabled
-                             && ColourLordRegistry.IsAshenLord(h)
+                             && ElementLordRegistry.IsAshenLord(h)
                              && h.PartyBelongedTo != null
                              && h.PartyBelongedTo.IsActive
                              && !h.PartyBelongedTo.IsGarrison)
@@ -228,7 +228,7 @@ namespace AshAndEmber
                 {
                     foreach (var hero in Hero.AllAliveHeroes)
                     {
-                        if (!hero.IsLord || !ColourLordRegistry.IsAshenLord(hero)) continue;
+                        if (!hero.IsLord || !ElementLordRegistry.IsAshenLord(hero)) continue;
                         if (hero.Clan == null || hero.Clan == ashenKingdom?.RulingClan) continue;
                         try { hero.Clan.Influence = Math.Max(hero.Clan.Influence, 2000f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                     }
@@ -268,7 +268,7 @@ namespace AshAndEmber
                     {
                         if (!party.IsActive) continue;
                         var leader = party.LeaderHero;
-                        if (leader != null && ColourLordRegistry.IsAshenLord(leader))
+                        if (leader != null && ElementLordRegistry.IsAshenLord(leader))
                             try { party.RecentEventsMorale += 60f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                     }
                 }

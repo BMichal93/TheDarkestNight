@@ -277,7 +277,7 @@ namespace AshAndEmber
             {
                 foreach (Hero h in Hero.AllAliveHeroes.ToList())
                 {
-                    if (h == player || !ColourLordRegistry.IsColourLord(h)) continue;
+                    if (h == player || !ElementLordRegistry.IsElementLord(h)) continue;
                     try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(player, h, 10, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 }
             }
@@ -303,7 +303,7 @@ namespace AshAndEmber
             {
                 foreach (Hero h in Hero.AllAliveHeroes)
                 {
-                    if (h == Hero.MainHero || !h.IsAlive || !ColourLordRegistry.IsColourLord(h)) continue;
+                    if (h == Hero.MainHero || !h.IsAlive || !ElementLordRegistry.IsElementLord(h)) continue;
                     EnforceCaramaraderieLimits(Hero.MainHero, h);
                 }
             }

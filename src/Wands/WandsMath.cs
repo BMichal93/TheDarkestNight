@@ -58,7 +58,7 @@ namespace AshAndEmber
 
         // ── Cast cooldown (all wielders) ─────────────────────────────────────
         // Prevents "cast on every swing" — comparable to the Ashen lords' fast
-        // 6s NPC-cast cadence (ColourLordAI), since a wand is meant to feel
+        // 6s NPC-cast cadence (ElementLordAI), since a wand is meant to feel
         // like a real but bounded battlefield tool, not a proc-on-every-hit trinket.
         public const float CastCooldownSeconds = 6f;
 

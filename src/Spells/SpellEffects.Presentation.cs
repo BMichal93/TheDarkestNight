@@ -201,7 +201,7 @@ namespace AshAndEmber
                 if (AshenVisuals.ShouldLookAshen(agent)) return ColorSchool.Ashen;
                 Hero h = (agent?.Character as CharacterObject)?.HeroObject;
                 if (h != null)
-                    return ColourLordRegistry.IsAshenLord(h) ? ColorSchool.Ashen : ColorSchool.Purple;
+                    return ElementLordRegistry.IsAshenLord(h) ? ColorSchool.Ashen : ColorSchool.Purple;
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             return ColorSchool.Red;

@@ -46,7 +46,7 @@ namespace AshAndEmber
             {
                 var h = Hero.OneToOneConversationHero;
                 if (h == null) return false;
-                if (ColourLordRegistry.IsAshenLord(h)) return true;
+                if (ElementLordRegistry.IsAshenLord(h)) return true;
                 if (h.PartyBelongedTo != null && FireWorshippersSystem.IsAshenSpawn(h.PartyBelongedTo))
                     return true;
                 return false;

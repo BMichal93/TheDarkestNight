@@ -359,8 +359,8 @@
     <Compile Include="QuestSystems\BattleEvents.Events.cs"/>
     <Compile Include="QuestSystems\BattleEvents.Helpers.cs"/>
     <Compile Include="AI\BanditMageAI.cs"/>
-    <Compile Include="AI\ColourLordRegistry.cs"/>
-    <Compile Include="AI\ColourLordAI.cs"/>
+    <Compile Include="AI\ElementLordRegistry.cs"/>
+    <Compile Include="AI\ElementLordAI.cs"/>
     <Compile Include="AI\NpcCastPlanner.cs"/>
     <Compile Include="AI\AshenCitySystem.cs"/>
     <Compile Include="AI\AshenCitySystem.Setup.cs"/>

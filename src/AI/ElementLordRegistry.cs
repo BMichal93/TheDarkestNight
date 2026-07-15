@@ -1,9 +1,9 @@
 ﻿// =============================================================================
-// ASH AND EMBER — AI/ColourLordRegistry.cs
+// ASH AND EMBER — AI/ElementLordRegistry.cs
 // Tracks which NPC lords carry the gift (isMage).
 // Population target: ~20% of all lords. Weekly regulator keeps it stable.
 // Mage lords cast the unified element magic — the same five elements the player
-// wields (KnownElements), in battle (ColourLordAI) and on the campaign map
+// wields (KnownElements), in battle (ElementLordAI) and on the campaign map
 // (DailyMapCast → TalentSystem.ExecuteNpcElementMapSpell). Ashen lords know them
 // all and wear the cold mask. Casting spends life expectancy; a lord burns out and
 // dies once he reaches his (spend-reduced) death age. The legacy path-archetype
@@ -23,7 +23,7 @@ using TaleWorlds.Library;
 
 namespace AshAndEmber
 {
-    public static class ColourLordRegistry
+    public static class ElementLordRegistry
     {
         private static readonly HashSet<string> _mageIds        = new HashSet<string>();
         private static readonly HashSet<string> _ashenIds        = new HashSet<string>();
@@ -49,7 +49,7 @@ namespace AshAndEmber
 
         // Six NPC path archetypes — each mirrors one player fire path.
         // Spells  : campaign-map workings (TalentId values 4–8, filtered in DailyMapCast).
-        // Enchants: battle passives activated by ColourLordAI.
+        // Enchants: battle passives activated by ElementLordAI.
         private static readonly (TalentId[] Spells, TalentId[] Enchants)[] _npcPathArchetypes =
         {
             // Reaper — attrition and life-drain
@@ -74,7 +74,7 @@ namespace AshAndEmber
             { TalentId.Ashveil, TalentId.CinderShell, TalentId.Hearthlight, TalentId.Reflect };
 
         // ── Public API ────────────────────────────────────────────────────────
-        public static bool IsColourLord(Hero hero) =>
+        public static bool IsElementLord(Hero hero) =>
             hero != null && _mageIds.Contains(hero.StringId);
 
         public static bool IsAshenLord(Hero hero) =>
@@ -325,7 +325,7 @@ namespace AshAndEmber
                     // Exclude Ashen lords from the trim set — they are registered in
                     // both _mageIds and _ashenIds (MarkClanAshen adds both), but are
                     // permanent and must keep their casting ability. Trimming one from
-                    // _mageIds would make IsColourLord false, silently disabling battle
+                    // _mageIds would make IsElementLord false, silently disabling battle
                     // and map casting while they remained diplomatically Ashen.
                     var mages = allLords.Where(h => _mageIds.Contains(h.StringId)
                                                  && !_ashenIds.Contains(h.StringId)).ToList();
@@ -363,7 +363,7 @@ namespace AshAndEmber
 
         // Years of life a lord has left before the fire burns him out — his real
         // spellcasting RESOURCE. The Ashen pay nothing, so they read as unlimited.
-        // Used by both the battle AI (ColourLordAI) and the map AI (DailyMapCast)
+        // Used by both the battle AI (ElementLordAI) and the map AI (DailyMapCast)
         // to make lords spend their years like people: freely while young, sparingly
         // near burnout. See NpcCastPlanner.
         public const float UnlimitedLife = 999f;
@@ -393,7 +393,7 @@ namespace AshAndEmber
         // Fire is innate to every mage. Beyond it a lord has LEARNED 0–4 of the other
         // elements, fixed by his identity and scaled by his standing (a tier-6 magnate
         // knows more than a landless knight). The Ashen know them all. Both the battle
-        // AI (ColourLordAI) and the campaign-map AI (DailyMapCast) draw from this, so a
+        // AI (ElementLordAI) and the campaign-map AI (DailyMapCast) draw from this, so a
         // lord uses ONLY the unified element magic the player wields — no old fire-path
         // spells or brands.
         private static readonly MagicElement[] _learnableElements =

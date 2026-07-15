@@ -13,7 +13,7 @@
 // Not persisted: `_seededSettlementIds` is a plain in-memory set. A save
 // reload simply re-rolls the (tiny) chance for settlements it hasn't already
 // seeded this session — an acceptable trade for a flavour rarity system,
-// the same choice ColourLordRegistry/SpellcasterLords already make for their
+// the same choice ElementLordRegistry/SpellcasterLords already make for their
 // own seeded-not-serialized populations.
 // =============================================================================
 

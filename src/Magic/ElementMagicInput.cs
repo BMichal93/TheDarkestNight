@@ -112,7 +112,7 @@ namespace AshAndEmber
         // The player's hold-and-charge element input is retired: casting now
         // goes through SpellbookInputHandler's spoken formulas, which bind back
         // onto ElementSpellEffects.CastAttack/CastWall exactly as this input used
-        // to. The effect code below is untouched and NPC lords (ColourLordAI)
+        // to. The effect code below is untouched and NPC lords (ElementLordAI)
         // still call CastAttack/CastWall directly, bypassing this file entirely —
         // only the PLAYER's own gesture is gated off here.
         public const bool PlayerCastingEnabled = false;

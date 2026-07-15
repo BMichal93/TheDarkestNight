@@ -677,7 +677,7 @@ namespace AshAndEmber
                     _lastBattleHadAshenEnemy = enemySide?.Parties?.Any(p => {
                         string fId = p.Party?.MapFaction?.StringId ?? "";
                         return fId == "ashen_kingdom" ||
-                               (p.Party?.LeaderHero != null && ColourLordRegistry.IsAshenLord(p.Party.LeaderHero));
+                               (p.Party?.LeaderHero != null && ElementLordRegistry.IsAshenLord(p.Party.LeaderHero));
                     }) == true;
                 }
                 catch { _lastBattleHadAshenEnemy = false; }

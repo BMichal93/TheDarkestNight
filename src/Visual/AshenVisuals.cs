@@ -230,7 +230,7 @@ namespace AshAndEmber
                 if (hero == null) return false;
                 return hero == Hero.MainHero
                     ? MageKnowledge.IsAshen
-                    : ColourLordRegistry.IsAshenLord(hero);
+                    : ElementLordRegistry.IsAshenLord(hero);
             }
 
             // Regular troops: ashen when their origin party is an Ashen Spawn

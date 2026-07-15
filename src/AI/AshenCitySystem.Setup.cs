@@ -217,7 +217,7 @@ namespace AshAndEmber
                         _settlementClanMap.Remove(kvp.Key);
 
                     foreach (Hero h in clan.Heroes.Where(h => h.IsAlive).ToList())
-                        try { ColourLordRegistry.SetAshen(h, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { ElementLordRegistry.SetAshen(h, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                     // Return the clan to a living kingdom of its own culture so its towns fly a
                     // banner again instead of the grey of an independent clan trapped in the
@@ -308,7 +308,7 @@ namespace AshAndEmber
             try { hero.SetTraitLevel(DefaultTraits.Honor,      -2); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
-        // ── Called by ColourLordRegistry.SetAshen for every hero turned Ashen ──
+        // ── Called by ElementLordRegistry.SetAshen for every hero turned Ashen ──
         // Moves the hero's clan into the Ashen kingdom. Safe to call at any time:
         // if the kingdom isn't ready yet the clan is simply ejected (Initialize
         // will re-join them on its next run).
@@ -369,9 +369,9 @@ namespace AshAndEmber
                     // free any who were captive when the cold claimed them.
                     if (hero.IsPrisoner)
                         try { EndCaptivityAction.ApplyByReleasedAfterBattle(hero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { ColourLordRegistry.SetAshen(hero, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ElementLordRegistry.SetAshen(hero, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                     try { RenameAshenHero(hero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { ColourLordRegistry.SetMage(hero, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ElementLordRegistry.SetMage(hero, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 }
 
                 // Re-assert settlement ownership (guards against fief-distribution firing in the gap)

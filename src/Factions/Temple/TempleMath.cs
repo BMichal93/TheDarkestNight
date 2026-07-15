@@ -42,7 +42,7 @@ namespace AshAndEmber
         // Bannerlord's five personality traits are Honor, Mercy, Valor,
         // Generosity and Calculating (see DefaultTraits). There is no literal
         // "devious"/"cruel" trait, so this maps the brief's language onto the
-        // closest existing ones, mirroring how ColourLordRegistry already reads
+        // closest existing ones, mirroring how ElementLordRegistry already reads
         // Calculating as "cunning" and (Honor<=-2 && Mercy<=-2) as "cruel enough
         // to serve the Ashen": a Calculating mind that schemes is devious; a
         // heart with no Mercy left is cruel. Either alone is enough to be

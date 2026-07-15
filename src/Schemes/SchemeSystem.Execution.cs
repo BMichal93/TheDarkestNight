@@ -50,7 +50,7 @@ namespace AshAndEmber
                 try { chance -= targetSettlement.OwnerClan.Tier * 0.02f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
             // Ashen targets resist mortal scheming — cold fire does not yield
-            bool isAshenTarget = (targetHero != null && ColourLordRegistry.IsAshenLord(targetHero))
+            bool isAshenTarget = (targetHero != null && ElementLordRegistry.IsAshenLord(targetHero))
                               || targetSettlement?.OwnerClan?.Kingdom?.StringId == AshenKingdomId;
             if (isAshenTarget) chance -= 0.30f;
 

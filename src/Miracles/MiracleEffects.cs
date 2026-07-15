@@ -747,7 +747,7 @@ namespace AshAndEmber
                 if (charObj == null) return false;
                 var hero = charObj.HeroObject;
                 if (hero != null)
-                    return ColourLordRegistry.IsAshenLord(hero)
+                    return ElementLordRegistry.IsAshenLord(hero)
                         || (hero == Hero.MainHero && MageKnowledge.IsAshen);
                 return charObj.Culture?.StringId == AshenKingdomId;
             }

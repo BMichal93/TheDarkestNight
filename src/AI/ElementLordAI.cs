@@ -1,5 +1,5 @@
 // =============================================================================
-// LIFE & DEATH MAGIC — AI/ColourLordAI.cs
+// LIFE & DEATH MAGIC — AI/ElementLordAI.cs
 // NPC mage battle AI. Casts through the unified element system
 // (ElementSpellEffects.CastAttack/CastWall) exactly as the player does — Fire and
 // the learned Wind/Earth/Water/Spirit all on one path. A lord reads the tactical
@@ -23,7 +23,7 @@ using TaleWorlds.MountAndBlade;
 
 namespace AshAndEmber
 {
-    public static class ColourLordAI
+    public static class ElementLordAI
     {
         // Tightened (25/15/35 → 16/10/24): at the old cadence a mage lord loosed
         // roughly one working a minute once the near-burnout stretch applied, and
@@ -109,8 +109,8 @@ namespace AshAndEmber
                     {
                         if (!a.IsActive() || a.IsMount || !a.IsHero || a == Agent.Main) continue;
                         Hero h = (a.Character as CharacterObject)?.HeroObject;
-                        if (h == null || !ColourLordRegistry.IsColourLord(h)) continue;
-                        bool ashen = ColourLordRegistry.IsAshenLord(h);
+                        if (h == null || !ElementLordRegistry.IsElementLord(h)) continue;
+                        bool ashen = ElementLordRegistry.IsAshenLord(h);
                         bool isFE  = ashen && BurningLabQuestSystem.IsArenicosHero(h) && !BurningLabQuestSystem.ArenicosIsTrue;
                         float maxJitter = isFE ? FalseEmperorCooldown * 2f : ashen ? AshenCooldown * 2f : DefaultCooldown * 0.6f;
                         float jitter = (float)_rng.NextDouble() * maxJitter;
@@ -130,7 +130,7 @@ namespace AshAndEmber
                 if (agent == Agent.Main) continue;
 
                 Hero hero = (agent.Character as CharacterObject)?.HeroObject;
-                if (hero == null || !ColourLordRegistry.IsColourLord(hero)) continue;
+                if (hero == null || !ElementLordRegistry.IsElementLord(hero)) continue;
                 if (_cooldowns.ContainsKey(hero.StringId)) continue;
 
                 TryCast(agent, hero);
@@ -145,7 +145,7 @@ namespace AshAndEmber
             if (Mission.Current == null) return;
             SpellEffects.TryFreeHandForCast(agent); // sheathe visually before cast, never blocks
 
-            bool isAshen = ColourLordRegistry.IsAshenLord(hero);
+            bool isAshen = ElementLordRegistry.IsAshenLord(hero);
             bool isFalseEmperor = isAshen && BurningLabQuestSystem.IsArenicosHero(hero) && !BurningLabQuestSystem.ArenicosIsTrue;
 
             var enemies = SpellEffects.EnemiesOf(agent);
@@ -167,9 +167,9 @@ namespace AshAndEmber
             // remaining years are his real reserve: he pours out power freely while
             // young and hoards it near burnout, weighted by temperament. The Ashen
             // pay nothing — they always read as "full reserve" and cast at boss power.
-            CasterTemper temper = ColourLordRegistry.TemperOf(hero);
+            CasterTemper temper = ElementLordRegistry.TemperOf(hero);
             float lifeFrac = isAshen ? 1f
-                : NpcCastPlanner.LifeFrac(ColourLordRegistry.LifeBudgetYears(hero));
+                : NpcCastPlanner.LifeFrac(ElementLordRegistry.LifeBudgetYears(hero));
 
             // -2. THE UNBINDING — a lord's cooldown-gated ultimate. Only in
             //     battles worth the working (70+ men), read from the same tactical
@@ -260,12 +260,12 @@ namespace AshAndEmber
         // fortify with a barrier wall before attacking from behind it.
         private static bool IsPyreLord(Hero hero)
         {
-            if (hero == null || ColourLordRegistry.IsAshenLord(hero)) return false;
+            if (hero == null || ElementLordRegistry.IsAshenLord(hero)) return false;
             try { return hero.GetTraitLevel(DefaultTraits.Calculating) >= 2; } catch { return false; }
         }
 
         // ── Unified elemental kit for NPC mage lords ─────────────────────────────
-        // A lord's learned repertoire lives on ColourLordRegistry.KnownElements (the
+        // A lord's learned repertoire lives on ElementLordRegistry.KnownElements (the
         // canonical source, shared with the campaign-map AI). When he casts he does
         // NOT pick at random: he reads the situation and throws the element that fits
         // it (see CastElementAttack/Preference), so a well-studied lord roots a crowd
@@ -274,7 +274,7 @@ namespace AshAndEmber
         // fire-path spells or brands. The Ashen and the false emperor know them all
         // and cast at boss power; the element kit applies the Ashen cold mask itself.
         private static System.Collections.Generic.List<MagicElement> KnownElements(Hero hero)
-            => ColourLordRegistry.KnownElements(hero);
+            => ElementLordRegistry.KnownElements(hero);
 
         private static string ElementBlurb(MagicElement el, CastForm form)
         {
@@ -528,7 +528,7 @@ namespace AshAndEmber
         {
             try
             {
-                if (ColourLordRegistry.IsAshenLord(hero))
+                if (ElementLordRegistry.IsAshenLord(hero))
                 {
                     bool isFE = BurningLabQuestSystem.IsArenicosHero(hero) && !BurningLabQuestSystem.ArenicosIsTrue;
                     _cooldowns[hero.StringId] = isFE ? FalseEmperorCooldown : AshenCooldown;
@@ -540,8 +540,8 @@ namespace AshAndEmber
                 else if (calc > 0) cd = CalculatingCooldown;
                 // Near-burnout lords stretch their cadence to hoard their remaining
                 // years — a calculating lord goes quiet, an impulsive one hardly slows.
-                CasterTemper temper = ColourLordRegistry.TemperOf(hero);
-                float lifeFrac = NpcCastPlanner.LifeFrac(ColourLordRegistry.LifeBudgetYears(hero));
+                CasterTemper temper = ElementLordRegistry.TemperOf(hero);
+                float lifeFrac = NpcCastPlanner.LifeFrac(ElementLordRegistry.LifeBudgetYears(hero));
                 cd *= NpcCastPlanner.CooldownMult(lifeFrac, temper);
                 _cooldowns[hero.StringId] = cd;
             }
@@ -576,7 +576,7 @@ namespace AshAndEmber
             {
                 if (Agent.Main == null) return;
                 if (agent.Team == Agent.Main.Team) return;
-                bool isAshen = ColourLordRegistry.IsAshenLord(hero);
+                bool isAshen = ElementLordRegistry.IsAshenLord(hero);
                 Color c = isAshen
                     ? new Color(0.38f, 0.50f, 0.75f)   // cold blue for Ashen
                     : new Color(0.65f, 0.45f, 0.75f);   // violet for colour lords

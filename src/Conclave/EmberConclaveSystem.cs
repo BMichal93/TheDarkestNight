@@ -316,8 +316,8 @@ namespace AshAndEmber
         {
             var eligible = Hero.AllAliveHeroes
                 .Where(h => h.IsLord && h.IsAlive && h != Hero.MainHero
-                         && ColourLordRegistry.IsColourLord(h)
-                         && !ColourLordRegistry.IsAshenLord(h))
+                         && ElementLordRegistry.IsElementLord(h)
+                         && !ElementLordRegistry.IsAshenLord(h))
                 .OrderBy(_ => _rng.Next())
                 .Take(InitialMemberCount)
                 .ToList();
@@ -335,8 +335,8 @@ namespace AshAndEmber
                 var existing = _memberIds;
                 var candidate = Hero.AllAliveHeroes
                     .Where(h => h.IsLord && h.IsAlive && h != Hero.MainHero
-                             && ColourLordRegistry.IsColourLord(h)
-                             && !ColourLordRegistry.IsAshenLord(h)
+                             && ElementLordRegistry.IsElementLord(h)
+                             && !ElementLordRegistry.IsAshenLord(h)
                              && !existing.Contains(h.StringId)
                              && h.MapFaction != Hero.MainHero?.MapFaction)
                     .OrderBy(_ => _rng.Next())
@@ -359,15 +359,15 @@ namespace AshAndEmber
                         try { return Hero.AllAliveHeroes.FirstOrDefault(h => h.StringId == id && h.IsAlive); }
                         catch { return null; }
                     })
-                    .Where(h => h != null && !ColourLordRegistry.IsAshenLord(h))
+                    .Where(h => h != null && !ElementLordRegistry.IsAshenLord(h))
                     .OrderByDescending(h => { try { return h.Clan?.Renown ?? 0f; } catch { return 0f; } })
                     .FirstOrDefault();
 
                 if (candidate == null)
                     candidate = Hero.AllAliveHeroes
                         .Where(h => h.IsLord && h.IsAlive && h != Hero.MainHero
-                                 && ColourLordRegistry.IsColourLord(h)
-                                 && !ColourLordRegistry.IsAshenLord(h))
+                                 && ElementLordRegistry.IsElementLord(h)
+                                 && !ElementLordRegistry.IsAshenLord(h))
                         .OrderByDescending(h => { try { return h.Clan?.Renown ?? 0f; } catch { return 0f; } })
                         .FirstOrDefault();
 
@@ -394,7 +394,7 @@ namespace AshAndEmber
                 {
                     target = Hero.AllAliveHeroes
                         .Where(h => h.IsLord && h.IsAlive && h != Hero.MainHero
-                                 && !ColourLordRegistry.IsColourLord(h)
+                                 && !ElementLordRegistry.IsElementLord(h)
                                  && h.MapFaction != Hero.MainHero?.MapFaction)
                         .OrderBy(_ => _rng.Next())
                         .FirstOrDefault();
@@ -665,7 +665,7 @@ namespace AshAndEmber
                 {
                     var puppet = Hero.AllAliveHeroes.FirstOrDefault(h => h.StringId == _puppetCandidateId && h.IsAlive);
                     if (puppet != null)
-                        ColourLordRegistry.SetAshen(puppet, true);
+                        ElementLordRegistry.SetAshen(puppet, true);
                 }
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -675,7 +675,7 @@ namespace AshAndEmber
                 try
                 {
                     var h = Hero.AllAliveHeroes.FirstOrDefault(x => x.StringId == id && x.IsAlive);
-                    if (h != null) ColourLordRegistry.SetAshen(h, true);
+                    if (h != null) ElementLordRegistry.SetAshen(h, true);
                 }
                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             }
