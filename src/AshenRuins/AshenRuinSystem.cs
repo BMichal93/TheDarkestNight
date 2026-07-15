@@ -21,7 +21,9 @@ namespace AshAndEmber
     public static class AshenRuinSystem
     {
         // ── Tuning ────────────────────────────────────────────────────────────
-        private const int RevisitCooldownDays = 90;
+        // Recovery cooldown after any clear is now a randomized 30-120 day roll
+        // (AshenRuinMath.RecoveryCooldownDays) rather than a fixed number — see
+        // MarkCleared. The old fixed 90-day constant is retired.
         private const int LordRacingDays      = 7;
         private const float LordRaceChance    = 0.005f; // 0.5% per day per eligible ruin
 
@@ -53,6 +55,17 @@ namespace AshAndEmber
 
         private static readonly Random _rng = new Random();
 
+        // Rewards that must never be granted twice to the same player. A repeat
+        // clear (cooldown expired, ruin already in _cleared) substitutes the
+        // ruin's own PartialReward instead — see RunRoom / GrantReward.
+        private static readonly HashSet<RewardType> _oneTimeUniqueRewards = new HashSet<RewardType>
+        {
+            RewardType.GrimoireFragment,
+            RewardType.AncientGrimoire,
+            RewardType.DragonArtifact,
+            RewardType.AshenCrownFragment,
+        };
+
         // ── Public queries ─────────────────────────────────────────────────────
         public static bool IsCleared(string villageName) => _cleared.Contains(villageName);
         public static int  ClearedCount              => _cleared.Count;
@@ -77,6 +90,23 @@ namespace AshAndEmber
             if (!IsContested(villageName) || _lordRacingId == null) return null;
             try { return Hero.AllAliveHeroes.FirstOrDefault(h => h.StringId == _lordRacingId); }
             catch { return null; }
+        }
+
+        // ── External clear hook (e.g. Legion Expeditions) ───────────────────────
+        // Lets an outside system (the Antiquarian Charter's expedition
+        // resolution) put a ruin on cooldown exactly as if an NPC lord had
+        // cleared it, without reaching into this class's private state
+        // directly. Stamps the same first-cleared ledger and rolls the same
+        // randomized 30-120 day recovery cooldown as any other clear.
+        public static void MarkClearedByExpedition(string villageName)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(villageName)) return;
+                if (!AshenRuinDefs.All.Any(r => r.VillageName == villageName)) return;
+                MarkCleared(villageName);
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
         // ── Daily tick ────────────────────────────────────────────────────────
@@ -109,10 +139,12 @@ namespace AshAndEmber
         {
             if (_rng.NextDouble() >= LordRaceChance) return;
 
-            // Pick an eligible ruin (Tier 3+, not cleared this campaign, not on cooldown, not already contested)
+            // Pick an eligible ruin (Tier 3+, not on cooldown, not already contested).
+            // _cleared is a first-cleared LEDGER only now (ruins recover over time) —
+            // it no longer permanently excludes a ruin from the lord race; only an
+            // active cooldown does.
             var eligible = AshenRuinDefs.All
                 .Where(r => r.Tier >= RuinTier.Brutal
-                         && !IsCleared(r.VillageName)
                          && !IsOnCooldown(r.VillageName)
                          && _lordRacingRuin != r.VillageName)
                 .ToList();
@@ -145,8 +177,11 @@ namespace AshAndEmber
                 ? (Hero.AllAliveHeroes.FirstOrDefault(h => h.StringId == _lordRacingId)?.Name?.ToString() ?? "A mage lord")
                 : "A mage lord";
 
+            // The lord's clear counts exactly like a player clear: it stamps
+            // _cleared (first-cleared ledger) and rolls the same randomized
+            // 30-120 day recovery cooldown.
             if (def != null)
-                SetCooldown(_lordRacingRuin, 30);
+                MarkCleared(_lordRacingRuin);
 
             InformationManager.DisplayMessage(new InformationMessage(
                 $"{lordName} has returned from {(def?.RuinName ?? "the ruins")}. The opportunity has passed for now.",
@@ -283,9 +318,17 @@ namespace AshAndEmber
         {
             if (roomIdx >= def.Challenges.Length)
             {
-                // All rooms cleared
+                // All rooms cleared. A repeat clear (cooldown already expired,
+                // ruin already in the first-cleared ledger) substitutes the
+                // partial-tier reward for any one-time unique — those must
+                // never be granted twice (see _oneTimeUniqueRewards).
+                bool repeatClear = IsCleared(def.VillageName);
                 MarkCleared(def.VillageName);
-                GrantReward(def.MainReward, sharedReward, def.RuinName, full: true);
+                bool substitute = repeatClear
+                    && def.MainReward != null
+                    && _oneTimeUniqueRewards.Contains(def.MainReward.Type);
+                var reward = substitute ? def.PartialReward : def.MainReward;
+                GrantReward(reward, sharedReward, def.RuinName, full: true, repeatSubstituted: substitute);
                 return;
             }
 
@@ -1101,14 +1144,16 @@ namespace AshAndEmber
         }
 
         // ── Reward dispatch ───────────────────────────────────────────────────
-        private static void GrantReward(RuinReward reward, bool sharedReward, string ruinName, bool full)
+        private static void GrantReward(RuinReward reward, bool sharedReward, string ruinName, bool full, bool repeatSubstituted = false)
         {
             if (reward == null) return;
             float split = sharedReward ? 0.5f : 1f;
 
-            string header = full
-                ? $"You emerge from {ruinName} carrying something the darkness did not want you to have."
-                : $"You retreat from {ruinName} with what you could carry.";
+            string header = repeatSubstituted
+                ? $"{ruinName} has been picked over before, yet the dark refills it. You come away with less than the first time, but not with nothing."
+                : full
+                    ? $"You emerge from {ruinName} carrying something the darkness did not want you to have."
+                    : $"You retreat from {ruinName} with what you could carry.";
 
             switch (reward.Type)
             {
@@ -1323,7 +1368,8 @@ namespace AshAndEmber
         private static void MarkCleared(string vname)
         {
             _cleared.Add(vname);
-            SetCooldown(vname, RevisitCooldownDays);
+            int days = AshenRuinMath.RecoveryCooldownDays(_rng.Next(91)); // 30-120 inclusive
+            SetCooldown(vname, days);
         }
 
         private static void SetCooldown(string vname, int days)

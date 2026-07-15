@@ -61,5 +61,18 @@ namespace AshAndEmber
 
         public static int ShiftingHallDesertionLoss(int healthyTroops) =>
             Math.Max(4, healthyTroops / 7);
+
+        // ── Ruin recovery cooldown (Feature: ruins recover over time) ──────────
+        // Any clear — player full clear, NPC lord-race resolution, or a
+        // successful Legion Expedition — puts the ruin on a randomized 30-120
+        // day cooldown rather than the old fixed 90-day "once per campaign"
+        // lock. Takes a 0-90 roll so the caller controls the RNG (see
+        // AshenRuinSystem.MarkCleared); pure and boundary-clamped so a caller
+        // passing an out-of-range roll still lands inside [30, 120].
+        public static int RecoveryCooldownDays(int roll0To90)
+        {
+            int clamped = Math.Max(0, Math.Min(90, roll0To90));
+            return 30 + clamped;
+        }
     }
 }
