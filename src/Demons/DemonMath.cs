@@ -142,8 +142,11 @@ namespace AshAndEmber
         // ── Silhouette scale (bind-once, applied right after spawn) ────────────
         // 1.0 = ordinary human size. Kept modest for the rank-and-file tiers
         // (a subtle "this isn't quite human" cue) and pushed hard for the
-        // Ravager/Lord, who also spawn on the larger demon_hulking Monster
-        // capsule so the bigger silhouette is a real hitbox, not an illusion.
+        // Ravager, who also spawns on the larger demon_hulking Monster capsule
+        // so the bigger silhouette is a real hitbox, not an illusion. The Lord
+        // deliberately is NOT a monster of size — he is a man a half-head too
+        // tall (uncanny, not bestial; see BoneWarps), and his menace lives in
+        // his stats and his workings, not his frame.
         public static float VisualScale(DemonTier tier)
         {
             switch (tier)
@@ -152,7 +155,7 @@ namespace AshAndEmber
                 case DemonTier.Stalker:   return 1.08f;
                 case DemonTier.Ravager:   return 1.28f;
                 case DemonTier.Hellsteed: return 1.05f; // the rider
-                case DemonTier.Lord:      return 1.45f;
+                case DemonTier.Lord:      return 1.12f;
                 default:                  return 1.00f;
             }
         }
@@ -164,11 +167,13 @@ namespace AshAndEmber
         // ── Monster override (the bigger, additive demon_hulking capsule) ──────
         // Null/empty means "spawn on the ordinary human Monster" — every tier
         // except the ones bulky enough to need a real (not just visual) bigger
-        // hitbox. See ModuleData/monsters.xml.
+        // hitbox. See ModuleData/monsters.xml. The Lord stays on the human
+        // capsule on purpose: an uncannily man-shaped thing should FEEL like
+        // fighting a man, right up until it doesn't.
         public const string HulkingMonsterId = "demon_hulking";
 
         public static string MonsterIdFor(DemonTier tier)
-            => (tier == DemonTier.Ravager || tier == DemonTier.Lord) ? HulkingMonsterId : null;
+            => tier == DemonTier.Ravager ? HulkingMonsterId : null;
 
         // ── The warp — per-bone disfigurement ────────────────────────────────
         // Each tier's body is WRONG in its own way: not a scaled-up man but a
@@ -243,17 +248,18 @@ namespace AshAndEmber
                     new BoneWarp(BonePart.LeftArm,    0.95f, 1.12f, 0.95f),
                     new BoneWarp(BonePart.RightArm,   0.95f, 1.12f, 0.95f),
                 };
-                // The Lord — the Ravager's mass without the Ravager's smallness
-                // of mind: everything larger, nothing starved, a crowned horror.
+                // The Lord — the uncanny one. Where every lesser tier is openly
+                // bestial, he is ALMOST a man: proportions off by a hair — a
+                // neck a shade too long, arms that don't quite match, fingers
+                // a knuckle past right — each within the range the eye can't
+                // name but can't stop noticing. The wrongness is the horror.
                 case DemonTier.Lord: return new[]
                 {
-                    new BoneWarp(BonePart.SpineUpper, 1.30f, 1.12f, 1.30f),
-                    new BoneWarp(BonePart.LeftArm,    1.30f, 1.20f, 1.30f),
-                    new BoneWarp(BonePart.RightArm,   1.30f, 1.20f, 1.30f),
-                    new BoneWarp(BonePart.MainHand,   1.40f, 1.40f, 1.40f),
-                    new BoneWarp(BonePart.OffHand,    1.40f, 1.40f, 1.40f),
-                    new BoneWarp(BonePart.Head,       1.05f, 1.05f, 1.05f),
-                    new BoneWarp(BonePart.Pelvis,     1.12f, 1.00f, 1.12f),
+                    new BoneWarp(BonePart.Neck,     1.00f, 1.08f, 1.00f),
+                    new BoneWarp(BonePart.LeftArm,  1.03f, 1.05f, 1.03f),
+                    new BoneWarp(BonePart.RightArm, 0.97f, 0.98f, 0.97f),
+                    new BoneWarp(BonePart.MainHand, 1.08f, 1.10f, 1.08f),
+                    new BoneWarp(BonePart.OffHand,  1.08f, 1.10f, 1.08f),
                 };
                 default: return new BoneWarp[0];
             }
@@ -261,9 +267,11 @@ namespace AshAndEmber
 
         // The face never rests — a permanent bared-teeth snarl (a real SandBox
         // facial-animation id, confirmed against the shipped DLLs), looped for
-        // the demon's whole life. The Lord alone wears fury rather than hunger.
+        // the demon's whole life. The Lord alone does not snarl: he wears a
+        // gentle, unbroken smile through everything — the calmest face on the
+        // field, and the wrongest.
         public static string FacialAnimation(DemonTier tier)
-            => tier == DemonTier.Lord ? "convo_furious" : "convo_bared_teeth";
+            => tier == DemonTier.Lord ? "convo_innocent_smile" : "convo_bared_teeth";
 
         // ── Unnatural movement ───────────────────────────────────────────────
         // A relative multiplier on top of the troop's own walking speed

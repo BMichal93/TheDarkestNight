@@ -51,9 +51,10 @@ namespace AshAndEmber
         // scale hook (Agent.SetInitialAgentScale via DemonFactory.SetAgentScale
         // — the hook the Jotunn-Blooded's original troops.xml note believed
         // did not exist; verified real against the shipped DLLs when the demon
-        // tiers gained it). Sits between the Ravager (1.28) and the Demon Lord
-        // (1.45): a giant should loom over any demon a common soldier meets,
-        // but never crowd the endgame boss's silhouette.
+        // tiers gained it). The tallest thing on any ordinary field — above
+        // even the Ravager (1.28); the Demon Lord deliberately isn't in this
+        // race at all (he is man-shaped and uncanny, not big — see
+        // DemonMath.VisualScale).
         public const float GiantAgentScale = 1.32f;
 
         // ── The Ulfhednar (wolf-rider) ───────────────────────────────────────

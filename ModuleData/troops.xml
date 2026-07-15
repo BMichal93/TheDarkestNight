@@ -963,19 +963,20 @@
                 occupation="Lord"
                 is_basic_troop="false"
                 is_hidden_in_encyclopedia="false">
-    <!-- Both sliders maxed — the most massive, distorted silhouette any demon
-         tier reaches, so he reads unmistakably apart from a Ravager at a
-         glance even before the shroud/tint sets in. -->
+    <!-- The uncanny one — deliberately NOT another beast. Where every lesser
+         tier hides its face under a trophy skull, the Lord's bare human face
+         is the point: a tall, well-made man smiling gently at the head of the
+         tide (DemonMath.BoneWarps gives him proportions off by a hair;
+         DemonMath.FacialAnimation, the unbroken smile). Sliders kept high but
+         human — imposing, not distorted. -->
     <face>
-      <BodyPropertiesMin version="4" age="40.0" weight="0.95" build="1.00" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
-      <BodyPropertiesMax version="4" age="55.0" weight="1.00" build="1.00" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMin version="4" age="40.0" weight="0.60" build="0.85" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
+      <BodyPropertiesMax version="4" age="50.0" weight="0.70" build="0.95" key="0000000000000000111111111111111000001100000100000001000000100000000106030000000000000000000000000000000000000000000000001C040002"/>
     </face>
     <Equipments>
       <EquipmentRoster>
         <equipment slot="Body" id="Item.bandit_fur_a"/>
-        <!-- The bear-head trophy, like the Ravager's — at his 1.45x scale it
-             reads as a crowned beast skull, not a hunter's costume. -->
-        <equipment slot="Head" id="Item.bearhead"/>
+        <!-- No head slot: his face is the horror. -->
         <equipment slot="Item0" id="Item.cleaver_sword_t3"/>
       </EquipmentRoster>
     </Equipments>

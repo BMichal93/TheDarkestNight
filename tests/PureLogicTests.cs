@@ -2814,22 +2814,27 @@ namespace AshAndEmber.Tests
         }
 
         [Test]
-        public void DemonMath_VisualScale_RavagerAndLordAreBiggestFiendUnchanged()
+        public void DemonMath_VisualScale_RavagerBiggestLordOnlyUncannilyTall()
         {
             Assert.AreEqual(1.00f, DemonMath.VisualScale(DemonMath.DemonTier.Fiend), 0.001f);
             Assert.Greater(DemonMath.VisualScale(DemonMath.DemonTier.Stalker), 1.00f);
             Assert.Greater(DemonMath.VisualScale(DemonMath.DemonTier.Ravager), DemonMath.VisualScale(DemonMath.DemonTier.Stalker));
-            Assert.Greater(DemonMath.VisualScale(DemonMath.DemonTier.Lord), DemonMath.VisualScale(DemonMath.DemonTier.Ravager));
+            // The Lord is uncanny, not bestial: taller than a man, but well
+            // short of the Ravager's monstrous frame.
+            Assert.Greater(DemonMath.VisualScale(DemonMath.DemonTier.Lord), 1.00f);
+            Assert.Less(DemonMath.VisualScale(DemonMath.DemonTier.Lord), DemonMath.VisualScale(DemonMath.DemonTier.Ravager));
         }
 
         [Test]
-        public void DemonMath_MonsterIdFor_OnlyRavagerAndLordGetTheHulkingCapsule()
+        public void DemonMath_MonsterIdFor_OnlyRavagerGetsTheHulkingCapsule()
         {
             Assert.IsNull(DemonMath.MonsterIdFor(DemonMath.DemonTier.Fiend));
             Assert.IsNull(DemonMath.MonsterIdFor(DemonMath.DemonTier.Stalker));
             Assert.AreEqual(DemonMath.HulkingMonsterId, DemonMath.MonsterIdFor(DemonMath.DemonTier.Ravager));
             Assert.IsNull(DemonMath.MonsterIdFor(DemonMath.DemonTier.Hellsteed));
-            Assert.AreEqual(DemonMath.HulkingMonsterId, DemonMath.MonsterIdFor(DemonMath.DemonTier.Lord));
+            // The Lord stays on the human capsule — fighting him should feel
+            // like fighting a man, right up until it doesn't.
+            Assert.IsNull(DemonMath.MonsterIdFor(DemonMath.DemonTier.Lord));
         }
 
         [Test]
