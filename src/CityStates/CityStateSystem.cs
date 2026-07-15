@@ -91,28 +91,30 @@ namespace AshAndEmber
             // city-state that already exists must never be allowed to drift.
             try { ReassertCityStateMembership(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
-            // The Camp's peace stays enforced every tick, same as the
-            // membership reassert above — a cheap, always-safe backstop
-            // regardless of what triggered a war against/from it.
-            try { ReassertCampPeace(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            // Every sanctuary kingdom's peace (The Camp, the Children of the
+            // Forest) stays enforced every tick, same as the membership
+            // reassert above — a cheap, always-safe backstop regardless of
+            // what triggered a war against/from one.
+            try { ReassertSanctuaryPeace(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
             if (!CityStateMath.ShouldBeginConversion(_daysSinceStart)) return;
 
             try { ConvertOwnerlessTowns(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
-        // ── Session launch: rebrand a pre-existing Revyl city-state ────────────
-        // A save made before this feature shipped may already hold Revyl's
-        // city-state under the generic "Clan <X>" identity (or, on a fresh
-        // conversion this same session, CreateCityState below already gave it
-        // the right identity and this is a harmless no-op). Idempotent, fully
-        // re-derived from live state — no new mandatory save keys.
+        // ── Session launch: rebrand a pre-existing sanctuary city-state ────────
+        // A save made before this feature (or before Phase 16's Camp) shipped
+        // may already hold Revyl's or Pen Cannoc's city-state under the
+        // generic "Clan <X>" identity (or, on a fresh conversion this same
+        // session, CreateCityState below already gave it the right identity
+        // and this is a harmless no-op). Idempotent, fully re-derived from
+        // live state — no new mandatory save keys.
         public static void OnSessionLaunched()
         {
-            try { RebrandCampIfPresent(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RebrandSanctuaryKingdomsIfPresent(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
-        private static void RebrandCampIfPresent()
+        private static void RebrandSanctuaryKingdomsIfPresent()
         {
             foreach (Kingdom kingdom in Kingdom.All.ToList())
             {
@@ -120,12 +122,20 @@ namespace AshAndEmber
                 {
                     if (kingdom == null || kingdom.IsEliminated) continue;
                     if (!CityStateMath.IsCityStateKingdomId(kingdom.StringId)) continue;
-                    if (kingdom.Name?.ToString() == CityStateMath.CampKingdomName) continue; // already rebranded
+
+                    string existingName = kingdom.Name?.ToString();
+                    if (existingName == CityStateMath.CampKingdomName
+                        || existingName == CityStateMath.ForestKingdomName) continue; // already rebranded
 
                     string homeName = kingdom.InitialHomeSettlement?.Name?.ToString();
-                    if (!CityStateMath.IsRevylHomeSettlement(homeName)) continue;
-
-                    ApplyCampIdentity(kingdom);
+                    if (CityStateMath.IsRevylHomeSettlement(homeName))
+                        ApplySanctuaryIdentity(kingdom, CityStateMath.CampKingdomName,
+                            CityStateMath.CampEncyclopediaText, CityStateMath.CampRulerTitle,
+                            BuildCampBanner(), CityStateMath.CampPrimaryColor, CityStateMath.CampSecondaryColor);
+                    else if (CityStateMath.IsPenCannocHomeSettlement(homeName))
+                        ApplySanctuaryIdentity(kingdom, CityStateMath.ForestKingdomName,
+                            CityStateMath.ForestEncyclopediaText, CityStateMath.ForestRulerTitle,
+                            BuildForestBanner(), CityStateMath.ForestPrimaryColor, CityStateMath.ForestSecondaryColor);
                 }
                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             }
@@ -140,6 +150,29 @@ namespace AshAndEmber
             catch { return false; }
         }
 
+        public static bool IsForestKingdom(IFaction faction)
+        {
+            try { return (faction as Kingdom)?.Name?.ToString() == CityStateMath.ForestKingdomName; }
+            catch { return false; }
+        }
+
+        // Shared predicate for every "neutral ground" kingdom (The Camp, the
+        // Children of the Forest) — one place to extend for a future
+        // sanctuary kingdom, used by both ReassertSanctuaryPeace below and
+        // AshenDiplomacyModel's score overrides.
+        public static bool IsSanctuaryKingdom(IFaction faction)
+        {
+            try
+            {
+                string name = (faction as Kingdom)?.Name?.ToString();
+                if (string.IsNullOrEmpty(name)) return false;
+                foreach (string sanctuaryName in CityStateMath.SanctuaryKingdomNames)
+                    if (name == sanctuaryName) return true;
+                return false;
+            }
+            catch { return false; }
+        }
+
         // Used by ExpeditionCampaignBehavior.Menus.cs to gate the charter menu
         // on ownership by The Camp — the same MapFaction-membership check
         // LegionSettlements.IsLegionSettlement/WolfBrothersSettlements.
@@ -151,19 +184,29 @@ namespace AshAndEmber
             catch { return false; }
         }
 
-        // The Camp stays out of every war, in or out — see AshenDiplomacyModel
-        // for the score-side discouragement; this is the belt-and-suspenders
-        // backstop that actually forces peace if a war ever slips through
-        // (a scheme, a quest trigger, a player declaration).
-        private static void ReassertCampPeace()
+        // Used by the Wands wiring to gate the permanent Pen Cannoc
+        // wandwright and the weapon-free market on Children of the Forest
+        // ownership — the same MapFaction-membership shape as IsCampSettlement.
+        public static bool IsForestSettlement(Settlement s)
         {
-            Kingdom camp = Kingdom.All.FirstOrDefault(k => !k.IsEliminated && IsCampKingdom(k));
-            if (camp == null) return;
+            if (s == null || !(s.IsTown || s.IsCastle)) return false;
+            try { return IsForestKingdom(s.MapFaction); }
+            catch { return false; }
+        }
 
-            foreach (IFaction enemy in camp.FactionsAtWarWith.ToList())
+        // Every sanctuary kingdom stays out of every war, in or out — see
+        // AshenDiplomacyModel for the score-side discouragement; this is the
+        // belt-and-suspenders backstop that actually forces peace if a war
+        // ever slips through (a scheme, a quest trigger, a player declaration).
+        private static void ReassertSanctuaryPeace()
+        {
+            foreach (Kingdom sanctuary in Kingdom.All.Where(k => !k.IsEliminated && IsSanctuaryKingdom(k)).ToList())
             {
-                try { MakePeaceAction.Apply(camp, enemy); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                foreach (IFaction enemy in sanctuary.FactionsAtWarWith.ToList())
+                {
+                    try { MakePeaceAction.Apply(sanctuary, enemy); }
+                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                }
             }
         }
 
@@ -252,21 +295,30 @@ namespace AshAndEmber
         {
             try
             {
-                bool isCamp = CityStateMath.IsRevylHomeSettlement(homeSettlement.Name?.ToString());
+                string homeName = homeSettlement.Name?.ToString();
+                bool isCamp = CityStateMath.IsRevylHomeSettlement(homeName);
+                bool isForest = !isCamp && CityStateMath.IsPenCannocHomeSettlement(homeName);
+                bool isSanctuary = isCamp || isForest;
 
-                string kingdomName = isCamp
-                    ? CityStateMath.CampKingdomName
+                string kingdomName = isCamp ? CityStateMath.CampKingdomName
+                    : isForest ? CityStateMath.ForestKingdomName
                     : CityStateMath.CityStateKingdomName(clan.Name?.ToString());
                 var culture = clan.Culture ?? homeSettlement.Culture;
 
-                Banner banner = isCamp ? BuildCampBanner() : (clan.Banner ?? Banner.CreateRandomBanner());
-                uint color1 = isCamp ? CityStateMath.CampPrimaryColor : clan.Color;
-                uint color2 = isCamp ? CityStateMath.CampSecondaryColor : clan.Color2;
-                string description = isCamp
-                    ? CityStateMath.CampEncyclopediaText
+                Banner banner = isCamp ? BuildCampBanner()
+                    : isForest ? BuildForestBanner()
+                    : (clan.Banner ?? Banner.CreateRandomBanner());
+                uint color1 = isCamp ? CityStateMath.CampPrimaryColor
+                    : isForest ? CityStateMath.ForestPrimaryColor
+                    : clan.Color;
+                uint color2 = isCamp ? CityStateMath.CampSecondaryColor
+                    : isForest ? CityStateMath.ForestSecondaryColor
+                    : clan.Color2;
+                string description = isCamp ? CityStateMath.CampEncyclopediaText
+                    : isForest ? CityStateMath.ForestEncyclopediaText
                     : "A free town that bends its knee to no crown.";
-                string rulerTitle = isCamp
-                    ? CityStateMath.CampRulerTitle
+                string rulerTitle = isCamp ? CityStateMath.CampRulerTitle
+                    : isForest ? CityStateMath.ForestRulerTitle
                     : "Lord of " + homeSettlement.Name;
 
                 var kingdom = Kingdom.CreateKingdom(kingdomId);
@@ -284,11 +336,11 @@ namespace AshAndEmber
 
                 ChangeKingdomAction.ApplyByCreateKingdom(clan, kingdom, false);
 
-                if (isCamp)
+                if (isSanctuary)
                 {
                     // Banner/colours must match on both the kingdom and its
-                    // ruling clan — no random clan banner sitting under The
-                    // Camp's black-and-white kingdom identity.
+                    // ruling clan — no random clan banner sitting under a
+                    // sanctuary kingdom's fixed identity.
                     try
                     {
                         clan.Banner = banner;
@@ -300,11 +352,15 @@ namespace AshAndEmber
 
                 // Requirement 24's bandit-culture reassignment (and its
                 // deliberately weak two-rung troop pool) is for the ordinary
-                // "wretched free towns" — Revyl reads as a mercenary hub, not
-                // a bandit camp, and skipping the swap keeps its original
-                // (Sturgia) troop tree so the town can actually field a
-                // non-trivial garrison of its own.
-                if (!isCamp) ApplyBanditCulture(homeSettlement);
+                // "wretched free towns" — Revyl reads as a mercenary hub and
+                // Pen Cannoc as the Children's own seat, not a bandit camp;
+                // skipping the swap keeps each its original troop tree
+                // (Sturgia / Battania respectively) so the town can actually
+                // field a non-trivial garrison of its own. The Children's
+                // "culture" is expressed through kingdom identity and lore,
+                // not a runtime-minted CultureObject — see the Phase 0 recon
+                // note on why that path is deliberately not attempted.
+                if (!isSanctuary) ApplyBanditCulture(homeSettlement);
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
@@ -320,11 +376,20 @@ namespace AshAndEmber
                 CityStateMath.CampSecondaryColor,
                 CityStateMath.CampBannerIconMeshId);
 
+        // Deep forest green field, pale Flora-group device — same
+        // construction as BuildCampBanner, verified against the same API.
+        private static Banner BuildForestBanner() =>
+            Banner.CreateOneColoredBannerWithOneIcon(
+                CityStateMath.ForestPrimaryColor,
+                CityStateMath.ForestSecondaryColor,
+                CityStateMath.ForestBannerIconMeshId);
+
         // Rewrites an already-existing city-state kingdom (and its ruling
-        // clan) into The Camp's identity. Used both by RebrandCampIfPresent
-        // (an older save that predates this feature) and is safe to call
-        // repeatedly — every field it touches is simply overwritten, nothing
-        // accumulates.
+        // clan) into a fixed sanctuary identity (The Camp, or the Children of
+        // the Forest). Used both by RebrandSanctuaryKingdomsIfPresent (an
+        // older save that predates the feature) and CreateCityState is safe
+        // to call repeatedly — every field it touches is simply overwritten,
+        // nothing accumulates.
         //
         // Kingdom.Name/InformalName/EncyclopediaText/EncyclopediaRulerTitle/
         // Color/Color2 are all PRIVATE-set auto-properties (verified against
@@ -335,24 +400,24 @@ namespace AshAndEmber
         // reflection pattern AshenCitySystem.Renaming.cs already uses for its
         // own kingdom renames (SetKingdomField). Banner is the only one of
         // these with a genuinely public setter.
-        private static void ApplyCampIdentity(Kingdom kingdom)
+        private static void ApplySanctuaryIdentity(Kingdom kingdom, string kingdomName,
+            string encyclopediaText, string rulerTitle, Banner banner, uint color1, uint color2)
         {
             try
             {
-                var banner = BuildCampBanner();
-                var nameText = new TextObject(CityStateMath.CampKingdomName);
+                var nameText = new TextObject(kingdomName);
 
                 try { kingdom.ChangeKingdomName(nameText, nameText); }
                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 SetKingdomField(kingdom,
                     new[] { "<EncyclopediaText>k__BackingField" },
-                    new TextObject(CityStateMath.CampEncyclopediaText));
+                    new TextObject(encyclopediaText));
                 SetKingdomField(kingdom,
                     new[] { "<EncyclopediaRulerTitle>k__BackingField" },
-                    new TextObject(CityStateMath.CampRulerTitle));
-                SetKingdomColorField(kingdom, "<Color>k__BackingField", CityStateMath.CampPrimaryColor);
-                SetKingdomColorField(kingdom, "<Color2>k__BackingField", CityStateMath.CampSecondaryColor);
+                    new TextObject(rulerTitle));
+                SetKingdomColorField(kingdom, "<Color>k__BackingField", color1);
+                SetKingdomColorField(kingdom, "<Color2>k__BackingField", color2);
 
                 kingdom.Banner = banner;
 
@@ -360,8 +425,8 @@ namespace AshAndEmber
                 if (ruler != null)
                 {
                     ruler.Banner = banner;
-                    ruler.Color = CityStateMath.CampPrimaryColor;
-                    ruler.Color2 = CityStateMath.CampSecondaryColor;
+                    ruler.Color = color1;
+                    ruler.Color2 = color2;
                 }
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }

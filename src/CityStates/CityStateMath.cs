@@ -105,5 +105,45 @@ namespace AshAndEmber
         // no lineage. See CityStateSystem.BuildCampBanner for the verified
         // Banner.CreateOneColoredBannerWithOneIcon construction.
         public const int CampBannerIconMeshId = 400;
+
+        // ── The Children of the Forest (Pen Cannoc special-case) ────────────────
+        // Forest Widows scopes Battania down to Marunath + Car Banseth only
+        // (ForestWidowsMath.StartingTownIds), so Pen Cannoc's clan is ejected
+        // and would otherwise fall through the ordinary "Clan <X>" city-state
+        // path above — the exact same re-identification seam The Camp's Revyl
+        // special-case rides. Matched by settlement name (case-insensitive,
+        // tolerant of the brief's "Per Cannoc" misspelling being just that —
+        // a misspelling; the real settlement is "Pen Cannoc").
+        public const string PenCannocSettlementName = "Pen Cannoc";
+
+        public static bool IsPenCannocHomeSettlement(string settlementName) =>
+            !string.IsNullOrEmpty(settlementName)
+            && settlementName.Equals(PenCannocSettlementName, StringComparison.OrdinalIgnoreCase);
+
+        public const string ForestKingdomName = "Children of the Forest";
+        public const string ForestInformalName = "Children of the Forest";
+        public const string ForestRulerTitle = "Warden of the Strange Wood";
+
+        public const string ForestEncyclopediaText =
+            "They dwell at the edge of woods older and stranger than the Night itself, and it is there " +
+            "they cut their wands. They keep no army of their own — no muster, no levy, no gate-guard " +
+            "roster. Those who march on the Children come home changed, and stay to guard the trees " +
+            "they once meant to burn.";
+
+        // Deep forest green field, pale device — they answer no muster because
+        // the wood itself answers for them.
+        public const uint ForestPrimaryColor = 0xFF1B3A22;
+        public const uint ForestSecondaryColor = 0xFFE8E4C9;
+
+        // Native banner_icons.xml — BannerIconGroup id=3 ("Flora"), first icon
+        // (id=200) — verified directly against the shipped ModuleData file.
+        public const int ForestBannerIconMeshId = 200;
+
+        // ── Sanctuary kingdoms (shared peace predicate) ──────────────────────
+        // Both The Camp and the Children of the Forest are neutral ground —
+        // matched by kingdom name so CityStateSystem.IsSanctuaryKingdom (and
+        // the diplomacy model behind it) has one shared list to extend for any
+        // future sanctuary kingdom.
+        public static readonly string[] SanctuaryKingdomNames = { CampKingdomName, ForestKingdomName };
     }
 }

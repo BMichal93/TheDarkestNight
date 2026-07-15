@@ -4767,6 +4767,44 @@ namespace AshAndEmber.Tests
             Assert.AreEqual(0xFFF2F2F2u, CityStateMath.CampSecondaryColor);
         }
 
+        // ── CityStateMath tests — the Children of the Forest (Pen Cannoc) ───────
+
+        [Test]
+        public void CityStateMath_IsPenCannocHomeSettlement_MatchesByNameCaseInsensitive()
+        {
+            Assert.IsTrue(CityStateMath.IsPenCannocHomeSettlement("Pen Cannoc"));
+            Assert.IsTrue(CityStateMath.IsPenCannocHomeSettlement("PEN CANNOC"));
+            Assert.IsTrue(CityStateMath.IsPenCannocHomeSettlement("pen cannoc"));
+            Assert.IsFalse(CityStateMath.IsPenCannocHomeSettlement("Marunath"));
+            Assert.IsFalse(CityStateMath.IsPenCannocHomeSettlement(null));
+            Assert.IsFalse(CityStateMath.IsPenCannocHomeSettlement(""));
+        }
+
+        [Test]
+        public void CityStateMath_ForestIdentity_IsFixedAndDistinctFromGenericCityStatesAndCamp()
+        {
+            Assert.AreEqual("Children of the Forest", CityStateMath.ForestKingdomName);
+            Assert.AreNotEqual(CityStateMath.ForestKingdomName, CityStateMath.CampKingdomName);
+            Assert.AreNotEqual(CityStateMath.ForestKingdomName, CityStateMath.CityStateKingdomName("Pen Cannoc"),
+                "the Children of the Forest must not read as an ordinary generic city-state");
+            Assert.IsFalse(string.IsNullOrEmpty(CityStateMath.ForestRulerTitle));
+            Assert.IsFalse(string.IsNullOrEmpty(CityStateMath.ForestEncyclopediaText));
+        }
+
+        [Test]
+        public void CityStateMath_ForestColors_AreForestGreenAndPale()
+        {
+            Assert.AreEqual(0xFF1B3A22u, CityStateMath.ForestPrimaryColor);
+            Assert.AreEqual(0xFFE8E4C9u, CityStateMath.ForestSecondaryColor);
+        }
+
+        [Test]
+        public void CityStateMath_SanctuaryKingdomNames_IncludesCampAndForest()
+        {
+            CollectionAssert.Contains(CityStateMath.SanctuaryKingdomNames, CityStateMath.CampKingdomName);
+            CollectionAssert.Contains(CityStateMath.SanctuaryKingdomNames, CityStateMath.ForestKingdomName);
+        }
+
         // ── RuinsMath tests (Phase 9 — the ruins) ───────────────────────────────
 
         [Test]
