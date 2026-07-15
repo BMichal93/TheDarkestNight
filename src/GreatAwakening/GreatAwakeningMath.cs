@@ -12,9 +12,24 @@ namespace AshAndEmber
     public static class GreatAwakeningMath
     {
         // ── Discovery trigger ────────────────────────────────────────────────────
-        // No chance at all before day 50. From day 50: 10%, rising by another 10%
-        // every full 20 days elapsed since day 50, capped at 100%. Rolled weekly,
-        // once ever (the roll stops the moment it succeeds).
+        // The Great Awakening is the Tower's darker SECOND act: it only opens
+        // once the Unbinding Rite (FactionQuests/Tower) has concluded — failed
+        // and burned out, or the Tower's kingdom broken before it was ever
+        // performed — so the same Archmagister is never running "close the
+        // way" and "crown what comes through it" in the same breath. A late
+        // fallback day keeps the questline reachable in a campaign where the
+        // player simply never engages the Rite (the Tower's scholars do not
+        // wait forever on one adventurer's curiosity).
+        public const int FallbackTriggerDay = 400;
+
+        public static bool TriggerAllowed(int day, bool towerRiteConcluded)
+            => towerRiteConcluded || day >= FallbackTriggerDay;
+
+        // Once allowed: 10%, rising by another 10% every full 20 days elapsed
+        // since day 50, capped at 100%. Rolled weekly, once ever (the roll
+        // stops the moment it succeeds). Because the Rite itself cannot start
+        // before day 50, the chance is already climbing by the time the
+        // second act opens.
         public const int   TriggerStartDay      = 50;
         public const float TriggerBaseChance    = 0.10f;
         public const float TriggerChancePerStep = 0.10f;

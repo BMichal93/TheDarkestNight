@@ -2474,6 +2474,17 @@ namespace AshAndEmber.Tests
         }
 
         [Test]
+        public void GreatAwakeningMath_TriggerAllowed_OnlyAfterRiteOrFallbackDay()
+        {
+            // The Tower's second act waits for its first act to fail...
+            Assert.IsFalse(GreatAwakeningMath.TriggerAllowed(100, false));
+            Assert.IsTrue(GreatAwakeningMath.TriggerAllowed(100, true));
+            // ...but a campaign that never engages the Rite still gets there.
+            Assert.IsFalse(GreatAwakeningMath.TriggerAllowed(GreatAwakeningMath.FallbackTriggerDay - 1, false));
+            Assert.IsTrue(GreatAwakeningMath.TriggerAllowed(GreatAwakeningMath.FallbackTriggerDay, false));
+        }
+
+        [Test]
         public void GreatAwakeningMath_PrisonerTarget_IsTenThousand()
         {
             Assert.AreEqual(10_000, GreatAwakeningMath.PrisonerTarget);

@@ -36,6 +36,14 @@ namespace AshAndEmber
         private static int _phase = PhaseIdle;
         private static int _rampageStartDay = -1;
 
+        // True once the Rite's story is over — failed and its rampage resolved
+        // (PhaseEnded), or the Tower destroyed before it could ever be
+        // performed (PhaseEndedFactionGone). The Great Awakening's trigger
+        // reads this: the Tower's darker second act only begins once its first
+        // act has failed (see GreatAwakeningCampaignBehavior.Trigger.cs).
+        internal static bool RiteConcluded
+            => _phase == PhaseEnded || _phase == PhaseEndedFactionGone;
+
         public TowerRiteQuestCampaignBehavior()
         {
             // Registration is idempotent (FactionQuestTrigger.Register dedupes

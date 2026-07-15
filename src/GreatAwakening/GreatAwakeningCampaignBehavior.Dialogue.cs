@@ -30,8 +30,9 @@ namespace AshAndEmber
             {
                 starter.AddDialogLine(
                     "grawk_reveal_npc", "grawk_reveal", "grawk_reveal_player",
-                    "You already know, then, or near enough. We have reached beyond the Sands and touched " +
-                    "something that answered. It hungers, and we have promised it a sacrifice large enough to " +
+                    "You already know, then, or near enough. We tried to shut the way, and the way taught us " +
+                    "it cannot be shut — so we read on, and reached through instead, and touched something " +
+                    "that answered. It hungers, and we have promised it a sacrifice large enough to " +
                     "sate it — every prisoner our knives can spare, poured out at the Dark Altar until the " +
                     "count is paid in full. What it wants in return is simple: to stand on Calradian soil, and " +
                     "to rule it. We mean to give it that chance.",
