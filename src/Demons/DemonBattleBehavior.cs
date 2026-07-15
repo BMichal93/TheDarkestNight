@@ -38,6 +38,9 @@ namespace AshAndEmber
             public DemonMath.DemonTier Tier;
             public bool Shrouded;
             public float CastTimer;
+            public int CastCount;      // Lord only — drives the Fire/Spirit alternation
+            public Agent Mount;        // Hellsteed only — the horse, once dressed
+            public bool MountDressed;  // Hellsteed only — scale + shroud applied to the horse
         }
 
         private static readonly Random _rng = new Random();
@@ -159,6 +162,11 @@ namespace AshAndEmber
                     agent.Health = agent.HealthLimit;
                 }
                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // The beast shape (visual scale + never-resting stance) for the
+                // roster-spawned tide — DemonFactory.SpawnDemon applies the same
+                // helper on its own path. (The bigger demon_hulking Monster
+                // capsule is build-time only and thus factory-path only.)
+                try { DemonFactory.ApplyBeastShape(agent, tier); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { DemonFactory.SetAggressive(agent, agent.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -187,6 +195,11 @@ namespace AshAndEmber
                         _tierOf.Remove(b.Agent);
                         try { DemonVisuals.Detach(b.Agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                     }
+                    if (b.Mount != null)
+                    {
+                        try { DemonVisuals.Detach(b.Mount); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        b.Mount = null;
+                    }
                     _beings.RemoveAt(i);
                     continue;
                 }
@@ -201,21 +214,74 @@ namespace AshAndEmber
                     try { DemonVisuals.Follow(b.Agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 }
 
+                // The Hellsteed's horse is a demon too — dressed lazily the
+                // first tick it exists alongside its rider (MountAgent can be
+                // null at OnAgentBuild time), same one-time-bind discipline as
+                // the rider's own shroud: an unnaturally large, smouldering
+                // beast, not an old nag carrying a monster.
+                if (b.Tier == DemonMath.DemonTier.Hellsteed) TickMount(b);
+
                 // Requirement 7a/7b/7c: never retreat, never escape, never
                 // strategize — reassert the charge order so nothing (a reformed
                 // line, a lost target, morale AI) ever lets a demon fall back.
-                if (reAggro) ReRouse(b.Agent);
+                // The same cadence reasserts the tier's unnatural gait — the
+                // engine's speed-limit hook decays (see NatureEffects), so a
+                // one-shot multiplier at spawn would quietly wear off.
+                if (reAggro)
+                {
+                    ReRouse(b.Agent);
+                    try
+                    {
+                        float speed = DemonMath.SpeedMultiplier(b.Tier);
+                        if (speed != 1f) b.Agent.SetMaximumSpeedLimit(speed, true);
+                    }
+                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                }
 
                 if (DemonMath.CastsMagic(b.Tier))
                 {
                     b.CastTimer -= dt;
                     if (b.CastTimer <= 0f)
                     {
-                        b.CastTimer = DemonMath.RavagerCastCooldownSeconds;
-                        TryLooseHellfire(b.Agent);
+                        b.CastTimer = b.Tier == DemonMath.DemonTier.Lord
+                            ? DemonMath.LordCastCooldownSeconds
+                            : DemonMath.RavagerCastCooldownSeconds;
+                        TryLooseWorking(b);
                     }
                 }
             }
+        }
+
+        // Scale + shroud the Hellsteed's horse once, then keep its shroud
+        // following. The horse rides through DemonVisuals untouched — the
+        // wreath-bone lookup reads the agent's own Monster bone map, so the
+        // same Attach works on the horse skeleton.
+        private static void TickMount(Being b)
+        {
+            try
+            {
+                Agent mount = b.Agent?.MountAgent;
+                if (!b.MountDressed)
+                {
+                    if (mount == null) return;
+                    b.Mount = mount;
+                    b.MountDressed = true;
+                    try { DemonFactory.SetAgentScale(mount, DemonMath.HellsteedMountScale); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { DemonVisuals.Attach(mount, b.Tier); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    return;
+                }
+                if (b.Mount == null) return;
+                bool mountAlive = false;
+                try { mountAlive = b.Mount.IsActive() && b.Mount.Health > 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                if (!mountAlive)
+                {
+                    try { DemonVisuals.Detach(b.Mount); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    b.Mount = null;
+                    return;
+                }
+                try { DemonVisuals.Follow(b.Mount); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
         private static void ReRouse(Agent agent)
@@ -232,13 +298,30 @@ namespace AshAndEmber
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
-        // A Ravager looses a cone of fire at the nearest foe within reach —
+        // A Ravager looses a cone of hellfire at the nearest foe within reach —
         // reuses ElementSpellEffects.CastAttack exactly as ElementalBeings does
-        // for the Kindled, just gated to the Ravager tier and a shorter, harsher
-        // cooldown ("some with magical attacks").
+        // for the Kindled, just gated to the casting tiers and a shorter, harsher
+        // cooldown ("some with magical attacks"). The Lord alternates hellfire
+        // with a Spirit nova (DemonMath.LordCastPatternIndex) — a boss that
+        // commands more than one working, whose panic-wave reads as the Night
+        // itself pressing in.
         private const float CastRangeMetres = 11f;
 
-        private static void TryLooseHellfire(Agent agent)
+        private static void TryLooseWorking(Being b)
+        {
+            Agent agent = b?.Agent;
+            MagicElement element = MagicElement.Fire;
+            float power = DemonMath.RavagerCastPower;
+            if (b != null && b.Tier == DemonMath.DemonTier.Lord)
+            {
+                element = DemonMath.LordCastPatternIndex(b.CastCount) == 0 ? MagicElement.Fire : MagicElement.Spirit;
+                power = DemonMath.LordCastPower;
+                b.CastCount++;
+            }
+            TryLooseAttack(agent, element, power);
+        }
+
+        private static void TryLooseAttack(Agent agent, MagicElement element, float power)
         {
             try
             {
@@ -265,7 +348,7 @@ namespace AshAndEmber
                     Vec3.DotProduct(fwd * (1f / fl), to * (1f / tl)) < 0.2f)
                     return; // foe is not ahead — hold the working this beat
 
-                ElementSpellEffects.CastAttack(MagicElement.Fire, agent, DemonMath.RavagerCastPower);
+                ElementSpellEffects.CastAttack(element, agent, power);
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }

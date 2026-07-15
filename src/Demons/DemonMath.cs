@@ -111,11 +111,85 @@ namespace AshAndEmber
             }
         }
 
-        // Only Ravagers loose a working of their own — a cone of hellfire on a
-        // cooldown, exactly like a Kindled looses its element (ElementalBeings).
-        public static bool CastsMagic(DemonTier tier) => tier == DemonTier.Ravager;
+        // Only Ravagers and the Lord loose a working of their own — a cone of
+        // hellfire on a cooldown, exactly like a Kindled looses its element
+        // (ElementalBeings). The Lord alternates Fire/Spirit so his boss fight
+        // reads as a creature commanding more than one working, not just a
+        // bigger Ravager.
+        public static bool CastsMagic(DemonTier tier) => tier == DemonTier.Ravager || tier == DemonTier.Lord;
         public const float RavagerCastCooldownSeconds = 6.5f;
         public const float RavagerCastPower           = 0.65f;
+        public const float LordCastCooldownSeconds    = 4.0f;
+        public const float LordCastPower              = 0.85f;
+
+        // Which element a tier's own working takes, and how many hellfire
+        // casts land between each "off-element" cast for tiers that alternate
+        // (the Lord only, today). Pure so NpcCastPlanner-style callers can be
+        // unit tested without touching MagicElement (defined outside this
+        // assembly's pure layer) — callers translate the index to their own
+        // element enum.
+        public const int LordCastPatternLength = 2; // Fire, then Spirit, repeating
+
+        // index 0 = Fire, 1 = Spirit — the caller (DemonBattleBehavior) maps
+        // this onto MagicElement so DemonMath itself never needs to reference
+        // a TaleWorlds/engine-adjacent enum.
+        public static int LordCastPatternIndex(int castCount)
+        {
+            if (castCount < 0) castCount = 0;
+            return castCount % LordCastPatternLength;
+        }
+
+        // ── Silhouette scale (bind-once, applied right after spawn) ────────────
+        // 1.0 = ordinary human size. Kept modest for the rank-and-file tiers
+        // (a subtle "this isn't quite human" cue) and pushed hard for the
+        // Ravager/Lord, who also spawn on the larger demon_hulking Monster
+        // capsule so the bigger silhouette is a real hitbox, not an illusion.
+        public static float VisualScale(DemonTier tier)
+        {
+            switch (tier)
+            {
+                case DemonTier.Fiend:     return 1.00f;
+                case DemonTier.Stalker:   return 1.08f;
+                case DemonTier.Ravager:   return 1.28f;
+                case DemonTier.Hellsteed: return 1.05f; // the rider
+                case DemonTier.Lord:      return 1.45f;
+                default:                  return 1.00f;
+            }
+        }
+
+        // Separate scale for the Hellsteed's own mount agent (the horse), so
+        // the warhorse itself reads as unnaturally large under its rider.
+        public const float HellsteedMountScale = 1.12f;
+
+        // ── Monster override (the bigger, additive demon_hulking capsule) ──────
+        // Null/empty means "spawn on the ordinary human Monster" — every tier
+        // except the ones bulky enough to need a real (not just visual) bigger
+        // hitbox. See ModuleData/monsters.xml.
+        public const string HulkingMonsterId = "demon_hulking";
+
+        public static string MonsterIdFor(DemonTier tier)
+            => (tier == DemonTier.Ravager || tier == DemonTier.Lord) ? HulkingMonsterId : null;
+
+        // ── Unnatural movement ───────────────────────────────────────────────
+        // A relative multiplier on top of the troop's own walking speed
+        // (Agent.SetMaximumSpeedLimit(mult, isMultiplier: true)) — reasserted
+        // on a tick, since the engine's own speed-limit hook decays. Fiends
+        // and Stalkers run unnervingly fast (prey-driven, always hunting);
+        // Ravagers are slower but heavier — a lurching, unstoppable mass, not
+        // a sprinting one. The Lord is fast despite his bulk — wrongness, not
+        // realism.
+        public static float SpeedMultiplier(DemonTier tier)
+        {
+            switch (tier)
+            {
+                case DemonTier.Fiend:     return 1.10f;
+                case DemonTier.Stalker:   return 1.20f;
+                case DemonTier.Ravager:   return 0.95f;
+                case DemonTier.Hellsteed: return 1.00f; // mounted — the horse's own gait carries this
+                case DemonTier.Lord:      return 1.05f;
+                default:                  return 1.00f;
+            }
+        }
 
         // ── Night window ──────────────────────────────────────────────────────
         // The tide rises at dusk and sinks at dawn. Hours are CampaignTime's

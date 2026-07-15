@@ -871,6 +871,10 @@
     <Equipments>
       <EquipmentRoster>
         <equipment slot="Body" id="Item.fur_skirt"/>
+        <!-- Vanilla Battanian wolf-head trophy (SandBoxCore head_armors.xml) —
+             fully replaces the human head silhouette with a beast's. Tinted
+             near-black by DemonFactory's hide tint like the rest of the gear. -->
+        <equipment slot="Head" id="Item.wolfhead"/>
         <equipment slot="Item0" id="Item.cleaver_sword_t3"/>
       </EquipmentRoster>
     </Equipments>
@@ -898,6 +902,9 @@
     <Equipments>
       <EquipmentRoster>
         <equipment slot="Body" id="Item.bandit_fur_a"/>
+        <!-- Vanilla Battanian bear-head trophy — a broad, heavy beast skull
+             over the hulking frame; kills the human head read at any range. -->
+        <equipment slot="Head" id="Item.bearhead"/>
         <equipment slot="Item0" id="Item.cleaver_sword_t3"/>
       </EquipmentRoster>
     </Equipments>
@@ -966,6 +973,9 @@
     <Equipments>
       <EquipmentRoster>
         <equipment slot="Body" id="Item.bandit_fur_a"/>
+        <!-- The bear-head trophy, like the Ravager's — at his 1.45x scale it
+             reads as a crowned beast skull, not a hunter's costume. -->
+        <equipment slot="Head" id="Item.bearhead"/>
         <equipment slot="Item0" id="Item.cleaver_sword_t3"/>
       </EquipmentRoster>
     </Equipments>

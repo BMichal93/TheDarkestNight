@@ -177,6 +177,10 @@ namespace AshAndEmber
         // head only, so the wisp reads as rising off dark hide rather than
         // wrapping a whole human silhouette (arms/hands/feet deliberately
         // left bare so the now-near-solid body itself carries the read).
+        // Reads the agent's OWN Monster bone map, so the same Attach also
+        // dresses the Hellsteed's horse (DemonBattleBehavior.TickMount) — the
+        // horse Monster maps pelvis/neck/foreleg bones here, and any bone a
+        // skeleton lacks comes back < 0 and is skipped.
         private static IEnumerable<sbyte> WreathBones(Agent agent)
         {
             Monster m = null;

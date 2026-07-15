@@ -2,7 +2,7 @@
 <Module>
     <Name value="The Darkest Night"/>
     <Id value="TheDarkestNight"/>
-    <Version value="v0.6.0.0"/>
+    <Version value="v0.7.0.0"/>
     <SingleplayerModule value="true"/>
     <MultiplayerModule value="false"/>
     <DependedModules>
@@ -27,6 +27,9 @@
         </XmlNode>
         <XmlNode>
             <XmlName id="NPCCharacters" path="troops"/>
+        </XmlNode>
+        <XmlNode>
+            <XmlName id="Monsters" path="monsters"/>
         </XmlNode>
     </Xmls>
 </Module>

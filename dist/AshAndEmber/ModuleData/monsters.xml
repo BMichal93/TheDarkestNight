@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =============================================================================
+     THE DARKEST NIGHT — ModuleData/monsters.xml
+
+     One additive Monster entry — see Demons/DemonMath.cs (HulkingMonsterId) and
+     Demons/DemonFactory.cs/DemonBattleBehavior.cs, which spawn the Ravager and
+     Lord demon tiers on this Monster instead of the shared "human" one.
+
+     base_monster="human" inherits action_set="as_human_warrior" (and every
+     other human field this entry doesn't override), so combat/animation stays
+     100% compatible with the ordinary human skeleton — only the body_capsule
+     (the actual physical hitbox, not just a visual scale trick) is enlarged,
+     so a Ravager/Lord is genuinely, physically bigger than a person, not an
+     illusion riding a person-sized collision volume. Paired with
+     Agent.SetInitialAgentScale (DemonFactory.cs) for the matching visual size.
+
+     This is purely additive: it does not redefine or touch Native's shared
+     "human" Monster, so nothing else in the game (or another mod) is affected.
+     ============================================================================= -->
+<Monsters>
+	<Monster
+		id="demon_hulking"
+		base_monster="human"
+		weight="140">
+		<Capsules>
+			<body_capsule
+				radius="0.46"
+				pos1="0.0, 0.0, 1.85"
+				pos2="0.0, 0, 0.85" />
+			<crouched_body_capsule
+				radius="0.46"
+				pos1="0.0, 0.0, 1.85"
+				pos2="0.0, 0, 0.85" />
+		</Capsules>
+	</Monster>
+</Monsters>

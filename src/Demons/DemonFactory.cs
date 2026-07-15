@@ -119,6 +119,23 @@ namespace AshAndEmber
                 Vec2 dir = Vec2.Forward;
                 agentData = agentData.InitialDirection(in dir);
 
+                // The hulking tiers spawn on their own additive Monster entry
+                // (ModuleData/monsters.xml, base_monster="human") — a genuinely
+                // larger physical body capsule, not just a visual scale trick.
+                // Only reachable on THIS spawn path (a Monster is fixed at build
+                // time); roster-spawned demons get the visual half from
+                // ApplyBeastShape in DemonBattleBehavior.OnAgentBuild.
+                try
+                {
+                    string monsterId = DemonMath.MonsterIdFor(tier);
+                    if (!string.IsNullOrEmpty(monsterId))
+                    {
+                        Monster hulking = MBObjectManager.Instance.GetObject<Monster>(monsterId);
+                        if (hulking != null) agentData = agentData.Monster(hulking);
+                    }
+                }
+                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+
                 Agent agent = Mission.Current.SpawnAgent(agentData, false);
                 if (agent == null) return null;
 
@@ -130,6 +147,7 @@ namespace AshAndEmber
                 }
                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
+                ApplyBeastShape(agent, tier);
                 DemonBattleBehavior.Register(agent, tier);
                 if (charge) SetAggressive(agent, team);
                 return agent;
@@ -150,6 +168,51 @@ namespace AshAndEmber
                 case DemonMath.DemonTier.Hellsteed: return 0xFF1E1210; // low ember dark
                 default:                            return 0xFF1C1614; // Fiend — near-black ash
             }
+        }
+
+        // ── The beast shape — scale + never-resting stance ─────────────────────
+        // Applied once per demon, right after its Agent exists, from BOTH spawn
+        // paths (SpawnDemon above; DemonBattleBehavior.OnAgentBuild for the
+        // roster-spawned night tide). Two cheap, high-impact "not a person" cues:
+        //   • Visual scale — Agent.SetInitialAgentScale is the engine's real
+        //     skeleton-scale hook (verified by reflection against the game DLLs:
+        //     private void SetInitialAgentScale(float)); it is private, so it is
+        //     invoked via cached reflection, and any engine drift degrades to a
+        //     logged no-op rather than a crash.
+        //   • SetAgentIdleAnimationStatus(false) — the body never settles into
+        //     the relaxed human idle sway between actions; it stands wrong.
+        private static System.Reflection.MethodInfo _setInitialScale;
+        private static bool _setInitialScaleLookedUp;
+
+        internal static void ApplyBeastShape(Agent agent, DemonMath.DemonTier tier)
+        {
+            if (agent == null) return;
+            try
+            {
+                float scale = DemonMath.VisualScale(tier);
+                if (scale > 1.001f) SetAgentScale(agent, scale);
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { agent.SetAgentIdleAnimationStatus(false); }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // Also used for the Hellsteed's mount (DemonBattleBehavior dresses the
+        // horse lazily on the first tick it exists alongside its rider).
+        internal static void SetAgentScale(Agent agent, float scale)
+        {
+            try
+            {
+                if (agent == null) return;
+                if (!_setInitialScaleLookedUp)
+                {
+                    _setInitialScaleLookedUp = true;
+                    _setInitialScale = typeof(Agent).GetMethod("SetInitialAgentScale",
+                        System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                }
+                _setInitialScale?.Invoke(agent, new object[] { scale });
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
         // The demon's only order: find the nearest living thing and CHARGE it.

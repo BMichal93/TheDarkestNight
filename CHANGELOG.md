@@ -2,6 +2,22 @@
 
 ---
 
+## v0.7.0 — The Shapes in the Dark
+
+### Demons read as beasts, not reskinned looters
+The night tide no longer wears a man's silhouette. Every lever here is built from what the engine already ships — no custom meshes, textures, or skeletons exist or are referenced:
+
+- **Unnatural stature.** Demons are scaled at spawn through the engine's own skeleton-scale hook: Stalkers stand a head taller than a man (1.08x), Ravagers loom at 1.28x, the Hellsteed's rider sits high at 1.05x on a mount grown to 1.12x, and the Demon Lord towers at 1.45x. Fiends alone stay man-sized — starved, uneven tide-fodder against which the bigger tiers read as monsters.
+- **A real hitbox, not an illusion.** Ravagers and the Lord spawned through the summoning path stand on a new additive `demon_hulking` Monster entry (`ModuleData/monsters.xml`, `base_monster="human"` so combat and animation stay fully compatible) with a taller, wider body capsule — physically bigger, not just drawn bigger. Purely additive; the shared vanilla `human` Monster is untouched.
+- **Unnatural gait.** Each tier moves wrong for its bulk, reasserted on the same relentless cadence as the charge order: Fiends and Stalkers run faster than any man (1.10x / 1.20x — prey-driven, always hunting), Ravagers grind forward slower but unstoppable (0.95x), and the Lord is fast *despite* his mass (1.05x). Demons also never settle into the relaxed human idle sway — the body stands wrong between kills.
+- **Beast heads.** Stalkers wear the vanilla Battanian wolf-head trophy and Ravagers (and the Lord) the bear-head — full head-replacing meshes that kill the human-head read at any distance, tinted near-black with the rest of the hide.
+- **The horse is a demon too.** The Hellsteed's mount is now scaled, wreathed in the same bone-bound smoke, ember-lit, and contoured like its rider — an unnaturally large, smouldering beast, not an old nag carrying a monster.
+- **The Lord commands more than one working.** The Demon Lord now casts in battle: hellfire alternating with a Spirit nova on a short cooldown — the Night itself pressing in — while Ravagers keep their hellfire cone unchanged.
+
+Save-safe throughout: no troop id, savedata key, or tier enum changed; the Monster entry and head-slot equipment are additive; all engine access degrades to a logged no-op under `ModLog` if another mod interferes.
+
+---
+
 ## v0.6.0 — The Night Retold
 
 ### Settlement encounters, questlines, and world events re-themed
