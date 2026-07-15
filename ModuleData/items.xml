@@ -1583,4 +1583,55 @@
     <Flags />
   </Item>
 
+  <!-- Ulfhednar mount (src/BeastsOfTheNorth/) — "a horse the way a wolf
+       remembers being one." Vanilla Bannerlord has no wolf/dog mount mesh
+       and a dog-type texture does not map onto the horse mesh's UVs, so no
+       wolf mesh is attempted here (mod-author-directed). Instead this clones
+       the real, shipped t2_sturgia_horse's Horse component verbatim
+       (SandBoxCore/ModuleData/items/horses_and_others.xml) — same mesh
+       ("horse_brown"), same skeleton_scale ("sturgia_horse", ~15-20% bigger
+       bones than a base horse — a real, already-shipped scale-up, not an
+       invented one), same shaggy-mane AdditionalMeshes (horse_mane_2 +
+       horse_trotter) — but locked to the single darkest verified material
+       (horse_black_mat, dropping the grey alternative Revyl Chaser also
+       offers) so every Ulfhednar mount reads black-maned. Stats are tuned
+       above the Revyl Chaser's own (56/57/20) for "high charge damage, high
+       speed, low armor": fast and vicious, not armoured. -->
+  <Item id="aae_ulfhednar_mount"
+        name="{=aae_ulfhednar_mount_name}Wolf-Bound Horse"
+        mesh="horse_brown"
+        subtype="horse"
+        item_category="war_horse"
+        culture="Culture.sturgia"
+        weight="420"
+        is_merchandise="false"
+        difficulty="40"
+        appearance="0"
+        Type="Horse">
+    <ItemComponent>
+      <Horse monster="Monster.horse"
+             maneuver="70"
+             speed="66"
+             charge_damage="28"
+             body_length="109"
+             is_mountable="true"
+             extra_health="0"
+             skeleton_scale="sturgia_horse">
+        <AdditionalMeshes>
+          <Mesh name="horse_mane_2" affected_by_cover="true" />
+          <Mesh name="horse_trotter" />
+        </AdditionalMeshes>
+        <Materials>
+          <Material name="horse_black_mat">
+            <MeshMultipliers>
+              <MeshMultiplier mesh_multiplier="FF010101" percentage="0.75" />
+              <MeshMultiplier mesh_multiplier="FF909090" percentage="0.25" />
+            </MeshMultipliers>
+          </Material>
+        </Materials>
+      </Horse>
+    </ItemComponent>
+    <Flags Civilian="true" />
+  </Item>
+
 </Items>
