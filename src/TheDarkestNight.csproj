@@ -481,6 +481,9 @@
     <Compile Include="AshenRuins\AshenRuinSystem.cs"/>
     <Compile Include="AshenRuins\AshenRuinMenus.cs"/>
     <Compile Include="AshenRuins\AshenRuinCampaignBehavior.cs"/>
+    <Compile Include="Expeditions\ExpeditionMath.cs"/>
+    <Compile Include="Expeditions\ExpeditionCampaignBehavior.cs"/>
+    <Compile Include="Expeditions\ExpeditionCampaignBehavior.Menus.cs"/>
     <Compile Include="Apprentice\ApprenticeSystem.cs"/>
     <Compile Include="Spells\SpellEffects.cs"/>
     <Compile Include="Spells\SpellEffects.Combat.cs"/>

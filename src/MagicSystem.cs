@@ -212,6 +212,10 @@ namespace AshAndEmber
                 // Phase 12, Faction G — Legion's "The Far Shore" (see
                 // FactionQuests/Legion/).
                 try { campaignStarter.AddBehavior(new LegionQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                // Legion Expeditions — "Charter an Expedition" (the Antiquarian
+                // Charter), a background ruin-expedition system in Legion
+                // (empire_w) towns. See Expeditions/ExpeditionCampaignBehavior.cs.
+                try { campaignStarter.AddBehavior(new ExpeditionCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -285,6 +289,7 @@ namespace AshAndEmber
                 try { TempleQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { EmpireQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 try { LegionQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ExpeditionCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
                 // player hits Save — long after the quest triggered. Audit at boot instead.
