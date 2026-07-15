@@ -2,6 +2,21 @@
 
 ---
 
+## v0.5.0 — The Children of the Forest
+
+### Wands, scarce at last
+- The wandwright no longer stocks the whole 16-wand catalog forever. Each shop town now holds a small rotating case (3 wands for the Tower and Chosen towns) re-rolled every 14 days via a deterministic, reload-safe function of the town and the current restock cycle; a stocked wand can be bought once, and a bought slot sits empty — "one hollow where a fourth once lay" — until the next restock.
+- Town traders thin further across the board: crude-weapon tier cap tightened, and what remains is cut to little more than a trickle. Horses are now a lucky find rather than a guarantee — most towns show none at all on a given day. Armour, previously untouched by market scarcity entirely, now vanishes above a middling tier and is thinned besides.
+
+### The Children of the Forest
+- Pen Cannoc (Battania) no longer falls into the generic "Clan <X>" city-state that every other orphaned town gets — it is special-cased, exactly like Revyl's Camp, into **the Children of the Forest**: a permanent one-city kingdom ruled under the informal title "Warden of the Strange Wood," flying a fixed forest-green banner on both the kingdom and its ruling clan, keeping its original Battanian culture and troop tree (no bandit-culture swap, no runtime-minted culture — there is no safe precedent for that in this codebase). Their encyclopedia entry carries the lore in full: they keep no army of their own, and those who march against them come home changed, and stay to guard the trees. Like The Camp, they are kept out of every war — the diplomacy score discouragement and the daily force-peace backstop are now shared by both kingdoms under one "sanctuary kingdom" predicate, so a third such kingdom would be a one-line addition. A save that already holds Pen Cannoc's generic city-state is rebranded in place on session launch.
+- Pen Cannoc's own market strips weapons entirely — they sell no blades, only what the wood gives them.
+- The Children cut their own wands: Pen Cannoc is now a third, *permanent* wandwright town (unlike the Tower/Chosen towns, which merely import the stock, this one is never re-picked), holding the fullest case of the three — 5 wands at a time, same rotation, same one-purchase-per-slot rule.
+- Roughly 85% of the Children's lords carry a wand into battle — and, for the first time, actually wield it: a latent gap meant every previous wand grant (Tower, Chosen, and now Forest lords alike) only ever reached a hero's item roster, never their equipped weapon, so `WandEffects` could never fire for them. A weekly self-healing pass now writes a carried wand into the primary weapon slot for every wand-holding lord regardless of faction, leaving a real sidearm untouched in the next slot, and survives the existing one-time lord-gear-weathering pass (which now explicitly exempts wand items from its own strip, belt-and-suspenders against the two systems racing).
+- The Children's lords are young — faces just past coming-of-age, never middle-aged, held there for the whole campaign. Ages are set deterministically per hero (stable across reloads) and re-anchored every week so ordinary campaign aging can never carry them back out of the window.
+
+---
+
 ## v0.4.0 — The Camp
 
 ### The Camp
