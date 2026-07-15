@@ -119,7 +119,7 @@ namespace AshAndEmber
         {
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "✦  The Old Flame-Seer",
-                "An old man sits outside the inn, eyes clouded white. He does not look at you. He faces toward you. \"I can smell the fire from here,\" he says. \"Not the campfire kind. The old kind.\" He taps the bench beside him.",
+                "An old man sits outside the inn, eyes clouded white. He does not look at you. He faces toward you. \"You carry a shape in your hands,\" he says. \"Not a soldier's shape. The kind that draws on the dark and gets an answer back.\" He taps the bench beside him.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Sit with him. You have questions too.", null, true,
@@ -138,17 +138,17 @@ namespace AshAndEmber
                             AgePlayer(1);
                             if (MagicLearning.TryGrantRandomUnknown(_rng, out string seerLearned))
                             {
-                                Msg($"You sit with him for an hour. He speaks around the edges of things you were already reaching toward. By the time the village lanterns are lit, something has opened in you — the shape of {seerLearned}, given without ceremony.", FireColor);
+                                Msg($"You sit with him for an hour. He traces formulas in the dust with one finger, patterns he learned long before anyone called it a Spellbook. By the time the village lanterns are lit, something has opened in you — the shape of {seerLearned}, given without ceremony.", FireColor);
                             }
                             else
                             {
                                 ChangeRenown(8f);
-                                Msg("You sit with him for an hour. He tells you things about fire that you already knew but had not named — the difference is smaller than it used to be. He senses it. Before you leave he says: 'You have gone further than I can follow.' He does not mean it as a compliment.", FireColor);
+                                Msg("You sit with him for an hour. He tells you things about the formulas that you already knew but had not named — the difference is smaller than it used to be. He senses it. Before you leave he says: 'You have gone further than I can follow.' He does not mean it as a compliment.", FireColor);
                             }
                             break;
                         case "b":
                             ShiftTrait(DefaultTraits.Calculating, 1);
-                            Msg("\"A fire that eats its own wood,\" he says. \"Burning slow. Burning long.\" He does not explain further.", FireColor);
+                            Msg("\"A door that opens both ways,\" he says. \"Every formula you tap, something on the other side feels it too.\" He does not explain further.", FireColor);
                             break;
                         case "c":
                             Msg("You walk past. He keeps facing the direction you were standing.", DimColor);
@@ -215,7 +215,7 @@ namespace AshAndEmber
         // EVENTS 73–77 — ENTER VILLAGE (new)
         // ═══════════════════════════════════════════════════════════════════
 
-        // 77. The Dog (Ashen-gated)
+        // 77. The Dog (cult-gated)
         private static void EV2_DogWontStop(Settlement s)
         {
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
@@ -259,7 +259,7 @@ namespace AshAndEmber
         {
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "✦  What She Sees",
-                "A girl of perhaps six stops playing and stares at you. Not at your horse, not at your armor — at you. She reaches toward something she cannot name, cannot see, but clearly senses. Her mother pulls her back. The girl's eyes do not leave yours.",
+                "A girl of perhaps six stops playing and stares at you. Not at your horse, not at your armor — at you. She reaches toward something she cannot name, cannot see, but clearly senses — the same pull that will one day let her tap a formula of her own, if the Night doesn't take her first. Her mother pulls her back. The girl's eyes do not leave yours.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Crouch down and say a quiet word to her.", null, true,
@@ -293,12 +293,12 @@ namespace AshAndEmber
         // EVENTS 109–111 — ENTER CITY (fourth batch)
         // ═══════════════════════════════════════════════════════════════════
 
-        // 114. The Watching Figure (Ashen-gated)
+        // 114. The Watching Figure (cult-gated)
         private static void LC4_RecognizedByAshen(Settlement s)
         {
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "✦  The Watching Figure",
-                "Leaving the city, you become aware — not by sight but by the particular absence of warmth — of someone in a building's shadow cataloguing your party. Grey cloak, pale still face, the patient posture of something that is not in a hurry because it has learned not to be. An Ashen agent is noting your movements.",
+                "Leaving the city, you become aware — not by sight but by the particular absence of warmth — of someone in a building's shadow cataloguing your party. Grey cloak, pale still face, the patient posture of something that is not in a hurry because it has learned not to be. A demon-cult agent is noting your movements.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Confront them directly.", null, true,
@@ -315,7 +315,7 @@ namespace AshAndEmber
                     {
                         case "a":
                             ShiftTrait(DefaultTraits.Honor, 1);
-                            Msg("You turn your horse and ride toward the shadow. They are gone before you reach the doorway — not fled, simply gone, the way the Ashen go when they choose not to be found. The shadow is cold in a way that has nothing to do with the hour. They know you saw them. That may be enough.", AshenColor);
+                            Msg("You turn your horse and ride toward the shadow. They are gone before you reach the doorway — not fled, simply gone, the way the demon-cult go when they choose not to be found. The shadow is cold in a way that has nothing to do with the hour. They know you saw them. That may be enough.", AshenColor);
                             break;
                         case "b":
                             Msg("You ride on. They follow at a distance you would not see if you didn't know what to look for. After a mile they stop. Their report will note your route, your party's strength, and that you did not react. The last detail is the one that will be read most carefully.", AshenColor);
@@ -327,7 +327,7 @@ namespace AshAndEmber
                                 Msg("A rider carries the message back into the city. Nothing happens for an hour. Then, near the road's first bend, something small and cold is placed in your saddlebag. A piece of grey cloth. An acknowledgement. The cold's own currency.", AshenColor);
                             }
                             else
-                                Msg("The message goes in. Nothing comes back. Either it was not received, or received and set aside, or received and filed under 'noted.' The Ashen are not hurried correspondents.", DimColor);
+                                Msg("The message goes in. Nothing comes back. Either it was not received, or received and set aside, or received and filed under 'noted.' The demon-cult are not hurried correspondents.", DimColor);
                             break;
                     }
                 }, null, "", false), false, true);

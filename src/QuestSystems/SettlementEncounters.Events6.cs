@@ -6,7 +6,7 @@
 // ┌────────────────────────────────┬──────────────────────┬──────────────────┐
 // │ Event                          │ Trigger              │ Gate             │
 // ├────────────────────────────────┼──────────────────────┼──────────────────┤
-// │ The Cartographer of Silences   │ Enter city           │ Mage or Ashen    │
+// │ The Cartographer of Silences   │ Enter city           │ Mage or cult    │
 // │ The Child Who Does Not Sleep   │ Enter village        │ General (1 arc)  │
 // │ The Vow Undischarged           │ Leave city           │ General, tier ≥2 │
 // │ The Fever Road                 │ Leave village        │ General          │
@@ -34,9 +34,9 @@ namespace AshAndEmber
     {
         // ═══════════════════════════════════════════════════════════════════
         // 1. THE CARTOGRAPHER OF SILENCES
-        //    City enter — mage or Ashen — escalates across three sightings.
+        //    City enter — mage or cult — escalates across three sightings.
         //    Phase 0 → 1 → 2 → 3 (done). 60-day cooldown between sightings.
-        //    Phase 3 reached without stopping it: Ashen raid fires 14 days later.
+        //    Phase 3 reached without stopping it: cult raid fires 14 days later.
         // ═══════════════════════════════════════════════════════════════════
 
         private static void EV_CartographerOfSilences(Settlement s)
@@ -89,7 +89,7 @@ namespace AshAndEmber
                             break;
                         case "confront":
                             ShiftTrait(DefaultTraits.Honor, 1);
-                            Msg("You step toward him. He is gone — not hurried, simply gone, the way the Ashen go when they choose " +
+                            Msg("You step toward him. He is gone — not hurried, simply gone, the way the demon-cult go when they choose " +
                                 "not to be found. The marks remain on the cobblestones for three days before rain removes them. " +
                                 "You were not fast enough to read all of them. He knows you saw him. That will change what he does next.", DimColor);
                             break;
@@ -174,7 +174,7 @@ namespace AshAndEmber
                                 ChangeRenown(8f);
                                 Msg("You follow the apprentice for six blocks. He leads you — unknowingly — to a safehouse in the " +
                                     "tanner's quarter, where he knocks three times and enters. You note the address, the time, " +
-                                    "the route. The next Ashen patrol through this city will find that house empty. Someone " +
+                                    "the route. The next cult patrol through this city will find that house empty. Someone " +
                                     "who receives your message will make sure of it.", GoodColor);
                             }
                             else
@@ -257,7 +257,7 @@ namespace AshAndEmber
                             ChangeRenown(8f);
                             Msg("You name what you have seen to a lord whose forces reach the city within a day. They find the " +
                                 "square, the marks, and — at the grain market, too late for the cartographer to stop them — an " +
-                                "Ashen operative preparing the final stage. The ritual does not complete. Your name is in the " +
+                                "cult operative preparing the final stage. The ritual does not complete. Your name is in the " +
                                 "garrison commander's report. The lord reads it.", GoodColor);
                             _cartographerPhase = 3; // clean — no consequence
                             break;
@@ -524,7 +524,7 @@ namespace AshAndEmber
                     {
                         if (isAshen)
                         {
-                            // Ashen reveal: she is a cold anchor; retroactive camp suppression explained
+                            // cult reveal: she is a cold anchor; retroactive camp suppression explained
                             ShiftTrait(DefaultTraits.Mercy, -1);
                             AddMorale(-6f);
                             Msg("She tells you what she is: a vessel the cold uses to extend itself into warm spaces. " +
@@ -944,7 +944,7 @@ namespace AshAndEmber
             bool isMage    = MageKnowledge.IsMage;
             bool isAshen   = MageKnowledge.IsAshen;
             // Old attunement or the merged art — any living mage draws the living
-            // world now. Not the Ashen: the cold has its own answer below.
+            // world now. Not the demon-cult: the cold has its own answer below.
             bool isNature  = NatureKnowledge.IsAttuned || (isMage && !isAshen);
 
             MageKnowledge._deferredInquiry = () =>
@@ -1092,7 +1092,7 @@ namespace AshAndEmber
                                         "store. The ash is in the flour — not in the eastern family's supply. It is the " +
                                         "miller adulterating the grain for margin. But you feel something else: the ash " +
                                         "has cold in it that has nothing to do with hearth-fire. This came from a cold " +
-                                        "site. The miller used Ashen residue without knowing what it was. " +
+                                        "site. The miller used cult residue without knowing what it was. " +
                                         "The children are not simply sick. They are changing.", AshenColor);
                                 }
                                 else

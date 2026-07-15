@@ -3,7 +3,7 @@
 // Random personal encounters triggered when the player enters or leaves a
 // settlement. The system tracks Hero.MainHero.CurrentSettlement on the daily
 // tick to detect transitions, then fires one encounter from an appropriate
-// pool (gated by mage status, Ashen status, and renown).
+// pool (gated by mage status, cult status, and renown).
 //
 // ┌─────────────────────────────┬───────────────────────┬──────────────────┐
 // │ Event                       │ Trigger               │ Gate             │
@@ -26,7 +26,7 @@
 // │ The Warmth Merchant         │ Enter village         │ Mage             │
 // │ A Family's Quarrel          │ Enter village         │ General          │
 // │ The Harvest Festival        │ Enter village         │ General          │
-// │ Ashen Aftermath             │ Enter village         │ General          │
+// │ cult Aftermath             │ Enter village         │ General          │
 // │ The Warning                 │ Enter village         │ General          │
 // │ The Spilled Cart            │ Enter village         │ General          │
 // │ The Veteran's Question      │ Leave city/castle     │ Mage             │
@@ -36,13 +36,13 @@
 // │ The Bard's Request          │ Leave city/castle     │ General, Ren≥300 │
 // │ A Detained Soldier          │ Leave city/castle     │ General          │
 // │ The Guild's Offer           │ Leave city/castle     │ General, Ren≥500 │
-// │ The Ashen Informant         │ Leave city/castle     │ General          │
+// │ The demon-cult Informant         │ Leave city/castle     │ General          │
 // │ An Insult at the Gate       │ Leave city/castle     │ General          │
 // │ The Curious Scholar         │ Enter city/castle     │ Mage             │
 // │ Another Fire                │ Enter city/castle     │ Mage             │
 // │ The Ash-Touched Market      │ Enter city/castle     │ Mage             │
-// │ Grey Eyes                   │ Enter city/castle     │ Ashen            │
-// │ The Fellow Cold             │ Enter city/castle     │ Ashen            │
+// │ Grey Eyes                   │ Enter city/castle     │ cult            │
+// │ The Fellow Cold             │ Enter city/castle     │ cult            │
 // │ The Crowd Wants a Sign      │ Enter city/castle     │ Mage, Renown≥1000│
 // │ A Soldier Dying             │ Enter city/castle     │ General          │
 // │ The Child's Bead            │ Enter city/castle     │ General          │
@@ -99,7 +99,7 @@ namespace AshAndEmber
         private static int    _babyEventCountdown    = 0;   // days until deferred illegitimate-child event
         private static int    _pregnancyCountdown    = 0;   // days until female-player pregnancy triggers
         private static int    _familyFeverCooldown   = 0;   // long cooldown for the family-plague event
-        private static int    _ashenFrenzyCountdown  = 0;   // fires the day after player becomes Ashen
+        private static int    _ashenFrenzyCountdown  = 0;   // fires the day after player becomes cult
         private static int    _hedgeWitchCooldown    = 0;   // cooldown for the hedge-witch event
         private static int    _hedgeWitchCurse       = 0;   // days until witch-bargain sickness fires
         private static int    _ancientBookFound      = 0;   // 1 after the grimoire event fires (one-time)
@@ -120,7 +120,7 @@ namespace AshAndEmber
         private static int    _poorKnightCooldown     = 0;         // long cooldown so knight event fires rarely
         private static int    _poorKnightTournamentCountdown = 0;  // days until "ride past" tournament word arrives
         private static int    _vengefulKnightCountdown = 0;        // days until the mocked knight strikes back
-        private static bool   _lastBattleHadAshenEnemy = false;   // true when enemy side had Ashen parties (not persisted)
+        private static bool   _lastBattleHadAshenEnemy = false;   // true when enemy side had cult parties (not persisted)
         private static int    _ashenMachineryCooldown  = 0;       // days between crystal-machine finds
         private static int    _ashenMachineryCountdown = 0;       // days until black-market weapon fires (option D)
         private static string _ashenMachineryKingdomId = null;    // kingdom targeted by deferred option D
@@ -149,15 +149,50 @@ namespace AshAndEmber
         private static int    _mothersPleaPhase       = 0;       // 0=none 1=healed_7d 2=money_7d 3=refused_7d 4=child_10yr 5=assassin
         private static readonly Random _rng          = new Random();
 
+        // ── New Darkest Night encounters ────────────────────────────────────
+        // The Painted Door (town enter)
+        private static int    _wardSellerCooldown   = 0;   // 40-70d between offers
+        private static int    _wardSellerOutcome    = 0;   // 1=bought 2=denounced
+        private static int    _wardSellerCountdown  = 0;   // 20-40d until deferred payoff
+
+        // One Watch (town leave, dusk, clan tier >= 1)
+        private static int    _nightwatchCooldown   = 0;
+        private static int    _nightwatchOutcome    = 0;   // 1=stood watch 2=posted substitute 3=refused
+        private static int    _nightwatchCountdown  = 0;   // 14-30d until deferred payoff
+        private static string _nightwatchSettlementId = null;
+
+        // The Vial Trade (town enter, Bloodbound culture or any mage-eligible town)
+        private static int    _bloodBrokerCooldown  = 0;
+        private static int    _bloodBrokerOutcome   = 0;   // 1=sold blood 2=let him bleed a prisoner 3=refused
+        private static int    _bloodBrokerCountdown = 0;   // 25-45d until deferred payoff
+
+        // Born at the Turning (village enter, long deferral)
+        private static int    _duskbornCooldown     = 0;
+        private static int    _duskbornOutcome      = 0;   // 1=protected 2=paid village 3=left to judgment
+        private static int    _duskbornCountdown    = 0;   // 60-90d until deferred payoff
+        private static string _duskbornSettlementId = null;
+
+        // The Family That Would Not Open (village leave, dusk)
+        private static int    _saltCircleCooldown   = 0;
+        private static int    _saltCircleOutcome    = 0;   // 1=left food 2=broke door 3=talked down
+        private static int    _saltCircleCountdown  = 0;   // 20-40d until deferred payoff
+        private static string _saltCircleSettlementId = null;
+
+        // The Bell of a Nameless Town (town enter, city-state)
+        private static int    _musterBellCooldown   = 0;
+        private static int    _musterBellOutcome    = 0;   // 1=held wall 2=named a price 3=declined
+        private static int    _musterBellCountdown  = 0;   // 15-35d until deferred payoff
+        private static string _musterBellSettlementId = null;
+
         // ── Events7 state ──────────────────────────────────────────────────
         // The Merchant of Endings (city enter, mage-gated, 90-day cooldown)
         private static int _merchantOfEndingsCooldown = 0;
 
         // ── Events6 state ──────────────────────────────────────────────────
-        // Cartographer of Silences (city enter, mage/Ashen, 3-phase escalation)
+        // Cartographer of Silences (city enter, mage/cult, 3-phase escalation)
         private static int    _cartographerPhase                = 0;  // 0=fresh 1,2=in progress 3=done
         private static int    _cartographerCooldown             = 0;  // 60d between sightings
-        private static int    _cartographerConsequenceCountdown = 0;  // 14d until Ashen raid fires
+        private static int    _cartographerConsequenceCountdown = 0;  // 14d until cult raid fires
 
         // The Child Who Does Not Sleep (village enter, global arc)
         private static int    _ashChildPhase    = 0;  // 0=initial 1=camp 2=long-camp 10=echo 11=done
@@ -275,6 +310,28 @@ namespace AshAndEmber
             _ashBreadOutcome      = 0;
             _ashBreadSettlementId = null;
             _agingCommentCooldown = 0;
+            _wardSellerCooldown  = 0;
+            _wardSellerOutcome   = 0;
+            _wardSellerCountdown = 0;
+            _nightwatchCooldown  = 0;
+            _nightwatchOutcome   = 0;
+            _nightwatchCountdown = 0;
+            _nightwatchSettlementId = null;
+            _bloodBrokerCooldown  = 0;
+            _bloodBrokerOutcome   = 0;
+            _bloodBrokerCountdown = 0;
+            _duskbornCooldown  = 0;
+            _duskbornOutcome   = 0;
+            _duskbornCountdown = 0;
+            _duskbornSettlementId = null;
+            _saltCircleCooldown  = 0;
+            _saltCircleOutcome   = 0;
+            _saltCircleCountdown = 0;
+            _saltCircleSettlementId = null;
+            _musterBellCooldown  = 0;
+            _musterBellOutcome   = 0;
+            _musterBellCountdown = 0;
+            _musterBellSettlementId = null;
             _recentEncounters.Clear();
             AmbientRemarks.ResetForNewGame();
         }
@@ -354,6 +411,28 @@ namespace AshAndEmber
             store.SyncData("SE_AshBreadOutcome",    ref _ashBreadOutcome);
             store.SyncData("SE_AshBreadS",          ref _ashBreadSettlementId);
             store.SyncData("SE_AgingCommentCD",     ref _agingCommentCooldown);
+            store.SyncData("SE_WardSellerCD",       ref _wardSellerCooldown);
+            store.SyncData("SE_WardSellerOut",      ref _wardSellerOutcome);
+            store.SyncData("SE_WardSellerCountdown", ref _wardSellerCountdown);
+            store.SyncData("SE_NightwatchCD",       ref _nightwatchCooldown);
+            store.SyncData("SE_NightwatchOut",      ref _nightwatchOutcome);
+            store.SyncData("SE_NightwatchCountdown", ref _nightwatchCountdown);
+            store.SyncData("SE_NightwatchS",        ref _nightwatchSettlementId);
+            store.SyncData("SE_BloodBrokerCD",      ref _bloodBrokerCooldown);
+            store.SyncData("SE_BloodBrokerOut",     ref _bloodBrokerOutcome);
+            store.SyncData("SE_BloodBrokerCountdown", ref _bloodBrokerCountdown);
+            store.SyncData("SE_DuskbornCD",         ref _duskbornCooldown);
+            store.SyncData("SE_DuskbornOut",        ref _duskbornOutcome);
+            store.SyncData("SE_DuskbornCountdown",  ref _duskbornCountdown);
+            store.SyncData("SE_DuskbornS",          ref _duskbornSettlementId);
+            store.SyncData("SE_SaltCircleCD",       ref _saltCircleCooldown);
+            store.SyncData("SE_SaltCircleOut",      ref _saltCircleOutcome);
+            store.SyncData("SE_SaltCircleCountdown", ref _saltCircleCountdown);
+            store.SyncData("SE_SaltCircleS",        ref _saltCircleSettlementId);
+            store.SyncData("SE_MusterBellCD",       ref _musterBellCooldown);
+            store.SyncData("SE_MusterBellOut",      ref _musterBellOutcome);
+            store.SyncData("SE_MusterBellCountdown", ref _musterBellCountdown);
+            store.SyncData("SE_MusterBellS",        ref _musterBellSettlementId);
             string recentStr = string.Join(",", _recentEncounters);
             store.SyncData("SE_RecentEncounters",  ref recentStr);
             _recentEncounters.Clear();
@@ -652,6 +731,49 @@ namespace AshAndEmber
                 _ashBreadCountdown--;
                 if (_ashBreadCountdown == 0)
                     FireAshBreadConsequence();
+            }
+
+            // ── New Darkest Night encounters ─────────────────────────────────
+            if (_wardSellerCooldown > 0) _wardSellerCooldown--;
+            if (_wardSellerCountdown > 0)
+            {
+                _wardSellerCountdown--;
+                if (_wardSellerCountdown == 0) FireWardSellerConsequence();
+            }
+
+            if (_nightwatchCooldown > 0) _nightwatchCooldown--;
+            if (_nightwatchCountdown > 0)
+            {
+                _nightwatchCountdown--;
+                if (_nightwatchCountdown == 0) FireNightwatchConsequence();
+            }
+
+            if (_bloodBrokerCooldown > 0) _bloodBrokerCooldown--;
+            if (_bloodBrokerCountdown > 0)
+            {
+                _bloodBrokerCountdown--;
+                if (_bloodBrokerCountdown == 0) FireBloodBrokerConsequence();
+            }
+
+            if (_duskbornCooldown > 0) _duskbornCooldown--;
+            if (_duskbornCountdown > 0)
+            {
+                _duskbornCountdown--;
+                if (_duskbornCountdown == 0) FireDuskbornConsequence();
+            }
+
+            if (_saltCircleCooldown > 0) _saltCircleCooldown--;
+            if (_saltCircleCountdown > 0)
+            {
+                _saltCircleCountdown--;
+                if (_saltCircleCountdown == 0) FireSaltCircleConsequence();
+            }
+
+            if (_musterBellCooldown > 0) _musterBellCooldown--;
+            if (_musterBellCountdown > 0)
+            {
+                _musterBellCountdown--;
+                if (_musterBellCountdown == 0) FireMusterBellConsequence();
             }
         }
 

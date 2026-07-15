@@ -133,7 +133,7 @@ namespace AshAndEmber
                                || DarkGiftSystem.HasAnyGift;
             // The living world answers the old attunement or the merged art (any
             // living mage now draws the living elements) — same repointing as sea
-            // travel. Not the Ashen: the cold has its own answer below.
+            // travel. Not the demon-cult: the cold has its own answer below.
             bool isNature      = NatureKnowledge.IsAttuned || (mage && !isAshen);
 
             string spouseName = spouse.Name?.ToString() ?? "your spouse";
@@ -150,7 +150,7 @@ namespace AshAndEmber
                 : "Requires a mage's bond with the living world.";
             string ashenHint = isAshen
                 ? "The cold holds them in stillness — suspended between life and letting go. They will survive. The cold always asks something back."
-                : "Requires Ashen affinity.";
+                : "Requires cult affinity.";
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "★  The Wasting",

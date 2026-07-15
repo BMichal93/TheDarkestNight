@@ -82,7 +82,7 @@ namespace AshAndEmber
                         null, true,
                         $"Force the issue. Gain Calculating -1. -20 with Temple lords. -5 with 3 Empire lords. {combatHint}"),
                     new InquiryElement("d",
-                        $"Offer your assistance to the soldiers. The {target} may be Ashen servants.",
+                        $"Offer your assistance to the soldiers. The {target} may be cult servants.",
                         null, true,
                         "Fall in beside them. Gain Calculating -1. -10 with a local lord. +10 with Temple lords. Gain 1000 gold."),
                     new InquiryElement("e",
@@ -202,21 +202,21 @@ namespace AshAndEmber
                 }, null, "", false), false, true);
         }
 
-        // ── AFTER BATTLE: The Cold Machine [Ashen enemy defeated, mage player] ────────────────
+        // ── AFTER BATTLE: The Cold Machine [cult enemy defeated, mage player] ────────────────
         private static void EB_AshenMachinery()
         {
             _ashenMachineryCooldown = 90;
             bool mage = MageKnowledge.IsMage;
 
             string intro = mage
-                ? "Among the fallen Ashen your men have found something they brought to you because they did not know what else to do with it. " +
+                ? "Among the fallen cult your men have found something they brought to you because they did not know what else to do with it. " +
                   "It is a framework of iron and dark glass packed with crystals arranged in a pattern that makes your teeth ache to look at. " +
                   "The mages were moving toward it when your soldiers cut them down. You recognise what it is — not the design, but the purpose. " +
                   "A weapon shaped by someone who understood cold fire from the outside in. It did not fire. Yet."
-                : "Among the fallen Ashen your men have found something and brought it to you because they did not know what else to do with it. " +
+                : "Among the fallen cult your men have found something and brought it to you because they did not know what else to do with it. " +
                   "A framework of iron and dark glass packed with crystals, arranged in no pattern you recognise. " +
                   "The mages were moving toward it when your soldiers cut them down. " +
-                  "You do not know what it does. You know that the Ashen were willing to die for it.";
+                  "You do not know what it does. You know that the demon-cult were willing to die for it.";
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "⚗  The Cold Machine",

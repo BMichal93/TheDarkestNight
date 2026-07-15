@@ -67,6 +67,8 @@ namespace AshAndEmber
                 if (_ashChildPhase == 0 || _ashChildPhase == 10) pool.Add(EV_ChildWhoDoesNotSleep);
                 // Ashes in the Bread — general, 45-day cooldown, no deferred pending
                 if (_ashBreadCooldown == 0 && _ashBreadCountdown == 0) pool.Add(EV_AshesInTheBread);
+                // Born at the Turning — general, long-deferral, village-gated
+                if (_duskbornCooldown == 0 && _duskbornCountdown == 0) pool.Add(E_DuskbornChild);
             }
             if (town)
             {
@@ -93,16 +95,27 @@ namespace AshAndEmber
                 if (_cinderEligible) pool.Add(EC_CinderVigil);
                 // Poor knight wants to prove himself in tournament (or just encountered by chance)
                 if (!ashen && _poorKnightCooldown == 0) pool.Add(EC_PoorKnight);
-                // Tavern harassment — clan tier < 5, not Ashen
+                // Tavern harassment — clan tier < 5, not cult
                 if (!ashen && clanTier < 5) pool.Add(EC_TavernHarassment);
                 // One-time Aserai alchemist with a dangerous idea
                 if (_weaponInventorFound == 0 && _cult == "aserai") pool.Add(E_WeaponInventor);
-                // Cartographer of Silences — mage or Ashen, city enter, 3-phase, 60-day cooldown
+                // Cartographer of Silences — mage or cult, city enter, 3-phase, 60-day cooldown
                 if ((mage || ashen) && _cartographerCooldown == 0 && _cartographerPhase < 3)
                     pool.Add(EV_CartographerOfSilences);
                 // The Scholar's Bargain — clan tier ≥ 2, entering a settlement the player's clan owns
                 if (ScholarBargainQuestSystem.CanTriggerAt(s))
                     pool.Add(ScholarBargainQuestSystem.EO_ScholarApproach);
+                // The Painted Door — town enter, general, 40-70d cooldown
+                if (_wardSellerCooldown == 0 && _wardSellerCountdown == 0) pool.Add(E_WardSeller);
+                // The Vial Trade — Bloodbound-culture town, or any town if the player has the Spellbook
+                if (_bloodBrokerCooldown == 0 && _bloodBrokerCountdown == 0
+                    && (_cult == "khuzait" || mage))
+                    pool.Add(E_BloodBroker);
+                // The Bell of a Nameless Town — ownerless city-state, not the two sanctuary kingdoms
+                if (_musterBellCooldown == 0 && _musterBellCountdown == 0
+                    && s.MapFaction is Kingdom mbk && CityStateMath.IsCityStateKingdomId(mbk.StringId)
+                    && !CityStateSystem.IsSanctuaryKingdom(mbk))
+                    pool.Add(E_MusterBell);
             }
 
             Fire(pool, s);
@@ -116,6 +129,7 @@ namespace AshAndEmber
             float ren   = Hero.MainHero?.Clan?.Renown ?? 0f;
             bool village = s.IsVillage;
             bool town    = s.IsTown || s.IsCastle;
+            bool dusk    = DemonMath.IsNightHour((float)CampaignTime.Now.CurrentHourInDay);
 
             var pool = new List<Action<Settlement>>();
 
@@ -133,16 +147,23 @@ namespace AshAndEmber
                 // Fever Road — general, recurring hazard; open window OR fresh start
                 if (_feverRoadCooldown == 0 && (!_feverRoadActive || _feverRoadTriggerCount < 3))
                     pool.Add(LV_FeverRoad);
+                // The Family That Would Not Open — village leave, dusk, ~40d cooldown
+                if (dusk && _saltCircleCooldown == 0 && _saltCircleCountdown == 0)
+                    pool.Add(E_SaltCircle);
             }
             if (town)
             {
+                // One Watch — town leave, dusk, clan tier >= 1
+                int watchClanTier = Hero.MainHero?.Clan?.Tier ?? 0;
+                if (dusk && watchClanTier >= 1 && _nightwatchCooldown == 0 && _nightwatchCountdown == 0)
+                    pool.Add(E_NightwatchShort);
                 if (!ashen && ren >= 300f) pool.Add(E_BardsRequest);
                 if (mage && _bloodTitheCountdown == 0 && _bloodTitheRevealCountdown == 0)
                 {
                     pool.Add(LC_BloodCollector);
                 }
                 if (ashen) pool.Add(LC4_RecognizedByAshen);
-                // Encounter: Hope — young mage afraid of Ashen; clan tier ≥ 2, non-Ashen mage
+                // Encounter: Hope — young mage afraid of cult; clan tier ≥ 2, non-cult mage
                 int clanTier = Hero.MainHero?.Clan?.Tier ?? 0;
                 if (mage && !ashen && clanTier >= 2) pool.Add(LC_YoungMageHope);
                 pool.Add(EL_InsultAtGate);
@@ -235,7 +256,7 @@ namespace AshAndEmber
             if (!_lastBattleWon && clanTier >= 3)
                 pool.Add(EB_HeroInspired);
 
-            // Crystal machine: mage, won, enemy side had Ashen, no recent find and no deferred D pending
+            // Crystal machine: mage, won, enemy side had cult, no recent find and no deferred D pending
             if (mage && _lastBattleWon && _lastBattleHadAshenEnemy
                 && _ashenMachineryCooldown == 0 && _ashenMachineryCountdown == 0)
                 pool.Add(EB_AshenMachinery);

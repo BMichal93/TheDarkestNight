@@ -142,7 +142,7 @@ namespace AshAndEmber
             {
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                     "⚗  The Vial",
-                    "He produces it from inside his coat: a small sealed vial, dark and faintly luminescent, the liquid inside not quite settling the way liquid should. He describes the contents — ash-blood drawn from a living Ashen donor, three additional reagents he declines to name, prepared over a fortnight at specific temperatures. He says it will unlock something in whoever drinks it. He says the process is irreversible. He says this as though it is a recommendation.",
+                    "He produces it from inside his coat: a small sealed vial, dark and faintly luminescent, the liquid inside not quite settling the way liquid should. He describes the contents — ash-blood drawn from a living cult donor, three additional reagents he declines to name, prepared over a fortnight at specific temperatures. He says it will unlock something in whoever drinks it. He says the process is irreversible. He says this as though it is a recommendation.",
                     new List<InquiryElement>
                     {
                         new InquiryElement("a", "Drink it.", null, true,
@@ -294,7 +294,7 @@ namespace AshAndEmber
                                     ElementLordRegistry.SetMage(child, true);
                                     try { AshenCitySystem.ApplyAshenPersonality(child); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                                     try { MageKnowledge.ApplyAshenAppearance(child); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                                    // Try to move child to a random Ashen clan
+                                    // Try to move child to a random cult clan
                                     var ashenClans = Clan.All
                                         .Where(c => c != Clan.PlayerClan && c.IsEliminated == false &&
                                                c.Heroes.Any(h => ElementLordRegistry.IsAshenLord(h)))

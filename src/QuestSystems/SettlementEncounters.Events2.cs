@@ -1,6 +1,6 @@
 // =============================================================================
 // ASH AND EMBER — SettlementEncounters.Events2.cs
-// After-battle/siege encounters and Ashen village/city events.
+// After-battle/siege encounters and cult village/city events.
 // Partial of SettlementEncounters (shared state lives in SettlementEncounters.cs).
 // =============================================================================
 
@@ -22,12 +22,12 @@ namespace AshAndEmber
 {
     public static partial class SettlementEncounters
     {
-        // ── AFTER BATTLE (Ashen): Memory Drain ────────────────────────────────
-        // Fires when an Ashen player cast 3+ spells in a single battle.
+        // ── AFTER BATTLE (cult): Memory Drain ────────────────────────────────
+        // Fires when a demon-cult player cast 3+ spells in a single battle.
         // Choices: resist (Leadership roll), accept loss, or feed it (gains XP, larger loss).
         private static void EB_AshenMemoryDrain()
         {
-            // Pick one of the three humane traits to drain (the ones Ashen players are losing)
+            // Pick one of the three humane traits to drain (the ones cult players are losing)
             var candidates = new[] { DefaultTraits.Mercy, DefaultTraits.Honor, DefaultTraits.Generosity };
             var drainTrait = candidates[_rng.Next(candidates.Length)];
             string traitName = drainTrait == DefaultTraits.Mercy ? "Mercy"
@@ -366,7 +366,7 @@ namespace AshAndEmber
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }
 
-        // ── Helper: become Ashen (full conversion sequence) ───────────────────
+        // ── Helper: become cult-bound (full conversion sequence) ───────────────────
         private static void BecomeAshen()
         {
             // Sync MageKnowledge player flags first so grimoire + spell aging work correctly.
@@ -402,7 +402,7 @@ namespace AshAndEmber
                 $"facing the same direction. The villagers won't meet your eyes. " +
                 $"Someone lit fires in the northern field after midnight, " +
                 $"the wrong colour and shape for hearth or harvest. " +
-                $"You cannot prove it, but something Ashen has been here recently.",
+                $"You cannot prove it, but something cult has been here recently.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Burn the village. Cultists hide among the innocent here.", null, true,
@@ -448,7 +448,7 @@ namespace AshAndEmber
                             {
                                 try { CampaignMapEvents.SpawnAshenAmbushNear(s.GetPosition2D, 20, 180f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                                 Msg($"You showed mercy and rode on. That evening, {vName} caught fire from three sides at once. " +
-                                    $"Ashen Spawn poured from the shadows — the cultists had already called for them. " +
+                                    $"demons poured from the shadows — the cultists had already called for them. " +
                                     $"The village burned regardless of your choice.", BadColor);
                             }
                             break;
@@ -457,13 +457,13 @@ namespace AshAndEmber
                             {
                                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                                     "★  The Hidden Root",
-                                    $"Your questioning finds a thread. A tanner at the edge of {vName} — not frightened, not defiant, just quietly wrong. The wrong kind of calm for someone who has seen what he has seen. You put the pieces together: one man, acting alone, laying markings in the fields at the Ashen's instruction. He does not know what they mean. He knows what he was paid and what he was threatened with.",
+                                    $"Your questioning finds a thread. A tanner at the edge of {vName} — not frightened, not defiant, just quietly wrong. The wrong kind of calm for someone who has seen what he has seen. You put the pieces together: one man, acting alone, laying markings in the fields at the demon-cult's instruction. He does not know what they mean. He knows what he was paid and what he was threatened with.",
                                     new List<InquiryElement>
                                     {
                                         new InquiryElement("x1", "Execute him publicly — make an example.", null, true,
                                             "Crime +5. Village preserved. Relation with settlement lord +5."),
                                         new InquiryElement("x2", "Exile him. Tell the village what was found.", null, true,
-                                            "He escapes. The Ashen lose this agent here, for now."),
+                                            "He escapes. The demon-cult lose this agent here, for now."),
                                         new InquiryElement("x3", "Use him — feed false information through the channel.", null, true,
                                             "Calculating +1. Difficult to sustain, but the intelligence value is real."),
                                     },
@@ -479,11 +479,11 @@ namespace AshAndEmber
                                                 Msg("You hold a brief public reckoning. The tanner does not deny it. The village watches. The elder thanks you. The settlement lord, receiving word of how you handled it, revises his opinion of you upward — you found the problem, judged it, and left the village intact.", GoodColor);
                                                 break;
                                             case "x2":
-                                                Msg("You escort him to the village boundary and tell him what exile means in your jurisdiction: never return, never make contact, and be grateful the alternative was available. He goes. The Ashen network loses this thread — but threads can be replaced.", DimColor);
+                                                Msg("You escort him to the village boundary and tell him what exile means in your jurisdiction: never return, never make contact, and be grateful the alternative was available. He goes. The demon-cult network loses this thread — but threads can be replaced.", DimColor);
                                                 break;
                                             case "x3":
                                                 ShiftTrait(DefaultTraits.Calculating, 1);
-                                                Msg("You explain his situation to him precisely. He understands. Whether he cooperates fully or plays both sides is a question you cannot answer without infrastructure you do not have. What you have is a frightened man with divided loyalties and a specific contact in the Ashen's local network. That is worth something.", AshenColor);
+                                                Msg("You explain his situation to him precisely. He understands. Whether he cooperates fully or plays both sides is a question you cannot answer without infrastructure you do not have. What you have is a frightened man with divided loyalties and a specific contact in the demon-cult's local network. That is worth something.", AshenColor);
                                                 break;
                                         }
                                     }, null, "", false), false, true);
@@ -608,7 +608,7 @@ namespace AshAndEmber
                             try { MageKnowledge.RemoveWhispers(3); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                             if (_rng.NextDouble() < 0.5)
                             {
-                                // She was Ashen — casts Curse before dying
+                                // She was cult — casts Curse before dying
                                 int w = 5 + _rng.Next(8);
                                 WoundPartyTroops(w);
                                 try { AgePlayer(3); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
@@ -716,7 +716,7 @@ namespace AshAndEmber
                 $"A worn priest intercepts you at the city gate of {cName}. " +
                 $"He speaks quickly — he has been turned away by two lords already. " +
                 $"He wants to build a sanctuary here: a place where the honourable can seek " +
-                $"blessing, healing, and protection against the Ashen. He needs coin. A great deal of it.",
+                $"blessing, healing, and protection against the demon-cult. He needs coin. A great deal of it.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Donate 10,000 denars — build it properly.", null, true,
@@ -805,7 +805,7 @@ namespace AshAndEmber
         }
 
         // ── LV_ColdEmbrace — village leave ────────────────────────────────────
-        // Resting in the afternoon, a ring of Ashen Spawn closes around you.
+        // Resting in the afternoon, a ring of demons closes around you.
         // They reach out the cold and wait.
         private static void LV_ColdEmbrace(Settlement s)
         {
@@ -814,7 +814,7 @@ namespace AshAndEmber
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "★ The Circle Closes",
                 "You are resting in the afternoon shade outside the village when they arrive. " +
-                "A ring of Ashen Spawn — grey-cloaked, cold-eyed — has closed around you without a sound. " +
+                "A ring of demons — grey-cloaked, cold-eyed — has closed around you without a sound. " +
                 "They do not speak. They extend their hands toward you, and the air drops ten degrees. " +
                 "They are offering you something.",
                 new List<InquiryElement>
@@ -837,7 +837,7 @@ namespace AshAndEmber
                             BecomeAshen();
                             Msg("You reach back. The cold is not a sensation — it is a state. " +
                                 "The grey settles into your eyes before you are aware it has begun. " +
-                                "The Ashen Spawn lower their hands. You are one of them now.", BadColor);
+                                "The demons lower their hands. You are one of them now.", BadColor);
                             break;
                         case "b":
                             if (_rng.NextDouble() < athChance)

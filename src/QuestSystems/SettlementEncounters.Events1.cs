@@ -70,14 +70,14 @@ namespace AshAndEmber
 
             if (roll == 0)
             {
-                // a) Daughter kidnapped by the Ashen — mother blames you, then comes for you
+                // a) Daughter kidnapped by the demon-cult — mother blames you, then comes for you
                 ShiftTrait(DefaultTraits.Mercy, -1);
                 _mothersPleaPhase = 5;
                 _mothersPleaCountdown = 5;
                 MageKnowledge._deferredInquiry = () =>
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                         "★  Ash's Debt",
-                        "A messenger reaches you on the road — rough-spoken, half-panicked, sent by the same village. The girl you healed is gone. Taken in the night by figures in grey cloaks. The mother sent word not as a plea but as an accusation: she knows your kind now, and she knows the Ashen follow the fire. She says you painted a target on her daughter's forehead the moment you touched her.",
+                        "A messenger reaches you on the road — rough-spoken, half-panicked, sent by the same village. The girl you healed is gone. Taken in the night by figures in grey cloaks. The mother sent word not as a plea but as an accusation: she knows your kind now, and she knows the demon-cult follow the fire. She says you painted a target on her daughter's forehead the moment you touched her.",
                         new List<InquiryElement>
                         {
                             new InquiryElement("ok", "There is nothing to say.", null, true,
@@ -269,10 +269,10 @@ namespace AshAndEmber
         }
 
         // ═══════════════════════════════════════════════════════════════════
-        // NEW ENCOUNTERS — LEAVE CITY (mage, non-Ashen, clan tier ≥ 2)
+        // NEW ENCOUNTERS — LEAVE CITY (mage, non-cult, clan tier ≥ 2)
         // ═══════════════════════════════════════════════════════════════════
 
-        // LC_YoungMageHope — A young mage afraid of the Ashen asks about hope [Leadership]
+        // LC_YoungMageHope — A young mage afraid of the demon-cult asks about hope [Leadership]
         private static void LC_YoungMageHope(Settlement s)
         {
             float leadershipChance = SkillChance(DefaultSkills.Leadership, 0.35f);
@@ -282,7 +282,7 @@ namespace AshAndEmber
                 "✦  There Is Always Hope",
                 "A young man waits at the city gate with the stiff posture of someone who practiced what they would say and forgot it anyway. " +
                 "He can feel the fire in you from here. His own gift is new — two years, maybe three. " +
-                "He has heard what the Ashen do to people like him. He wants to know if it has to end that way.",
+                "He has heard what the demon-cult do to people like him. He wants to know if it has to end that way.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "\"There is always hope. If you know what you are, you can choose what you become.\"", null, true, hint),
@@ -301,7 +301,7 @@ namespace AshAndEmber
                                 ShiftTrait(DefaultTraits.Honor, 1);
                                 ChangeRenown(5f);
                                 Msg("He listens to you — not to the words, but to the way you say them. Something settles in him, then hardens. " +
-                                    "A week later, word reaches you from the north: a young mage was seen leading a small band of volunteers against an Ashen raiding column. " +
+                                    "A week later, word reaches you from the north: a young mage was seen leading a small band of volunteers against a demon-cult raiding column. " +
                                     "They held the village road. Against expectation, they held it. " +
                                     "His name is already travelling faster than he is. He inspired them not by being powerful — by being certain.", GoodColor);
                                 // Deferred consequence: castle town stirs — rebellion chance in ~14 days
@@ -313,7 +313,7 @@ namespace AshAndEmber
                                 Msg("You give him the words but not the weight — the right speech without the certainty behind it. " +
                                     "He nods and thanks you and you can see he is no more certain than before. " +
                                     "He will make a choice based on fear, not on what you said. You do not know what that choice will be.", DimColor);
-                                // Youth defects to Ashen — no mechanical consequence, narrative only
+                                // Youth defects to cult — no mechanical consequence, narrative only
                                 Msg("Three days later, the city guard reports a young man was seen leaving north " +
                                     "toward the grey hills. He took nothing but his coat.", BadColor);
                             }
@@ -337,7 +337,7 @@ namespace AshAndEmber
                                 Msg("He hears the urgency but not the reason. He runs — but without direction, without a plan, " +
                                     "toward the grey hills rather than away from them. " +
                                     "Your warning sent him exactly where you were warning him away from.", BadColor);
-                                Msg("A week later, the Ashen gain a recruit.", BadColor);
+                                Msg("A week later, the demon-cult gain a recruit.", BadColor);
                                 // No city rebellion — he went to the wrong side
                             }
                             break;
@@ -446,10 +446,10 @@ namespace AshAndEmber
         }
 
         // ═══════════════════════════════════════════════════════════════════
-        // NEW ENCOUNTERS — ENTER VILLAGE/TOWN (Ashen only, random)
+        // NEW ENCOUNTERS — ENTER VILLAGE/TOWN (cult only, random)
         // ═══════════════════════════════════════════════════════════════════
 
-        // EV_MemoryHunger — Ashen only; fading memories; potentially fatal choice
+        // EV_MemoryHunger — cult only; fading memories; potentially fatal choice
         private static void EV_MemoryHunger(Settlement s)
         {
             float leadershipChance = SkillChance(DefaultSkills.Leadership, 0.30f);
@@ -530,7 +530,7 @@ namespace AshAndEmber
         {
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "✦  Left Behind",
-                "In a room off the keep's great hall, placed on a shelf between two books as if it belonged there: a small object of grey stone that is cold in a way that has nothing to do with temperature. The Ashen put this here before the siege began — possibly years before. It is a marker. It means: we were here. We will return for it.",
+                "In a room off the keep's great hall, placed on a shelf between two books as if it belonged there: a small object of grey stone that is cold in a way that has nothing to do with temperature. The demon-cult put this here before the siege began — possibly years before. It is a marker. It means: we were here. We will return for it.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Destroy it completely.", null, true,
@@ -554,14 +554,14 @@ namespace AshAndEmber
                         case "b":
                             _ashenCrystalOutcome  = 2;
                             _ashenCrystalCountdown = 30;
-                            Msg("You wrap it in cloth and keep it separate from everything else. It will be cold to the touch for as long as you carry it. The Ashen use these to locate each other across distances. You now own a gap in their network. How long before the gap is noticed is a question without an answer yet.", AshenColor);
+                            Msg("You wrap it in cloth and keep it separate from everything else. It will be cold to the touch for as long as you carry it. The demon-cult use these to locate each other across distances. You now own a gap in their network. How long before the gap is noticed is a question without an answer yet.", AshenColor);
                             break;
                         case "c":
                             ShiftTrait(DefaultTraits.Calculating, 1);
                             _ashenCrystalOutcome      = 3;
                             _ashenCrystalSettlementId = null; // resolved in consequence via nearby settlement
                             _ashenCrystalCountdown    = 14;
-                            Msg("You leave it exactly where it is, touching nothing. When the Ashen return — and they will return — they will find the keep changed but the marker undisturbed. They will conclude their absence was unnoticed. You will know they concluded that. That is a small and specific advantage.", DarkColor);
+                            Msg("You leave it exactly where it is, touching nothing. When the demon-cult return — and they will return — they will find the keep changed but the marker undisturbed. They will conclude their absence was unnoticed. You will know they concluded that. That is a small and specific advantage.", DarkColor);
                             break;
                     }
                 }, null, "", false), false, true);
@@ -579,10 +579,10 @@ namespace AshAndEmber
             {
                 case 1: // destroyed — fire-mage finds you
                     MageKnowledge._deferredInquiry = () =>
-                        Msg("A fire-mage finds you on the road — young, precise, clearly following a thread she picked up some time ago. She was tracking an Ashen marker that has gone silent. She knew what it was. She knows you destroyed it. She does not thank you with words. She tells you something about where she found the thread's other end: a direction, a name, a piece of the network you did not have before.", FireColor);
+                        Msg("A fire-mage finds you on the road — young, precise, clearly following a thread she picked up some time ago. She was tracking a demon-cult marker that has gone silent. She knew what it was. She knows you destroyed it. She does not thank you with words. She tells you something about where she found the thread's other end: a direction, a name, a piece of the network you did not have before.", FireColor);
                     break;
 
-                case 2: // kept — Ashen collector arrives
+                case 2: // kept — cult collector arrives
                     MageKnowledge._deferredInquiry = () =>
                     {
                         MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
@@ -638,7 +638,7 @@ namespace AshAndEmber
                             .FirstOrDefault();
                         if (nearbySettlement != null) ChangeRelWithOwner(nearbySettlement, 5);
                         string sName = nearbySettlement?.Name?.ToString() ?? "the keep";
-                        Msg($"Word reaches you: Ashen scouts entered {sName} two nights ago and departed before dawn. The garrison commander reports they went directly to one room and left without searching further — they found the marker undisturbed and concluded their absence went unnoticed. Your deception holds. The garrison commander, who trusted you with this intelligence, is now more inclined to trust you with others.", DimColor);
+                        Msg($"Word reaches you: cult scouts entered {sName} two nights ago and departed before dawn. The garrison commander reports they went directly to one room and left without searching further — they found the marker undisturbed and concluded their absence went unnoticed. Your deception holds. The garrison commander, who trusted you with this intelligence, is now more inclined to trust you with others.", DimColor);
                     };
                     break;
             }
@@ -960,7 +960,7 @@ namespace AshAndEmber
                             if (SkillRoll(DefaultSkills.Roguery, 0.25f))
                             {
                                 ShiftTrait(DefaultTraits.Calculating, 1);
-                                Msg("His hands moved once — toward his left pocket when you said 'visitors', then caught themselves. He was given something to keep and told to say nothing. You do not confront him. You wait until he uses the privy and check the pocket: a folded note with an Ashen symbol and a date three days from now. He was given a message to hold, not just a cover story. The date is a meeting.", AshenColor);
+                                Msg("His hands moved once — toward his left pocket when you said 'visitors', then caught themselves. He was given something to keep and told to say nothing. You do not confront him. You wait until he uses the privy and check the pocket: a folded note with a demon-cult symbol and a date three days from now. He was given a message to hold, not just a cover story. The date is a meeting.", AshenColor);
                             }
                             else
                                 Msg("You read the performance but not the content behind it — you can see the lie clearly but not what it contains. He was told something and told to deny it. What specifically, you cannot extract from his manner alone. You know the shape of the secret without its substance. That is useful, imprecisely.", DimColor);
@@ -1176,7 +1176,7 @@ namespace AshAndEmber
                             {
                                 ShiftTrait(DefaultTraits.Calculating, 1);
                                 ChangeRenown(5f);
-                                Msg("You use a shop window and a narrow passage to get a clear look without stopping. City watch — not uniformed, working plainclothes. This is a sanctioned surveillance, not a freelance tail. Someone in city administration has an official interest in your movements. That is a different kind of problem than an Ashen watcher. You continue your route as if unaware and note everything they observe.", DimColor);
+                                Msg("You use a shop window and a narrow passage to get a clear look without stopping. City watch — not uniformed, working plainclothes. This is a sanctioned surveillance, not a freelance tail. Someone in city administration has an official interest in your movements. That is a different kind of problem than a demon-cult watcher. You continue your route as if unaware and note everything they observe.", DimColor);
                             }
                             else
                                 Msg("You try to get a look but they are better than you expected and shift position exactly when you commit to the read. You confirm they are professional and confirm they are still there. That is all you get. You cannot tell employer, motive, or number — there may be more than one. You continue with incomplete information, which is the standard condition.", DimColor);
@@ -1409,7 +1409,7 @@ namespace AshAndEmber
                                 Msg("The permit office's response comes in two days: legitimate. The merchant had a real permit and a delayed shipment and is furious about the detention at a level that may become a formal complaint. The guard's instinct was wrong. Your backing made it stick. He is embarrassed. You have a complaint pending. The seal was genuine.", BadColor);
                             break;
                         case "c":
-                            Msg("The permit was forged. The wagon contained grey-dyed cloth that matches Ashen courier colours exactly — not contraband in any legal sense, but material with a specific use. It cleared your gate. The merchant was gone before the guard's follow-up instinct completed. You made a small decision at a gate and someone's supply run went through. Whether that matters depends on what the cloth is for.", BadColor);
+                            Msg("The permit was forged. The wagon contained grey-dyed cloth that matches cult courier colours exactly — not contraband in any legal sense, but material with a specific use. It cleared your gate. The merchant was gone before the guard's follow-up instinct completed. You made a small decision at a gate and someone's supply run went through. Whether that matters depends on what the cloth is for.", BadColor);
                             break;
                         case "d":
                             ShiftTrait(DefaultTraits.Calculating, 1);
