@@ -2,6 +2,26 @@
 
 ---
 
+## v0.6.0 — The Night Retold
+
+### Settlement encounters, questlines, and world events re-themed
+- `src/QuestSystems/` was inherited from Ash and Ember largely verbatim and, despite being wired into live Darkest Night saves since day one, still told the Ash and Ember story in its flavour text — the "Ashen" cold-fire death-cult, an "inner fire" that ages its caster, noble-blood mages, gold-heavy rewards. A systematic vocabulary pass retexts every settlement encounter, world event, and questline consistently: "the Ashen" reads as a human demon-worshipping cult where a network of lords, agents, and markers is implied; "Ashen Spawn" reads as demons; mechanical identifiers, save keys, and method names are untouched (`ElementLordRegistry.IsAshenLord`, `MageKnowledge.IsAshen`, `ashen_kingdom`, `ColorSchool.Ashen`, and all `SE_*`/`LDQ2_*`/`LDM_*` save keys survive exactly as before — a save from an earlier build loads unaffected).
+- `CampaignMapEvents.Branded.cs` ("The Branded") is rewritten in full as **"The Turning"**: a caster lord losing the argument with the Night's corruption rather than an "inner fire" burning them from within — the three-way choice (end it, hold the corruption back, walk away) and its underlying mechanics are unchanged.
+- The mage-teacher family of encounters (`E_OldFlameSeer`, `EV4_GiftedChild`, and others) now speak in terms of the Spellbook and its formulas rather than an innate noble "fire."
+- **`DragonQuestSystem` (The Sundered Crown) and `AshenQuestSystem` (The Hunger of the Void)** — Ash and Ember's two campaign-ending quests — are retired for this world: both premises (a First Emperor's soul shattered into a world-ending cycle; a player who consecrates seven capitals to end the world) have no place in The Darkest Night, which already owns this narrative slot with the Demon Lord endgame (`Apocalypse/DemonLordSystem`). Both triggers are gated off (`DormantForDarkestNight`) so neither can start in a new game; every method, save key, and in-progress save from an earlier build is left untouched and continues to resolve normally.
+
+### Six new settlement encounters
+- **The Painted Door** — a door-to-door ward seller; buying, denouncing, or ignoring him each carries a deferred, unexpected payoff.
+- **One Watch** — asked to stand a short-staffed gate watch at dusk; standing it, posting a substitute, and refusing all resolve differently weeks later.
+- **The Vial Trade** — a Bloodbound blood-broker wants your Demon Blood, or a prisoner's.
+- **Born at the Turning** — a child born at the exact moment of nightfall, and a village that wants it given back to the Night.
+- **The Family That Would Not Open** — a shuttered croft, a salt-laid threshold, and a family convinced you are wearing a borrowed face.
+- **The Bell of a Nameless Town** — an ownerless city-state's muster bell, ringing for any company willing to hold its wall for one night.
+
+Each follows the house pattern (`E_OldEnemy`/`FireOldEnemyConsequence`): an immediate multi-choice inquiry, persisted state synced under new `SE_*` keys, and a deferred consequence fired days to weeks later via the daily tick.
+
+---
+
 ## v0.5.0 — The Children of the Forest
 
 ### Wands, scarce at last
