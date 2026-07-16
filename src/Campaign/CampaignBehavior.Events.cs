@@ -147,71 +147,58 @@ namespace TheDarkestNight
                 // Apply any character-creation backstory boon AFTER the resets above,
                 // so it is not wiped (the pick was recorded during creation).
                 try { CreationBackstoryRework.ApplyPendingBoons(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                // Every culture — Sturgian included — takes the ordinary path: the Gift
-                // prompt decides their magic. The Ashen are something you BECOME in play
-                // (the Last Ember at a century's age, captivity, the cold's darker turns),
-                // never a starting state.
-                MageKnowledge._deferredInquiry = ShowGiftPrompt;
+                // Every culture takes the same path now: magic is learned through the
+                // Spellbook, not granted by a childhood "Gift" choice. The old blocking
+                // prompt could wedge (issue 3) and, worse, gated ALL of the world setup
+                // below behind its callbacks — if the popup never resolved, city-states,
+                // imperial reassignment, and lord seeding silently never ran either.
+                FinishNewGameWorldSetup();
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
-        private void ShowGiftPrompt()
+        private void FinishNewGameWorldSetup()
         {
-            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                "The Gift",
-                "As a child, you sometimes sensed things others could not — warmth ebbing from the wounded, the weight behind dying eyes. Do you feel it still?",
-                new List<InquiryElement>
-                {
-                    new InquiryElement("yes", "I feel it still.", null, true,
-                        "The fire stirs in you. Press Alt+X/LB+RB to open your grimoire."),
-                    new InquiryElement("no", "I don't feel it.", null, true,
-                        "The fire faded. You live as others do, and the world will treat you as it treats them."),
-                },
-                false, 1, 1,
-                "Choose.",
-                "",
-                chosen =>
-                {
-                    bool isMage = chosen?.Any(e => e.Identifier is string s && s == "yes") == true;
-                    MageKnowledge.SetMage(isMage);
-                    if (isMage)
-                    {
-                        InformationManager.DisplayMessage(new InformationMessage(
-                            "The fire stirs in you. Its gestures are written in your Codex of Hand and Voice.",
-                            new Color(0.7f, 0.5f, 1.0f)));
-                    }
-                    else
-                    {
-                        InformationManager.DisplayMessage(new InformationMessage(
-                            "Your fire is silent. You live as others do, and the world will treat you as it treats them.",
-                            new Color(0.6f, 0.6f, 0.6f)));
-                    }
-                    _selectionDone = true;
-                    try { ElementLordRegistry.SeedInitialLords(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                    // Seed the attuned seers — now the mage's TEACHERS — for every new
-                    // campaign (was previously tied to the removed Living-Ember choice).
-                    try { NatureCampaignBehavior.EstablishForNewCampaign(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                    try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                    try { AshenCitySystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                    try { ReassignImperialSettlements(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                    // Greet every new ruler with a brief pointer to the journal — the
-                    // full controls manual now lives there ("Notes for the Adventurer"),
-                    // so we no longer dump the whole codex on them at the start.
-                    MageKnowledge._deferredInquiry = MageKnowledge.ShowControlsPointer;
-                },
-                _ =>
-                {
-                    MageKnowledge.SetMage(false);
-                    _selectionDone = true;
-                    try { ElementLordRegistry.SeedInitialLords(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                    try { NatureCampaignBehavior.EstablishForNewCampaign(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                    try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                    try { AshenCitySystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                    try { ReassignImperialSettlements(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                },
-                "", false
-            ), false, true);
+            MageKnowledge.SetMage(false);
+            _selectionDone = true;
+            // Issue 15 — vanilla hands every new character 1000 gold, which reads
+            // as untouched by the barter economy's ~10x scarcity everywhere else
+            // (EconomyMath.GoldScarcityFactor). Clamp down to the scarcity-scaled
+            // starting purse; never raise it if a keepsake or other system already
+            // granted less (or nothing) by the time this runs.
+            try
+            {
+                if (Hero.MainHero != null && Hero.MainHero.Gold > EconomyMath.PlayerStartingGold)
+                    Hero.MainHero.Gold = EconomyMath.PlayerStartingGold;
+            }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            // Issue 17 — the legacy unified-element NPC lord casters are retired
+            // for new games; the Spellbook's own SpellcasterLords/Troops and the
+            // Nature seers carry NPC magic now. See LegacyContent.LegacyNpcCastersEnabled.
+            if (LegacyContent.LegacyNpcCastersEnabled)
+                try { ElementLordRegistry.SeedInitialLords(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { NatureCampaignBehavior.EstablishForNewCampaign(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            // The Ashen are retired for new games (v0.8.0, issue 7) — demons already
+            // own the night in this fiction, and a second immortal-villain kingdom
+            // competing for the same narrative space was clutter. Never establish
+            // them on a fresh save; see LegacyContent.AshenEnabled.
+            if (LegacyContent.AshenEnabled)
+            {
+                try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { AshenCitySystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            }
+            try { ReassignImperialSettlements(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            // Eager first city-state pass (issue 4): scope every faction down to its
+            // starting towns FIRST (orphaning any clan outside them), then convert the
+            // newly-ownerless towns into city-states immediately, rather than waiting
+            // for CityStateMath.SettleDelayDays to elapse on the daily tick. The daily
+            // tick keeps running afterward as the ongoing repair pass.
+            try { FactionScoping.ScopeAllFactionsNow(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { CityStateSystem.ConvertOwnerlessTownsNow(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            // Greet every new ruler with a brief pointer to the journal — the full
+            // controls manual lives there ("Notes for the Adventurer"), so this is the
+            // only popup queued at new-game start.
+            MageKnowledge._deferredInquiry = MageKnowledge.ShowControlsPointer;
         }
 
         private static void ReassignImperialSettlements()

@@ -48,6 +48,22 @@ namespace TheDarkestNight
         // rolls through AshenRuinMath.RecoveryCooldownDays itself. Nothing to
         // duplicate here.
 
+        // ── v0.8.0 (issue 12) — NPC charters, world texture only ────────────────
+        // A charter The Camp runs on its own, independent of the player's one
+        // slot: pure flavour (a notification, no player state), so the odds and
+        // duration are generous compared to the player's own careful math above.
+        public const int NpcExpeditionChancePercentPerWeek = 25;
+        public const int NpcExpeditionMinDays = 5;
+        public const int NpcExpeditionMaxDays = 9;
+
+        public static bool RollNpcExpeditionStarts(int roll0To99) => roll0To99 < NpcExpeditionChancePercentPerWeek;
+
+        public static int RollNpcExpeditionDays(Random rng)
+        {
+            if (rng == null) return NpcExpeditionMinDays;
+            return NpcExpeditionMinDays + rng.Next(NpcExpeditionMaxDays - NpcExpeditionMinDays + 1);
+        }
+
         private static bool IsHighTier(RuinTier tier) => tier >= RuinTier.Brutal;
 
         // ── Success chance ───────────────────────────────────────────────────

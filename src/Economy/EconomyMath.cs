@@ -72,6 +72,15 @@ namespace TheDarkestNight
         public const float GarrisonGrowthScale = 0.5f;
         public const float AutoRecruitmentScale = 0.5f;
 
+        // ── v0.8.0 (issue 15) — lord parties read scarcity-thin too, not just
+        // gold. Applied as a straight multiplier on the vanilla party-size
+        // limit (EconomyPartySizeModel.GetPartyMemberSizeLimit).
+        public const float LordPartySizeMult = 0.5f;
+
+        // A new character starts with roughly a tenth of vanilla's 1000 gold —
+        // consistent with GoldScarcityFactor everywhere else in this economy.
+        public const int PlayerStartingGold = 50;
+
         // Town food-stock / militia ceilings, expressed as a fraction of the
         // settlement's Prosperity so richer towns still hold a little more
         // than poor ones, but every town sits at roughly half (or less) of

@@ -56,10 +56,23 @@ namespace TheDarkestNight
 
         internal static bool IsActive => _active;
 
+        // ── NPC charter (issue 12) — world texture only, fully independent of
+        // the player's own single-slot expedition above. Just enough state to
+        // resolve later: the day it ends, and which ruin it's visiting.
+        private static bool   _npcActive;
+        private static string _npcVillage;
+        private static int    _npcEndDay;
+
         public override void RegisterEvents()
         {
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
+            CampaignEvents.WeeklyTickEvent.AddNonSerializedListener(this, OnWeeklyTick);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
+        }
+
+        private void OnWeeklyTick()
+        {
+            try { TickNpcExpedition(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnSessionLaunched(CampaignGameStarter starter)
@@ -92,6 +105,10 @@ namespace TheDarkestNight
                 store.SyncData("EXP_Team",       ref _activeTeam);
                 store.SyncData("EXP_DaysLeft",   ref _activeDaysLeft);
 
+                store.SyncData("EXPED_NPC_Active", ref _npcActive);
+                store.SyncData("EXPED_NPC_Village", ref _npcVillage);
+                store.SyncData("EXPED_NPC_EndDay",  ref _npcEndDay);
+
                 if (ids != null && names != null && specs != null && proven != null
                     && ids.Count > 0
                     && ids.Count == names.Count && ids.Count == specs.Count && ids.Count == proven.Count)
@@ -123,7 +140,56 @@ namespace TheDarkestNight
             _activeVillage  = null;
             _activeTeam     = 0;
             _activeDaysLeft = 0;
+            _npcActive  = false;
+            _npcVillage = null;
+            _npcEndDay  = 0;
             GenerateFreshPool();
+        }
+
+        // ── NPC charter (issue 12) ──────────────────────────────────────────────
+        // Weekly: if The Camp isn't already running one, roll a chance to send one
+        // out; when the day comes, resolve it with a notification only — no gold,
+        // renown, or items change hands for the player either way.
+        private static void TickNpcExpedition()
+        {
+            if (Campaign.Current == null) return;
+
+            if (_npcActive)
+            {
+                if ((int)CampaignTime.Now.ToDays < _npcEndDay) return;
+                ResolveNpcExpedition();
+                return;
+            }
+
+            if (!ExpeditionMath.RollNpcExpeditionStarts(_rng.Next(100))) return;
+
+            var ruins = AshenRuinDefs.All;
+            if (ruins == null || ruins.Length == 0) return;
+            var def = ruins[_rng.Next(ruins.Length)];
+
+            _npcActive  = true;
+            _npcVillage = def.VillageName;
+            _npcEndDay  = (int)CampaignTime.Now.ToDays + ExpeditionMath.RollNpcExpeditionDays(_rng);
+        }
+
+        private static void ResolveNpcExpedition()
+        {
+            var def = AshenRuinDefs.All.FirstOrDefault(r => r.VillageName == _npcVillage);
+            string ruinName = def?.RuinName ?? "an old ruin";
+            RuinTier tier = def?.Tier ?? RuinTier.Standard;
+
+            bool success = _rng.Next(100) < ExpeditionMath.BaseSuccessChance(tier);
+            string text = success
+                ? $"A charter out of The Camp returned from {ruinName}, laden with whatever the dark let them keep."
+                : $"A charter out of The Camp did not return from {ruinName}. The Camp writes off the loss and moves on.";
+            Color color = success ? new Color(0.70f, 0.60f, 0.35f) : new Color(0.5f, 0.35f, 0.3f);
+
+            try { InformationManager.DisplayMessage(new InformationMessage(text, color)); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+
+            _npcActive  = false;
+            _npcVillage = null;
+            _npcEndDay  = 0;
         }
 
         // ── Leader pool generation ───────────────────────────────────────────────

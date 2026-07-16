@@ -95,7 +95,7 @@ namespace TheDarkestNight
             _raidCooldown = 3; // slight cooldown so back-to-back raids don't stack wildly
 
             InformationManager.DisplayMessage(new InformationMessage(
-                $"Spoils of the Raid — the tribesmen strip the village bare. (+{bonusGold} gold)",
+                $"Spoils of the Raid — your riders strip the village bare. (+{bonusGold} gold)",
                 new Color(0.85f, 0.6f, 0.2f)));
         }
 

@@ -680,30 +680,49 @@ namespace TheDarkestNight
         // the same treatment as Sturgia → Northman and Aserai → Duneborn. A couple
         // of iconic units get more evocative overrides; everything else is a plain
         // prefix swap.
+        // Battania IS the Forest Widows (ruler: Grand Widow, court: Widows) — a court
+        // of women who buy a season of quiet beneath the leaves with a life freely
+        // offered. Shipped as "Forest Clan X" under Ash and Ember, whose Battania were
+        // the Forest Clans. NOTE: the battania tree is shared with the Children of the
+        // Forest (Pen Cannoc), who deliberately keep Battanian culture and troops
+        // (CityStateSystem), so these names are worn by the Children too — the neutral
+        // "Forest"/"deep wood" wording is chosen to read correctly for both, rather
+        // than tying the whole tree to the Widows' court.
         private static readonly Dictionary<string, string> _forestClansTroopOverrides =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
-            { "Battanian Volunteer",     "Forest Clan Whelp"              },
-            { "Battanian Fian Champion", "Champion of the Forest Clans"   },
+            { "Battanian Volunteer",     "Forest Whelp"              },
+            { "Battanian Fian Champion", "Champion of the Deep Wood" },
         };
 
         public static void RenameBattanianTroops()
-            => RenameCultureTroops("battania", "Battanian ", "Forest Clan ", _forestClansTroopOverrides);
+            => RenameCultureTroops("battania", "Battanian ", "Forest ", _forestClansTroopOverrides);
 
         // ── Khuzait troop rename ───────────────────────────────────────────────
-        // Renames all vanilla Khuzait troops from "Khuzait X" to "Tribal X", with
-        // specific overrides for key units. Idempotent: already-renamed names are
-        // left unchanged. Called once per session alongside the kingdom rename.
+        // Renames all vanilla Khuzait troops from "Khuzait X" to "Bloodbound X",
+        // with specific overrides for key units. Idempotent: the rename only fires
+        // on the vanilla "Khuzait " prefix, so an already-renamed name is skipped.
+        // Called once per session alongside the kingdom rename.
+        //
+        // Naming: this shipped as "Tribal X" / "God-King's Vanguard" under Ash and
+        // Ember, where khuzait were the Tribes of the East. The Darkest Night's
+        // Phase 7 reworked khuzait into the Bloodbound (ruler: the Huntmaster —
+        // BloodboundCulture.RulerTitle) and swapped the KINGDOM rename call in
+        // AshenCitySystem.Tick.EnsureKingdomRenames, but left this TROOP rename
+        // pointed at the old vocabulary — so the Bloodbound fielded "Tribal
+        // Lancers" led by a "God-King's Vanguard". Troop names are display-only
+        // (read from CharacterObject each session, never persisted), so retargeting
+        // them is save-safe.
         private static readonly Dictionary<string, string> _tribalTroopOverrides =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
-            { "Khuzait Nomad",        "Tribesman"             },
-            { "Khuzait Khan's Guard", "God-King's Vanguard"   },
-            { "Khuzait Raider",       "Tribal Ravager"        },
+            { "Khuzait Nomad",        "Blooded Rider"         },
+            { "Khuzait Khan's Guard", "Huntmaster's Vanguard" },
+            { "Khuzait Raider",       "Blood Ravager"         },
         };
 
         public static void RenameKhuzaitTroops()
-            => RenameCultureTroops("khuzait", "Khuzait ", "Tribal ", _tribalTroopOverrides);
+            => RenameCultureTroops("khuzait", "Khuzait ", "Bloodbound ", _tribalTroopOverrides);
 
         private static void SetKingdomField(Kingdom kingdom, string[] candidates, TextObject value)
         {
@@ -761,28 +780,39 @@ namespace TheDarkestNight
         // units get more evocative overrides; everything else is a plain prefix
         // swap. Idempotent (already-renamed names are skipped by the "Sturgian "
         // guard). Called once per session alongside the other troop renames.
+        // Sturgia IS the Wolf Brothers (ruler: Packmaster, kin: Kinsman) — they hold
+        // Tyal and Sibir the way a wolf holds a kill. Shipped as "Northman X" under
+        // Ash and Ember; retargeted with the rest of the troop trees. NOTE: the
+        // sturgia tree is shared with The Camp (Revyl), which deliberately keeps the
+        // original Sturgian troops (CityStateSystem.IsCampSettlement), so these names
+        // are worn by the Camp's sellswords too — as "Northman X" always was.
+        // "Chosen" is deliberately avoided: the Southern Empire faction owns that word.
         private static readonly Dictionary<string, string> _northmenTroopOverrides =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
-            { "Sturgian Recruit",             "Northman Bondsman" },
-            { "Sturgian Druzhinnik Champion", "Northman Chosen"   },
+            { "Sturgian Recruit",             "Pack Whelp"        },
+            { "Sturgian Druzhinnik Champion", "Packmaster's Own"  },
         };
 
         public static void RenameSturgianTroops()
-            => RenameCultureTroops("sturgia", "Sturgian ", "Northman ", _northmenTroopOverrides);
+            => RenameCultureTroops("sturgia", "Sturgian ", "Wolf ", _northmenTroopOverrides);
 
         // ── Aserai → Duneborn troop rename ─────────────────────────────────────
         // Renames vanilla Aserai troops from "Aserai X" to "Duneborn X". "Duneborn"
         // reads cleanly as an attributive, so most units need no override.
+        // Aserai IS the Tower (ruler: Archmagister, sworn: Warlock) — scholars who
+        // hold their one seat the way a library holds a locked vault, and who teach
+        // the patient. Shipped as "Duneborn X" under Ash and Ember, whose Aserai were
+        // the Duneborn; that faction no longer exists.
         private static readonly Dictionary<string, string> _dunebornTroopOverrides =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
-            { "Aserai Recruit",       "Duneborn Servant"    },
-            { "Aserai Vanguard Faris", "Duneborn Bloodsworn" },
+            { "Aserai Recruit",        "Tower Novice"     },
+            { "Aserai Vanguard Faris", "Magister's Lance" },
         };
 
         public static void RenameAseraiTroops()
-            => RenameCultureTroops("aserai", "Aserai ", "Duneborn ", _dunebornTroopOverrides);
+            => RenameCultureTroops("aserai", "Aserai ", "Tower ", _dunebornTroopOverrides);
 
         // Shared troop-rename loop used by every culture rename above. Matches
         // CharacterObjects by their CULTURE (not StringId prefix — troop ids are

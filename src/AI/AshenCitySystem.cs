@@ -182,6 +182,16 @@ namespace TheDarkestNight
             catch { return false; }
         }
 
+        // True once the Ashen have actually been established in THIS save — either
+        // restored from a v0.7.x save's persisted clan ids (see Persistence.cs'
+        // Save(), which repopulates _ashenClanIds before the first daily tick) or,
+        // if LegacyContent.AshenEnabled is ever flipped back on, freshly converted
+        // by Initialize(). New-game setup and the daily tick both gate the
+        // establishment calls (Initialize/DailyTick) on this OR LegacyContent.
+        // AshenEnabled, so an old save's Ashen kingdom keeps ticking exactly as
+        // before while a brand-new game never stands one up.
+        public static bool HasEstablishedClans => _ashenClanIds.Count > 0;
+
         public static void ResetForNewGame()
         {
             _initialized       = false;

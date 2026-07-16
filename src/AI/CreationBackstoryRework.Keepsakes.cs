@@ -278,6 +278,22 @@ namespace TheDarkestNight
             args.SetLevelToTraits(1);
         }
 
+        // A playtester-visible confirmation that the pick actually landed — the
+        // null-id bug in OnCharacterCreationFinalize used to silently swallow this.
+        private static string KeepsakeConfirmationText(KeepsakeId keepsake)
+        {
+            switch (keepsake)
+            {
+                case KeepsakeId.Blade:    return "The keepsake rides with you: a good one-handed sword.";
+                case KeepsakeId.Book:     return "The keepsake rides with you: the Spellbook, unlocked, with two formulas already known.";
+                case KeepsakeId.Mount:    return "The keepsake rides with you: a war-capable horse and salted fish in its stores.";
+                case KeepsakeId.Goods:    return "The keepsake rides with you: cheese, butter, fish, and a mule.";
+                case KeepsakeId.Heirloom: return "The keepsake rides with you: clan renown, and a wand whose working you don't understand.";
+                case KeepsakeId.Luck:     return "The keepsake rides with you: nothing but luck. It hasn't run out yet.";
+                default:                  return "The keepsake rides with you.";
+            }
+        }
+
         // ── Boon grants (post new-game-reset) ─────────────────────────────────
 
         private static void ApplyKeepsakeBoon(KeepsakeId keepsake)

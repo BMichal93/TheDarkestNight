@@ -174,15 +174,7 @@ namespace TheDarkestNight
                 var pt = banditClan.DefaultPartyTemplate;
                 if (pt == null) return null;
 
-                Hideout hideout = null;
-                try
-                {
-                    Settlement hs = banditClan.Settlements.FirstOrDefault(s => s?.Hideout != null)
-                        ?? Settlement.All.Where(s => s?.Hideout != null)
-                            .OrderBy(s => (s.GetPosition2D - anchor).LengthSquared).FirstOrDefault();
-                    hideout = hs?.Hideout;
-                }
-                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                Hideout hideout = FindHideoutFallback(banditClan, anchor);
                 if (hideout == null) return null;
 
                 const float scatter = 2.5f;
@@ -264,6 +256,28 @@ namespace TheDarkestNight
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return false; }
         }
 
+        // The same 3-level fallback CampaignMapEvents.Helpers.SpawnAshenSpawnParty
+        // uses (a mechanic already proven working in this codebase): the bandit
+        // clan's own hideout, then the nearest hideout to the anchor, then ANY
+        // hideout in the world. A null hideout crashes the post-battle loot
+        // screen, so CreateBanditParty must never receive one — but bailing out
+        // after only the first two levels (the demon spawn's old behaviour) is
+        // one silent-failure step short of that proven path.
+        private static Hideout FindHideoutFallback(Clan banditClan, Vec2 anchor)
+        {
+            try
+            {
+                Settlement hs = banditClan.Settlements.FirstOrDefault(s => s?.Hideout != null);
+                if (hs == null)
+                    hs = Settlement.All.Where(s => s?.Hideout != null)
+                        .OrderBy(s => (s.GetPosition2D - anchor).LengthSquared).FirstOrDefault();
+                if (hs == null)
+                    hs = Settlement.All.FirstOrDefault(s => s?.Hideout != null);
+                return hs?.Hideout;
+            }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
+        }
+
         private static string CultureHint(Settlement s)
         {
             try { return s?.Culture?.StringId ?? ""; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return ""; }
@@ -298,15 +312,7 @@ namespace TheDarkestNight
                 var pt = banditClan.DefaultPartyTemplate;
                 if (pt == null) return null;
 
-                Hideout hideout = null;
-                try
-                {
-                    Settlement hs = banditClan.Settlements.FirstOrDefault(s => s?.Hideout != null)
-                        ?? Settlement.All.Where(s => s?.Hideout != null)
-                            .OrderBy(s => (s.GetPosition2D - anchor).LengthSquared).FirstOrDefault();
-                    hideout = hs?.Hideout;
-                }
-                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                Hideout hideout = FindHideoutFallback(banditClan, anchor);
                 if (hideout == null) return null;
 
                 const float scatter = 1.0f;
@@ -387,16 +393,30 @@ namespace TheDarkestNight
         // within the hour, so nothing "escapes" toward safety for long.
         private const float EngageSearchRadius = 40f;
 
+        // Packs within this radius of each other band together — the smaller
+        // escorts the larger rather than each hunting alone (issue 16).
+        private const float BandRadius = 8f;
+
         private void DirectDemonParties()
         {
-            foreach (var id in _partyOriginalSize.Keys.ToList())
+            var living = _partyOriginalSize.Keys
+                .Select(id => MobileParty.All.FirstOrDefault(p => p != null && p.StringId == id))
+                .Where(p => p != null && p.IsActive)
+                .ToList();
+
+            foreach (MobileParty party in living)
             {
                 try
                 {
-                    MobileParty party = MobileParty.All.FirstOrDefault(p => p != null && p.StringId == id);
-                    if (party == null || !party.IsActive) continue;
                     if (party.MapEvent != null) continue;           // already fighting
                     if (party.BesiegedSettlement != null) continue; // already assaulting
+
+                    // Pin the party to pure aggression on the campaign map every
+                    // hour: max attack initiative, zero avoid initiative, and never
+                    // shy from the main party — a vanilla AI nudge toward caution
+                    // gets overwritten again within the hour (requirement 7a/7b/7c).
+                    try { party.Ai.SetInitiative(1f, 0f, 6f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { party.Ai.SetDoNotAttackMainParty(0); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                     // Faction D (the Bloodbound) and Faction C (the Forest
                     // Widows) can each buy a few days of being left alone — a
@@ -423,7 +443,23 @@ namespace TheDarkestNight
                         .FirstOrDefault(p => (p.GetPosition2D - party.GetPosition2D).Length <= EngageSearchRadius);
 
                     if (prey != null)
+                    {
                         try { party.SetMoveEngageParty(prey, MobileParty.NavigationType.Default); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                        continue;
+                    }
+
+                    // No prey nearby — band together instead of hunting alone:
+                    // the smaller of two nearby packs escorts the larger one.
+                    MobileParty packLeader = living
+                        .Where(p => p != party
+                                 && (p.MemberRoster?.TotalManCount ?? 0) >= (party.MemberRoster?.TotalManCount ?? 0)
+                                 && (p.GetPosition2D - party.GetPosition2D).Length <= BandRadius)
+                        .OrderByDescending(p => p.MemberRoster?.TotalManCount ?? 0)
+                        .FirstOrDefault();
+
+                    if (packLeader != null)
+                        try { party.SetMoveEscortParty(packLeader, MobileParty.NavigationType.Default, false); }
                         catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
                 catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }

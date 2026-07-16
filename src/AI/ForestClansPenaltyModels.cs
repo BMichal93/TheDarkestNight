@@ -37,11 +37,23 @@ namespace TheDarkestNight
         }
     }
 
+    // The one PartySizeLimitModel registration in this mod — TaleWorlds resolves
+    // only a single implementation per model interface, so the v0.8.0 scarcity
+    // penalty (issue 15: lord party rosters read scarcity-thin, not just their
+    // gold) is layered onto every party HERE rather than via a second AddModel
+    // call, which would silently replace this one (see BloodAttunementSpeedModel's
+    // header for the same "one model per interface" note).
     internal sealed class ForestClansPartySizeModel : DefaultPartySizeLimitModel
     {
         public override ExplainedNumber GetPartyMemberSizeLimit(PartyBase party, bool includeDescriptions = false)
         {
             var result = base.GetPartyMemberSizeLimit(party, includeDescriptions);
+            try
+            {
+                result.AddFactor(EconomyMath.LordPartySizeMult - 1f,
+                    new TextObject("{=dn_thin_hosts}The Thin Hosts"));
+            }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try
             {
                 if (ForestClansCulture.IsForestClanParty(party?.MobileParty))

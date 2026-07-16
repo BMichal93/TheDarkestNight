@@ -78,12 +78,41 @@ namespace TheDarkestNight
         private static readonly HashSet<string> _cleared = new HashSet<string>();
         private static readonly Dictionary<string, int> _cooldownDays = new Dictionary<string, int>();
 
+        // v0.8.0 fix (issue 6): the reflection-set settlement name can be reverted
+        // by the engine reloading its own XML texts after OnSessionLaunchedEvent
+        // fires — the exact same "names revert to XML on load" behaviour
+        // AshenCitySystem.Renaming.cs already documents, which is why THAT system
+        // re-applies its own renames from the first daily tick as a backstop, not
+        // just once at session launch. Mirrors that pattern here: cleared on every
+        // session launch, consumed by the first daily tick after it.
+        private static bool _reappliedThisSession;
+
         public static void ResetForNewGame()
         {
             _ruinIds.Clear();
             _chamberSequence.Clear();
             _cleared.Clear();
             _cooldownDays.Clear();
+            _reappliedThisSession = false;
+        }
+
+        // Re-applies ONLY the ruin appearance (name/garrison/prosperity) for every
+        // settlement ConvertCastles already selected this session — called once
+        // from the first daily tick after OnSessionLaunched, in case the engine's
+        // own text reload reverted the name in between. Idempotent.
+        public static void ReapplyRuinNamesIfNeeded()
+        {
+            if (_reappliedThisSession) return;
+            _reappliedThisSession = true;
+            foreach (string id in _ruinIds.ToList())
+            {
+                try
+                {
+                    var s = Settlement.Find(id);
+                    if (s != null) ApplyRuinAppearance(s);
+                }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            }
         }
 
         // ── Queries ──────────────────────────────────────────────────────────
@@ -167,6 +196,7 @@ namespace TheDarkestNight
         {
             _ruinIds.Clear();
             _chamberSequence.Clear();
+            _reappliedThisSession = false;
             if (Campaign.Current == null) return;
 
             foreach (Settlement s in Settlement.All)

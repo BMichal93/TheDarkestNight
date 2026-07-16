@@ -37,5 +37,16 @@ namespace TheDarkestNight
 
         public static bool IsClaimReady(float daysSinceLastClaim)
             => daysSinceLastClaim < 0f || daysSinceLastClaim >= ClaimCooldownDays;
+
+        // ── v0.8.0 (issue 11) — the Empire actually uses its scheme access ──────
+        // A random interval, not a fixed cadence, so it doesn't read as clockwork.
+        public const int SchemeIntervalMinDays = 10;
+        public const int SchemeIntervalMaxDays = 14;
+
+        public static int RollSchemeIntervalDays(Random rng)
+        {
+            if (rng == null) return SchemeIntervalMinDays;
+            return SchemeIntervalMinDays + rng.Next(SchemeIntervalMaxDays - SchemeIntervalMinDays + 1);
+        }
     }
 }

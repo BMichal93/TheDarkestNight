@@ -39,19 +39,33 @@ namespace TheDarkestNight
             }
             try
             {
+                // The Ashen are retired for new games (v0.8.0, issue 7) — see
+                // LegacyContent.AshenEnabled. AshenCitySystem.HasEstablishedClans is
+                // true on any v0.7.x save that already has an Ashen kingdom (restored
+                // from LDM_AshenClanIds before the first daily tick), so this keeps
+                // ticking exactly as before for those saves while never establishing
+                // one on a fresh game.
+                bool ashenLive = LegacyContent.AshenEnabled || AshenCitySystem.HasEstablishedClans;
+
                 if (!_selectionDone)
                 {
                     _selectionDone = true;
-                    try { ElementLordRegistry.SeedInitialLords(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    // Issue 17 — see LegacyContent.LegacyNpcCastersEnabled.
+                    if (LegacyContent.LegacyNpcCastersEnabled)
+                        try { ElementLordRegistry.SeedInitialLords(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     // Establish the Ashen claims BEFORE the Empire reassignment —
                     // ReassignImperialSettlements guards on IsAshenSettlement, which
                     // is empty until Initialize() runs, so the reverse order let the
                     // border sweeps and the Ashen swap fight over the same fiefs.
-                    try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    if (ashenLive)
+                        try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     try { ReassignImperialSettlements(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
-                try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                try { AshenCitySystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                if (ashenLive)
+                {
+                    try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { AshenCitySystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                }
                 try { ElementLordRegistry.DailyMapCast(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { TalentSystem.ResetDailyCastCount(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { TalentSystem.EnforceKinship(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }

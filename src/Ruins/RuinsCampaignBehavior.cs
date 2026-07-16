@@ -28,6 +28,7 @@ namespace TheDarkestNight
 
         private void OnDailyTick()
         {
+            try { RuinsCastleSystem.ReapplyRuinNamesIfNeeded(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try { RuinsCastleSystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 

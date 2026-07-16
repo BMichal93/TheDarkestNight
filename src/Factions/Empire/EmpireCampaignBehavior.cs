@@ -28,6 +28,11 @@ namespace TheDarkestNight
         private static List<string> _claimHeroIds = new List<string>();
         private static List<float>  _claimLastDay  = new List<float>();
 
+        // Not persisted — a missed roll after a reload just waits out the next
+        // interval, exactly like DemonSpawnCampaignBehavior's day counters.
+        private static int _daysUntilNextScheme = -1;
+        private static readonly Random _schemeRng = new Random();
+
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
@@ -47,6 +52,7 @@ namespace TheDarkestNight
         {
             _claimHeroIds = new List<string>();
             _claimLastDay = new List<float>();
+            _daysUntilNextScheme = EmpireMath.RollSchemeIntervalDays(_schemeRng);
         }
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
@@ -58,6 +64,32 @@ namespace TheDarkestNight
         {
             try { EmpireSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try { TickLordGrainClaims(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TickNpcSchemes(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+        }
+
+        // Issue 11 — the Empire's Schemes access (SchemeSystem.cs — influence-only,
+        // gated to EmpireCulture.IsPlayerEmpireKingdom for the PLAYER menu) had no
+        // NPC-side counterpart: TryQueueNpcScheme existed but nothing called it.
+        // Every rolled interval, one Empire lord at war with a rival kingdom is
+        // picked to run one scheme through that same, now-wired execution path.
+        private void TickNpcSchemes()
+        {
+            if (_daysUntilNextScheme < 0) _daysUntilNextScheme = EmpireMath.RollSchemeIntervalDays(_schemeRng);
+            if (--_daysUntilNextScheme > 0) return;
+            _daysUntilNextScheme = EmpireMath.RollSchemeIntervalDays(_schemeRng);
+
+            var empire = Kingdom.All.FirstOrDefault(k => k.StringId == "empire" && !k.IsEliminated);
+            if (empire == null) return;
+
+            var rivalLord = Hero.AllAliveHeroes
+                .Where(h => h.IsLord && h.IsAlive && !h.IsPrisoner && !h.IsChild
+                         && h.Clan != null && h.Clan.Kingdom == empire
+                         && h.Clan.Kingdom.Leader != h) // the ruler stays above the scheming
+                .OrderBy(_ => _schemeRng.Next())
+                .FirstOrDefault();
+            if (rivalLord == null) return;
+
+            try { SchemeSystem.TryQueueNpcScheme(rivalLord); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Empire bonuses apply to Empire lords too: every Empire lord party

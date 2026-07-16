@@ -62,32 +62,18 @@ namespace TheDarkestNight
 
     internal static class AshEmberLoreIntro
     {
-        // The opening lore, split into paragraphs.
+        // The opening lore, split into paragraphs. v0.8.0 (issue 13): the previous
+        // five long paragraphs are cut to four short screens, max ~2 sentences
+        // each, holding to the new canon (see FIX_PLAN.md Phase L / CLAUDE.md).
         private static readonly string[] Paragraphs =
         {
-            "Calradia had a thousand years of history, and then it had one night. " +
-            "No omen announced it. No horn was blown in warning. The sky simply tore, and what came through did not stop coming.",
+            "An Empire ruled all Calradia.",
 
-            "They call it the Long Night now, though it was one night only — the night the dead world's dead things " +
-            "climbed out from under everything and found the living waiting, unarmed, in their beds.",
+            "The underworld tore open; demons rose with every dusk and broke the world.",
 
-            "By morning the great armies were ash and the great cities were tombs. The Emperor's word meant nothing to " +
-            "claws that do not negotiate. Gold meant nothing to things that do not trade. Only walls held, where walls were high enough, " +
-            "and only faith held, where faith was hard enough.",
+            "The Empire fell. The frightened learned to cut symbols that turn the dark — the first spells.",
 
-            "So the survivors built their world small. Behind stone, behind ward-fire, behind whatever charm or prayer or " +
-            "desperate bargain kept the dark on the other side of the gate until sunrise. A lord's coffers buy little when " +
-            "there is nothing left worth selling for it — grain, iron, and a sound horse are worth more than gold now, and " +
-            "most dealing is hand to hand, goods for goods, favour for favour. Every dusk they count their walls. " +
-            "Every dawn they count their dead.",
-
-            "The old world left more behind than ruins. In collapsed halls and drowned cellars, on the tongues of the dying " +
-            "and the mad, a few have found the old formulas still — a shape spoken with empty hands and a held nerve that " +
-            "bends the world's grain the way fire bends air. Get the shape wrong and the working may turn on the one who " +
-            "spoke it. The demons have not stopped coming. They will not stop coming. Somewhere out past the torchlight, in " +
-            "the wastes and the ruined halls of the old world, something is still gathering itself for a worse night than " +
-            "this one. You were born into what is left of Calradia. Make yourself useful to it, or be one more name the " +
-            "wards failed to keep.",
+            "Now remnants huddle behind walls and wards, and fight each other for what is left.",
         };
 
         // Per-paragraph timing (seconds).

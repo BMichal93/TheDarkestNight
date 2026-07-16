@@ -51,6 +51,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterCreationContent;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
@@ -64,10 +65,6 @@ namespace TheDarkestNight
 
         // Requirement 23, Step 1 — the sole surviving background.
         private const string EmpireCultureId = "empire";
-
-        // Pending boons recorded at finalize, applied after the new-game reset.
-        private static bool _pendingApostleDarkGift;
-        private static bool _pendingSquireBoon;
 
         // The generic option grants (read from the live content so we stay in
         // sync with the engine's defaults rather than hard-coding 1/10/1).
@@ -124,8 +121,6 @@ namespace TheDarkestNight
         private void OnInitialized(CharacterCreationManager manager)
         {
             // Clear any stale pending state from an abandoned creation this session.
-            _pendingApostleDarkGift = false;
-            _pendingSquireBoon      = false;
             _pendingKeepsake        = KeepsakeId.None;
             _gated.Clear();
             _manager = null;
@@ -160,6 +155,13 @@ namespace TheDarkestNight
                 RewriteKeepsakeMenu(m);             // "The Keepsake" — see .Keepsakes.cs
                 RewriteMenus(m);
                 ApplyGatedRenames();   // set initial state for the current (or no) selection
+                // The Keepsake stage is the ONLY source of starting flavour (bonuses,
+                // items, spells) — every earlier narrative stage (Family, Childhood,
+                // Adolescence, Youth) now grants nothing, so "I am a survivor" really
+                // is a background with no hidden bonus or penalty attached to it.
+                NeutralizeMenu(m, "narrative_parent_menu");
+                NeutralizeMenu(m, "narrative_education_menu");
+                NeutralizeMenu(m, "narrative_youth_menu");
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
@@ -177,18 +179,16 @@ namespace TheDarkestNight
             // The Apostle/Squire options are SHARED across cultures (their flavour is
             // culture-gated), so their boons must be gated by culture too — otherwise an
             // Empire character who picks the "groom" option would receive Templar Grace.
-            try
+            foreach (var pair in m.SelectedOptions)
             {
-                string sel = m?.CharacterCreationContent?.SelectedCulture?.StringId;
-                foreach (var pair in m.SelectedOptions)
+                try
                 {
                     string id = pair.Value?.StringId;
-                    if      (id == KhuzaitApostleOptionId && sel == "khuzait") _pendingApostleDarkGift = true;
-                    else if (id == VlandiaSquireOptionId  && sel == "vlandia") _pendingSquireBoon      = true;
-                    else if (KeepsakeOptionIds.TryGetValue(id, out var keepsake)) _pendingKeepsake = keepsake;
+                    if (string.IsNullOrEmpty(id)) continue;
+                    if (KeepsakeOptionIds.TryGetValue(id, out var keepsake)) _pendingKeepsake = keepsake;
                 }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Menu rewrites ────────────────────────────────────────────────────
@@ -203,14 +203,12 @@ namespace TheDarkestNight
             // granted post-reset in ApplyPendingBoons.
 
             // ── Stage 1 — Family ─────────────────────────────────────────────
-            // Khuzait: A noyan's kinsfolk → Apostles of the God-King (Dark Gift for Polearm).
+            // Khuzait: A noyan's kinsfolk → the Huntmaster's Blood-Sworn (Dark Gift for Polearm).
             Edit(m, "narrative_parent_menu", KhuzaitApostleOptionId,
-                "Apostles of the God-King",
-                "Your family were sworn to the God-King's inner rites — the marked few who carry his fire in "
-                + "miniature and speak his word where his horsemen have not yet ridden. You were raised among "
-                + "them, and the dark took its measure of you before you were old enough to refuse it.\n\n"
-                + "(You will begin bearing one random Dark Gift.)",
-                ApostleArgs);
+                "The Huntmaster's Blood-Sworn",
+                "Your family were sworn to the Huntmaster's inner rites — the marked few who carry his fire in "
+                + "miniature and drink first from what the hunt brings down. You were raised among them, and the "
+                + "dark took its measure of you before you were old enough to refuse it.");
             // Vlandia: A baron's retainers → Lower-rank Templars (same bonus).
             Edit(m, "narrative_parent_menu", "vlandia_retainer_option",
                 "Lower-rank Templars",
@@ -228,11 +226,12 @@ namespace TheDarkestNight
             // These education/youth options are SHARED across cultures, so the flavour
             // is culture-gated (see RegisterGatedRename) — only the matching culture
             // sees it; everyone else keeps the vanilla wording.
-            // Khuzait (urban): studied with your private tutor → attended the religious school.
+            // Khuzait (urban): studied with your private tutor → learned the blood-lore.
             RegisterGatedRename(m, "narrative_education_menu", "education_tutor_option", "khuzait",
-                "attended the religious school.",
-                "While other children worked the herds, you were sent to the God-King's schoolmen, who drilled "
-                + "scripture, numbers, and the disciplines of the faithful into you by rote and by rod.");
+                "were schooled in the blood-lore.",
+                "While other children worked the herds, you were sent to the Huntmaster's readers, who drilled "
+                + "the anatomy of the risen, the reckoning of vials, and the disciplines of the hunt into you by "
+                + "rote and by rod.");
             // Vlandia (urban): hung out with the gangs → denounced enemies of the faith.
             RegisterGatedRename(m, "narrative_education_menu", "education_ganger_option", "vlandia",
                 "denounced enemies of the faith with your friends.",
@@ -241,24 +240,22 @@ namespace TheDarkestNight
                 + "Some of it was knowing whom to threaten, and when.");
 
             // ── Stage 4 — Youth ──────────────────────────────────────────────
-            // Khuzait: a chieftain's servant → the God-King's bloodrider's servant.
+            // Khuzait: a chieftain's servant → a bloodrider's servant.
             RegisterGatedRename(m, "narrative_youth_menu", "youth_servant_first_option", "khuzait",
-                "were the God-King's bloodrider's servant.",
-                "You waited on one of the God-King's bloodriders — his chosen lancers — fetching and scouting "
+                "were a bloodrider's servant.",
+                "You waited on one of the Huntmaster's bloodriders — his chosen lancers — fetching and scouting "
                 + "and listening at the edges of councils you were never meant to hear.");
-            // Khuzait: an envoy's entourage → the Tribe's emissary.
+            // Khuzait: an envoy's entourage → the Bloodbound's emissary.
             RegisterGatedRename(m, "narrative_youth_menu", "youth_envoys_guard_first_option", "khuzait",
-                "served as the Tribe's emissary.",
-                "You rode ahead of the horde, carrying the God-King's terms to cities that still believed they "
+                "served as the Bloodbound's emissary.",
+                "You rode ahead of the hunt, carrying the Huntmaster's terms to cities that still believed they "
                 + "could bargain. You learned to read a room full of frightened men — and to be gone before the "
                 + "knives came out.");
             // Vlandia: a baron's groom → a Lord Templar's squire (Grace + Honour for Charm).
             RegisterGatedRename(m, "narrative_youth_menu", VlandiaSquireOptionId, "vlandia",
                 "served as a Lord Templar's squire.",
                 "You served a Lord Templar as his squire — tending his arms and his horse, kneeling through the "
-                + "long vigils, and learning that the Order's strength is bought with discipline and faith.\n\n"
-                + "(You will begin with 3 Grace.)",
-                new GetNarrativeMenuOptionArgsDelegate(SquireArgs));
+                + "long vigils, and learning that the Order's strength is bought with discipline and faith.");
         }
 
         // ── Requirement 23, Step 1 — the sole background ─────────────────────
@@ -411,28 +408,35 @@ namespace TheDarkestNight
                 try { ArgsGetterField?.SetValue(o, argsGetter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
-        // Riding only (the dropped Polearm is replaced by a random Dark Gift, granted
-        // post-reset in ApplyPendingBoons); Endurance attribute unchanged.
-        private static void ApostleArgs(NarrativeMenuOptionArgs args)
+        // Every option in Family/Childhood/Adolescence/Youth grants nothing — see
+        // NeutralizeMenu below. The Keepsake stage is the sole source of bonuses.
+        private static void NeutralArgs(NarrativeMenuOptionArgs args)
         {
-            args.SetAffectedSkills(new SkillObject[] { DefaultSkills.Riding });
+            args.SetAffectedSkills(new SkillObject[0]);
             args.SetAffectedTraits(_noTraits);   // non-null or ApplyFinalEffects throws
-            args.SetFocusToSkills(_focus);
-            args.SetLevelToSkills(_skill);
-            args.SetLevelToAttribute(DefaultCharacterAttributes.Endurance, _attr);
+            args.SetFocusToSkills(0);
+            args.SetLevelToSkills(0);
+            // Level 0 rather than an unset attribute — EffectedAttribute defaults to
+            // null if SetLevelToAttribute is never called, and the engine's effect
+            // application does not appear to null-guard it.
+            args.SetLevelToAttribute(DefaultCharacterAttributes.Vigor, 0);
         }
 
-        // Tactics + a point of Honour (both shown in the dedicated effect panel) in place
-        // of the dropped Charm; the +3 Grace cannot be expressed there and is granted
-        // post-reset in ApplyPendingBoons. Social attribute unchanged.
-        private static void SquireArgs(NarrativeMenuOptionArgs args)
+        // Overwrites every option's args getter in the given narrative menu with
+        // NeutralArgs. Called once from AfterInitializeContent, after RewriteMenus/
+        // RegisterGatedRename have run — ApplyGatedRenames only touches an option's
+        // args getter when a gated rename explicitly supplies one (none currently
+        // do), so this neutral getter is never overwritten afterward.
+        private static void NeutralizeMenu(CharacterCreationManager m, string menuId)
         {
-            args.SetAffectedSkills(new SkillObject[] { DefaultSkills.Tactics });
-            args.SetFocusToSkills(_focus);
-            args.SetLevelToSkills(_skill);
-            args.SetLevelToAttribute(DefaultCharacterAttributes.Social, _attr);
-            args.SetAffectedTraits(new TraitObject[] { DefaultTraits.Honor });
-            args.SetLevelToTraits(1);
+            var menu = m.GetNarrativeMenuWithId(menuId);
+            if (menu == null) return;
+            foreach (var o in menu.CharacterCreationMenuOptions)
+            {
+                if (o == null) continue;
+                try { ArgsGetterField?.SetValue(o, new GetNarrativeMenuOptionArgsDelegate(NeutralArgs)); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            }
         }
 
         // ── Boon application ─────────────────────────────────────────────────
@@ -443,24 +447,20 @@ namespace TheDarkestNight
         // through the squire's args (and so survives on the hero already).
         public static void ApplyPendingBoons()
         {
-            if (_pendingApostleDarkGift)
-            {
-                _pendingApostleDarkGift = false;
-                try { DarkGiftSystem.GrantRandomGift(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-            }
-
-            if (_pendingSquireBoon)
-            {
-                _pendingSquireBoon = false;
-                try { MiracleInventory.AddGrace(3); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-            }
-
-            // "The Keepsake" — see CreationBackstoryRework.Keepsakes.cs.
+            // "The Keepsake" — see CreationBackstoryRework.Keepsakes.cs — is the ONLY
+            // source of creation-time bonuses; every earlier stage is neutral (see
+            // NeutralizeMenu in AfterInitializeContent).
             if (_pendingKeepsake != KeepsakeId.None)
             {
                 var keepsake = _pendingKeepsake;
                 _pendingKeepsake = KeepsakeId.None;
                 ApplyKeepsakeBoon(keepsake);
+                try
+                {
+                    InformationManager.DisplayMessage(new InformationMessage(
+                        KeepsakeConfirmationText(keepsake), new Color(0.75f, 0.65f, 0.4f)));
+                }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
     }

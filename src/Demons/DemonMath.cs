@@ -302,18 +302,41 @@ namespace TheDarkestNight
         public static bool IsNightHour(float hourOfDay) => hourOfDay >= DuskHour || hourOfDay < DawnHour;
 
         // ── Spawning (the night tide) ─────────────────────────────────────────
-        // How many fresh demon parties rise on the hourly tick that crosses into
-        // night, scaled so the map "crawls" without drowning the campaign in
-        // parties the engine then has to simulate all day.
-        public const int    MinNightSpawnParties = 3;
-        public const int    MaxNightSpawnParties = 6;
-        public const int    MaxLivingDemonParties = 40;
+        // v0.8.0 retune (playtest issues 5/16): the old flat 3–6 parties/night
+        // read as a trickle, not a tide. Nightly intensity now rolls one of
+        // three bands so some nights crawl and others surge — Quiet (25%),
+        // Restless (50%), Surge (25%) — capped well above the old ceiling.
+        public const int MaxLivingDemonParties = 120;
+
+        public const int QuietMinParties     = 8,  QuietMaxParties     = 14;
+        public const int RestlessMinParties   = 15, RestlessMaxParties  = 25;
+        public const int SurgeMinParties      = 26, SurgeMaxParties     = 40;
+
+        public enum NightIntensity { Quiet, Restless, Surge }
+
+        public static NightIntensity RollNightIntensity(Random rng)
+        {
+            if (rng == null) return NightIntensity.Restless;
+            int roll = rng.Next(100);
+            if (roll < 25) return NightIntensity.Quiet;      // 0..24  (25%)
+            if (roll < 75) return NightIntensity.Restless;   // 25..74 (50%)
+            return NightIntensity.Surge;                     // 75..99 (25%)
+        }
 
         public static int NightSpawnPartyCount(Random rng, int currentLivingParties)
         {
-            if (rng == null) return MinNightSpawnParties;
+            if (rng == null) return QuietMinParties;
             int room = Math.Max(0, MaxLivingDemonParties - currentLivingParties);
-            int wanted = MinNightSpawnParties + rng.Next(MaxNightSpawnParties - MinNightSpawnParties + 1);
+
+            int min, max;
+            switch (RollNightIntensity(rng))
+            {
+                case NightIntensity.Quiet:    min = QuietMinParties;    max = QuietMaxParties;    break;
+                case NightIntensity.Surge:    min = SurgeMinParties;    max = SurgeMaxParties;    break;
+                default:                      min = RestlessMinParties; max = RestlessMaxParties; break;
+            }
+
+            int wanted = min + rng.Next(max - min + 1);
             return Math.Min(wanted, room);
         }
 
@@ -344,13 +367,15 @@ namespace TheDarkestNight
         // NPCs actually run into them, some in the deep wilds.
         public enum SpawnLocationKind { NearSettlement = 0, Road = 1, Wilderness = 2 }
 
+        // v0.8.0 retune: raised the near-settlement/road share so nights read
+        // as dangerous where people actually travel (was 40/35/25).
         public static SpawnLocationKind RollSpawnLocation(Random rng)
         {
             if (rng == null) return SpawnLocationKind.Wilderness;
             int roll = rng.Next(100);
-            if (roll < 40) return SpawnLocationKind.NearSettlement; // 40%
-            if (roll < 75) return SpawnLocationKind.Road;           // 35%
-            return SpawnLocationKind.Wilderness;                    // 25%
+            if (roll < 45) return SpawnLocationKind.NearSettlement; // 45%
+            if (roll < 80) return SpawnLocationKind.Road;           // 35%
+            return SpawnLocationKind.Wilderness;                    // 20%
         }
 
         // ── Replenishment (the tide regathers) ────────────────────────────────

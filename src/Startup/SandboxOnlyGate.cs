@@ -67,17 +67,20 @@ namespace TheDarkestNight
             return false;
         }
 
+        // A blocking ShowInquiry fired from a campaign tick can race a loading-screen
+        // transition and wedge behind an unclickable modal (issue 2) — the player is
+        // then stranded with no way back to the main menu. Push the state change
+        // first (always reversible), then explain what happened with a plain,
+        // non-blocking message rather than a modal the player might never see.
         private static void WarnAndReturnToMenu()
         {
+            ReturnToMainMenu();
             try
             {
-                InformationManager.ShowInquiry(new InquiryData(
-                    "The Darkest Night",
-                    "This is a Sandbox tale. The scripted campaign was never rebuilt for the Long Night — " +
-                    "start a Sandbox game instead, and let the dark find you there.",
-                    true, false,
-                    "Return to the main menu", null,
-                    ReturnToMainMenu, null));
+                InformationManager.DisplayMessage(new InformationMessage(
+                    "The Darkest Night is a Sandbox tale. The scripted campaign was never rebuilt for the " +
+                    "Long Night — start a Sandbox game instead, and let the dark find you there.",
+                    new Color(0.8f, 0.3f, 0.3f)));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }

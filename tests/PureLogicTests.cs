@@ -2906,9 +2906,26 @@ namespace TheDarkestNight.Tests
             for (int i = 0; i < 200; i++)
             {
                 int count = DemonMath.NightSpawnPartyCount(rng, 0);
-                Assert.GreaterOrEqual(count, DemonMath.MinNightSpawnParties);
-                Assert.LessOrEqual(count, DemonMath.MaxNightSpawnParties);
+                Assert.GreaterOrEqual(count, DemonMath.QuietMinParties);
+                Assert.LessOrEqual(count, DemonMath.SurgeMaxParties);
             }
+        }
+
+        [Test]
+        public void DemonMath_RollNightIntensity_AllThreeBandsAppearOverManyRolls()
+        {
+            var rng = new Random(11);
+            bool sawQuiet = false, sawRestless = false, sawSurge = false;
+            for (int i = 0; i < 500; i++)
+            {
+                switch (DemonMath.RollNightIntensity(rng))
+                {
+                    case DemonMath.NightIntensity.Quiet:    sawQuiet    = true; break;
+                    case DemonMath.NightIntensity.Restless: sawRestless = true; break;
+                    case DemonMath.NightIntensity.Surge:    sawSurge    = true; break;
+                }
+            }
+            Assert.IsTrue(sawQuiet && sawRestless && sawSurge);
         }
 
         [Test]
@@ -3462,10 +3479,10 @@ namespace TheDarkestNight.Tests
 
         // ── SpellcasterLordMath (Requirement 14) ─────────────────────────────
         [Test]
-        public void SpellcasterLordMath_TargetCasterCount_IsRoughlySevenPercent()
+        public void SpellcasterLordMath_TargetCasterCount_IsRoughlyFifteenPercent()
         {
-            Assert.AreEqual(7, SpellcasterLordMath.TargetCasterCount(100));
-            Assert.AreEqual(14, SpellcasterLordMath.TargetCasterCount(200));
+            Assert.AreEqual(15, SpellcasterLordMath.TargetCasterCount(100));
+            Assert.AreEqual(30, SpellcasterLordMath.TargetCasterCount(200));
             Assert.AreEqual(0, SpellcasterLordMath.TargetCasterCount(0));
         }
 
@@ -4612,6 +4629,40 @@ namespace TheDarkestNight.Tests
         {
             Assert.Greater(EmpireMath.GrainClaimAmount, 0);
             Assert.Less(EmpireMath.GrainClaimAmount, 100);
+        }
+
+        [Test]
+        public void EmpireMath_RollSchemeIntervalDays_StaysWithinConfiguredRange()
+        {
+            var rng = new Random(5);
+            for (int i = 0; i < 100; i++)
+            {
+                int days = EmpireMath.RollSchemeIntervalDays(rng);
+                Assert.GreaterOrEqual(days, EmpireMath.SchemeIntervalMinDays);
+                Assert.LessOrEqual(days, EmpireMath.SchemeIntervalMaxDays);
+            }
+        }
+
+        // ── ExpeditionMath (v0.8.0, issue 12 — The Camp's own NPC charters) ─────
+        [Test]
+        public void ExpeditionMath_RollNpcExpeditionStarts_RespectsChanceBoundary()
+        {
+            Assert.IsTrue(ExpeditionMath.RollNpcExpeditionStarts(0));
+            Assert.IsTrue(ExpeditionMath.RollNpcExpeditionStarts(ExpeditionMath.NpcExpeditionChancePercentPerWeek - 1));
+            Assert.IsFalse(ExpeditionMath.RollNpcExpeditionStarts(ExpeditionMath.NpcExpeditionChancePercentPerWeek));
+            Assert.IsFalse(ExpeditionMath.RollNpcExpeditionStarts(99));
+        }
+
+        [Test]
+        public void ExpeditionMath_RollNpcExpeditionDays_StaysWithinConfiguredRange()
+        {
+            var rng = new Random(9);
+            for (int i = 0; i < 100; i++)
+            {
+                int days = ExpeditionMath.RollNpcExpeditionDays(rng);
+                Assert.GreaterOrEqual(days, ExpeditionMath.NpcExpeditionMinDays);
+                Assert.LessOrEqual(days, ExpeditionMath.NpcExpeditionMaxDays);
+            }
         }
 
         // ── LegionMath (Phase 7, Faction G — Legion, Western Empire) ────────────

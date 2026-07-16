@@ -337,6 +337,10 @@ namespace TheDarkestNight
             // Requirement 29: lords are stripped of gold/ornate/rich gear.
             try { GearWeathering.ApplyShabbyGearToTroopTrees(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try { LordGearWeathering.ApplyToAllLords();         } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            // Issue 6: a reload can revert the ruin castles' reflection-set names
+            // the same way kingdom/culture names revert above — re-apply here too,
+            // on top of the daily-tick backstop (RuinsCampaignBehavior.OnDailyTick).
+            try { RuinsCastleSystem.ReapplyRuinNamesIfNeeded(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Re-applies the Templar culture text while still in the menu / intro-video /
@@ -411,8 +415,16 @@ namespace TheDarkestNight
                 // spent the focus point to open the book.
                 try
                 {
-                    if (TaleWorlds.InputSystem.Input.IsKeyDown(TaleWorlds.InputSystem.InputKey.LeftAlt)
-                        && TaleWorlds.InputSystem.Input.IsKeyPressed(TaleWorlds.InputSystem.InputKey.L)
+                    // Controller: X (ControllerRLeft, the Spellbook's own hold key) + Y
+                    // (ControllerRUp) opens the same book on the map — Alt+L has no
+                    // keyboard-only equivalent on a pad (issue 9). Formula taps use the
+                    // left stick/D-pad, so the right face-button cluster is free.
+                    bool padOpen = TaleWorlds.InputSystem.Input.IsKeyDown(TaleWorlds.InputSystem.InputKey.ControllerRLeft)
+                        && TaleWorlds.InputSystem.Input.IsKeyPressed(TaleWorlds.InputSystem.InputKey.ControllerRUp);
+
+                    if ((TaleWorlds.InputSystem.Input.IsKeyDown(TaleWorlds.InputSystem.InputKey.LeftAlt)
+                            && TaleWorlds.InputSystem.Input.IsKeyPressed(TaleWorlds.InputSystem.InputKey.L)
+                         || padOpen)
                         && MageKnowledge._deferredInquiry == null)
                     {
                         if (SpellbookCampaignBehavior.IsUnlocked)

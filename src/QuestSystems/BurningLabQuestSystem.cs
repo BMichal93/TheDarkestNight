@@ -215,8 +215,8 @@ namespace TheDarkestNight
                 // Non-imperial factions
                 AddFactionOption(elements, "sturgia",  "give_sturgia",  "Give it to the Northmen — iron hands may steady iron knowledge.",
                     "The Northmen receive the scrolls. What they do with fire-made-life is their own affair.");
-                AddFactionOption(elements, "khuzait",  "give_khuzait",  "Give it to the Tribes of the East — the God-King keeps his own counsel.",
-                    "The Tribes of the East receive the scrolls. The wind carries secrets far.");
+                AddFactionOption(elements, "khuzait",  "give_khuzait",  "Give it to the Bloodbound — the Huntmaster keeps his own counsel.",
+                    "The Bloodbound receive the scrolls. The wind carries secrets far.");
                 AddFactionOption(elements, "battania", "give_battania", "Give it to the Battanians — they understand old power.",
                     "Battania receives the scrolls. They know things about life and death that predate the Empire.");
                 AddFactionOption(elements, "aserai",   "give_aserai",   "Give it to the Duneborn — the desert keeps its own secrets.",

@@ -93,8 +93,8 @@ namespace TheDarkestNight
                     "Pass them to the Northmen.",
                     "The Northmen receive the scrolls.");
                 AddFactionOption(elements, "khuzait",  "give_khuzait",
-                    "Pass them to the Tribes of the East.",
-                    "The Tribes of the East receive the scrolls.");
+                    "Pass them to the Bloodbound.",
+                    "The Bloodbound receive the scrolls.");
                 AddFactionOption(elements, "battania", "give_battania",
                     "Pass them to the Battanians.",
                     "Battania receives the scrolls.");

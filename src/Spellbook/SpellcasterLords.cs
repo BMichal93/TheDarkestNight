@@ -1,7 +1,7 @@
 // =============================================================================
 // THE DARKEST NIGHT — Spellbook/SpellcasterLords.cs
 //
-// Requirement 14 — roughly 7% of named lords/companions (excluding the
+// Requirement 14 — roughly 15% of named lords/companions (excluding the
 // player) know 1-3 spells from the Phase 4 SpellbookCatalog and cast them in
 // battle. Deliberately kept SEPARATE from ElementLordAI (which drives the old
 // unified-element NPC casting and is already a large, intricate file): this

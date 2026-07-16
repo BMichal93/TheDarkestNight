@@ -345,7 +345,12 @@ namespace TheDarkestNight
             => !string.IsNullOrEmpty(targetId)
             && _npcTargetBreather.TryGetValue(targetId, out int d) && d > 0;
 
-        private static void TryQueueNpcScheme(Hero lord)
+        // v0.8.0 (issue 11): this was the NPC scheme AI's execution entry point,
+        // but nothing in the codebase actually called it — the whole method was
+        // dead code, which is why NPC schemes (Empire included) never fired.
+        // Exposed (was private) so EmpireCampaignBehavior can drive it directly
+        // rather than duplicating a parallel resolver.
+        internal static void TryQueueNpcScheme(Hero lord)
         {
             // Filter to schemes the lord can afford at base cost (quick pre-filter).
             var affordable = Definitions

@@ -38,7 +38,14 @@ namespace TheDarkestNight
         public override void RegisterEvents()
         {
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
+            // Issue 15 — the engine builds day-1 markets full before any daily tick
+            // runs, so a fresh campaign showed vanilla-stocked shops for its first
+            // day. Run the same pruning pass once at session launch so shops read
+            // thin from the very first frame (idempotent — safe on every reload too).
+            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
         }
+
+        private void OnSessionLaunched(CampaignGameStarter starter) => OnDailyTick();
 
         public override void SyncData(IDataStore dataStore)
         {

@@ -1,7 +1,7 @@
 // =============================================================================
 // ASH AND EMBER — AI/TempleCultureCardFixer.cs
 // Rewrites the renamed culture cards on the character-creation culture-selection
-// screen: Vlandia → The Holy Temple, Khuzait → Tribes of the East, Sturgia →
+// screen: Vlandia → The Holy Temple, Khuzait → The Bloodbound, Sturgia →
 // Northmen, and Aserai → the Duneborn.
 //
 // Why this exists: the culture cards read "str_culture_rich_name" and CACHE the
@@ -96,19 +96,21 @@ namespace TheDarkestNight
             new CultureCard
             {
                 Id   = "khuzait",
-                Name = "Tribes of the East",
+                Name = "The Bloodbound",
                 Desc =
-                    "They came from the eastern steppe — a hundred warring clans who forgot how to stop fighting "
-                    + "until the God-King put his hand on the sky and turned three chieftains to ash. The rest knelt. "
-                    + "Now the Tribes ride as one, not because they love their king, but because they love war, and "
-                    + "he alone has shown them how to win it. He wields fire the way other men wield iron. He does not "
-                    + "negotiate. He takes wives from every city his horsemen put to tribute. He is watching the Empire "
-                    + "bleed itself empty, and he is patient. The Tribes do not seek peace. They seek the next horizon.",
+                    "They came from the eastern steppe — a hundred warring clans who forgot how to stop fighting, "
+                    + "until the night the dark came up through the grass and emptied it. What the clans kept was the "
+                    + "hunt. They ride out from Akkalat and Chaikand after every dusk to cut down whatever the Long "
+                    + "Night sent up, and they do not leave a kill without taking its blood — drunk, spilled, or "
+                    + "bartered, it is the only coin they still trust, because it does not lie about what a rider is "
+                    + "willing to face. The Huntmaster rides first and wields fire the way other men wield iron. He "
+                    + "does not negotiate; he binds every town he takes into his own bloodline and calls that peace "
+                    + "enough. The Bloodbound do not seek the next horizon. They seek what is under it.",
                 Feats = new[]
                 {
-                    "War Fever — The Tribes ride to war as if born to it; your clan's parties never lose heart. (party morale floor +15)",
+                    "War Fever — The Bloodbound ride to war as if born to it; your clan's parties never lose heart. (party morale floor +15)",
                     "Spoils of the Raid — A village put to the torch yields more than the usual plunder. (+50–150 gold per raid)",
-                    "No Quarter — The God-King's word burns through any treaty; your wars do not end in peace.",
+                    "No Quarter — The Huntmaster's word burns through any treaty; your wars do not end in peace.",
                 },
             },
             // Sturgia → the Northmen. Name + blurb only; the feats are LEFT as vanilla

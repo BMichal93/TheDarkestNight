@@ -108,7 +108,7 @@ namespace TheDarkestNight
         // triumphant, WINNABLE war a reunified Calradia can actually finish
         // within one determined campaign's pacing. 15,000 is under a third of
         // the Temple's target — still a real, sustained campaign-wide tally (the
-        // Tide spawns DemonMath.MinNightSpawnParties..MaxNightSpawnParties
+        // Tide spawns DemonMath.QuietMinParties..DemonMath.SurgeMaxParties
         // parties of DemonMath.MinPartyBodies..MaxPartyBodies bodies EVERY
         // night, capped at DemonMath.MaxLivingDemonParties parties alive at
         // once — the arithmetic is real, not fantasy), but framed and paced as

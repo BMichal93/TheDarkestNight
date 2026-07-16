@@ -264,6 +264,12 @@ namespace TheDarkestNight
             }
         }
 
+        // Public entry point for the eager first-pass conversion run once from
+        // new-game setup (see FactionScoping.ScopeAllFactionsNow /
+        // CampaignBehavior.Events.cs' FinishNewGameWorldSetup) — removes the
+        // SettleDelayDays dead window where a fresh save showed no free towns.
+        public static void ConvertOwnerlessTownsNow() => ConvertOwnerlessTowns();
+
         // Finds every ownerless (kingdomless) town outside the Phase 7 core
         // factions and the Ashen realm, and mints a brand-new one-city kingdom
         // for its owning clan. Villages bound to that town, and any other

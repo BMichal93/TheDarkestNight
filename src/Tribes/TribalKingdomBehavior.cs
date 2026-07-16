@@ -1,23 +1,36 @@
 // =============================================================================
-// ASH AND EMBER — Tribes/TribalKingdomBehavior.cs
+// THE DARKEST NIGHT — Tribes/TribalKingdomBehavior.cs
 //
-// Manages the Tribes of the East (khuzait) as a faction ruled by the God-King:
-// a fire-wielding despot who brokers no peace and collects wives from
-// conquered lands, keeping his lords in deliberate submission.
+// Manages the Bloodbound (khuzait) as a faction ruled by the Huntmaster: the
+// first rider of the hunt, who brokers no peace, binds every taken town to his
+// own bloodline, and keeps his Bloodhunters in deliberate submission.
+//
+// ── Naming ────────────────────────────────────────────────────────────────────
+// This system is inherited from Ash and Ember, where khuzait were "the Tribes of
+// the East" under a fire-wielding "God-King". The Darkest Night reworked khuzait
+// into the Bloodbound (Factions/Bloodbound/), whose ruler is the **Huntmaster**
+// and whose vassals are **Bloodhunters** — see BloodboundCulture.RulerTitle,
+// which is what the game's own culture texts now say. Every player-facing string
+// here follows that. What deliberately does NOT: the class/file name, the
+// `TRIBES_*` save keys, the `tribal_free_recruit` menu id, and the
+// `ElementLordRegistry.SetGodKing` call — those are identifiers, and renaming
+// them either breaks saves or belongs to REFACTOR_NAMING.md Phase 4.
 //
 // Mechanics:
-//   God-King Setup     — marked as Pyrelord mage with dark gifts each session.
-//   Divine Rule        — a dominance policy is enforced weekly.
-//   God-King Dominance — ruling clan influence pinned high; other lords capped.
-//   Wives of Conquest  — each conquered town adds a woman to the God-King's
-//                        household (capped at TribalWifeMax).
-//   Endless War        — any peace involving the Tribes is immediately reversed.
-//   Blood Succession   — on the God-King's death, the oldest living son inherits.
-//   Self-Immolation    — a captured God-King sets himself ablaze rather than submit.
-//   Free Recruitment   — a player sworn to the God-King (clan in the Tribes'
+//   Huntmaster Setup   — marked as Pyrelord mage with dark gifts each session.
+//   Rule of the Hunt   — a dominance policy is enforced weekly.
+//   Huntmaster Dominance — ruling clan influence pinned high; other lords capped.
+//   Blood-Bonds        — each taken town binds one of its own into the
+//                        Huntmaster's household by marriage (capped at
+//                        TribalWifeMax). The Bloodbound trust blood over oaths,
+//                        so a town is held by a shared bloodline, not a treaty.
+//   Endless War        — any peace involving the Bloodbound is immediately reversed.
+//   Blood Succession   — on the Huntmaster's death, the oldest living son inherits.
+//   Self-Immolation    — a captured Huntmaster burns rather than submit.
+//   Free Recruitment   — a player sworn to the Huntmaster (clan in the Bloodbound
 //                        kingdom, regardless of birth culture) can recruit tier-1
-//                        tribesmen at no cost from Tribal towns (global 7-day
-//                        cooldown — the tribes answer the champion only once a
+//                        riders at no cost from Bloodbound towns (global 7-day
+//                        cooldown — the hunt answers its champion only once a
 //                        week, not once per town). Leaving the kingdom ends it.
 // =============================================================================
 
@@ -46,7 +59,7 @@ namespace TheDarkestNight
         private   const int    FreeRecruitCount     = 6;
         private   const int    FreeRecruitCooldown  = 7; // days
 
-        // Persisted: StringIds of consort heroes added to the God-King's clan.
+        // Persisted: StringIds of consort heroes bound into the Huntmaster's clan.
         private static readonly List<string> _consortIds = new List<string>();
         // Persisted: settlement StringIds already processed (so starting towns are skipped).
         private static readonly HashSet<string> _processedSettlements = new HashSet<string>();
@@ -55,8 +68,8 @@ namespace TheDarkestNight
         // Session-only: settlement StringId → last day free recruits were taken.
         private static readonly Dictionary<string, int> _recruitCooldowns
             = new Dictionary<string, int>();
-        // Persisted: the day the Call to the Tribes was last answered, anywhere. This
-        // is a GLOBAL weekly cap — without it the player could hop between tribal towns
+        // Persisted: the day the Call to the Hunt was last answered, anywhere. This
+        // is a GLOBAL weekly cap — without it the player could hop between Bloodbound towns
         // and pull FreeRecruitCount fresh troops from each, every visit.
         private static int _lastFreeRecruitDay = -1000;
 
@@ -127,11 +140,11 @@ namespace TheDarkestNight
             try { FreeDraftTick();       } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
-        // ── Free Drafting — the God-King's war levy ─────────────────────────────
-        // The Tribes conscript as they ride: every under-strength Tribes lord party
-        // refills with tier-1 tribesmen each day, far faster than any rival lord
+        // ── Free Drafting — the Huntmaster's war levy ─────────────────────────────
+        // The Bloodbound conscript as they ride: every under-strength Bloodbound lord party
+        // refills with tier-1 riders each day, far faster than any rival lord
         // rebuilds from village volunteers. (The player's mirror of this is the
-        // Call to the Tribes town menu — NPC parity for the same free drafting.)
+        // Call to the Hunt town menu — NPC parity for the same free drafting.)
         private const float FreeDraftFillThreshold = 0.85f;
         private const int   FreeDraftDailyMax      = 5;
 
@@ -180,7 +193,7 @@ namespace TheDarkestNight
             try { CheckConquestWives();       } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
-        // ── Hero killed — God-King succession ─────────────────────────────────
+        // ── Hero killed — Huntmaster succession ─────────────────────────────────
         private static void OnHeroKilled(Hero victim, Hero killer,
             KillCharacterAction.KillCharacterActionDetail detail, bool showNotification)
         {
@@ -205,19 +218,19 @@ namespace TheDarkestNight
                 if ((tribes as Kingdom)?.IsEliminated == true) return;
                 if ((other  as Kingdom)?.IsEliminated == true) return;
 
-                // Re-declare war immediately — the God-King does not parley.
+                // Re-declare war immediately — the Huntmaster does not parley.
                 try { DeclareWarAction.ApplyByDefault(tribes, other); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (TribalCulture.IsPlayerTribal)
                     InformationManager.DisplayMessage(new InformationMessage(
-                        "No Quarter — the God-King's word burns through any treaty. The war endures.",
+                        "No Quarter — the Huntmaster's word burns through any treaty. The hunt endures.",
                         new Color(0.85f, 0.35f, 0.15f)));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
-        // ── Self-Immolation — God-King dies rather than be taken prisoner ────────
-        // Checked daily: if the God-King is a prisoner, he immediately sets himself
+        // ── Self-Immolation — Huntmaster dies rather than be taken prisoner ────────
+        // Checked daily: if the Huntmaster is a prisoner, he immediately sets himself
         // ablaze. Capture is not a fate the divine fire permits.
         private static void CheckGodKingCapture()
         {
@@ -233,7 +246,7 @@ namespace TheDarkestNight
                 try { KillCharacterAction.ApplyByMurder(godKing, null, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 InformationManager.DisplayMessage(new InformationMessage(
-                    "The God-King would not kneel. He set himself ablaze before his captors could savour the victory.",
+                    "The Huntmaster would not kneel. He set himself ablaze before his captors could savour the victory.",
                     new Color(0.85f, 0.35f, 0.15f)));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
@@ -274,7 +287,7 @@ namespace TheDarkestNight
                 try { ChangeClanLeaderAction.ApplyWithSelectedNewLeader(rulingClan, heir); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 InformationManager.DisplayMessage(new InformationMessage(
-                    $"The God-King is dead. His heir {heir.Name} rises — the divine fire passes to new hands.",
+                    $"The Huntmaster is dead. His heir {heir.Name} rises — the hunt passes to new hands.",
                     new Color(0.85f, 0.45f, 0.2f)));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
@@ -283,7 +296,7 @@ namespace TheDarkestNight
         // ── Wives of conquest ──────────────────────────────────────────────────
         // Checked weekly: any Khuzait town not yet in _processedSettlements is a
         // new conquest. The first call records the starting towns silently so the
-        // God-King doesn't retroactively claim wives for his own homeland.
+        // Huntmaster doesn't retroactively bind his own homeland's daughters.
         private static void CheckConquestWives()
         {
             try
@@ -310,7 +323,7 @@ namespace TheDarkestNight
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
-        // ── God-King setup ─────────────────────────────────────────────────────
+        // ── Huntmaster setup ─────────────────────────────────────────────────────
         private static void SetupGodKing()
         {
             try
@@ -345,7 +358,7 @@ namespace TheDarkestNight
         }
 
         // ── Divine Rule — represented through influence dominance ─────────────
-        // The God-King's absolute rule is enforced by pinning his clan's influence
+        // The Huntmaster's absolute rule is enforced by pinning his clan's influence
         // at GodKingInfluenceMin and capping all other lords. A formal policy hook
         // can be added once the PolicyObject API is confirmed against the game DLLs.
         private static void EnforceDivineRule() { /* placeholder — influence dominance suffices */ }
@@ -415,7 +428,7 @@ namespace TheDarkestNight
                 // ExSpouses on its own (she stays in the clan — the household grows),
                 // so each conquest crowns a new consort while the old ones remain.
                 // Without this the "wives" were clanswomen only, invisible on the
-                // God-King's page and barren of heirs.
+                // Huntmaster's page and barren of heirs.
                 try
                 {
                     var godKing = khuzait?.Leader ?? godKingClan.Leader;
@@ -425,7 +438,8 @@ namespace TheDarkestNight
                 catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 InformationManager.DisplayMessage(new InformationMessage(
-                    $"A woman of {capturedTown.Name} is claimed for the God-King's household. His dominion grows.",
+                    $"A daughter of {capturedTown.Name} is bound into the Huntmaster's household. "
+                    + "The town is held by shared blood now, and blood does not lie.",
                     new Color(0.85f, 0.45f, 0.2f)));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
@@ -445,23 +459,23 @@ namespace TheDarkestNight
                         try
                         {
                             // Gated on allegiance, not birth: only a champion sworn
-                            // to the God-King may call the tribes to arms.
+                            // to the Huntmaster may call the hunt to arms.
                             if (!TribalCulture.IsPlayerSwornToTribes) return false;
                             var s = Settlement.CurrentSettlement;
                             if (s == null || !s.IsTown) return false;
                             if (s.OwnerClan?.Kingdom?.StringId != KhuzaitId) return false;
 
                             int day = (int)CampaignTime.Now.ToDays;
-                            // Global weekly cap: the tribes answer the champion only once
+                            // Global weekly cap: the hunt answers its champion only once
                             // a week, no matter which town the call goes out from.
                             int sinceCall  = day - _lastFreeRecruitDay;
                             bool onCooldown = sinceCall < FreeRecruitCooldown;
 
                             string status = onCooldown
-                                ? $"  [The tribes have answered lately — ready in {FreeRecruitCooldown - sinceCall} day(s)]"
-                                : "  [Free — tribesmen answer your call]";
+                                ? $"  [The hunt has answered lately — ready in {FreeRecruitCooldown - sinceCall} day(s)]"
+                                : "  [Free — riders answer your call]";
                             MBTextManager.SetTextVariable("TRIBAL_RECRUIT_TEXT",
-                                "Call to the Tribes" + status);
+                                "Call to the Hunt" + status);
 
                             try { args.optionLeaveType = GameMenuOption.LeaveType.Continue; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = !onCooldown;
@@ -483,7 +497,7 @@ namespace TheDarkestNight
                             {
                                 MobileParty.MainParty.AddElementToMemberRoster(tier1, FreeRecruitCount);
                                 InformationManager.DisplayMessage(new InformationMessage(
-                                    $"{FreeRecruitCount} tribesmen answer the call of the God-King's champion.",
+                                    $"{FreeRecruitCount} riders answer the call of the Huntmaster's champion.",
                                     new Color(0.85f, 0.55f, 0.2f)));
                             }
 

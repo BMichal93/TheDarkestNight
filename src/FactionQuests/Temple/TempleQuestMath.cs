@@ -81,7 +81,7 @@ namespace TheDarkestNight
 
         // ── The kill target — "a huge but technically countable number" ────────
         // Demons respawn nightly, campaign-wide, in real numbers
-        // (DemonMath.MinNightSpawnParties..MaxNightSpawnParties parties every
+        // (DemonMath.QuietMinParties..DemonMath.SurgeMaxParties parties every
         // night, DemonMath.MinPartyBodies..MaxPartyBodies bodies each, capped
         // at DemonMath.MaxLivingDemonParties parties alive at once) — so
         // 50,000 kills is not fantasy-arithmetic, it is a real number of

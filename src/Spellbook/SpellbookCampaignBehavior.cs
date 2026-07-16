@@ -41,7 +41,75 @@ namespace TheDarkestNight
             _known.Clear();
         }
 
-        public override void RegisterEvents() { }
+        public override void RegisterEvents()
+        {
+            // Issue 10 — spellbook inheritance. OnHeirSelectionOverEvent fires once
+            // the engine has already picked the new Hero.MainHero (vanilla only
+            // triggers heir selection on the previous main character's death), so
+            // by the time this runs succession is complete and this is purely
+            // "ask, and on decline, wipe" — the state itself (_unlocked/_known) is
+            // already player-global and survives untouched either way.
+            CampaignEvents.OnHeirSelectionOverEvent.AddNonSerializedListener(this, OnHeirSelectionOver);
+        }
+
+        private void OnHeirSelectionOver(Hero newMainHero)
+        {
+            try
+            {
+                if (!_unlocked || _known.Count == 0) return;
+                // Never clobber another system's queued popup — losing the ask is
+                // safer than losing a queued event (behaviour.md's single-slot rule).
+                // Keeping the book silently is the safe default either way.
+                if (MageKnowledge._deferredInquiry != null) return;
+
+                int count = _known.Count;
+                MageKnowledge._deferredInquiry = () =>
+                {
+                    try
+                    {
+                        MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                            "The Book Passes",
+                            "Your hands are done with the marks. Your heir now carries the book — and every "
+                            + $"formula written in your years ({count} known). Or let it burn with you.",
+                            new List<InquiryElement>
+                            {
+                                new InquiryElement("keep", "Leave them the book", null, true,
+                                    "The formulas pass on unbroken."),
+                                new InquiryElement("burn", "Let it burn", null, true,
+                                    "Every formula is forgotten."),
+                            },
+                            false, 1, 1, "Choose.", "",
+                            chosen =>
+                            {
+                                bool burn = chosen?.Any(e => e.Identifier is string s && s == "burn") == true;
+                                if (burn)
+                                {
+                                    ForgetAll();
+                                    InformationManager.DisplayMessage(new InformationMessage(
+                                        "The book burns with its keeper. Nothing of it remains.", Dim));
+                                }
+                                else
+                                {
+                                    InformationManager.DisplayMessage(new InformationMessage(
+                                        $"The book passes on: {count} formula{(count != 1 ? "s" : "")} carried into the next hand.", Gold));
+                                }
+                            },
+                            null, "", false), false, true);
+                    }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                };
+            }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+        }
+
+        // Wipes the unlocked state and every known formula — used only when the
+        // player deliberately lets the book burn with them on succession (issue 10).
+        // Deliberately separate from ResetForNewGame, which may grow other duties.
+        public static void ForgetAll()
+        {
+            _unlocked = false;
+            _known.Clear();
+        }
 
         public override void SyncData(IDataStore dataStore)
         {
