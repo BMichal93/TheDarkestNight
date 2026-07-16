@@ -56,7 +56,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class ForestWidowsCampaignBehavior : CampaignBehaviorBase
     {
@@ -80,12 +80,12 @@ namespace AshAndEmber
 
         public override void SyncData(IDataStore store)
         {
-            try { store.SyncData("FW_IGNORE_IDS",        ref _ignoreHeroIds);   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("FW_IGNORE_EXPIRY_DAY",  ref _ignoreExpiryDay); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("FW_GRANT_HERO_IDS",     ref _grantHeroIds);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("FW_GRANT_TROOP_IDS",    ref _grantTroopIds);   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("FW_GRANT_COUNTS",       ref _grantCounts);     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("FW_GRANT_VANISH_DAY",   ref _grantVanishDay);  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("FW_IGNORE_IDS",        ref _ignoreHeroIds);   } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("FW_IGNORE_EXPIRY_DAY",  ref _ignoreExpiryDay); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("FW_GRANT_HERO_IDS",     ref _grantHeroIds);    } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("FW_GRANT_TROOP_IDS",    ref _grantTroopIds);   } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("FW_GRANT_COUNTS",       ref _grantCounts);     } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("FW_GRANT_VANISH_DAY",   ref _grantVanishDay);  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (_ignoreHeroIds == null) _ignoreHeroIds = new List<string>();
             if (_ignoreExpiryDay == null) _ignoreExpiryDay = new List<float>();
@@ -112,20 +112,20 @@ namespace AshAndEmber
         // owns what is unique to the Forest Widows.
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterForestWidowsMenus(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterForestWidowsMenus(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Enforce at session start too, not only on the next daily tick —
             // a fresh load of a save with a male Battanian lord should not
             // get a free day of illegitimate rule.
-            try { EnforceFemaleLeadership(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { EnforceFemaleLeadership(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnDailyTick()
         {
-            try { ForestWidowsSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { EnforceFemaleLeadership(); }                      catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TickInfluenceDrain(); }                           catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { PruneExpiredIgnores(); }                          catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TickDemonGrantExpiry(); }                         catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ForestWidowsSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { EnforceFemaleLeadership(); }                      catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TickInfluenceDrain(); }                           catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { PruneExpiredIgnores(); }                          catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TickDemonGrantExpiry(); }                         catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static Kingdom GetForestWidowsKingdom()
@@ -145,7 +145,7 @@ namespace AshAndEmber
                 if (clan.MapFaction?.StringId != ForestWidowsCulture.CultureId) return;
                 if (!newLeader.IsFemale) TryReplaceWithFemaleLeader(clan, newLeader);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void EnforceFemaleLeadership()
@@ -162,7 +162,7 @@ namespace AshAndEmber
                     if (leader == null || leader.IsFemale) continue;
                     TryReplaceWithFemaleLeader(clan, leader);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -185,13 +185,13 @@ namespace AshAndEmber
                 if (heir == null) return; // no woman left to hold the seat — leave the clan alone
 
                 try { ChangeClanLeaderAction.ApplyWithSelectedNewLeader(clan, heir); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return; }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return; }
 
                 InformationManager.DisplayMessage(new InformationMessage(
                     $"{heir.Name} sets aside {deposedMale.Name} and takes {clan.Name}'s seat — a husband does not rule among the Forest Widows.",
                     new Color(0.20f, 0.45f, 0.25f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Daily influence drain for a male player ─────────────────────────────
@@ -206,7 +206,7 @@ namespace AshAndEmber
                 float updated = ForestWidowsMath.InfluenceAfterDailyDrain(!player.IsFemale, isMember, clan.Influence);
                 if (updated != clan.Influence) clan.Influence = updated;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── "The dark's blindness" ignore buff ──────────────────────────────────
@@ -227,7 +227,7 @@ namespace AshAndEmber
                 _ignoreHeroIds.Add(hero.StringId);
                 _ignoreExpiryDay.Add(ForestWidowsMath.ExtendIgnoreExpiry(today, today, days));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Consulted by DemonSpawnCampaignBehavior.DirectDemonParties to skip a
@@ -264,7 +264,7 @@ namespace AshAndEmber
                     _ignoreHeroIds.RemoveAt(i);
                     _ignoreExpiryDay.RemoveAt(i);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -286,7 +286,7 @@ namespace AshAndEmber
                 _grantCounts.Add(count);
                 _grantVanishDay.Add(today + vanishDays);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void TickDemonGrantExpiry()
@@ -321,7 +321,7 @@ namespace AshAndEmber
                     _grantCounts.RemoveAt(i);
                     _grantVanishDay.RemoveAt(i);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
     }

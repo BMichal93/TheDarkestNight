@@ -55,7 +55,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class AshenQuestSystem
     {
@@ -162,7 +162,7 @@ namespace AshAndEmber
 
             if (_phase == PhasePrereqs)
             {
-                if (_questLog == null) try { EnsureQuestLog(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                if (_questLog == null) try { EnsureQuestLog(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 CheckPrereqGoals();
             }
             else if (_phase == PhaseAllDone && MageKnowledge._deferredInquiry == null)

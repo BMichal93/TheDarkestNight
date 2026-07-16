@@ -8,7 +8,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed class NorthmenStonesQuestLog : QuestBase
     {
@@ -48,19 +48,19 @@ namespace AshAndEmber
                     new TextObject("Donate materials for the standing stones at Varcheg."),
                     new TextObject("The Working"), 0, 100, null, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void UpdateProgress(int blendedPercent)
         {
             try { _questLog?._objProgress?.UpdateCurrentProgress(System.Math.Min(blendedPercent, 100)); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void LogInvasion(string text)
         {
             try { _questLog?.AddLog(new TextObject(text)); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void CompleteDisagree()
@@ -72,7 +72,7 @@ namespace AshAndEmber
                     "Northmen will not forget who turned from them at the last."));
                 _questLog?.CompleteQuestWithFail();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void CompleteSelfSacrifice()
@@ -84,7 +84,7 @@ namespace AshAndEmber
                     "burns still, though you do not live to see it."));
                 _questLog?.CompleteQuestWithSuccess();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void CompleteChildSacrifice()
@@ -96,7 +96,7 @@ namespace AshAndEmber
                     "Varcheg. Not everyone in your hall has forgiven you for it."));
                 _questLog?.CompleteQuestWithSuccess();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

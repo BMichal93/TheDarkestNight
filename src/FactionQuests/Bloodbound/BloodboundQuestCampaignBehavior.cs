@@ -32,7 +32,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class BloodboundQuestCampaignBehavior : CampaignBehaviorBase
     {
@@ -62,7 +62,7 @@ namespace AshAndEmber
             // by Id) and runs at construction time — every OnGameStart, new
             // game or load, well before any CampaignEvents fire.
             try { FactionQuestTrigger.Register(BuildDef()); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static FactionQuestDef BuildDef() => new FactionQuestDef
@@ -107,7 +107,7 @@ namespace AshAndEmber
                 InformationManager.DisplayMessage(new InformationMessage(
                     "Quest added: The Surpassing Rite.", new Color(0.55f, 0.10f, 0.10f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Wiring ────────────────────────────────────────────────────────────────
@@ -120,9 +120,9 @@ namespace AshAndEmber
 
         public override void SyncData(IDataStore store)
         {
-            try { store.SyncData("BLDQ_Phase",         ref _phase); }               catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("BLDQ_BloodDonated",  ref _bloodDonated); }        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("BLDQ_ShrineId",      ref _shrineSettlementId); }  catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("BLDQ_Phase",         ref _phase); }               catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("BLDQ_BloodDonated",  ref _bloodDonated); }        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("BLDQ_ShrineId",      ref _shrineSettlementId); }  catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             SyncResolutionData(store);
         }
 
@@ -136,16 +136,16 @@ namespace AshAndEmber
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { EnsureShrineChosen(); }        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { RegisterQuestAltarMenu(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { EnsureShrineChosen(); }        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { RegisterQuestAltarMenu(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnWeeklyTick()
         {
-            try { EnsureShrineChosen(); }        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { NpcContributionWeeklyTick(); }  catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { CheckThresholdWeeklyTick(); }   catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { CheckFactionGoneWeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { EnsureShrineChosen(); }        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { NpcContributionWeeklyTick(); }  catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { CheckThresholdWeeklyTick(); }   catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { CheckFactionGoneWeeklyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Balance-pass reliability fix: the Bloodbound are scoped to only two
@@ -164,12 +164,12 @@ namespace AshAndEmber
             if (GetBloodboundKingdom() != null) return; // still exists — nothing to do
 
             _phase = PhaseEndedFactionGone;
-            try { BloodboundQuestLog.Current?.LogFactionGone(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { BloodboundQuestLog.Current?.LogFactionGone(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnDailyTick()
         {
-            try { AftermathDailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { AftermathDailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Shared: record a contribution toward the draught ────────────────────
@@ -178,7 +178,7 @@ namespace AshAndEmber
             if (amount <= 0 || _phase != PhaseAccumulating) return;
             _bloodDonated += amount;
             try { BloodboundQuestLog.Current?.LogProgress(_bloodDonated); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

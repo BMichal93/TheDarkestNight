@@ -9,7 +9,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed class ForestWidowsQuestLog : QuestBase
     {
@@ -41,7 +41,7 @@ namespace AshAndEmber
                 if (_objSacrifice == null && JournalEntries != null && JournalEntries.Count >= 2)
                     _objSacrifice = JournalEntries[1];
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void Start()
@@ -62,7 +62,7 @@ namespace AshAndEmber
                     new TextObject("Feed the altar toward the Grand Widow's lasting peace."),
                     new TextObject("Men Given To The Dark"), 0, ForestWidowsQuestMath.SacrificeTarget, null, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogProgress(int menSacrificed)
@@ -72,7 +72,7 @@ namespace AshAndEmber
                 RebindObjective();
                 _objSacrifice?.UpdateCurrentProgress(ForestWidowsQuestMath.ClampedProgress(menSacrificed));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogEndingCastOut()
@@ -87,7 +87,7 @@ namespace AshAndEmber
                     "finished paying."));
                 CompleteQuestWithSuccess();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogEndingStayed()
@@ -101,7 +101,7 @@ namespace AshAndEmber
                     "to keep."));
                 CompleteQuestWithFail();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Reliability closure — the Forest Widows were wiped out before the
@@ -117,7 +117,7 @@ namespace AshAndEmber
                     "first — the Grand Widow's bargain dies with the last of her court, unpaid and unpayable."));
                 CompleteQuestWithFail();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

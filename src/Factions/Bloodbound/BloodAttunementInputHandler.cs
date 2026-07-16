@@ -44,7 +44,7 @@ using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class BloodAttunementInputHandler
     {
@@ -82,13 +82,13 @@ namespace AshAndEmber
                     _drawTime = 0f;
                     BloodAttunement.EnsureValidLoaded(hero);
                     try { if (Agent.Main != null) SpellEffects.BeginFocusVisual(Agent.Main, ColorSchool.Ashen); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 ReadElementSelect();
 
                 float hour = 12f;
-                try { hour = (float)CampaignTime.Now.CurrentHourInDay; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { hour = (float)CampaignTime.Now.CurrentHourInDay; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (!BloodAttunementMath.IsUsableHour(hour))
                 {
@@ -104,7 +104,7 @@ namespace AshAndEmber
                 {
                     Agent c = Agent.Main;
                     bool still = c != null && c.IsActive();
-                    if (still) { try { still = c.GetCurrentVelocity().Length < StillSpeed; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } }
+                    if (still) { try { still = c.GetCurrentVelocity().Length < StillSpeed; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } }
 
                     if (c == null || !c.IsActive() || !still)
                     {
@@ -131,7 +131,7 @@ namespace AshAndEmber
                 _prevAtk = _prevBlk = false;
                 _drawTime = 0f;
                 try { if (Agent.Main != null) SpellEffects.EndFocusVisual(Agent.Main); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -176,7 +176,7 @@ namespace AshAndEmber
                 if (form == CastForm.Attack) ElementSpellEffects.CastAttack(el, caster, power);
                 else                         ElementSpellEffects.CastWall(el, caster, power);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             _sinceCast = 0f;
             _drawTime = 0f;

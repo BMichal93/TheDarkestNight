@@ -24,7 +24,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public class SpellcasterTroopBehavior : CampaignBehaviorBase
     {
@@ -71,10 +71,10 @@ namespace AshAndEmber
 
                         _seededSettlementIds.Add(settlement.StringId);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

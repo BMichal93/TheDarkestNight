@@ -27,7 +27,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class TalismansCampaignBehavior : CampaignBehaviorBase
     {
@@ -48,7 +48,7 @@ namespace AshAndEmber
             {
                 store.SyncData("TLM_ShopTown", ref _shopTownId);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void ResetForNewGame()
@@ -58,13 +58,13 @@ namespace AshAndEmber
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterTalismanMenus(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SelectShopTown(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterTalismanMenus(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SelectShopTown(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void OnWeeklyTick()
         {
-            try { SelectShopTown(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SelectShopTown(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Shop town selection — stable-but-random, re-picked only if lost ────
@@ -75,7 +75,7 @@ namespace AshAndEmber
                 if (string.IsNullOrEmpty(_shopTownId) || !IsStillTempleTown(_shopTownId))
                     _shopTownId = PickRandomTempleTown();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static bool IsStillTempleTown(string settlementId)
@@ -116,7 +116,7 @@ namespace AshAndEmber
                     InformationManager.DisplayMessage(new InformationMessage(
                         $"{def.Name} is pressed into your hand.", new Color(0.90f, 0.82f, 0.42f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

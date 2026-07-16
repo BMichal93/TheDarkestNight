@@ -17,7 +17,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class BurningLabQuestSystem
     {
@@ -46,7 +46,7 @@ namespace AshAndEmber
                     _qcActive       = true;
                     _qcWeeklyTimer  = QCWeeklyDelay;
                     _qcWhisperTimer = 2;
-                    try { _qcQuestLog = new BurningLabQCLog(); _qcQuestLog.StartQuest(); _qcQuestLog.LogStarted(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { _qcQuestLog = new BurningLabQCLog(); _qcQuestLog.StartQuest(); _qcQuestLog.LogStarted(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     break;
 
                 case "sell":
@@ -106,7 +106,7 @@ namespace AshAndEmber
             Notify(
                 $"The Burning Laboratory — the scrolls have been delivered to {empName}. " +
                 "They are not the kind of people who read slowly.");
-            try { _qaQuestLog = new BurningLabQALog(); _qaQuestLog.StartQuest(); _qaQuestLog.LogStarted(empName); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { _qaQuestLog = new BurningLabQALog(); _qaQuestLog.StartQuest(); _qaQuestLog.LogStarted(empName); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void TickQA()
@@ -235,10 +235,10 @@ namespace AshAndEmber
             _arenicosIsTrue  = _rng.Next(2) == 0; // 50/50
 
             if (!_arenicosIsTrue)
-                try { ElementLordRegistry.SetFalseEmperor(chosen); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementLordRegistry.SetFalseEmperor(chosen); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Make his clan the ruling clan of the empire
-            try { ChangeRulingClanAction.Apply(empire, chosen.Clan); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ChangeRulingClanAction.Apply(empire, chosen.Clan); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Grant immense renown and influence — the emperor's legend dwarfs any living lord
             try
@@ -250,17 +250,17 @@ namespace AshAndEmber
                     chosen.Clan.Influence = Math.Max(chosen.Clan.Influence, 50000f);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Rename: "[Lord name] (Emperor Arenicos)"
-            try { chosen.SetName(new TextObject(chosen.Name.ToString() + " (Emperor Arenicos)"), chosen.FirstName); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { chosen.SetName(new TextObject(chosen.Name.ToString() + " (Emperor Arenicos)"), chosen.FirstName); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Cap age at 50 — Arenicos preserves the vessel; prevents imminent vanilla aging death
             try
             {
                 if (chosen.Age > 50.0)
                     chosen.SetBirthDay(chosen.BirthDay + CampaignTime.Days((int)((chosen.Age - 50.0) * 84.0)));
-            } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             string empName  = empire.Name?.ToString() ?? "the Empire";
             string heroName = chosen.Name?.ToString() ?? "a great lord";
@@ -275,7 +275,7 @@ namespace AshAndEmber
                 $"He calls himself Arenicos. He says he has been waiting a long time.\n\n" +
                 $"{trueStr}\n\n" +
                 $"He has already begun issuing orders. The court — for the moment — is obeying.");
-            try { _qaQuestLog?.LogRevival(heroName, _arenicosIsTrue); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { _qaQuestLog?.LogRevival(heroName, _arenicosIsTrue); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void FireOtherEmpireSubmission()
@@ -349,7 +349,7 @@ namespace AshAndEmber
                         declaredOn.Add(k.Name?.ToString() ?? k.StringId);
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             if (declaredOn.Count > 0)
@@ -383,7 +383,7 @@ namespace AshAndEmber
                 // Advance birthday by 1 campaign day each tick to cancel natural aging.
                 // Prevents both the vanilla AgingCampaignBehavior and the mod's DailyAgeCheck
                 // from ever killing the possessed vessel.
-                try { ar.SetBirthDay(ar.BirthDay + CampaignTime.Days(1)); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ar.SetBirthDay(ar.BirthDay + CampaignTime.Days(1)); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (_qaAshenMerged && !_qaWitheringFired)
                     CheckWitheringCondition();
@@ -437,7 +437,7 @@ namespace AshAndEmber
 
                 _qaReplenishCooldown = 2; // wait 2 days before checking again
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void CheckWitheringCondition()
@@ -466,7 +466,7 @@ namespace AshAndEmber
                 if (MageKnowledge.IsAshen) { _qaQuestLog?.LogWitheringVictory(); _qaQuestLog?.CompleteSuccess(); }
                 else                       { _qaQuestLog?.LogWitheringDefeat();  _qaQuestLog?.CompleteFail();   }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (MageKnowledge._deferredInquiry == null)
                 MageKnowledge._deferredInquiry = ShowWitheringPrompt;
@@ -518,7 +518,7 @@ namespace AshAndEmber
                     null, null
                 ), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ActivateFalseEmperorAlliance()
@@ -546,7 +546,7 @@ namespace AshAndEmber
                 $"The Burning Laboratory — {arName}'s empire has revealed its true allegiance. " +
                 "The grey banners lower. The cold warriors of the demon-cult march under the imperial eagle now. " +
                 "The demon-cult and the Empire are one. Whatever stands against them stands alone.");
-            try { _qaQuestLog?.LogMerger(arName); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { _qaQuestLog?.LogMerger(arName); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void MaintainFalseEmperorAlliance()
@@ -605,7 +605,7 @@ namespace AshAndEmber
                     $"The Burning Laboratory — with the false emperor gone, the cold alliance shatters. " +
                     $"The demon-cult withdraw from {empName} and vanish back into their own dark. " +
                     "The empire endures — diminished, uncertain, no longer the void's instrument.");
-                try { _qaQuestLog?.LogFalseEmperorDead(); _qaQuestLog?.CompleteSuccess(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { _qaQuestLog?.LogFalseEmperorDead(); _qaQuestLog?.CompleteSuccess(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 return;
             }
 
@@ -620,7 +620,7 @@ namespace AshAndEmber
             if (targets.Count == 0)
             {
                 Notify("The Burning Laboratory — Arenicos's empire has no imperial heirs to split among. His fiefs remain.");
-                try { _qaQuestLog?.LogTrueEmperorDead(); _qaQuestLog?.CompleteFail(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { _qaQuestLog?.LogTrueEmperorDead(); _qaQuestLog?.CompleteFail(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 return;
             }
 
@@ -644,7 +644,7 @@ namespace AshAndEmber
                     StabiliseSettlement(s);
                     moved++;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             Notify(
@@ -656,7 +656,7 @@ namespace AshAndEmber
                 if (_arenicosIsTrue) { _qaQuestLog?.LogTrueEmperorDead(); _qaQuestLog?.CompleteFail(); }
                 else                 { _qaQuestLog?.LogFalseEmperorDead(); _qaQuestLog?.CompleteSuccess(); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
     }

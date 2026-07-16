@@ -34,7 +34,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class RuinsExplorationSystem
     {
@@ -135,7 +135,7 @@ namespace AshAndEmber
 
             int scouting = 0;
             try { scouting = Hero.MainHero?.GetSkillValue(DefaultSkills.Scouting) ?? 0; }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             float hours = RuinsMath.HoursForChamber(scouting);
 
             InformationManager.ShowInquiry(new InquiryData(
@@ -157,18 +157,18 @@ namespace AshAndEmber
                     int lost = RuinsMath.HazardTroopLoss(_rng);
                     // Wound rather than kill outright — a close call, not a massacre.
                     try { roster.AddToCounts(nonHeroTroop, -Math.Min(lost, healthy - 1)); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     return "Something in the dark finds a few of your people before you find it. You lose a handful of soldiers to it.";
                 }
                 else
                 {
                     int hp = RuinsMath.HazardHpLoss(_rng);
                     try { Hero.MainHero.HitPoints = Math.Max(1, Hero.MainHero.HitPoints - hp); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     return "Alone, the close call falls on you. You carry the wound out with you.";
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return "Something in the dark almost finds you."; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return "Something in the dark almost finds you."; }
         }
 
         // ── Loot granting ────────────────────────────────────────────────────
@@ -230,7 +230,7 @@ namespace AshAndEmber
                 roster.AddToCounts(item, 1);
                 return string.Format(lineFormat, item.Name?.ToString() ?? item.StringId);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
 
         private static string GrantRelic()
@@ -250,7 +250,7 @@ namespace AshAndEmber
                 roster.AddToCounts(item, 1);
                 return $"Something answers a different light beneath the dust — {def.Name}.";
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
 
         // Wand loot (mod-author-directed addition) — the same "pull a random
@@ -275,7 +275,7 @@ namespace AshAndEmber
                 WandEffects.RefillPlayerCharges(def.ItemId);
                 return $"Wrapped in oiled cloth, untouched by the dust — {def.Name}.";
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
 
         // Talisman loot (mod-author-directed addition) — the same "pull a
@@ -300,7 +300,7 @@ namespace AshAndEmber
                 roster.AddToCounts(item, 1);
                 return $"A small stone charm, still warm to the touch — {def.Name}.";
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
 
         private static string GrantSpellFormula()
@@ -316,7 +316,7 @@ namespace AshAndEmber
                 SpellbookCampaignBehavior.LearnSpellFromRuin(def.Id);
                 return $"A formula, half-legible, still readable: {def.Name} [{def.Formula}]. You will not forget it now.";
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
 
         // ── Advance / finish ─────────────────────────────────────────────────
@@ -337,7 +337,7 @@ namespace AshAndEmber
                 InformationManager.DisplayMessage(new InformationMessage(
                     $"You reach the Throne of Dust and find nothing left sitting on it. {ruinName} has given up what it had.",
                     new Color(0.75f, 0.65f, 0.35f)));
-                try { RuinFullyCleared?.Invoke(stringId); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { RuinFullyCleared?.Invoke(stringId); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             else if (stringId != null)
             {
@@ -351,7 +351,7 @@ namespace AshAndEmber
             _sequence   = null;
             _chamberIdx = 0;
 
-            try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static readonly Color Dim = new Color(0.7f, 0.65f, 0.55f);

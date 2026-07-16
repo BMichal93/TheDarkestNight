@@ -25,14 +25,14 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class MortalLawCampaignBehavior
     {
         private static float CurrentHourOfDay()
         {
             try { return (float)CampaignTime.Now.CurrentHourInDay; }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return 12f; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return 12f; }
         }
 
         private static void TickNightFear()
@@ -67,9 +67,9 @@ namespace AshAndEmber
                     if (shelter == null) continue;
 
                     try { party.SetMoveGoToSettlement(shelter, MobileParty.NavigationType.Default, false); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 

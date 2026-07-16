@@ -55,7 +55,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class ChosenCampaignBehavior : CampaignBehaviorBase
     {
@@ -82,7 +82,7 @@ namespace AshAndEmber
 
         public override void SyncData(IDataStore store)
         {
-            try { store.SyncData("CHO_CONSORT_IDS", ref _consortIds); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("CHO_CONSORT_IDS", ref _consortIds); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try
             {
                 var settled = _processedSettlements.ToList();
@@ -92,9 +92,9 @@ namespace AshAndEmber
                     _processedSettlements = new HashSet<string>(settled ?? new List<string>());
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("CHO_INITIAL_RECORDED", ref _initialSettlementsRecorded); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("CHO_PEACE_STREAK", ref _peaceDayStreak); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("CHO_INITIAL_RECORDED", ref _initialSettlementsRecorded); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("CHO_PEACE_STREAK", ref _peaceDayStreak); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             SyncWifeData(store);
 
@@ -113,25 +113,25 @@ namespace AshAndEmber
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterChosenMenus(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SweepGrantRodsToChosenLords(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterChosenMenus(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SweepGrantRodsToChosenLords(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnDailyTick()
         {
-            try { ChosenSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { CheckPriestKingCapture(); }                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { EnsureTempleWar(); }                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TickRaidAndSiegeNudges(); }                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TickWarEagerness(); }                       catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ChosenSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { CheckPriestKingCapture(); }                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { EnsureTempleWar(); }                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TickRaidAndSiegeNudges(); }                 catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TickWarEagerness(); }                       catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void OnWeeklyTick()
         {
-            try { MaintainPriestKingInfluence(); }     catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { CapApostleInfluence(); }              catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { CheckConquestWives(); }               catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SweepGrantRodsToChosenLords(); }       catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { MaintainPriestKingInfluence(); }     catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { CapApostleInfluence(); }              catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { CheckConquestWives(); }               catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SweepGrantRodsToChosenLords(); }       catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static Kingdom GetChosenKingdom() => ChosenCulture.GetChosenKingdom();
@@ -147,7 +147,7 @@ namespace AshAndEmber
                 if (ruling.Influence < ChosenMath.PriestKingInfluenceMin)
                     ruling.Influence = ChosenMath.PriestKingInfluenceMin;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void CapApostleInfluence()
@@ -166,7 +166,7 @@ namespace AshAndEmber
                         clan.Influence = ChosenMath.ApostleInfluenceCap;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Wives of Conquest ────────────────────────────────────────────────────
@@ -193,7 +193,7 @@ namespace AshAndEmber
                     AcquireConsort(town);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void AcquireConsort(Settlement capturedTown)
@@ -224,20 +224,20 @@ namespace AshAndEmber
                     if (priestKing != null && priestKing.IsAlive && !priestKing.IsFemale && consort.IsFemale)
                         priestKing.Spouse = consort;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 InformationManager.DisplayMessage(new InformationMessage(
                     $"A woman of {capturedTown.Name} is brought into the PriestKing's household — one more oath sealed against the dark.",
                     new Color(0.85f, 0.72f, 0.25f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Blood Succession ─────────────────────────────────────────────────────
         private static void OnHeroKilled(Hero victim, Hero killer,
             KillCharacterAction.KillCharacterActionDetail detail, bool showNotification)
         {
-            try { EnforcePriestKingSuccession(victim); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { EnforcePriestKingSuccession(victim); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void EnforcePriestKingSuccession(Hero deadHero)
@@ -266,13 +266,13 @@ namespace AshAndEmber
 
                 if (heir == null) return;
 
-                try { ChangeClanLeaderAction.ApplyWithSelectedNewLeader(rulingClan, heir); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ChangeClanLeaderAction.ApplyWithSelectedNewLeader(rulingClan, heir); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 InformationManager.DisplayMessage(new InformationMessage(
                     $"The PriestKing is dead. His heir {heir.Name} rises — the Chosen believe the vision passes with the blood.",
                     new Color(0.85f, 0.72f, 0.25f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Self-Immolation ──────────────────────────────────────────────────────
@@ -286,13 +286,13 @@ namespace AshAndEmber
                 var priestKing = chosen.Leader;
                 if (priestKing == null || !priestKing.IsAlive || !priestKing.IsPrisoner) return;
 
-                try { KillCharacterAction.ApplyByMurder(priestKing, null, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { KillCharacterAction.ApplyByMurder(priestKing, null, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 InformationManager.DisplayMessage(new InformationMessage(
                     "The PriestKing would not be Heaven's prisoner and a captor's both. He is ash before his captors can savour the victory.",
                     new Color(0.85f, 0.35f, 0.15f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Never allies with the Temple, at war whenever possible ──────────────
@@ -308,14 +308,14 @@ namespace AshAndEmber
                 if (!(other is Kingdom otherKingdom) || otherKingdom.StringId != TempleKingdomId) return;
                 if (otherKingdom.IsEliminated) return;
 
-                try { DeclareWarAction.ApplyByDefault(chosen, otherKingdom); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { DeclareWarAction.ApplyByDefault(chosen, otherKingdom); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (ChosenCulture.IsPlayerChosen)
                     InformationManager.DisplayMessage(new InformationMessage(
                         "No peace with the false altar — the PriestKing's vision names the Temple an enemy of Heaven, and the war resumes.",
                         new Color(0.85f, 0.35f, 0.15f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Daily safety net: if the Chosen and the Temple are ever found at peace
@@ -331,9 +331,9 @@ namespace AshAndEmber
                 if (temple == null) return;
                 if (chosen.IsAtWarWith(temple)) return;
 
-                try { DeclareWarAction.ApplyByDefault(chosen, temple); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { DeclareWarAction.ApplyByDefault(chosen, temple); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Very expansive ────────────────────────────────────────────────────
@@ -369,7 +369,7 @@ namespace AshAndEmber
                         if (siegeTarget != null)
                         {
                             try { party.SetMoveBesiegeSettlement(siegeTarget, MobileParty.NavigationType.Default); }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             continue;
                         }
                     }
@@ -380,9 +380,9 @@ namespace AshAndEmber
                     if (raidTarget == null) continue;
 
                     try { party.SetMoveRaidSettlement(raidTarget, MobileParty.NavigationType.Default, false); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -448,7 +448,7 @@ namespace AshAndEmber
             var target = FindNearestKingdom(chosen);
             if (target == null) return;
 
-            try { DeclareWarAction.ApplyByDefault(chosen, target); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { DeclareWarAction.ApplyByDefault(chosen, target); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             _peaceDayStreak = 0;
 

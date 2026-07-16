@@ -44,7 +44,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class TempleQuestCampaignBehavior
     {
@@ -58,7 +58,7 @@ namespace AshAndEmber
             }
             catch (System.Exception logEx)
             {
-                AshAndEmber.ModLog.Error(logEx);
+                TheDarkestNight.ModLog.Error(logEx);
                 _artifactRuinIds = new List<string>();
             }
         }
@@ -98,15 +98,15 @@ namespace AshAndEmber
                     true, false, "So the trail was true.", "", null, null), true);
 
                 try { TempleQuestLog.Current?.LogArtifactFound(FoundArtifactCount(), RequiredArtifactCount()); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (AllArtifactsFound())
                 {
                     _phase = PhaseDelivery;
-                    try { TempleQuestLog.Current?.LogAllFound(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { TempleQuestLog.Current?.LogAllFound(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Delivery menu — mirrors TowerRiteQuestCampaignBehavior.Menus.cs's
@@ -123,16 +123,16 @@ namespace AshAndEmber
                             if (_phase != PhaseDelivery) return false;
                             if (!TempleSettlements.IsTempleSettlement(Settlement.CurrentSettlement)) return false;
                             MBTextManager.SetTextVariable("TPLQ_DELIVER_TEXT", "Lay the Five Vigils before the Grand-Master");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = true;
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { ShowDeliveryMenu(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { ShowDeliveryMenu(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ShowDeliveryMenu()
@@ -154,10 +154,10 @@ namespace AshAndEmber
                     "Lay them before the Grand-Master.",
                     "Leave",
                     ready ? (System.Action)PerformDelivery : null,
-                    () => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } }
+                    () => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } }
                 ), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static int HeldVigilCount()
@@ -194,9 +194,9 @@ namespace AshAndEmber
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-            try { TempleQuestLog.Current?.LogDelivered(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TempleQuestLog.Current?.LogDelivered(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -210,13 +210,13 @@ namespace AshAndEmber
                     "There is no cheer in the hall. Only the sound of a great many people quietly agreeing to " +
                     "something they cannot take back.",
                     true, false, "So it is bound.", "",
-                    () => { try { BindPermanentArmy(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    () => { try { BindPermanentArmy(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     null
                 ), true, true);
             }
             catch (System.Exception logEx)
             {
-                AshAndEmber.ModLog.Error(logEx);
+                TheDarkestNight.ModLog.Error(logEx);
                 BindPermanentArmy();
             }
         }

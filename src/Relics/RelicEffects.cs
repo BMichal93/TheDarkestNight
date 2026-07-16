@@ -40,7 +40,7 @@ using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class RelicEffects
     {
@@ -75,14 +75,14 @@ namespace AshAndEmber
             def = default;
             if (agent == null) return false;
             Equipment eq;
-            try { eq = agent.SpawnEquipment; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return false; }
+            try { eq = agent.SpawnEquipment; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return false; }
             if (eq == null) return false;
 
             foreach (var slot in WeaponSlots)
             {
                 string itemId;
                 try { itemId = eq.GetEquipmentFromSlot(slot).Item?.StringId; }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); continue; }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); continue; }
                 if (!RelicCatalog.TryGetByItemId(itemId, out var candidate)) continue;
                 foreach (var eff in candidate.Effects)
                 {
@@ -118,7 +118,7 @@ namespace AshAndEmber
                 if (attackDown && !_prevAttackDown && !focusing)
                 {
                     string itemId = null;
-                    try { itemId = main.WieldedWeapon.Item?.StringId; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { itemId = main.WieldedWeapon.Item?.StringId; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     if (RelicCatalog.TryGetByItemId(itemId, out var def)
                         && def.Effects.Any(e => e.Source == RelicEffectSource.Crystal))
                     {
@@ -128,7 +128,7 @@ namespace AshAndEmber
                 }
                 _prevAttackDown = attackDown;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Dark Gift-style passive aura: DreadPresence relic.
             _duskwardCooldown -= dt;
@@ -158,10 +158,10 @@ namespace AshAndEmber
                         a.SetMorale(Math.Max(m - drain, 0f));
                         SpellEffects.BeginAgentGlowRaw(a, new Color(0.25f, 0f, 0.25f).ToUnsignedInteger(), 0.5f);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Crystal-style dispatch (instant, no missile, no burndown) ───────
@@ -176,7 +176,7 @@ namespace AshAndEmber
                 SpellEffects.SpawnImpactBurst(at, def.GlowColor, 1.6f);
                 SpellEffects.SpawnTempLight(at, def.GlowColor, 7f, 0.8f);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             switch (source)
             {
@@ -210,7 +210,7 @@ namespace AshAndEmber
                     hit++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             Announce(caster, hit > 0
                 ? $"The relic sears — {hit} enemies scorched."
                 : "The relic sears — nothing stood close enough to burn.");
@@ -230,18 +230,18 @@ namespace AshAndEmber
                     if (caster.Team != null && a.Team == caster.Team) continue;
                     float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                     if (dx * dx + dy * dy > r2) continue;
-                    try { a.SetMaximumSpeedLimit(slowMult, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { a.SetMaximumSpeedLimit(slowMult, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     slowed++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             Announce(caster, "The relic's frost pulse " + (slowed > 0 ? $"stills {slowed} enemies." : "finds nothing to still."));
         }
 
         private static void CastAegisstoneRelic(Agent caster, float mult)
         {
             Vec3 pos; try { pos = caster.Position; } catch { return; }
-            try { SpellEffects.HealAgent(caster, CrystalMath.AegisSelfHeal * mult); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.HealAgent(caster, CrystalMath.AegisSelfHeal * mult); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             float r2 = CrystalMath.AegisRadius * CrystalMath.AegisRadius;
             try
             {
@@ -253,10 +253,10 @@ namespace AshAndEmber
                     if (dx * dx + dy * dy > r2) continue;
                     Vec3 away = (a.Position - pos);
                     away = away.LengthSquared > 0.001f ? away.NormalizedCopy() : new Vec3(1f, 0f, 0f);
-                    try { NatureEffects.KnockbackAgent(a, a.Position + away * (CrystalMath.AegisKnockback * mult)); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { NatureEffects.KnockbackAgent(a, a.Position + away * (CrystalMath.AegisKnockback * mult)); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             Announce(caster, $"The relic's bulwark pulse steadies you (+{(int)(CrystalMath.AegisSelfHeal * mult)} HP).");
         }
 
@@ -280,9 +280,9 @@ namespace AshAndEmber
                     hit++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (totalDealt > 0f)
-                try { SpellEffects.HealAgent(caster, totalDealt * CrystalMath.BloodLifestealFrac); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.HealAgent(caster, totalDealt * CrystalMath.BloodLifestealFrac); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             Announce(caster, hit > 0
                 ? $"The relic's vampiric pulse strikes {hit} enemies and returns some of the toll."
                 : "The relic's vampiric pulse finds nothing to take.");
@@ -292,7 +292,7 @@ namespace AshAndEmber
         {
             Vec3 pos; try { pos = caster.Position; } catch { return; }
             float hasteMult = 1f + (CrystalMath.ZephyrHasteMult - 1f) * mult;
-            try { caster.SetMaximumSpeedLimit(hasteMult, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { caster.SetMaximumSpeedLimit(hasteMult, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             float r2 = CrystalMath.ZephyrRadius * CrystalMath.ZephyrRadius;
             try
             {
@@ -302,10 +302,10 @@ namespace AshAndEmber
                     if (caster.Team == null || a.Team != caster.Team) continue;
                     float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                     if (dx * dx + dy * dy > r2) continue;
-                    try { a.SetMaximumSpeedLimit(hasteMult, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { a.SetMaximumSpeedLimit(hasteMult, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             Announce(caster, "The relic's quickening light lifts your step.");
         }
 
@@ -322,7 +322,7 @@ namespace AshAndEmber
                     SpellEffects.DamageAgent(victim, bonus);
                     SpellEffects.BeginAgentGlowRaw(victim, new Color(0.6f, 0f, 0.08f).ToUnsignedInteger(), 0.3f);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             if (CarriesDarkGiftRelic(attacker, DarkGiftId.SoulDrain, out _))
@@ -333,7 +333,7 @@ namespace AshAndEmber
                     victim.SetMorale(Math.Max(m - 30f * RelicMath.DarkGiftRelicPowerMult, 0f));
                     SpellEffects.BeginAgentGlowRaw(victim, new Color(0.1f, 0f, 0.4f).ToUnsignedInteger(), 0.35f);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -352,7 +352,7 @@ namespace AshAndEmber
                         SpellEffects.BeginAgentGlowRaw(victim, new Color(0.3f, 0.3f, 0.3f).ToUnsignedInteger(), 0.2f);
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -365,13 +365,13 @@ namespace AshAndEmber
                 SpellEffects.HealAgent(killer, 12f * RelicMath.DarkGiftRelicPowerMult);
                 SpellEffects.BeginAgentGlowRaw(killer, new Color(0.7f, 0f, 0.1f).ToUnsignedInteger(), 0.4f);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void Announce(Agent caster, string msg)
         {
             try { if (caster == Agent.Main) InformationManager.DisplayMessage(new InformationMessage(msg, new Color(0.8f, 0.7f, 0.4f))); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

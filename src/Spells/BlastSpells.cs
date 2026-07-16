@@ -15,7 +15,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SpellEffects
     {
@@ -73,7 +73,7 @@ namespace AshAndEmber
                     targets.Add(a);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             ColorSchool glowColor = cast.VisualColor;
             SpawnConeLights(caster.Position, fwd, glowColor, 3f, range);
@@ -122,7 +122,7 @@ namespace AshAndEmber
                     BeginAgentGlow(a, glowColor, 2.5f);
                     affected++;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // Scatter surviving enemies outward — units inside and just beyond the

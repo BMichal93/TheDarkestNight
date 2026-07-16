@@ -30,7 +30,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SettlementEncounters
     {
@@ -120,7 +120,7 @@ namespace AshAndEmber
                                             Msg("(+150 renown, +250 influence)", GoodColor);
                                         }
                                     }
-                                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 },
                                 lossMsg:
                                     "He flips the coin. It lands tails. " +
@@ -159,7 +159,7 @@ namespace AshAndEmber
             }
             else
             {
-                try { MageKnowledge.SetMage(false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { MageKnowledge.SetMage(false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 Msg(lossMsg, BadColor);
             }
         }

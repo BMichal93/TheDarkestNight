@@ -23,7 +23,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class WolfHuntQuestCampaignBehavior : CampaignBehaviorBase
     {
@@ -47,7 +47,7 @@ namespace AshAndEmber
             // never races the trigger's own OnSessionLaunchedEvent dialogue
             // registration.
             try { FactionQuestTrigger.Register(BuildDef()); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static FactionQuestDef BuildDef() => new FactionQuestDef
@@ -89,7 +89,7 @@ namespace AshAndEmber
                 InformationManager.DisplayMessage(new InformationMessage(
                     "Quest added: The Great Hunt.", new Color(0.55f, 0.15f, 0.12f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Wiring ────────────────────────────────────────────────────────────────
@@ -104,8 +104,8 @@ namespace AshAndEmber
 
         public override void SyncData(IDataStore store)
         {
-            try { store.SyncData("WLFHUNT_Phase", ref _phase); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("WLFHUNT_Stage", ref _currentStage); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("WLFHUNT_Phase", ref _phase); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("WLFHUNT_Stage", ref _currentStage); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             WolfHuntBeastParty.SyncData(store);
         }
 
@@ -118,23 +118,23 @@ namespace AshAndEmber
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterFinalChoiceMenu(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterFinalChoiceMenu(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnMapEventStarted(MapEvent mapEvent, PartyBase attackerParty, PartyBase defenderParty)
         {
-            try { WolfHuntBeastParty.OnMapEventStarted(mapEvent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { WolfHuntBeastParty.OnMapEventStarted(mapEvent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnMapEventEndedHandler(MapEvent mapEvent)
         {
-            try { WolfHuntBeastParty.OnMapEventEnded(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { WolfHuntBeastParty.OnMapEventEnded(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnWeeklyTick()
         {
-            try { WolfHuntBeastParty.WeeklyTick(); }         catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { CheckFactionGoneWeeklyTick(); }             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { WolfHuntBeastParty.WeeklyTick(); }         catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { CheckFactionGoneWeeklyTick(); }             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Balance-pass reliability fix: the beast hunt itself never depends on
@@ -154,16 +154,16 @@ namespace AshAndEmber
 
             Kingdom k = null;
             try { k = Kingdom.All.FirstOrDefault(x => x != null && x.StringId == WolfBrothersCulture.CultureId && !x.IsEliminated); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (k != null) return; // still exists (even leaderless) — nothing to do
 
-            try { OnChooseBurning(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { OnChooseBurning(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Daily: spawn/track the current stage's beast ─────────────────────────
         private void OnDailyTick()
         {
-            try { TickStageProgress(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TickStageProgress(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void TickStageProgress()

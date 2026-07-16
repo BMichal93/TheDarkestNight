@@ -5,7 +5,7 @@
 // a Sanctuary). No TaleWorlds types, fully testable.
 // =============================================================================
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class SanctuaryMath
     {

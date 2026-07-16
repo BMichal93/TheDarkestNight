@@ -24,7 +24,7 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class WolfBrothersSettlements
     {
@@ -46,10 +46,10 @@ namespace AshAndEmber
 
                         ChangeKingdomAction.ApplyByLeaveKingdom(clan, false);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static bool HoldsAStartingTown(Clan clan)

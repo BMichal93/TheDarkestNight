@@ -21,7 +21,7 @@
 
 using System;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     // How a weapon bit — mapped at runtime from TaleWorlds' DamageTypes so this
     // stays pure. (Invalid/unknown weapon hits are treated as Cut.)

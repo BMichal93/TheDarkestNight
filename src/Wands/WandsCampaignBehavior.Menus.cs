@@ -28,7 +28,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class WandsCampaignBehavior
     {
@@ -49,16 +49,16 @@ namespace AshAndEmber
                         {
                             if (!IsWandShopTown(Settlement.CurrentSettlement)) return false;
                             MBTextManager.SetTextVariable("WAND_SHOP_ENTER_TEXT", "Seek the wandwright");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = true;
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { GameMenu.SwitchToMenu("wand_shop_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { GameMenu.SwitchToMenu("wand_shop_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void RegisterMainMenu(CampaignGameStarter starter)
@@ -83,21 +83,21 @@ namespace AshAndEmber
                             + "one thing it was made to say,\" the wandwright tells you, \"and each will only say it "
                             + "so many times before you. The case fills slow — come back another season.\"");
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             RegisterBuyOptions(starter);
 
             try
             {
                 starter.AddGameMenuOption("wand_shop_main", "wand_shop_leave", "Leave",
-                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } return true; },
-                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } return true; },
+                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     true, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static string GetCurrentTownId()
@@ -131,14 +131,14 @@ namespace AshAndEmber
                                 MBTextManager.SetTextVariable($"WAND_SHOP_BUY_{captured}_TEXT",
                                     $"Buy {def.Name}  [{cost} denars]");
                                 args.IsEnabled = (Hero.MainHero?.Gold ?? 0) >= cost;
-                                try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return false; }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return false; }
                             return true;
                         },
-                        args => { try { DoBuyWand(captured); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                        args => { try { DoBuyWand(captured); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -155,16 +155,16 @@ namespace AshAndEmber
             if (hero == null || hero.Gold < cost)
             {
                 ShowDialog("Not Enough Coin", $"You need {cost} denars for {def.Name}.",
-                    () => { try { GameMenu.SwitchToMenu("wand_shop_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("wand_shop_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
-            try { hero.ChangeHeroGold(-cost); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { hero.ChangeHeroGold(-cost); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             GrantWandToHero(hero, def);
             MarkSlotSold(townId, slot);
 
             ShowDialog("Purchased", $"\"Carry it well,\" the wandwright says, \"and it will carry you.\" ({def.Name})",
-                () => { try { GameMenu.SwitchToMenu("wand_shop_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("wand_shop_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 
         private static void ShowDialog(string title, string body, Action onClose)
@@ -179,7 +179,7 @@ namespace AshAndEmber
             {
                 string brief = body.Length > 100 ? body.Substring(0, 100) + "…" : body;
                 MBInformationManager.AddQuickInformation(new TextObject(brief));
-                try { onClose?.Invoke(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { onClose?.Invoke(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
     }

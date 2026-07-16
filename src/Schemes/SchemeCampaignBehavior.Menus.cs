@@ -15,7 +15,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class SchemeCampaignBehavior
     {
@@ -44,10 +44,10 @@ namespace AshAndEmber
                         if (skip) SchemeMinigame.ResolveSkip(def, hero, sett);
                         else      SchemeMinigame.Begin(def, hero, sett);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 };
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Tavernkeeper dialogue ─────────────────────────────────────────────
@@ -61,7 +61,7 @@ namespace AshAndEmber
                     "I have some shadier business that needs arranging.",
                     CondSchemeAvailable, null, P);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try
             {
                 starter.AddDialogLine(
@@ -69,7 +69,7 @@ namespace AshAndEmber
                     "Coin spent here buys silence. Find the usual spot in the square.",
                     null, OpenSchemMenuDeferred, P);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static bool CondSchemeAvailable()
@@ -94,10 +94,10 @@ namespace AshAndEmber
             {
                 MageKnowledge._deferredInquiry = () =>
                 {
-                    try { GameMenu.SwitchToMenu("ldm_scheme_menu"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { GameMenu.SwitchToMenu("ldm_scheme_menu"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 };
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Scheme game menus ─────────────────────────────────────────────────
@@ -118,30 +118,30 @@ namespace AshAndEmber
                             // Empire-only: the scheme network belongs to the Empire's own
                             // informants — a lord not currently sworn to it has no access.
                             if (!EmpireCulture.IsPlayerEmpireKingdom) return false;
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                             // Disable while a queued NPC-era scheme is still in flight
                             bool pending = false;
-                            try { pending = SchemeSystem.PlayerHasPendingScheme(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { pending = SchemeSystem.PlayerHasPendingScheme(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                             // Disable while the post-operation global cooldown is active
                             bool onCooldown = false;
                             int  cdDays     = 0;
                             try { onCooldown = SchemeSystem.PlayerOnGlobalCooldown;
-                                  cdDays     = SchemeSystem.PlayerGlobalCooldownDays; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                  cdDays     = SchemeSystem.PlayerGlobalCooldownDays; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                             args.IsEnabled = !pending && !onCooldown;
                             if (pending)
-                                try { args.Tooltip = new TextObject("A scheme is already in motion."); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { args.Tooltip = new TextObject("A scheme is already in motion."); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             else if (onCooldown)
-                                try { args.Tooltip = new TextObject($"Network cooling down — {cdDays} day{(cdDays != 1 ? "s" : "")} before the next operation."); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { args.Tooltip = new TextObject($"Network cooling down — {cdDays} day{(cdDays != 1 ? "s" : "")} before the next operation."); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { GameMenu.SwitchToMenu("ldm_scheme_menu"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    args => { try { GameMenu.SwitchToMenu("ldm_scheme_menu"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // ── Scheme selection menu ─────────────────────────────────────────
             try
@@ -158,10 +158,10 @@ namespace AshAndEmber
                             MBTextManager.SetTextVariable("LDM_SCHEME_HDR",
                                 $"The tavernkeeper leans forward. Name the work.\nYour resources: {gold}g  |  {inf} influence");
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // ── One option per scheme — option IDs use letters only (no digits) ─
             // Pattern mirrors Sanctuary: always return true (show all), grey when
@@ -193,11 +193,11 @@ namespace AshAndEmber
                                         + $"  —  from {captured.InfluenceCost} inf"
                                         + (canAfford ? "" : "  [Insufficient influence]");
                                     MBTextManager.SetTextVariable(textKey, label);
-                                    try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                    try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                     args.IsEnabled = canAfford;
-                                    try { args.Tooltip = new TextObject(captured.Description + "\nFinal cost scales with target clan tier."); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                    try { args.Tooltip = new TextObject(captured.Description + "\nFinal cost scales with target clan tier."); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 }
-                                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 return true;
                             },
                             args =>
@@ -208,10 +208,10 @@ namespace AshAndEmber
                                 OpenFactionFilterUI();
                             });
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // ── Counter-intelligence sweep ──────────────────────────────────────
             // Active defence against NPC schemes targeting the player or their
@@ -230,19 +230,19 @@ namespace AshAndEmber
                             int pct = (int)(SweepSuccessChance(roguery) * 100f);
                             MBTextManager.SetTextVariable("LDM_SCHEME_SWEEP",
                                 $"Sweep the city for hostile agents  —  {SweepCostGold}g  [{pct}% Roguery]");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = (Hero.MainHero?.Gold ?? 0) >= SweepCostGold;
                             try { args.Tooltip = new TextObject(
                                 "Pay informants to comb the underworld for plots against you or your fiefs. "
                                 + "If a scheme is in motion, a successful sweep cancels it and names its author. "
-                                + "If nothing is in motion, the coin buys only rumours."); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                + "If nothing is in motion, the coin buys only rumours."); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
                     args => RunCounterIntelSweep());
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // ── Leave ──────────────────────────────────────────────────────────
             try
@@ -252,13 +252,13 @@ namespace AshAndEmber
                     "Think better of it.",
                     args =>
                     {
-                        try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
-                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
     }

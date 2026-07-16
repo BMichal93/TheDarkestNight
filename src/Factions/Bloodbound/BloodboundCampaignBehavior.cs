@@ -38,7 +38,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class BloodboundCampaignBehavior : CampaignBehaviorBase
     {
@@ -80,15 +80,15 @@ namespace AshAndEmber
 
         public override void SyncData(IDataStore store)
         {
-            try { store.SyncData("BLD_IGNORE_IDS",       ref _ignoreHeroIds);       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("BLD_IGNORE_GRANT_DAY",  ref _ignoreGrantDay);      } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("BLD_IGNORE_DURATION",   ref _ignoreDurationDays);  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("BLD_HPBUFF_IDS",        ref _hpBuffHeroIds);       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("BLD_HPBUFF_GRANT_DAY",  ref _hpBuffGrantDay);      } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("BLD_ATT_HERO_IDS",      ref BloodAttunement.HeroIds);            } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("BLD_ATT_ELEMENT_MASKS", ref BloodAttunement.ElementMasks);        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("BLD_ATT_MORALE_STACKS", ref BloodAttunement.DaytimeMoraleStacks);  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("BLD_ATT_SPEED_STACKS",  ref BloodAttunement.DaytimeSpeedStacks);   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("BLD_IGNORE_IDS",       ref _ignoreHeroIds);       } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("BLD_IGNORE_GRANT_DAY",  ref _ignoreGrantDay);      } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("BLD_IGNORE_DURATION",   ref _ignoreDurationDays);  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("BLD_HPBUFF_IDS",        ref _hpBuffHeroIds);       } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("BLD_HPBUFF_GRANT_DAY",  ref _hpBuffGrantDay);      } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("BLD_ATT_HERO_IDS",      ref BloodAttunement.HeroIds);            } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("BLD_ATT_ELEMENT_MASKS", ref BloodAttunement.ElementMasks);        } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("BLD_ATT_MORALE_STACKS", ref BloodAttunement.DaytimeMoraleStacks);  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("BLD_ATT_SPEED_STACKS",  ref BloodAttunement.DaytimeSpeedStacks);   } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (_ignoreHeroIds == null) _ignoreHeroIds = new List<string>();
             if (_ignoreGrantDay == null) _ignoreGrantDay = new List<float>();
@@ -117,15 +117,15 @@ namespace AshAndEmber
         // spending menus, and the timed-buff ticks.
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterBloodboundMenus(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterBloodboundMenus(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnDailyTick()
         {
-            try { BloodboundSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TickHpBuffExpiry(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { PruneExpiredIgnores(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { BloodAttunement.TickDaytimeMoralePenalty(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { BloodboundSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TickHpBuffExpiry(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { PruneExpiredIgnores(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { BloodAttunement.TickDaytimeMoralePenalty(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── The join gate — refuses the soft and the untested ───────────────────
@@ -151,7 +151,7 @@ namespace AshAndEmber
 
                 bool isPlayerClan = clan == Clan.PlayerClan;
                 try { ChangeKingdomAction.ApplyByLeaveKingdom(clan, isPlayerClan); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (isPlayerClan)
                 {
@@ -161,7 +161,7 @@ namespace AshAndEmber
                         new Color(0.55f, 0.10f, 0.10f)));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static bool Qualifies(Hero hero)
@@ -174,7 +174,7 @@ namespace AshAndEmber
                 int combatFocus = 0;
                 if (hero.HeroDeveloper != null)
                     foreach (var skill in CombatSkills())
-                        try { combatFocus += hero.HeroDeveloper.GetFocus(skill); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { combatFocus += hero.HeroDeveloper.GetFocus(skill); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 return BloodboundMath.QualifiesForBloodbound(vigor, endurance, combatFocus);
             }
@@ -209,7 +209,7 @@ namespace AshAndEmber
                         new Color(0.55f, 0.10f, 0.10f)));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Ignore buff ──────────────────────────────────────────────────────────
@@ -230,7 +230,7 @@ namespace AshAndEmber
                 _ignoreGrantDay.Add(today);
                 _ignoreDurationDays.Add(durationDays);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Consulted by DemonSpawnCampaignBehavior.DirectDemonParties to skip a
@@ -267,7 +267,7 @@ namespace AshAndEmber
                     _ignoreGrantDay.RemoveAt(i);
                     _ignoreDurationDays.RemoveAt(i);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -285,7 +285,7 @@ namespace AshAndEmber
                 float ceiling = hero.MaxHitPoints + BloodboundMath.HpBuffAmount;
                 hero.HitPoints = Math.Min(hero.HitPoints + (int)BloodboundMath.HpBuffAmount, (int)ceiling);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void TickHpBuffExpiry()
@@ -305,7 +305,7 @@ namespace AshAndEmber
                         // The week is over — let the overheal fall back to the hero's
                         // normal ceiling. Never raises HP, only clamps an inflated one down.
                         try { hero.HitPoints = Math.Min(hero.HitPoints, hero.MaxHitPoints); }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                         if (hero == Hero.MainHero)
                         {
@@ -318,7 +318,7 @@ namespace AshAndEmber
                     _hpBuffHeroIds.RemoveAt(i);
                     _hpBuffGrantDay.RemoveAt(i);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
     }

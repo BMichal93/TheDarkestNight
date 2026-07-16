@@ -27,7 +27,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class EmpireQuestCampaignBehavior
     {
@@ -36,7 +36,7 @@ namespace AshAndEmber
         private static void SyncKillData(IDataStore store)
         {
             try { store.SyncData("EMPQ_DemonsKilled", ref _demonsKilled); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ResetKillState()
@@ -57,9 +57,9 @@ namespace AshAndEmber
 
                 _demonsKilled++;
                 try { EmpireQuestLog.Current?.LogKillProgress(EmpireQuestMath.ClampedKillProgress(_demonsKilled)); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Victory — the kill target is reached ────────────────────────────────
@@ -84,9 +84,9 @@ namespace AshAndEmber
                 Hero emperor = EmpireLeader();
                 ClanRenown.Gain(emperor?.Clan ?? empire?.RulingClan, EmpireQuestMath.VictoryRenownBonus);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-            try { EmpireQuestLog.Current?.LogVictory(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { EmpireQuestLog.Current?.LogVictory(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -104,7 +104,7 @@ namespace AshAndEmber
 
                     true, false, "Long live the Emperor.", "", null, null), true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

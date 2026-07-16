@@ -18,7 +18,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class GreatAwakeningCampaignBehavior
     {
@@ -36,16 +36,16 @@ namespace AshAndEmber
                                 || Settlement.CurrentSettlement.StringId != _altarSettlementId) return false;
                             MBTextManager.SetTextVariable("GRAWK_ALTAR_ENTER_TEXT",
                                 $"Prepare for a Great Summoning  [{_prisonersSacrificed:N0} / {GreatAwakeningMath.PrisonerTarget:N0}]");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = true;
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { GameMenu.SwitchToMenu("grawk_altar_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { GameMenu.SwitchToMenu("grawk_altar_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -63,10 +63,10 @@ namespace AshAndEmber
                           + $"Sacrificed toward the Great Summoning: {_prisonersSacrificed:N0} / {GreatAwakeningMath.PrisonerTarget:N0}\n\n"
                           + status);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -85,23 +85,23 @@ namespace AshAndEmber
                             MBTextManager.SetTextVariable("GRAWK_ALTAR_CONTRIBUTE_TEXT",
                                 $"Give every prisoner you hold to the summoning ({held}){note}");
                             args.IsEnabled = canGive;
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Continue; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Continue; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             return true;
                         }
                         catch { return false; }
                     },
                     args => DoContribute());
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
                 starter.AddGameMenuOption("grawk_altar_main", "grawk_altar_leave", "Step away",
-                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } return true; },
-                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } return true; },
+                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     true, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static int PlayerPrisonerCount()
@@ -138,7 +138,7 @@ namespace AshAndEmber
                     $"{given} prisoners are led to the Dark Altar and do not come back. " +
                     $"The Great Summoning stands at {_prisonersSacrificed:N0} / {GreatAwakeningMath.PrisonerTarget:N0}."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

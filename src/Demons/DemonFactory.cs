@@ -64,7 +64,7 @@ using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class DemonFactory
     {
@@ -93,7 +93,7 @@ namespace AshAndEmber
                         BodyFlags.CommonCollisionExcludeFlagsForAgent, ref gz);
                     pos.z = gz;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 int seed = _rng.Next();
                 Equipment equipment = troop.FirstBattleEquipment ?? troop.Equipment;
@@ -134,7 +134,7 @@ namespace AshAndEmber
                         if (hulking != null) agentData = agentData.Monster(hulking);
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 Agent agent = Mission.Current.SpawnAgent(agentData, false);
                 if (agent == null) return null;
@@ -145,7 +145,7 @@ namespace AshAndEmber
                     agent.HealthLimit = hp;
                     agent.Health      = hp;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 ApplyBeastShape(agent, tier);
                 DemonBattleBehavior.Register(agent, tier);
@@ -192,9 +192,9 @@ namespace AshAndEmber
                 float scale = DemonMath.VisualScale(tier);
                 if (scale > 1.001f) SetAgentScale(agent, scale);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try { agent.SetAgentIdleAnimationStatus(false); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── The warp — per-bone disfigurement + the snarl ──────────────────────
@@ -217,7 +217,7 @@ namespace AshAndEmber
                 if (warps.Length > 0 && visuals != null)
                 {
                     Monster m = null;
-                    try { m = agent.Monster; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { m = agent.Monster; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     if (m != null)
                     {
                         var indices = new System.Collections.Generic.List<sbyte>(warps.Length);
@@ -231,15 +231,15 @@ namespace AshAndEmber
                         }
                         if (indices.Count > 0)
                         {
-                            try { visuals.UseScaledWeapons(false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { visuals.UseScaledWeapons(false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             visuals.ApplySkeletonScale(Vec3.One, 0f, indices.ToArray(), scales.ToArray());
                         }
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try { agent.SetAgentFacialAnimation(Agent.FacialAnimChannel.Mid, DemonMath.FacialAnimation(tier), true); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static sbyte BoneIndexFor(Monster m, DemonMath.BonePart part)
@@ -274,7 +274,7 @@ namespace AshAndEmber
                 }
                 _setInitialScale?.Invoke(agent, new object[] { scale });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // The demon's only order: find the nearest living thing and CHARGE it.
@@ -283,23 +283,23 @@ namespace AshAndEmber
         // (or cavalry, for the Hellsteed) and told to charge, same as a Kindled.
         internal static void SetAggressive(Agent agent, Team team)
         {
-            try { agent.SetWatchState(Agent.WatchState.Alarmed); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { agent.SetWatchState(Agent.WatchState.Alarmed); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             bool enemySide = false;
             try { enemySide = Mission.Current.PlayerTeam == null || team != Mission.Current.PlayerTeam; }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (!enemySide) return;
             try
             {
                 bool mounted = false;
-                try { mounted = agent.HasMount; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { mounted = agent.HasMount; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 Formation form = team.GetFormation(mounted ? FormationClass.Cavalry : FormationClass.Infantry);
                 if (form != null)
                 {
-                    try { agent.Formation = form; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { form.SetMovementOrder(MovementOrder.MovementOrderCharge); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { agent.Formation = form; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { form.SetMovementOrder(MovementOrder.MovementOrderCharge); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

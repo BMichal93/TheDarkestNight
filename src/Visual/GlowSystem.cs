@@ -22,7 +22,7 @@ using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 using TaleWorlds.CampaignSystem.MapEvents;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SpellEffects
     {
@@ -42,14 +42,14 @@ namespace AshAndEmber
                 if (a == null || !a.IsActive() || a.Health <= 0f)
                 {
                     if (a != null)
-                        try { a.AgentVisuals?.GetEntity()?.SetContourColor(null, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { a.AgentVisuals?.GetEntity()?.SetContourColor(null, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     _glowTimers.RemoveAt(i);
                     continue;
                 }
                 float t = _glowTimers[i].remaining - dt;
                 if (t <= 0f)
                 {
-                    try { a.AgentVisuals?.GetEntity()?.SetContourColor(null, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { a.AgentVisuals?.GetEntity()?.SetContourColor(null, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     _glowTimers.RemoveAt(i);
                 }
                 else
@@ -63,7 +63,7 @@ namespace AshAndEmber
         {
             foreach (var (agent, _) in _glowTimers)
                 if (agent != null && agent.IsActive() && agent.Health > 0f)
-                    try { agent.AgentVisuals?.GetEntity()?.SetContourColor(null, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { agent.AgentVisuals?.GetEntity()?.SetContourColor(null, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _glowTimers.Clear();
         }
 
@@ -79,7 +79,7 @@ namespace AshAndEmber
                 if (idx >= 0) _glowTimers.RemoveAt(idx);
                 _glowTimers.Add((agent, duration));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void BeginAgentGlowWhite(Agent agent, float duration)
@@ -93,7 +93,7 @@ namespace AshAndEmber
                 if (idx >= 0) _glowTimers.RemoveAt(idx);
                 _glowTimers.Add((agent, duration));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void BeginAgentGlowRaw(Agent agent, uint rawArgb, float duration)
@@ -106,7 +106,7 @@ namespace AshAndEmber
                 if (idx >= 0) _glowTimers.RemoveAt(idx);
                 _glowTimers.Add((agent, duration));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Inner Fire Heat (glow intensity — scales with recent aging spend) ─────
@@ -139,7 +139,7 @@ namespace AshAndEmber
                 if (_innerFireHeat >= 30f)
                     BeginAgentGlow(Agent.Main, ColorSchool.Red, HeatLightInterval + 0.2f);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void ClearInnerFireHeat()
@@ -160,7 +160,7 @@ namespace AshAndEmber
                 TryCastSound(caster.Position, school);
                 TryCastAnimation(caster);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

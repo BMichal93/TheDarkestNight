@@ -16,7 +16,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class ForeignMusterCampaignBehavior
     {
@@ -60,15 +60,15 @@ namespace AshAndEmber
                                     $"The Foreign Muster — hire a {recruit.Name} ({culture.Name})  [{cost} denars, {ForeignMusterMath.WeeklyPurchaseCap - bought} left this week]");
                                 args.IsEnabled = true;
                             }
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Recruit; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Recruit; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { DoMuster(Settlement.CurrentSettlement); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { DoMuster(Settlement.CurrentSettlement); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void DoMuster(Settlement s)
@@ -96,7 +96,7 @@ namespace AshAndEmber
                     "It will not be the last foreign blade Legion buys this week.",
                     new Color(0.7f, 0.65f, 0.55f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

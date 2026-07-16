@@ -23,7 +23,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class TowerCampaignBehavior : CampaignBehaviorBase
     {
@@ -58,12 +58,12 @@ namespace AshAndEmber
         // transmutation menus, and the join ritual.
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterTowerMenus(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterTowerMenus(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnDailyTick()
         {
-            try { TowerSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TowerSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── The join ritual — magic opens to whoever joins ─────────────────────
@@ -80,9 +80,9 @@ namespace AshAndEmber
                 if (oldKingdom != null && oldKingdom.StringId == TowerCulture.CultureId) return; // already Tower
 
                 foreach (Hero hero in clan.Heroes.Where(h => h != null && h.IsAlive).ToList())
-                    try { ApplyTowerJoinMagic(hero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ApplyTowerJoinMagic(hero); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void ApplyTowerJoinMagic(Hero hero)
@@ -109,7 +109,7 @@ namespace AshAndEmber
                 var granted = PickRandom(allIds, Math.Min(TowerMath.LordGrantedSpellCount, allIds.Count));
                 SpellcasterLords.GrantToHero(hero, granted);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static List<SpellId> PickRandom(List<SpellId> source, int count)

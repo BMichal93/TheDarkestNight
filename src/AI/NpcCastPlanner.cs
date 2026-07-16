@@ -19,7 +19,7 @@
 
 using System;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     // A lord's temperament, read from DefaultTraits.Calculating at the call site.
     public enum CasterTemper { Calculating, Balanced, Impulsive }

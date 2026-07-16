@@ -17,7 +17,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class TavernCampaignBehavior
     {
@@ -75,7 +75,7 @@ namespace AshAndEmber
                 string sign = delta >= 0 ? "+" : "";
                 Msg($"(Relation with {target.Name}: {sign}{delta})", delta >= 0 ? GoodColor : BadColor);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ChangeCrime(float amount)
@@ -86,18 +86,18 @@ namespace AshAndEmber
                 if (kingdom != null)
                     ChangeCrimeRatingAction.Apply(kingdom, amount, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void AddMorale(float delta)
         {
-            try { if (MobileParty.MainParty != null) MobileParty.MainParty.RecentEventsMorale += delta; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { if (MobileParty.MainParty != null) MobileParty.MainParty.RecentEventsMorale += delta; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void Msg(string text, Color c)
         {
             try { MBInformationManager.AddQuickInformation(new TextObject(text)); }
-            catch { try { InformationManager.DisplayMessage(new InformationMessage(text, c)); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } }
+            catch { try { InformationManager.DisplayMessage(new InformationMessage(text, c)); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } }
         }
     }
 }

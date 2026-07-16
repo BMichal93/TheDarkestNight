@@ -19,7 +19,7 @@
 
 using System;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     // The five elements of the unified magic. Fire is the default/free root.
     // v0.37 — FUSIONS: two known elements drawn together in one chord (see

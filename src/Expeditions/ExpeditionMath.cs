@@ -13,7 +13,7 @@
 
 using System;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     // ── Leader specialties ──────────────────────────────────────────────────
     // Data-only: leaders in the pool are records, never real Hero objects.

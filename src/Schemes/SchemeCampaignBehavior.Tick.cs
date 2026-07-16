@@ -15,18 +15,18 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class SchemeCampaignBehavior
     {
         // ── Daily tick ────────────────────────────────────────────────────────
         private static void OnDailyTick()
         {
-            try { SchemeSystem.DailyTick();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SchemeSystem.NpcSchemeTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SchemeSystem.DailyTick();     } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SchemeSystem.NpcSchemeTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Old scheme renown hits wrote Clan.Renown below the tier floor, which
             // wedges the clan-screen bar. Repairs saves damaged before ClanRenown existed.
-            try { ClanRenown.RepairFloor(TaleWorlds.CampaignSystem.Hero.MainHero?.Clan); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ClanRenown.RepairFloor(TaleWorlds.CampaignSystem.Hero.MainHero?.Clan); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Counter-intelligence sweep ────────────────────────────────────────
@@ -41,7 +41,7 @@ namespace AshAndEmber
             try
             {
                 if (Hero.MainHero == null || Hero.MainHero.Gold < SweepCostGold) return;
-                try { Hero.MainHero.Gold -= SweepCostGold; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { Hero.MainHero.Gold -= SweepCostGold; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 var plot = SchemeSystem.FindSchemeAgainstPlayerInterests();
                 if (plot == null)
@@ -59,7 +59,7 @@ namespace AshAndEmber
                     string who   = schemer?.Name?.ToString() ?? "an unknown hand";
                     var def      = SchemeSystem.GetDefinition(plot.Type);
                     SchemeSystem.RemovePendingScheme(plot);
-                    try { Hero.MainHero.HeroDeveloper?.AddSkillXp(DefaultSkills.Roguery, 300); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { Hero.MainHero.HeroDeveloper?.AddSkillXp(DefaultSkills.Roguery, 300); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     MBInformationManager.AddQuickInformation(new TextObject(
                         $"Your informants caught the agent mid-errand. The {def?.Name ?? "scheme"} against you "
                         + $"is unravelled before it lands — and the hand behind it belongs to {who}."));
@@ -71,7 +71,7 @@ namespace AshAndEmber
                         + "Something is in motion against you. You could not stop it."));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
     }

@@ -29,7 +29,7 @@ using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class ElementalVisuals
     {
@@ -81,14 +81,14 @@ namespace AshAndEmber
                         if (ps != null)
                             shroud.Systems.Add(new KeyValuePair<sbyte, ParticleSystem>(bone, ps));
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 // One coloured light per being, hung at chest height. Created here and
                 // only moved thereafter — this is what tints the smoke of the airy /
                 // stony kinds (their particle is uncoloured) and glows at night.
                 try { shroud.Light = SpellEffects.CreateFollowerLight(agent.Position + new Vec3(0f, 0f, 1.1f), Rgb(kind), 4.5f); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 shroud.Contour = Argb(kind);
                 _shrouds[agent] = shroud;
@@ -97,16 +97,16 @@ namespace AshAndEmber
                 // edges of a faceless shape. Re-asserted by Follow (a hit-flash from the
                 // shared glow system would otherwise clear it for good on expiry).
                 try { agent.AgentVisuals?.GetEntity()?.SetContourColor(shroud.Contour, true); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Fade the bald, textured body away to a translucent shimmer so the
                 // being reads as pooled element, not a naked man. Re-asserted by
                 // Follow — the engine reasserts full opacity on animation/LOD
                 // changes, so a one-shot fade here would flicker back solid.
                 try { agent.AgentVisuals?.GetEntity()?.SetAlpha(GhostAlpha); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Cheap per-tick upkeep: drag the one light to the body and re-assert the
@@ -128,7 +128,7 @@ namespace AshAndEmber
                     entity.SetAlpha(GhostAlpha);   // hold the body faded — see Attach
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void Detach(Agent agent)
@@ -150,8 +150,8 @@ namespace AshAndEmber
             if (shroud == null) return;
             foreach (var pair in shroud.Systems)
             {
-                try { pair.Value?.SetEnable(false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { shroud.Skeleton?.RemoveBoneComponent(pair.Key, pair.Value); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { pair.Value?.SetEnable(false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { shroud.Skeleton?.RemoveBoneComponent(pair.Key, pair.Value); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             shroud.Systems.Clear();
             SpellEffects.RemoveFollowerLight(shroud.Light);
@@ -165,7 +165,7 @@ namespace AshAndEmber
                     entity.SetAlpha(1f);   // restore full opacity (e.g. the corpse)
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Per-kind dressing ────────────────────────────────────────────────────

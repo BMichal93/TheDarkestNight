@@ -17,7 +17,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class ScholarBargainQuestSystem
     {
@@ -218,7 +218,7 @@ namespace AshAndEmber
                 if (troop != null && MobileParty.MainParty?.MemberRoster != null)
                     MobileParty.MainParty.MemberRoster.AddToCounts(troop, 1);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ═══════════════════════════════════════════════════════════════════
@@ -310,7 +310,7 @@ namespace AshAndEmber
                         var troop = MBObjectManager.Instance?.GetObject<CharacterObject>("ashen_revenant");
                         if (troop != null) lord.PartyBelongedTo?.MemberRoster.AddToCounts(troop, 20);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     body = $"Word reaches you that {lord.Name}'s muster has grown by twenty men who do not eat, " +
                            "sleep, or speak — cold soldiers raised somewhere quiet, under some scholar's instruction. " +
                            $"You hear the name {ScholarName} mentioned once, carefully, by someone who does not want " +

@@ -15,7 +15,7 @@
 
 using System;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     // The four channels of the living world.
     public enum NatureElement

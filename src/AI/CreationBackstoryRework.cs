@@ -54,7 +54,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal sealed partial class CreationBackstoryRework : CampaignBehaviorBase, ICharacterCreationContentHandler
     {
@@ -129,7 +129,7 @@ namespace AshAndEmber
             _pendingKeepsake        = KeepsakeId.None;
             _gated.Clear();
             _manager = null;
-            try { manager.RegisterCharacterCreationContentHandler(this, 1000); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { manager.RegisterCharacterCreationContentHandler(this, 1000); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── ICharacterCreationContentHandler ─────────────────────────────────
@@ -161,14 +161,14 @@ namespace AshAndEmber
                 RewriteMenus(m);
                 ApplyGatedRenames();   // set initial state for the current (or no) selection
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Culture is chosen partway through creation; re-evaluate the shared-option
         // flavour each time a stage completes so it tracks the player's live pick.
         void ICharacterCreationContentHandler.OnStageCompleted(CharacterCreationStageBase stage)
         {
-            try { ApplyGatedRenames(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ApplyGatedRenames(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         void ICharacterCreationContentHandler.OnCharacterCreationFinalize(CharacterCreationManager m)
@@ -188,7 +188,7 @@ namespace AshAndEmber
                     else if (KeepsakeOptionIds.TryGetValue(id, out var keepsake)) _pendingKeepsake = keepsake;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Menu rewrites ────────────────────────────────────────────────────
@@ -287,12 +287,12 @@ namespace AshAndEmber
 
                 CultureObject empire = null;
                 try { empire = MBObjectManager.Instance?.GetObject<CultureObject>(EmpireCultureId); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (empire == null) return;   // Empire missing — leave creation alone rather than break it.
 
-                try { content.SetSelectedCulture(empire, m); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { content.SetSelectedCulture(empire, m); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Requirement 23, Step 5 — Youth ───────────────────────────────────
@@ -344,7 +344,7 @@ namespace AshAndEmber
         {
             var o = Find(m, menuId, optionId);
             if (o == null) return;
-            try { OnConditionField?.SetValue(o, AlwaysVisible); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { OnConditionField?.SetValue(o, AlwaysVisible); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Registers a culture-gated rename of a shared narrative option: captures the
@@ -367,7 +367,7 @@ namespace AshAndEmber
                     BaseArgs = ArgsGetterField?.GetValue(o) as GetNarrativeMenuOptionArgsDelegate,
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Applies each gated rename's flavour when its culture is the live selection,
@@ -376,16 +376,16 @@ namespace AshAndEmber
         {
             if (_manager == null || _gated.Count == 0) return;
             string sel = null;
-            try { sel = _manager.CharacterCreationContent?.SelectedCulture?.StringId; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { sel = _manager.CharacterCreationContent?.SelectedCulture?.StringId; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             foreach (var gr in _gated)
             {
                 var o = Find(_manager, gr.MenuId, gr.OptionId);
                 if (o == null) continue;
                 bool match = sel == gr.Culture;
-                try { TextField?.SetValue(o, match ? gr.FlavText : gr.BaseText); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { DescField?.SetValue(o, match ? gr.FlavDesc : gr.BaseDesc); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { TextField?.SetValue(o, match ? gr.FlavText : gr.BaseText); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { DescField?.SetValue(o, match ? gr.FlavDesc : gr.BaseDesc); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (gr.FlavArgs != null)
-                    try { ArgsGetterField?.SetValue(o, match ? gr.FlavArgs : gr.BaseArgs); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ArgsGetterField?.SetValue(o, match ? gr.FlavArgs : gr.BaseArgs); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -405,10 +405,10 @@ namespace AshAndEmber
         {
             var o = Find(m, menuId, optionId);
             if (o == null) return;
-            try { TextField?.SetValue(o, new TextObject(newText)); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { DescField?.SetValue(o, new TextObject(newDesc)); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TextField?.SetValue(o, new TextObject(newText)); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { DescField?.SetValue(o, new TextObject(newDesc)); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (argsGetter != null)
-                try { ArgsGetterField?.SetValue(o, argsGetter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ArgsGetterField?.SetValue(o, argsGetter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Riding only (the dropped Polearm is replaced by a random Dark Gift, granted
@@ -446,13 +446,13 @@ namespace AshAndEmber
             if (_pendingApostleDarkGift)
             {
                 _pendingApostleDarkGift = false;
-                try { DarkGiftSystem.GrantRandomGift(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { DarkGiftSystem.GrantRandomGift(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             if (_pendingSquireBoon)
             {
                 _pendingSquireBoon = false;
-                try { MiracleInventory.AddGrace(3); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { MiracleInventory.AddGrace(3); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // "The Keepsake" — see CreationBackstoryRework.Keepsakes.cs.

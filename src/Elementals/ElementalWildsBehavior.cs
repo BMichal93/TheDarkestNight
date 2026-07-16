@@ -32,7 +32,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public class ElementalWildsBehavior : CampaignBehaviorBase
     {
@@ -92,7 +92,7 @@ namespace AshAndEmber
                 Settlement home = hideouts[_rng.Next(hideouts.Count)];
                 SpawnBand(home.GetPosition2D, ElementalMath.WildKindForBiome(BiomeHint(home)), roam: true, announce: true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Force-spawn a band right beside the player, ready to engage — the
@@ -111,7 +111,7 @@ namespace AshAndEmber
                     ? "[DEBUG] Awakened spawn FAILED — no bandit clan/hideout/troop available."
                     : $"[DEBUG] {ElementUltimateMath.ElementalName(kind)} band spawned beside you — engage it.");
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Shared spawner. Returns the party (or null on any failure).
@@ -134,7 +134,7 @@ namespace AshAndEmber
                             .OrderBy(s => (s.GetPosition2D - anchor).LengthSquared).FirstOrDefault();
                     hideout = hs?.Hideout;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (hideout == null) return null;
 
                 const float scatter = 3f;
@@ -147,7 +147,7 @@ namespace AshAndEmber
                 MobileParty party = BanditPartyComponent.CreateBanditParty(partyId, banditClan, hideout, false, pt, cvec);
                 if (party == null) return null;
 
-                try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Seed the band with the bare, weaponless "Elemental" troop so it
                 // reads as the Kindled on the map and in battle — no looter mesh, no
                 // thrown stones. Falls back to bandits only if the troop failed to load.
@@ -162,7 +162,7 @@ namespace AshAndEmber
                            + _rng.Next(ElementalMath.WildPartyMaxBodies - ElementalMath.WildPartyMinBodies + 1);
                 party.MemberRoster.AddToCounts(troop, bodies);
 
-                try { party.Party.SetCustomName(new TextObject(ElementUltimateMath.ElementalName(kind))); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { party.Party.SetCustomName(new TextObject(ElementUltimateMath.ElementalName(kind))); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 _bandKind[party.StringId] = (int)kind;
 
                 // Kick it out of the hideout onto the roads so it is actually
@@ -179,13 +179,13 @@ namespace AshAndEmber
                         if (town != null)
                             party.SetMoveGoToSettlement(town, MobileParty.NavigationType.Default, false);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 if (announce) AnnounceBirth(kind, spawnPos);
                 return party;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
 
         // A quiet rumour in the message feed when a band wakes — atmospheric, and
@@ -208,14 +208,14 @@ namespace AshAndEmber
         private static void Announce(string text)
         {
             try { InformationManager.DisplayMessage(new InformationMessage(text, new TaleWorlds.Library.Color(0.65f, 0.55f, 0.95f))); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Culture of the nearest land, mapped to the terrain the Kindled reads.
         private static string BiomeHint(Settlement s)
         {
             string c = "";
-            try { c = s?.Culture?.StringId ?? ""; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { c = s?.Culture?.StringId ?? ""; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             switch (c)
             {
                 case "aserai":   return "desert";
@@ -250,7 +250,7 @@ namespace AshAndEmber
                 }
                 ElementalBeings.PendingBattleKind = kind;   // null in an ordinary fight
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Clear the mark so a later, unrelated battle never inherits it (the
@@ -258,7 +258,7 @@ namespace AshAndEmber
         // mission — auto-resolved — must not leave it armed).
         private void OnMapEventEnded(MapEvent mapEvent)
         {
-            try { ElementalBeings.PendingBattleKind = null; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ElementalBeings.PendingBattleKind = null; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void PruneDead()
@@ -269,7 +269,7 @@ namespace AshAndEmber
                 var dead = _bandKind.Keys.Where(id => !alive.Contains(id)).ToList();
                 foreach (var id in dead) _bandKind.Remove(id);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

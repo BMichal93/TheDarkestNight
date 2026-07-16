@@ -4,7 +4,7 @@
 // locations (matched by village name), challenge sequences, and rewards.
 // =============================================================================
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     // ── Challenge types ───────────────────────────────────────────────────────
     public enum ChallengeType

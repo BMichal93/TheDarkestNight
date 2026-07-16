@@ -18,7 +18,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class TalentSystem
     {
@@ -41,7 +41,7 @@ namespace AshAndEmber
             _fadeDaysRemaining--;
             if (_fadeDaysRemaining <= 0)
             {
-                try { if (MobileParty.MainParty != null) TrySetPartyConcealed(MobileParty.MainParty, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { if (MobileParty.MainParty != null) TrySetPartyConcealed(MobileParty.MainParty, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 Msg("Fade — the ash settles. Your party is visible once more.");
             }
         }
@@ -66,7 +66,7 @@ namespace AshAndEmber
         public static void RegisterMapCast()
         {
             _dailyMapCastCount++;
-            try { AgingSystem.RecordMapCast(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { AgingSystem.RecordMapCast(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Player talent tracking ─────────────────────────────────────────────
@@ -217,7 +217,7 @@ namespace AshAndEmber
                     spent = true;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (!spent)
             {
@@ -263,12 +263,12 @@ namespace AshAndEmber
                 int honor = hero.GetTraitLevel(DefaultTraits.Honor);
                 if (honor > -3) hero.SetTraitLevel(DefaultTraits.Honor, honor - 1);
                 if (hero.MapFaction is Kingdom k)
-                    try { ChangeCrimeRatingAction.Apply(k, 30f, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ChangeCrimeRatingAction.Apply(k, 30f, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 InformationManager.DisplayMessage(new InformationMessage(
                     "The fire darkens with hunger. Those who witness what you do will remember.",
                     new Color(0.8f, 0.4f, 0.2f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ApplyCamaraderie(Hero player)
@@ -278,10 +278,10 @@ namespace AshAndEmber
                 foreach (Hero h in Hero.AllAliveHeroes.ToList())
                 {
                     if (h == player || !ElementLordRegistry.IsElementLord(h)) continue;
-                    try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(player, h, 10, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(player, h, 10, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void EnforceCaramaraderieLimits(Hero player, Hero mage)
@@ -292,7 +292,7 @@ namespace AshAndEmber
                 int rel = CharacterRelationManager.GetHeroRelation(player, mage);
                 if (rel < 0) CharacterRelationManager.SetHeroRelation(player, mage, 0);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Enforce Kinship floor for all living mage lords — call from daily tick.
@@ -307,7 +307,7 @@ namespace AshAndEmber
                     EnforceCaramaraderieLimits(Hero.MainHero, h);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static TalentDef GetDef(TalentId id) =>

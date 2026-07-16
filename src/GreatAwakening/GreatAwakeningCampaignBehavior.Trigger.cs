@@ -7,7 +7,7 @@
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class GreatAwakeningCampaignBehavior
     {
@@ -26,7 +26,7 @@ namespace AshAndEmber
             // this reachable in a campaign that never engaged the Rite.
             bool riteConcluded = false;
             try { riteConcluded = TowerRiteQuestCampaignBehavior.RiteConcluded; }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (!GreatAwakeningMath.TriggerAllowed(day, riteConcluded)) return;
             if (day < GreatAwakeningMath.TriggerStartDay) return;
             if (_rng.NextDouble() >= GreatAwakeningMath.TriggerChance(day)) return;
@@ -41,7 +41,7 @@ namespace AshAndEmber
                     : "Dark forces gather in the deep desert. Word reaches you that the Tower has found " +
                       "something ancient down in the Sands — and means to bring it in."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

@@ -59,7 +59,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class BloodboundQuestCampaignBehavior
     {
@@ -70,9 +70,9 @@ namespace AshAndEmber
 
         private static void SyncResolutionData(IDataStore store)
         {
-            try { store.SyncData("BLDQ_MassDeathApplied",   ref _massDeathApplied); }  catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("BLDQ_DemonAttackApplied", ref _demonAttackApplied); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("BLDQ_MassDeathDay",       ref _massDeathDay); }       catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("BLDQ_MassDeathApplied",   ref _massDeathApplied); }  catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("BLDQ_DemonAttackApplied", ref _demonAttackApplied); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("BLDQ_MassDeathDay",       ref _massDeathDay); }       catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ResetResolutionState()
@@ -100,8 +100,8 @@ namespace AshAndEmber
                 true, true,
                 "Drink. I'll see what's on the other side too.",
                 "Ride out. This isn't a hunt I'll follow you on.",
-                () => { try { ResolveParticipate(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
-                () => { try { ResolveRan(); }         catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } }
+                () => { try { ResolveParticipate(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
+                () => { try { ResolveRan(); }         catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } }
             ), true, true);
         }
 
@@ -109,7 +109,7 @@ namespace AshAndEmber
         private static void ResolveParticipate()
         {
             _phase = PhaseEndedParticipated;
-            try { BloodboundQuestLog.Current?.LogEndingParticipated(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { BloodboundQuestLog.Current?.LogEndingParticipated(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             ApplyMassClanDeath();
 
@@ -125,11 +125,11 @@ namespace AshAndEmber
                     "It costs everything. The last thing you're certain of is that you are still, somehow, yourself.",
 
                     true, false, "So it is.", "",
-                    () => { try { KillCharacterAction.ApplyByMurder(Hero.MainHero, null, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    () => { try { KillCharacterAction.ApplyByMurder(Hero.MainHero, null, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     () => { }
                 ), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Ending B — ride out ──────────────────────────────────────────────────
@@ -140,12 +140,12 @@ namespace AshAndEmber
                 Kingdom bloodbound = GetBloodboundKingdom();
                 if (bloodbound != null && Clan.PlayerClan != null && Clan.PlayerClan.Kingdom == bloodbound)
                     try { ChangeKingdomAction.ApplyByLeaveKingdom(Clan.PlayerClan, false); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             _phase = PhaseEndedRan;
-            try { BloodboundQuestLog.Current?.LogEndingRan(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { BloodboundQuestLog.Current?.LogEndingRan(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             ApplyMassClanDeath();
 
@@ -155,7 +155,7 @@ namespace AshAndEmber
                     "You are on the road before the shrine's basin runs dry. Whatever happens in Akkalat now " +
                     "happens without you — and you do not look back to see the start of it."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── The mass death — every OTHER clan drinks, and dies ───────────────────
@@ -189,11 +189,11 @@ namespace AshAndEmber
                             KillCharacterAction.ApplyByMurder(hero, null, false);
                             killed++;
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -203,7 +203,7 @@ namespace AshAndEmber
                     $"{killed} riders are gone in a single night, gruesomely, all at once — every hall left to " +
                     "children too young to lead it."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── The aftermath — the dark comes for the emptied seats ────────────────
@@ -215,7 +215,7 @@ namespace AshAndEmber
             if (!BloodboundQuestMath.IsDemonAttackDue((int)daysSince)) return;
 
             _demonAttackApplied = true;
-            try { SpawnAftermathAttack(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpawnAftermathAttack(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void SpawnAftermathAttack()
@@ -234,7 +234,7 @@ namespace AshAndEmber
                     {
                         if (DemonSpawnCampaignBehavior.SpawnAmbushNear(s.GetPosition2D, "khuzait") != null) spawned++;
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
 
@@ -247,7 +247,7 @@ namespace AshAndEmber
                         "Akkalat and Chaikand both, and there is no one left in either hall old enough to answer " +
                         "the muster."));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 

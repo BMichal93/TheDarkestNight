@@ -19,7 +19,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class CampaignMapEvents
     {
@@ -67,7 +67,7 @@ namespace AshAndEmber
 
                 MageKnowledge._deferredInquiry = () => ShowBrandedEvent(branded, brandedName, clanName);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ShowBrandedEvent(Hero branded, string brandedName, string clanName)
@@ -144,16 +144,16 @@ namespace AshAndEmber
                     if (branded.IsAlive)
                         KillCharacterAction.ApplyByOldAge(branded, true);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try
                 {
                     if (branded.MapFaction is Kingdom k)
                         ChangeCrimeRatingAction.Apply(k, 20f, true);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ShiftTrait(DefaultTraits.Mercy, -1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ShiftTrait(DefaultTraits.Mercy, -1); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void OnBrandedLeave(Hero branded, string brandedName)
@@ -168,14 +168,14 @@ namespace AshAndEmber
             try
             {
                 // The warding is paid for as advertised — 3 days of the player's own vigour.
-                try { AgingSystem.AgeHero(Hero.MainHero, 3); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, branded, 15, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { AgingSystem.AgeHero(Hero.MainHero, 3); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, branded, 15, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 MBInformationManager.AddQuickInformation(new TextObject(
                     $"You reach in and hold the Night back from {brandedName} — carefully, at a cost you feel but cannot measure. " +
                     $"They will carry the mark, but they will carry it longer. " +
                     $"They do not fully understand what you did. They feel only that they owe you something they cannot name."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ShiftTrait(TraitObject trait, int delta)
@@ -187,7 +187,7 @@ namespace AshAndEmber
                 int next = Math.Max(-3, Math.Min(3, cur + delta));
                 if (next != cur) Hero.MainHero.SetTraitLevel(trait, next);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

@@ -22,7 +22,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class SanctuaryCampaignBehavior : CampaignBehaviorBase
     {
@@ -64,13 +64,13 @@ namespace AshAndEmber
                 store.SyncData("SANCT_PermanentIds", ref ids);
                 if (ids != null) { _permanentSanctuaryIds.Clear(); foreach (var id in ids) _permanentSanctuaryIds.Add(id); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("SANCT_Announced", ref _sanctuariesAnnounced); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("SANCT_LastUseDay", ref _lastSanctuaryUseDay); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("SANCT_UseCount", ref _sanctuaryUseCount); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("SANCT_LastPrayerDay", ref _lastPrayerDay); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("SANCT_LastProtectiveDay", ref _lastProtectiveDay); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("SANCT_LastCommunionDay", ref _lastCommunionDay); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("SANCT_Announced", ref _sanctuariesAnnounced); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("SANCT_LastUseDay", ref _lastSanctuaryUseDay); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("SANCT_UseCount", ref _sanctuaryUseCount); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("SANCT_LastPrayerDay", ref _lastPrayerDay); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("SANCT_LastProtectiveDay", ref _lastProtectiveDay); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("SANCT_LastCommunionDay", ref _lastCommunionDay); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnSessionLaunched(CampaignGameStarter starter)
@@ -130,10 +130,10 @@ namespace AshAndEmber
                     // Also post to the message log so the list survives the new-game
                     // lore popup and stays retrievable in the scrollback.
                     try { InformationManager.DisplayMessage(new InformationMessage(line, new Color(0.95f, 0.75f, 0.35f))); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Permanent sanctuary selection ──────────────────────────────────────
@@ -166,7 +166,7 @@ namespace AshAndEmber
                 if (_permanentSanctuaryIds.Count > 0 && !_sanctuariesAnnounced)
                     _needsAnnouncementAfterSync = true;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static bool AddPermanentSanctuary(string id)

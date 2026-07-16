@@ -12,7 +12,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class SoldierServiceCampaignBehavior
     {
@@ -32,7 +32,7 @@ namespace AshAndEmber
                     "I would take your coin and march under your banner, until this war is done.",
                     CondCanOffer, OnOfferChosen, P);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -42,7 +42,7 @@ namespace AshAndEmber
                         + "so long as you ride where I ride. How long will you serve?",
                     null, null, P);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -63,7 +63,7 @@ namespace AshAndEmber
                     "On second thought — not yet.",
                     null, null, P);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -72,7 +72,7 @@ namespace AshAndEmber
                     "Then it is sealed. Stay close, soldier, and my coin is yours.",
                     null, null, P);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // ── End service (talking to your own commander) ───────────────────
             try
@@ -82,7 +82,7 @@ namespace AshAndEmber
                     "About my service under your banner...",
                     CondIsMyCommander, OnDischargeChosen, P);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -91,7 +91,7 @@ namespace AshAndEmber
                     "{SOLDIER_DISC_TEXT}",
                     null, null, P);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Term already served — clean release.
             try
@@ -101,7 +101,7 @@ namespace AshAndEmber
                     "My term is served. I'll take my leave, and my due.",
                     CondTermServed, () => HonourableRelease(true), P);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Term unfinished — leaving now is desertion.
             try
@@ -111,7 +111,7 @@ namespace AshAndEmber
                     "I'm done. I break the oath and ride on.",
                     CondTermNotServed, () => Desert(), P);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -120,7 +120,7 @@ namespace AshAndEmber
                     "Nothing. I keep my word.",
                     null, null, P);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -129,7 +129,7 @@ namespace AshAndEmber
                     "Go, then.",
                     null, null, P);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Conditions ────────────────────────────────────────────────────────
@@ -168,7 +168,7 @@ namespace AshAndEmber
                 MBTextManager.SetTextVariable("SOLDIER_T1", SoldierServiceMath.TermDays[1]);
                 MBTextManager.SetTextVariable("SOLDIER_T2", SoldierServiceMath.TermDays[2]);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void DoJoin(int termIndex)
@@ -181,7 +181,7 @@ namespace AshAndEmber
                     Math.Max(0, Math.Min(SoldierServiceMath.TermDays.Length - 1, termIndex))];
                 JoinService(lord, days);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void OnDischargeChosen()
@@ -203,7 +203,7 @@ namespace AshAndEmber
                 }
                 MBTextManager.SetTextVariable("SOLDIER_DISC_TEXT", text);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

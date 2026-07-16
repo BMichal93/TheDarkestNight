@@ -23,7 +23,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class SpellbookEffects
     {
@@ -37,7 +37,7 @@ namespace AshAndEmber
         {
             if (caster == null || !caster.IsActive()) return;
             try { CastCore(id, caster); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void CastCore(SpellId id, Agent caster)
@@ -136,7 +136,7 @@ namespace AshAndEmber
                     SpellEffects.SpawnTempLightWhite(d.Position + new Vec3(0f, 0f, 1f), 10f, 0.4f);
                     struck++;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             SpellEffects.SpawnTempLightWhite(pos + new Vec3(0f, 0f, 1.5f), 24f, 0.6f);
             if (struck > 0)
@@ -166,7 +166,7 @@ namespace AshAndEmber
                     if (dx * dx + dy * dy > r2) continue;
                     NatureEffects.ApplySpeedToken(d, 0.5f, 4f);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -174,7 +174,7 @@ namespace AshAndEmber
         private static void CastVeilOfAsh(Agent caster)
         {
             Vec3 pos; try { pos = caster.Position; } catch { return; }
-            try { SpellEffects.SpawnTempSmokeParticle(pos + new Vec3(0f, 0f, 0.8f), 2.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempSmokeParticle(pos + new Vec3(0f, 0f, 0.8f), 2.2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             SpellEffects.ExecuteWardFromAgent(caster);
         }
 
@@ -198,9 +198,9 @@ namespace AshAndEmber
         {
             var target = NearestEnemy(caster, range);
             if (target == null) return;
-            try { target.SetMaximumSpeedLimit(0f, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { target.SetMaximumSpeedLimit(0f, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             NatureEffects.ApplySpeedToken(target, 0f, seconds);
-            try { SpellEffects.SpawnTempSnowParticle(target.Position + new Vec3(0f, 0f, 0.6f), 1.6f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempSnowParticle(target.Position + new Vec3(0f, 0f, 0.6f), 1.6f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void CastCurse(Agent caster)
@@ -215,7 +215,7 @@ namespace AshAndEmber
             var target = NearestEnemy(caster, 10f);
             if (target == null) return;
             SpellEffects.DamageAgent(target, 12f, ColorSchool.Nature, caster);
-            try { target.SetMorale(target.GetMorale() - 10f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { target.SetMorale(target.GetMorale() - 10f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void CastFear(Agent caster, float radius)
@@ -229,7 +229,7 @@ namespace AshAndEmber
                 if (caster.Team != null && a.Team == caster.Team) continue;
                 float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                 if (dx * dx + dy * dy > r2) continue;
-                try { a.SetMorale(a.GetMorale() - 12f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { a.SetMorale(a.GetMorale() - 12f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 NatureEffects.ApplySpeedToken(a, 0.7f, 3f);
             }
         }
@@ -238,24 +238,24 @@ namespace AshAndEmber
         {
             Vec3 fwd; try { fwd = caster.LookDirection; fwd.z = 0f; if (fwd.Length < 0.01f) return; fwd.Normalize(); }
             catch { return; }
-            try { caster.TeleportToPosition(caster.Position + fwd * 6f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.SpawnTempSmokeParticle(caster.Position + new Vec3(0f, 0f, 0.6f), 1.4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { caster.TeleportToPosition(caster.Position + fwd * 6f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempSmokeParticle(caster.Position + new Vec3(0f, 0f, 0.6f), 1.4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void CastWidowsVeil(Agent caster)
         {
             Vec3 pos; try { pos = caster.Position; } catch { return; }
-            try { SpellEffects.SpawnFogPatch(pos, 22f, 12f, caster.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnFogPatch(pos, 22f, 12f, caster.Team); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void FlashSelf(Agent caster, MagicElement el)
         {
             try
             {
-                bool ashen = false; try { ashen = MageKnowledge.IsAshen; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                bool ashen = false; try { ashen = MageKnowledge.IsAshen; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 SpellEffects.SpawnTempLightRgb(caster.Position + new Vec3(0f, 0f, 1f), ElementSpellEffects.ElementLightRgb(el, ashen), 8f, 0.8f);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static readonly Color DemonColor = new Color(0.85f, 0.35f, 0.3f);

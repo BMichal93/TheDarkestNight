@@ -18,7 +18,7 @@ using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class PriestTroops
     {
@@ -63,7 +63,7 @@ namespace AshAndEmber
                 if (room <= 0) return;
                 garrison.MemberRoster.AddToCounts(priest, System.Math.Min(AddPerWeek, room));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static CharacterObject Find(string id)

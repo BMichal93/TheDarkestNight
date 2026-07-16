@@ -16,7 +16,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class AshenQuestSystem
     {
@@ -50,7 +50,7 @@ namespace AshAndEmber
                     {
                         _phase       = PhaseFrozen;
                         _endingPhase = 1;
-                        try { _questLog?.LogComplete(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { _questLog?.LogComplete(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         InformationManager.DisplayMessage(new InformationMessage(
                             "The cold moves through you. There is no calling it back.",
                             new Color(0.4f, 0.5f, 0.9f)));
@@ -58,7 +58,7 @@ namespace AshAndEmber
                     () =>
                     {
                         _phase = PhaseFailed;
-                        try { _questLog?.LogFailed(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { _questLog?.LogFailed(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         InformationManager.DisplayMessage(new InformationMessage(
                             "The void withdraws. It has outlasted everything before you. " +
                             "It will outlast your hesitation too.",
@@ -66,7 +66,7 @@ namespace AshAndEmber
                     }
                 ), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Ending sequence ───────────────────────────────────────────────────
@@ -104,7 +104,7 @@ namespace AshAndEmber
                         break;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void KillMageLords(int cap)
@@ -119,10 +119,10 @@ namespace AshAndEmber
                     if (!ElementLordRegistry.IsElementLord(h)) continue;
                     if (ElementLordRegistry.IsAshenLord(h)) continue;
                     try { KillCharacterAction.ApplyByMurder(h, null, false); killed++; }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void KillMageCompanions()
@@ -137,10 +137,10 @@ namespace AshAndEmber
                     if (companion == null || companion == Hero.MainHero) continue;
                     if (!ElementLordRegistry.IsElementLord(companion)) continue;
                     if (ElementLordRegistry.IsAshenLord(companion)) continue;
-                    try { KillCharacterAction.ApplyByMurder(companion, null, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { KillCharacterAction.ApplyByMurder(companion, null, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Final dialog ──────────────────────────────────────────────────────
@@ -176,12 +176,12 @@ namespace AshAndEmber
                     () =>
                     {
                         try { KillCharacterAction.ApplyByMurder(Hero.MainHero, null, true); }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     },
                     () => { }
                 ), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Grimoire summary ──────────────────────────────────────────────────

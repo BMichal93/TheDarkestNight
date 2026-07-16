@@ -22,7 +22,7 @@ using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 using TaleWorlds.CampaignSystem.MapEvents;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SpellEffects
     {
@@ -66,9 +66,9 @@ namespace AshAndEmber
             int idx = _areaEffects.FindIndex(e => e.Id == id);
             if (idx >= 0)
             {
-                try { _areaEffects[idx].LightEntity?.Remove(0); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { _areaEffects[idx].LightEntity2?.Remove(0); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { _areaEffects[idx].LightEntity3?.Remove(0); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { _areaEffects[idx].LightEntity?.Remove(0); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { _areaEffects[idx].LightEntity2?.Remove(0); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { _areaEffects[idx].LightEntity3?.Remove(0); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 _areaEffects.RemoveAt(idx);
                 return;
             }
@@ -83,9 +83,9 @@ namespace AshAndEmber
         {
             foreach (var e in _areaEffects.Where(e => e.Id == id).ToList())
             {
-                try { e.LightEntity?.Remove(0); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { e.LightEntity2?.Remove(0); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { e.LightEntity3?.Remove(0); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { e.LightEntity?.Remove(0); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { e.LightEntity2?.Remove(0); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { e.LightEntity3?.Remove(0); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             _areaEffects.RemoveAll(e => e.Id == id);
         }
@@ -199,13 +199,13 @@ namespace AshAndEmber
                 var frame = new MatrixFrame(Mat3.Identity, position);
                 light.SetGlobalFrame(in frame, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void RemoveFollowerLight(GameEntity light)
         {
             if (light == null) return;
-            try { light.Remove(0); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { light.Remove(0); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Lights a circular AoE with a centre node plus an evenly spaced ring.

@@ -16,7 +16,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class AshenRuinSystem
     {
@@ -106,7 +106,7 @@ namespace AshAndEmber
                 if (!AshenRuinDefs.All.Any(r => r.VillageName == villageName)) return;
                 MarkCleared(villageName);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Daily tick ────────────────────────────────────────────────────────
@@ -229,12 +229,12 @@ namespace AshAndEmber
                     _ => 45 + _rng.Next(21),
                 };
                 float minStr = tier >= 3 ? 150f : 0f;
-                try { CampaignMapEvents.SpawnAshenAmbushNear(pos, troops, minStr); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { CampaignMapEvents.SpawnAshenAmbushNear(pos, troops, minStr); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Set respawn cooldown for this ruin
                 SetGuardCooldown(def.VillageName, tier >= 3 ? 10 : 7);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Challenge resolution ───────────────────────────────────────────────
@@ -924,7 +924,7 @@ namespace AshAndEmber
         private static void Ch_EmberWraith(RuinChallenge c, RuinDef def, bool isSolo, int ri, bool sr)
         {
             float renown = 0f;
-            try { renown = Hero.MainHero?.Clan?.Renown ?? 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { renown = Hero.MainHero?.Clan?.Renown ?? 0f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             bool pass = _rng.Next(100) < AshenRuinMath.EmberWraithPassChance(renown);
             if (pass)
             {
@@ -961,7 +961,7 @@ namespace AshAndEmber
         private static void Ch_WardstoneGate(RuinChallenge c, RuinDef def, bool isSolo, int ri, bool sr)
         {
             int roguery = 0;
-            try { roguery = Hero.MainHero?.GetSkillValue(DefaultSkills.Roguery) ?? 0; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { roguery = Hero.MainHero?.GetSkillValue(DefaultSkills.Roguery) ?? 0; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             bool pass = _rng.Next(100) < AshenRuinMath.WardstoneGatePassChance(roguery);
             if (pass)
             {
@@ -1017,7 +1017,7 @@ namespace AshAndEmber
         private static void Ch_EmberToll(RuinChallenge c, RuinDef def, bool isSolo, int ri, bool sr)
         {
             int unspentFp = 0;
-            try { unspentFp = Hero.MainHero?.HeroDeveloper?.UnspentFocusPoints ?? 0; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { unspentFp = Hero.MainHero?.HeroDeveloper?.UnspentFocusPoints ?? 0; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             bool canPayFp = unspentFp > 0;
             string toll = canPayFp ? "Pay with knowledge (1 focus point)" : "Pay with fire (4 days aging)";
             InformationManager.ShowInquiry(new InquiryData(
@@ -1028,7 +1028,7 @@ namespace AshAndEmber
                 {
                     if (canPayFp)
                     {
-                        try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints -= 1; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints -= 1; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                     else AgePlayer(4);
                     NextRoom(def, isSolo, ri, sr);
@@ -1058,7 +1058,7 @@ namespace AshAndEmber
                         true, false, "Continue", "",
                         () =>
                         {
-                            try { ClanRenown.Gain(Hero.MainHero.Clan, 15f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { ClanRenown.Gain(Hero.MainHero.Clan, 15f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             NextRoom(def, isSolo, ri, sr);
                         }, null), true);
                     break;
@@ -1089,8 +1089,8 @@ namespace AshAndEmber
         {
             bool isAshen = MageKnowledge.IsAshen;
             bool natureAttuned = false, hasGrace = false;
-            try { natureAttuned = NatureKnowledge.IsAttuned; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { hasGrace = MiracleInventory.HasGrace; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { natureAttuned = NatureKnowledge.IsAttuned; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { hasGrace = MiracleInventory.HasGrace; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (isAshen)
             {
@@ -1108,7 +1108,7 @@ namespace AshAndEmber
                     true, false, "Continue", "",
                     () =>
                     {
-                        try { ClanRenown.Gain(Hero.MainHero.Clan, 10f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { ClanRenown.Gain(Hero.MainHero.Clan, 10f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         NextRoom(def, isSolo, ri, sr);
                     }, null), true);
             }
@@ -1186,7 +1186,7 @@ namespace AshAndEmber
 
                 case RewardType.FocusPoints:
                     int fp = Math.Max(1, (int)(reward.Points * split));
-                    try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints += fp; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints += fp; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     InformationManager.DisplayMessage(new InformationMessage(
                         $"{header} The knowledge crystallises into {fp} focus point{(fp!=1?"s":"")}.",
                         new Color(0.7f, 0.9f, 0.7f)));
@@ -1194,7 +1194,7 @@ namespace AshAndEmber
 
                 case RewardType.RenownBurst:
                     float renown = reward.Points * split;
-                    try { ClanRenown.Gain(Hero.MainHero.Clan, renown); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ClanRenown.Gain(Hero.MainHero.Clan, renown); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     InformationManager.DisplayMessage(new InformationMessage(
                         $"{header} Word of this spreads. (+{(int)renown} renown)",
                         new Color(0.9f, 0.78f, 0.25f)));
@@ -1222,7 +1222,7 @@ namespace AshAndEmber
                         new Color(0.6f, 0.45f, 0.8f)));
                     if (_crownFragments >= 3)
                     {
-                        try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints += AshenCrownFpBonus; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints += AshenCrownFpBonus; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         InformationManager.DisplayMessage(new InformationMessage(
                             "The three fragments align. Something clicks in the fire. +3 focus points.",
                             new Color(0.9f, 0.6f, 0.9f)));
@@ -1235,7 +1235,7 @@ namespace AshAndEmber
                         "A dark glass shard, cold even when held. It hums at the same frequency as your inner fire. You could sell it — 5000 denars, to the right buyer — or let it dissolve into you, which costs the fire nothing and gives back 20 days.",
                         true, true, "Dissolve it (20 days reclaimed)", "Sell it (5000 denars)",
                         () => AgingSystem.RejuvenateHero(Hero.MainHero, 20),
-                        () => { try { Hero.MainHero.ChangeHeroGold(5000); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } }), true);
+                        () => { try { Hero.MainHero.ChangeHeroGold(5000); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } }), true);
                     break;
 
                 case RewardType.AncientGrimoire:
@@ -1246,7 +1246,7 @@ namespace AshAndEmber
 
                 case RewardType.GoldCache:
                     int gold = Math.Max(50, (int)(reward.Points * split));
-                    try { Hero.MainHero.ChangeHeroGold(gold); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { Hero.MainHero.ChangeHeroGold(gold); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     InformationManager.DisplayMessage(new InformationMessage(
                         $"{header} A cache of coin, still good — {gold} denars.",
                         new Color(0.9f, 0.78f, 0.25f)));
@@ -1269,7 +1269,7 @@ namespace AshAndEmber
         private static void GrantSkillTome(string header, float xp)
         {
             var skill = _skillTomePool[_rng.Next(_skillTomePool.Length)];
-            try { Hero.MainHero?.HeroDeveloper?.AddSkillXp(skill, xp); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { Hero.MainHero?.HeroDeveloper?.AddSkillXp(skill, xp); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             InformationManager.DisplayMessage(new InformationMessage(
                 $"{header} Old knowledge settles into a skill you already had — {(int)xp} {skill.Name} experience.",
                 new Color(0.7f, 0.9f, 0.7f)));
@@ -1288,7 +1288,7 @@ namespace AshAndEmber
                 return;
             }
             bool hasGrace = false;
-            try { hasGrace = MiracleInventory.HasGrace; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { hasGrace = MiracleInventory.HasGrace; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (hasGrace)
             {
                 int added = MiracleInventory.AddGrace(points);
@@ -1298,7 +1298,7 @@ namespace AshAndEmber
                 return;
             }
             int fp = Math.Max(1, points / 2);
-            try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints += fp; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints += fp; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             InformationManager.DisplayMessage(new InformationMessage(
                 $"{header} Nothing claims the offering, so the fire simply sharpens. +{fp} focus point{(fp!=1?"s":"")}.",
                 new Color(0.7f, 0.9f, 0.7f)));
@@ -1319,7 +1319,7 @@ namespace AshAndEmber
                     lastName = def.Name;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             string body = count > 1
                 ? $"{count} crystals rest among the ash, their lattices somehow unbroken."
@@ -1338,7 +1338,7 @@ namespace AshAndEmber
             }
             else
             {
-                try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints += 2; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints += 2; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 InformationManager.DisplayMessage(new InformationMessage(
                     $"{header} The knowledge was already yours — but the fire sharpens anyway. +2 focus points.",
                     new Color(0.7f, 0.9f, 0.7f)));
@@ -1357,7 +1357,7 @@ namespace AshAndEmber
                     new Color(0.9f, 0.7f, 0.3f)));
             else
             {
-                try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints += 4; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints += 4; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 InformationManager.DisplayMessage(new InformationMessage(
                     $"{header} Every lost form was already yours. The grimoire gives back 4 focus points instead.",
                     new Color(0.7f, 0.9f, 0.7f)));
@@ -1389,7 +1389,7 @@ namespace AshAndEmber
         // ── Helpers ────────────────────────────────────────────────────────────
         private static void AgePlayer(int days)
         {
-            try { AgingSystem.AgeHero(Hero.MainHero, days); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { AgingSystem.AgeHero(Hero.MainHero, days); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void LoseTroops(int count)
@@ -1410,7 +1410,7 @@ namespace AshAndEmber
                     remaining -= kill;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ApplyPartyHealthPenalty(float fraction)
@@ -1424,10 +1424,10 @@ namespace AshAndEmber
                     if (entry.Character == null || entry.Character.IsHero) continue;
                     int healthy = entry.Number - entry.WoundedNumber;
                     int wound = Math.Max(1, (int)(healthy * fraction));
-                    if (wound > 0) try { roster.AddToCounts(entry.Character, 0, false, wound); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    if (wound > 0) try { roster.AddToCounts(entry.Character, 0, false, wound); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Persistence ───────────────────────────────────────────────────────
@@ -1468,7 +1468,7 @@ namespace AshAndEmber
                     for (int i = 0; i < gCdKeys.Count; i++) { _guardCdKeys.Add(gCdKeys[i]); _guardCdDays.Add(gCdDays[i]); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void ResetForNewGame()

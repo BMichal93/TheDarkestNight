@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed class SacredSiteDef
     {

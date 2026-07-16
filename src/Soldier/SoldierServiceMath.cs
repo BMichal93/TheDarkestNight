@@ -7,7 +7,7 @@
 
 using System;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class SoldierServiceMath
     {

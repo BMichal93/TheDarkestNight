@@ -11,7 +11,7 @@
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class GreatAwakeningCampaignBehavior
     {
@@ -50,13 +50,13 @@ namespace AshAndEmber
                     total += give - left;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (total > 0)
             {
                 _prisonersSacrificed += total;
                 try { GreatAwakeningQuestLog.UpdateProgress(_prisonersSacrificed, GreatAwakeningMath.PrisonerTarget); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
     }

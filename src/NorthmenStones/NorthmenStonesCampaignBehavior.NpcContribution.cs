@@ -9,7 +9,7 @@
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class NorthmenStonesCampaignBehavior
     {
@@ -44,7 +44,7 @@ namespace AshAndEmber
                     _iron, _hardwood, _tools, _silver, _denars, KindledTotal()) * 100f);
                 NorthmenStonesQuestLog.UpdateProgress(pct);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // "Materials are persistent... unless the city is captured by a
@@ -74,7 +74,7 @@ namespace AshAndEmber
                     _iron, _hardwood, _tools, _silver, _denars, KindledTotal()) * 100f);
                 NorthmenStonesQuestLog.UpdateProgress(pct);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

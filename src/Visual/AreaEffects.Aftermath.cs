@@ -23,7 +23,7 @@ using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 using TaleWorlds.CampaignSystem.MapEvents;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SpellEffects
     {
@@ -95,8 +95,8 @@ namespace AshAndEmber
             node.LightEntity = SpawnAreaLightRaw(pos + new Vec3(0f, 0f, 0.4f),
                                                  new Vec3(0.42f, 0.32f, 0.18f), 5f);
             _areaEffects.Add(node);
-            try { SpawnNatureBurst(pos, NatureElement.Water, 1.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpawnNatureBurst(pos, NatureElement.Earth, 1.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpawnNatureBurst(pos, NatureElement.Water, 1.2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpawnNatureBurst(pos, NatureElement.Earth, 1.2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Elemental fusions (ElementSpellEffects) ─────────────────────────────
@@ -118,7 +118,7 @@ namespace AshAndEmber
             };
             node.LightEntity = SpawnAreaLightRaw(pos + new Vec3(0f, 0f, 0.6f), new Vec3(0.62f, 0.66f, 0.68f), Math.Max(4f, radius));
             _areaEffects.Add(node);
-            try { SpawnTempSmokeParticle(pos + new Vec3(0f, 0f, 0.6f), radius * 0.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpawnTempSmokeParticle(pos + new Vec3(0f, 0f, 0.6f), radius * 0.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Fire+Earth — a thrown glob of molten ground that keeps burning and
@@ -141,7 +141,7 @@ namespace AshAndEmber
             };
             node.LightEntity = SpawnAreaLight(pos, ColorSchool.Red, Math.Max(6f, radius * 1.5f));
             _areaEffects.Add(node);
-            try { SpawnTempFireParticle(pos, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpawnTempFireParticle(pos, 2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Earth+Water — ground that gives way underfoot instead of holding: no
@@ -165,8 +165,8 @@ namespace AshAndEmber
             };
             node.LightEntity = SpawnAreaLightRaw(pos + new Vec3(0f, 0f, 0.3f), new Vec3(0.34f, 0.30f, 0.16f), 5f);
             _areaEffects.Add(node);
-            try { SpawnNatureBurst(pos, NatureElement.Earth, 1.4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpawnNatureBurst(pos, NatureElement.Water, 1.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpawnNatureBurst(pos, NatureElement.Earth, 1.4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpawnNatureBurst(pos, NatureElement.Water, 1.2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Called from ExecuteBurstFromAgent (when RestoreCount > 0 and player is caster) —
@@ -218,9 +218,9 @@ namespace AshAndEmber
             _agentSnapshotTime = -1f;
             foreach (var e in _areaEffects)
             {
-                try { e.LightEntity?.Remove(0); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { e.LightEntity2?.Remove(0); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { e.LightEntity3?.Remove(0); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { e.LightEntity?.Remove(0); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { e.LightEntity2?.Remove(0); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { e.LightEntity3?.Remove(0); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             foreach (var kvp in _haltedAgents)
             {
@@ -230,12 +230,12 @@ namespace AshAndEmber
                     if (agent?.IsActive() == true && agent.Health > 0f)
                     {
                         bool usingEquip = false;
-                        try { usingEquip = agent.IsUsingGameObject; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { usingEquip = agent.IsUsingGameObject; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         if (!usingEquip)
                             agent.SetMaximumSpeedLimit(10f, false);
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             _areaEffects.Clear();
             _haltedAgents.Clear();

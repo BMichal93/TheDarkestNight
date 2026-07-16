@@ -24,7 +24,7 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class LordGearWeathering
     {
@@ -42,10 +42,10 @@ namespace AshAndEmber
                 foreach (Hero h in Hero.AllAliveHeroes.Where(h => h.IsLord && h != Hero.MainHero).ToList())
                 {
                     try { WeatherHeroEquipment(h); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void WeatherHeroEquipment(Hero hero)

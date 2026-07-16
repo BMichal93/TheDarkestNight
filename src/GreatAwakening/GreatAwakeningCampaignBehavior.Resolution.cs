@@ -13,7 +13,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class GreatAwakeningCampaignBehavior
     {
@@ -24,7 +24,7 @@ namespace AshAndEmber
         private static void SyncResolutionData(IDataStore store)
         {
             try { store.SyncData("GRAWK_ResolutionHandled", ref _resolutionHandled); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ResetResolutionState() { _resolutionHandled = false; }
@@ -40,11 +40,11 @@ namespace AshAndEmber
             _phase = controlled ? PhaseResolvedControlled : PhaseResolvedUncontrolled;
 
             var altar = AltarSettlement();
-            try { GreatOtherParty.Summon(altar, controlled); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { GreatOtherParty.Summon(altar, controlled); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (controlled)
             {
-                try { DeclarePermanentWar(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { DeclarePermanentWar(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try
                 {
                     MBInformationManager.AddQuickInformation(new TextObject(
@@ -52,8 +52,8 @@ namespace AshAndEmber
                         "of the space behind the stone, into the Tower's service. Every kingdom in Calradia is now " +
                         "the Tower's enemy, and the Tower means to keep it that way until the thing dies."));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { GreatAwakeningQuestLog.CompleteSummoningControlled(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { GreatAwakeningQuestLog.CompleteSummoningControlled(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             else
             {
@@ -63,8 +63,8 @@ namespace AshAndEmber
                         "The count is paid — but whatever answered the Dark Altar answers to no one. The Great " +
                         "Other has come, and it belongs to nothing and no one, least of all the Tower."));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { GreatAwakeningQuestLog.CompleteSummoningUncontrolled(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { GreatAwakeningQuestLog.CompleteSummoningUncontrolled(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -80,7 +80,7 @@ namespace AshAndEmber
             {
                 if (other == null || other == duneborn || other.IsEliminated) continue;
                 if (duneborn.IsAtWarWith(other)) continue;
-                try { DeclareWarAction.ApplyByDefault(duneborn, other); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { DeclareWarAction.ApplyByDefault(duneborn, other); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
     }

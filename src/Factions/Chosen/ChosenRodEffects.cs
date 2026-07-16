@@ -37,7 +37,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class ChosenRodEffects
     {
@@ -54,12 +54,12 @@ namespace AshAndEmber
                 if (affectorAgent != null && affectorAgent.IsActive() && blow.InflictedDamage > 0)
                 {
                     string itemId = null;
-                    try { itemId = affectorWeapon.Item?.StringId; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { itemId = affectorWeapon.Item?.StringId; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     if (itemId == ChosenRodCatalog.RodOfApostleItemId)
                         OnLandedHit(affectorAgent);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // ── On block: victim wields the Rod and blocks/parries the blow ────
             try
@@ -73,18 +73,18 @@ namespace AshAndEmber
                                || attackCollisionData.CollisionResult == CombatCollisionResult.Blocked
                                || attackCollisionData.CollisionResult == CombatCollisionResult.Parried;
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                     if (blocked)
                     {
                         string itemId = null;
-                        try { itemId = affectedAgent.WieldedWeapon.Item?.StringId; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { itemId = affectedAgent.WieldedWeapon.Item?.StringId; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         if (itemId == ChosenRodCatalog.RodOfApostleItemId)
                             OnBlock(affectedAgent);
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void OnBlock(Agent wielder)
@@ -93,11 +93,11 @@ namespace AshAndEmber
             if (victim != null)
             {
                 try { SpellEffects.DamageAgent(victim, ChosenMath.RodOnBlockAllyDamage, ColorSchool.Red, wielder); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             try { SpellEffects.HealAgent(wielder, ChosenMath.RodOnBlockWielderHeal); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (victim != null && wielder == Agent.Main)
                 try
@@ -106,7 +106,7 @@ namespace AshAndEmber
                         "The Rod of the Apostle drinks conviction from the man beside you — it heals you all the same.",
                         new Color(0.55f, 0.10f, 0.10f)));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void OnLandedHit(Agent wielder)
@@ -114,8 +114,8 @@ namespace AshAndEmber
             Agent victim = PickRandomNearbyAlly(wielder);
             if (victim == null) return; // fight alone — no ally to sacrifice, no-op
 
-            try { SpellEffects.KillAgent(victim, wielder); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellbookEffects.Cast(SpellId.SummonDemon, wielder); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.KillAgent(victim, wielder); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellbookEffects.Cast(SpellId.SummonDemon, wielder); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (wielder == Agent.Main)
                 try
@@ -124,7 +124,7 @@ namespace AshAndEmber
                         "The Rod of the Apostle claims a life of your own line — and something answers the offering from below.",
                         new Color(0.55f, 0.10f, 0.10f)));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Never the wielder themselves (SpellEffects.AlliesOf already excludes

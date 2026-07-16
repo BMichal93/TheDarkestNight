@@ -44,7 +44,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class TempleQuestCampaignBehavior
     {
@@ -56,7 +56,7 @@ namespace AshAndEmber
         private static void SyncArmyData(IDataStore store)
         {
             try { store.SyncData("TPLQ_LeaderHeroId", ref _boundLeaderHeroId); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ResetArmyState()
@@ -74,7 +74,7 @@ namespace AshAndEmber
                 var leader = TempleLeader() ?? PickNewLeader(kingdom);
                 _boundLeaderHeroId = leader?.StringId ?? "";
 
-                try { TempleQuestLog.Current?.LogBound(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { TempleQuestLog.Current?.LogBound(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 InformationManager.DisplayMessage(new InformationMessage(
                     "The Unbroken Vow is sealed. Every Templar sword marches as one host now, and will not stop " +
@@ -84,7 +84,7 @@ namespace AshAndEmber
                 // hourly tick, so the binding reads as immediate.
                 ReassertPermanentArmy(kingdom);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── The self-healing reassert loop ──────────────────────────────────
@@ -118,9 +118,9 @@ namespace AshAndEmber
                     if (objective != null)
                     {
                         try { army = new Army(kingdom, leaderParty, Army.ArmyTypes.Patrolling); }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); army = null; }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); army = null; }
                         if (army != null)
-                            try { army.AiBehaviorObject = objective; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { army.AiBehaviorObject = objective; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
                 if (army == null) return; // nothing to fold the rest of the Order into this tick — try again next hour
@@ -139,10 +139,10 @@ namespace AshAndEmber
                         party.Army = army;
                         army.AddPartyToMergedParties(party);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static Hero ResolveLeaderHero()
@@ -171,7 +171,7 @@ namespace AshAndEmber
                 {
                     bool ok = false;
                     try { ok = hero != null && hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null; }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     if (ok) yield return hero;
                 }
             }
@@ -216,7 +216,7 @@ namespace AshAndEmber
                     foreach (var set in kingdom.Settlements)
                         if (set != null) return set;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return null;
         }
 
@@ -245,9 +245,9 @@ namespace AshAndEmber
                 Army army = leader?.PartyBelongedTo?.Army;
                 if (army != null)
                     try { DisbandArmyAction.ApplyByObjectiveFinished(army); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -259,13 +259,13 @@ namespace AshAndEmber
                         if (clan == null || clan.IsEliminated) continue;
                         bool isPlayerClan = clan == Clan.PlayerClan;
                         try { ChangeKingdomAction.ApplyByLeaveKingdom(clan, isPlayerClan); }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-            try { TempleQuestLog.Current?.LogDisbanded(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TempleQuestLog.Current?.LogDisbanded(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -281,7 +281,7 @@ namespace AshAndEmber
                     "The Temple does not fall to the dark. It just runs out of people willing to keep counting.",
                     true, false, "So it ends.", "", null, null), true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

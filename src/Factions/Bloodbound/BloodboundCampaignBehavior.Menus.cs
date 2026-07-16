@@ -24,7 +24,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class BloodboundCampaignBehavior
     {
@@ -49,16 +49,16 @@ namespace AshAndEmber
                         {
                             if (!BloodboundSettlements.IsBloodboundSettlement(Settlement.CurrentSettlement)) return false;
                             MBTextManager.SetTextVariable("BLOODBOUND_HUNT_ENTER_TEXT", "Spend Demon Blood among the Bloodbound");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = true;
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { GameMenu.SwitchToMenu("bloodbound_hunt_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { GameMenu.SwitchToMenu("bloodbound_hunt_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Main menu ──────────────────────────────────────────────────────────
@@ -75,10 +75,10 @@ namespace AshAndEmber
                           + "warmth. The Bloodbound will trade you a working of it — a few days unseen by the "
                           + "dark, a week of flesh too stubborn to die, or a swallow that reshapes what you are.");
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             RegisterIgnoreOption(starter);
             RegisterHpBuffOption(starter);
@@ -88,11 +88,11 @@ namespace AshAndEmber
             try
             {
                 starter.AddGameMenuOption("bloodbound_hunt_main", "bloodbound_hunt_leave", "Leave",
-                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } return true; },
-                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } return true; },
+                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     true, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Option 1: demons ignore you for 1-4 days ─────────────────────────────
@@ -108,14 +108,14 @@ namespace AshAndEmber
                             MBTextManager.SetTextVariable("BLOODBOUND_HUNT_IGNORE_TEXT",
                                 $"Buy the dark's blindness (1-4 days)  [{BloodboundMath.IgnoreCostBlood} Demon Blood]");
                             args.IsEnabled = HaveBlood(BloodboundMath.IgnoreCostBlood);
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
-                    args => { try { DoBuyIgnore(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    args => { try { DoBuyIgnore(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void DoBuyIgnore()
@@ -123,7 +123,7 @@ namespace AshAndEmber
             if (!SpendBlood(BloodboundMath.IgnoreCostBlood))
             {
                 ShowDialog("Not Enough Blood", $"You need {BloodboundMath.IgnoreCostBlood} Demon Blood for this working.",
-                    () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
@@ -131,7 +131,7 @@ namespace AshAndEmber
             GrantIgnore(Hero.MainHero, days);
 
             ShowDialog("Unseen", $"The dark passes over you without turning its head. ({(int)Math.Round(days)} day(s))",
-                () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 
         // ── Option 2: +80 max HP for a week ──────────────────────────────────────
@@ -147,14 +147,14 @@ namespace AshAndEmber
                             MBTextManager.SetTextVariable("BLOODBOUND_HUNT_HPBUFF_TEXT",
                                 $"Drink for hardened flesh (+{(int)BloodboundMath.HpBuffAmount} max HP, a week)  [{BloodboundMath.HpBuffCostBlood} Demon Blood]");
                             args.IsEnabled = HaveBlood(BloodboundMath.HpBuffCostBlood);
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
-                    args => { try { DoBuyHpBuff(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    args => { try { DoBuyHpBuff(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void DoBuyHpBuff()
@@ -162,14 +162,14 @@ namespace AshAndEmber
             if (!SpendBlood(BloodboundMath.HpBuffCostBlood))
             {
                 ShowDialog("Not Enough Blood", $"You need {BloodboundMath.HpBuffCostBlood} Demon Blood for this working.",
-                    () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
             GrantHpBuff(Hero.MainHero);
 
             ShowDialog("Hardened", $"The blood settles under your skin. You can take more than you used to, for now. (+{(int)BloodboundMath.HpBuffAmount} max HP, {(int)BloodboundMath.HpBuffDurationDays} days)",
-                () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 
         // ── Option 3: -1 Social/Intellect (random) for +1 Vigor/Endurance (random) ──
@@ -185,14 +185,14 @@ namespace AshAndEmber
                             MBTextManager.SetTextVariable("BLOODBOUND_HUNT_TRADE_TEXT",
                                 $"Swallow the working (trade a mind's edge for the body's)  [{BloodboundMath.AttributeTradeCostBlood} Demon Blood]");
                             args.IsEnabled = HaveBlood(BloodboundMath.AttributeTradeCostBlood);
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
-                    args => { try { DoAttributeTrade(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    args => { try { DoAttributeTrade(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void DoAttributeTrade()
@@ -200,7 +200,7 @@ namespace AshAndEmber
             if (!SpendBlood(BloodboundMath.AttributeTradeCostBlood))
             {
                 ShowDialog("Not Enough Blood", $"You need {BloodboundMath.AttributeTradeCostBlood} Demon Blood for this working.",
-                    () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
@@ -212,11 +212,11 @@ namespace AshAndEmber
                 ? DefaultCharacterAttributes.Vigor
                 : DefaultCharacterAttributes.Endurance;
 
-            try { hero.HeroDeveloper?.RemoveAttribute(down, 1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { hero.HeroDeveloper?.AddAttribute(up, 1, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { hero.HeroDeveloper?.RemoveAttribute(down, 1); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { hero.HeroDeveloper?.AddAttribute(up, 1, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             ShowDialog("Remade", $"Something in you gives ground so something else can grow. (-1 {down.Name}, +1 {up.Name})",
-                () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 
         // ── Option 4: drink to permanently attune to an element ─────────────────
@@ -235,16 +235,16 @@ namespace AshAndEmber
                         {
                             MBTextManager.SetTextVariable("BLOODBOUND_HUNT_ATTUNE_ENTRY_TEXT",
                                 "Drink to bind an element to your blood, permanently");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = BloodAttunement.KnownCount(Hero.MainHero) < BloodAttunement.AttunableElements.Length;
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
-                    args => { try { GameMenu.SwitchToMenu("bloodbound_hunt_attune_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { GameMenu.SwitchToMenu("bloodbound_hunt_attune_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void RegisterAttuneMenu(CampaignGameStarter starter)
@@ -261,10 +261,10 @@ namespace AshAndEmber
                           + "It will not go unnoticed, by the blood or by those who despise it. The working sleeps "
                           + "through the full light of day; it wakes with dusk.");
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             RegisterAttuneElementOption(starter, MagicElement.Fire,  "bloodbound_hunt_attune_fire",  "Fire",  "BLOODBOUND_HUNT_ATTUNE_FIRE_TEXT");
             RegisterAttuneElementOption(starter, MagicElement.Water, "bloodbound_hunt_attune_water", "Water", "BLOODBOUND_HUNT_ATTUNE_WATER_TEXT");
@@ -274,11 +274,11 @@ namespace AshAndEmber
             try
             {
                 starter.AddGameMenuOption("bloodbound_hunt_attune_main", "bloodbound_hunt_attune_leave", "Leave it be",
-                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } return true; },
-                    args => { try { GameMenu.SwitchToMenu("bloodbound_hunt_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } return true; },
+                    args => { try { GameMenu.SwitchToMenu("bloodbound_hunt_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     true, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void RegisterAttuneElementOption(CampaignGameStarter starter, MagicElement el, string optionId, string label, string textVar)
@@ -296,14 +296,14 @@ namespace AshAndEmber
                                 ? $"{label} (already bound to your blood)"
                                 : $"Bind {label} to your blood  [{cost} Demon Blood]");
                             args.IsEnabled = !already && HaveBlood(cost);
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
-                    args => { try { DoAttune(el, label); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    args => { try { DoAttune(el, label); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void DoAttune(MagicElement el, string label)
@@ -319,7 +319,7 @@ namespace AshAndEmber
             if (!SpendBlood(cost))
             {
                 ShowDialog("Not Enough Blood", $"You need {cost} Demon Blood for this working.",
-                    () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_attune_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_attune_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
@@ -330,7 +330,7 @@ namespace AshAndEmber
                 // IsEnabled above) — refund rather than silently eat the blood.
                 var item = MBObjectManager.Instance?.GetObject<ItemObject>(BloodboundCatalog.DemonBloodItemId);
                 var roster = MobileParty.MainParty?.ItemRoster;
-                try { if (item != null && roster != null) roster.AddToCounts(item, cost); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { if (item != null && roster != null) roster.AddToCounts(item, cost); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 GameMenu.SwitchToMenu("bloodbound_hunt_attune_main");
                 return;
             }
@@ -346,7 +346,7 @@ namespace AshAndEmber
 
             ShowDialog("Bound", $"The vial goes down like cold iron. {label} answers when you reach for it now — "
                 + $"but not under a full sun, and not without a price. {penaltyText}",
-                () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_attune_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("bloodbound_hunt_attune_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 
         // ── Helpers ────────────────────────────────────────────────────────────
@@ -388,7 +388,7 @@ namespace AshAndEmber
             {
                 string brief = body.Length > 100 ? body.Substring(0, 100) + "…" : body;
                 MBInformationManager.AddQuickInformation(new TextObject(brief));
-                try { onClose?.Invoke(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { onClose?.Invoke(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
     }

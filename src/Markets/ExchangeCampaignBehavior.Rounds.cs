@@ -15,7 +15,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class ExchangeCampaignBehavior
     {
@@ -97,11 +97,11 @@ namespace AshAndEmber
                         body,
                         options, false, 1, 1,
                         "Confirm", "Close position",
-                        chosen => { try { ProcessRoundChoice(chosen?[0]?.Identifier as string ?? "sell"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
-                        _      => { try { SellVenture(forced: false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } }),
+                        chosen => { try { ProcessRoundChoice(chosen?[0]?.Identifier as string ?? "sell"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
+                        _      => { try { SellVenture(forced: false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } }),
                     true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ProcessRoundChoice(string choiceId)
@@ -172,7 +172,7 @@ namespace AshAndEmber
                 }
                 InformationManager.DisplayMessage(new InformationMessage(line, col));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void CrashVenture(int roundNumber, bool wasAggressive)
@@ -190,7 +190,7 @@ namespace AshAndEmber
                             + (salvage > 0 ? $"Salvage: {salvage}g." : "Nothing recovered.");
                 InformationManager.DisplayMessage(new InformationMessage(line, new Color(0.80f, 0.30f, 0.25f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

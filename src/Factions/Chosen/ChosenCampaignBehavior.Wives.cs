@@ -44,7 +44,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class ChosenCampaignBehavior
     {
@@ -54,7 +54,7 @@ namespace AshAndEmber
 
         private static void SyncWifeData(IDataStore store)
         {
-            try { store.SyncData("CHO_PLAYER_WIFE_IDS", ref _playerWifeIds); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("CHO_PLAYER_WIFE_IDS", ref _playerWifeIds); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (_playerWifeIds == null) _playerWifeIds = new List<string>();
         }
 
@@ -83,7 +83,7 @@ namespace AshAndEmber
                 _playerWifeIds.Add(wife.StringId);
                 Hero.MainHero.Spouse = wife;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Path 1: settlement-capture prompt ───────────────────────────────────
@@ -119,11 +119,11 @@ namespace AshAndEmber
                                 $"{wife.Name} joins your household — one more of {settlement.Name}'s own now bound to your line.",
                                 new Color(0.85f, 0.72f, 0.25f)));
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     },
                     null));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static CharacterObject FindFemaleTemplateForSettlement(Settlement settlement)
@@ -176,7 +176,7 @@ namespace AshAndEmber
                 if (wife == null) return;
                 AddNewWife(wife);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

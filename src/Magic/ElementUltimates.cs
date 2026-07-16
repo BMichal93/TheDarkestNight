@@ -48,7 +48,7 @@ using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class ElementUltimates
     {
@@ -150,7 +150,7 @@ namespace AshAndEmber
                 var t = _thralls[i];
                 if (t == null || !t.Player) continue;
                 try { if (t.Agent != null && t.Agent.IsActive() && t.Agent.Health > 0f) return true; }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             return false;
         }
@@ -174,7 +174,7 @@ namespace AshAndEmber
             // the shared cooldown — so the player may seize again after this one lets go.
             if (el != MagicElement.Spirit)
                 _playerNextUnbind = Now() + ElementUltimateMath.UltimateCooldownSeconds;
-            bool ashen = false; try { ashen = MageKnowledge.IsAshen; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            bool ashen = false; try { ashen = MageKnowledge.IsAshen; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             Msg($"{ElementUltimateMath.UltimateName(el, ashen)} — the " +
                 $"{(ashen ? ElementMagicMath.AshenElementName(el) : ElementMagicMath.ElementName(el))} is unbound!");
             Execute(el, caster, ashen);
@@ -245,7 +245,7 @@ namespace AshAndEmber
             // Marked SPENT at windup start: an interrupted Unbinding is gone for
             // the battle — that is the player's reward for riding the caster down.
             _npcNextUnbind[hero.StringId] = Now() + ElementUltimateMath.NpcUltimateCooldownSeconds;
-            try { SpellEffects.BeginCastLoop(agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginCastLoop(agent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _npcWindups.Add(new NpcWindup
             {
                 Caster = agent, Element = pick.Value,
@@ -317,7 +317,7 @@ namespace AshAndEmber
                     _flights.RemoveAt(i);
                     if (victim == Agent.Main)
                         Msg("The wind is struck from you — you fall!");
-                    try { SpellEffects.SpawnNatureBurst(victim.Position, NatureElement.Wind, 0.8f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpellEffects.SpawnNatureBurst(victim.Position, NatureElement.Wind, 0.8f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
 
@@ -330,8 +330,8 @@ namespace AshAndEmber
                     if (_npcWindups[i].Caster != victim) continue;
                     var w = _npcWindups[i];
                     _npcWindups.RemoveAt(i);
-                    try { SpellEffects.EndCastLoop(victim); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { SpellEffects.SpawnTempSmokeParticle(victim.Position + new Vec3(0f, 0f, 0.8f), 1.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpellEffects.EndCastLoop(victim); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { SpellEffects.SpawnTempSmokeParticle(victim.Position + new Vec3(0f, 0f, 0.8f), 1.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     if (Agent.Main != null && victim.Team != null && Agent.Main.Team != null
                         && victim.Team != Agent.Main.Team)
                         Msg($"The Unbinding is broken — {ElementUltimateMath.UltimateName(w.Element, w.Ashen)} dies unspoken.");
@@ -350,7 +350,7 @@ namespace AshAndEmber
                         if (healBack >= 1f) SpellEffects.HealAgent(victim, healBack);
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -361,10 +361,10 @@ namespace AshAndEmber
         public static void Tick(float dt)
         {
             if (Mission.Current == null) return;
-            try { TickNpcWindups(dt); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TickFlights(dt); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TickRain(dt); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TickThralls(dt); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TickNpcWindups(dt); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TickFlights(dt); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TickRain(dt); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TickThralls(dt); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void TickNpcWindups(float dt)
@@ -373,7 +373,7 @@ namespace AshAndEmber
             {
                 var w = _npcWindups[i];
                 bool alive = false;
-                try { alive = w.Caster != null && w.Caster.IsActive() && w.Caster.Health > 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { alive = w.Caster != null && w.Caster.IsActive() && w.Caster.Health > 0f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (!alive) { _npcWindups.RemoveAt(i); continue; }
 
                 // The channel is LOUD: a swelling glow and the element's charge
@@ -391,14 +391,14 @@ namespace AshAndEmber
                         SpellEffects.SpawnTempLightRgb(w.Caster.Position + new Vec3(0f, 0f, 1f),
                             ElementSpellEffects.ElementLightRgb(w.Element, w.Ashen), 9f, 0.7f);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 w.Remaining -= dt;
                 if (w.Remaining > 0f) continue;
                 _npcWindups.RemoveAt(i);
-                try { SpellEffects.EndCastLoop(w.Caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { Execute(w.Element, w.Caster, w.Ashen); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.EndCastLoop(w.Caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { Execute(w.Element, w.Caster, w.Ashen); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -423,9 +423,9 @@ namespace AshAndEmber
                 case MagicElement.Mire:      MireSwallow(caster, ashen);      break;
             }
             try { SpellEffects.TryCastSound(caster.Position,
-                    ashen ? ColorSchool.Ashen : el == MagicElement.Fire ? ColorSchool.Red : ColorSchool.Nature); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.RecordMagicCast(caster.Position); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ElementWallWards.NoteCast(el, caster.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    ashen ? ColorSchool.Ashen : el == MagicElement.Fire ? ColorSchool.Red : ColorSchool.Nature); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.RecordMagicCast(caster.Position); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ElementWallWards.NoteCast(el, caster.Team); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── FIRE — The First Flame Remembered / The Long Winter ─────────────────
@@ -444,13 +444,13 @@ namespace AshAndEmber
                 if (SpellEffects.IsWarded(a)) continue;
                 // The nova is fire like any other — a standing mist wall between
                 // the caster and a foe drinks the working before it reaches him.
-                try { if (ElementWallWards.BlocksPath(MagicElement.Fire, pos, a.Position, out _)) continue; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SpellEffects.DamageAgent(a, ElementUltimateMath.NovaDamage * power, ColorSchool.Red, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { if (ElementWallWards.BlocksPath(MagicElement.Fire, pos, a.Position, out _)) continue; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SpellEffects.DamageAgent(a, ElementUltimateMath.NovaDamage * power, ColorSchool.Red, caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Full ignition on everything the nova touches (the Ashen cold
                 // grips as deep frost instead of a burn — same dread, colder face).
-                if (!ashen) try { ElementSpellEffects.IgniteTarget(a, caster, 1f * power, ashen); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                if (!ashen) try { ElementSpellEffects.IgniteTarget(a, caster, 1f * power, ashen); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 else        try { NatureEffects.ApplySpeedToken(a, ElementUltimateMath.NovaAshenSlowMult,
-                                                                   ElementUltimateMath.NovaAshenSlowSec); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                                                   ElementUltimateMath.NovaAshenSlowSec); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Horses panic and bolt away from the eruption.
                 try
                 {
@@ -463,19 +463,19 @@ namespace AshAndEmber
                             SkinVoiceManager.CombatVoiceNetworkPredictionType.NoPrediction);
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try
                 {
                     if (ashen) SpellEffects.SpawnTempSnowParticle(a.Position + new Vec3(0f, 0f, 0.4f), 1.2f);
                     else       SpellEffects.SpawnTempFireParticle(a.Position + new Vec3(0f, 0f, 0.4f), 1.2f);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // The survivors visibly flee the eruption; timber in the ring chars.
-            try { SpellEffects.ScatterEnemies(pos, ElementUltimateMath.NovaRadius, caster.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.ScatterEnemies(pos, ElementUltimateMath.NovaRadius, caster.Team); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try { SpellEffects.DamageBurnableStructures(pos, ElementUltimateMath.NovaRadius,
-                    ElementUltimateMath.NovaSiegeDamage * power, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    ElementUltimateMath.NovaSiegeDamage * power, caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // The burning ring: eight tangent bands around the caster (the living
             // fire smoulders and scorches; the cold leaves standing frost that
@@ -491,13 +491,13 @@ namespace AshAndEmber
                     if (ashen) SpellEffects.SpawnTempSnowParticle(node + new Vec3(0f, 0f, 0.4f), ElementUltimateMath.NovaRingBurnSec);
                     else       SpellEffects.SpawnTempFireParticle(node + new Vec3(0f, 0f, 0.4f), ElementUltimateMath.NovaRingBurnSec);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { ElementWallWards.RegisterNode(MagicElement.Fire, node, 1.6f,
-                        ElementUltimateMath.NovaRingBurnSec, caster.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        ElementUltimateMath.NovaRingBurnSec, caster.Team); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (!ashen)
                     try { SpellEffects.SpawnFireWallPatches(node, tangent, 2.2f,
                             ElementUltimateMath.NovaRingBurnDps * power,
-                            ElementUltimateMath.NovaRingBurnSec, caster.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            ElementUltimateMath.NovaRingBurnSec, caster.Team); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // The eruption itself.
@@ -516,9 +516,9 @@ namespace AshAndEmber
                         SpellEffects.SpawnTempSmokeParticle(pos + new Vec3(0f, 0f, 0.5f), 3f);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.SpawnTempLightRgb(pos + new Vec3(0f, 0f, 1.5f), rgb, 22f, 1.4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.BeginAgentGlow(caster, ashen ? ColorSchool.Ashen : ColorSchool.Red, 2.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempLightRgb(pos + new Vec3(0f, 0f, 1.5f), rgb, 22f, 1.4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ashen ? ColorSchool.Ashen : ColorSchool.Red, 2.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── WIND — On the Wings of the Gale / Carried by the Howl ───────────────
@@ -546,7 +546,7 @@ namespace AshAndEmber
             _flights.Add(new Flight { Flyer = caster, Remaining = seconds, FixedDir = fixedDir, Ashen = ashen });
             if (caster == Agent.Main)
                 Msg("The wind bears you — steer with your gaze. One arrow ends it.");
-            try { SpellEffects.SpawnNatureBurst(caster.Position, NatureElement.Wind, 1.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnNatureBurst(caster.Position, NatureElement.Wind, 1.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void TickFlights(float dt)
@@ -557,7 +557,7 @@ namespace AshAndEmber
             {
                 var f = _flights[i];
                 bool alive = false;
-                try { alive = f.Flyer != null && f.Flyer.IsActive() && f.Flyer.Health > 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { alive = f.Flyer != null && f.Flyer.IsActive() && f.Flyer.Health > 0f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (!alive) { _flights.RemoveAt(i); continue; }
 
                 f.Remaining -= dt;
@@ -589,7 +589,7 @@ namespace AshAndEmber
                         if (!Mission.Current.IsPositionInsideBoundaries(next.AsVec2))
                             next = f.Flyer.Position;
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                     // Terrain-following: ground height + the flight/landing curve.
                     float ground = next.z;
@@ -598,7 +598,7 @@ namespace AshAndEmber
                         scene.GetHeightAtPoint(next.AsVec2,
                             BodyFlags.CommonCollisionExcludeFlagsForAgent, ref ground);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     next.z = ground + ElementUltimateMath.FlightHeightAt(f.Remaining);
 
                     // LOCAL-VERIFY (in-game): a per-tick TeleportToPosition is the
@@ -610,16 +610,16 @@ namespace AshAndEmber
                     // movement input while aloft. The mechanic itself stays as is.
                     f.Flyer.TeleportToPosition(next);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // A trail of gusts marks the carried caster.
                 f.VisualTimer -= dt;
                 if (f.VisualTimer <= 0f)
                 {
                     f.VisualTimer = 0.35f;
-                    try { SpellEffects.SpawnNatureBurst(f.Flyer.Position, NatureElement.Wind, 0.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpellEffects.SpawnNatureBurst(f.Flyer.Position, NatureElement.Wind, 0.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     try { SpellEffects.BeginAgentGlow(f.Flyer,
-                            f.Ashen ? ColorSchool.Ashen : ColorSchool.Nature, 0.6f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            f.Ashen ? ColorSchool.Ashen : ColorSchool.Nature, 0.6f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
         }
@@ -640,26 +640,26 @@ namespace AshAndEmber
             foreach (Agent a in EnemiesNear(caster, radius))
             {
                 if (SpellEffects.IsWarded(a)) continue;
-                try { SpellEffects.DamageAgent(a, ElementUltimateMath.QuakeDamage, ColorSchool.Nature, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.DamageAgent(a, ElementUltimateMath.QuakeDamage, ColorSchool.Nature, caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Hurled outward off the heaving ground — mount-safe knockback.
                 Vec3 away = a.Position - pos; away.z = 0f;
                 if (away.Length > 0.1f) away.Normalize(); else away = new Vec3(1f, 0f, 0f);
                 Vec3 dest = a.Position + away * ElementUltimateMath.QuakeKnockback;
                 dest.z = a.Position.z;
-                try { NatureEffects.KnockbackAgent(a, dest); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { NatureEffects.KnockbackAgent(a, dest); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Broken footing: a short slow (deep frost for the Ashen barrow-cold).
                 try { NatureEffects.ApplySpeedToken(a, ElementUltimateMath.QuakeSlowMult,
-                                                       ElementUltimateMath.QuakeSlowSec); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                                       ElementUltimateMath.QuakeSlowSec); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { SpellEffects.SpawnNatureBurst(a.Position,
-                        ashen ? NatureElement.Water : NatureElement.Earth, 0.6f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        ashen ? NatureElement.Water : NatureElement.Earth, 0.6f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // The survivors scatter; wooden machines in the ring are shaken apart.
-            try { SpellEffects.ScatterEnemies(pos, radius, caster.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.ScatterEnemies(pos, radius, caster.Team); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try { SpellEffects.DamageBurnableStructures(pos, radius,
-                    ElementUltimateMath.QuakeSiegeDamage, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    ElementUltimateMath.QuakeSiegeDamage, caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // A ring of churned rubble is left to bog the ground the quake tore up.
             int rubble = ElementUltimateMath.QuakeRubblePatches;
@@ -669,19 +669,19 @@ namespace AshAndEmber
                 Vec3 p = pos + new Vec3((float)Math.Cos(ang) * ElementUltimateMath.QuakeRubbleRing,
                                         (float)Math.Sin(ang) * ElementUltimateMath.QuakeRubbleRing, 0f);
                 p.z = pos.z;
-                try { SpellEffects.SpawnMudPatch(p); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.SpawnMudPatch(p); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // The eruption itself — a stone shockwave ring and a heave at the centre.
-            try { SpellEffects.SpawnNatureRing(pos, NatureElement.Earth, radius * 0.55f, 1.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.SpawnNatureBurst(pos, NatureElement.Earth, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnNatureRing(pos, NatureElement.Earth, radius * 0.55f, 1.2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnNatureBurst(pos, NatureElement.Earth, 2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try
             {
                 Vec3 rgb = ElementSpellEffects.ElementLightRgb(MagicElement.Earth, ashen);
                 SpellEffects.SpawnTempLightRgb(pos + new Vec3(0f, 0f, 1f), rgb, 18f, 1.1f);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.BeginAgentGlow(caster, ashen ? ColorSchool.Ashen : ColorSchool.Nature, 1.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ashen ? ColorSchool.Ashen : ColorSchool.Nature, 1.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (caster == Agent.Main)
                 Msg(ashen ? "The barrow wakes — the frozen ground splits, and the cold throws them down."
@@ -706,7 +706,7 @@ namespace AshAndEmber
                 Ashen = ashen,
             };
             if (replaced) Msg("A new will takes the sky — the old rain is torn away.");
-            try { SpellEffects.SpawnNatureBurst(caster.Position, NatureElement.Water, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnNatureBurst(caster.Position, NatureElement.Water, 2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void TickRain(float dt)
@@ -734,18 +734,18 @@ namespace AshAndEmber
                     if (dx * dx + dy * dy > radius2) continue;
 
                     // The rain puts out every burning man inside it.
-                    try { ElementSpellEffects.QuenchIgnition(a); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ElementSpellEffects.QuenchIgnition(a); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     // Slow tokens are short and re-applied each tick, so they end
                     // with the rain (or the moment someone walks out of it).
                     try { NatureEffects.ApplySpeedToken(a, ElementUltimateMath.RainFootSlowMult,
-                            ElementUltimateMath.RainTickSeconds + 0.3f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            ElementUltimateMath.RainTickSeconds + 0.3f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     try
                     {
                         if (a.MountAgent != null && a.MountAgent.IsActive())
                             NatureEffects.ApplySpeedToken(a.MountAgent, ElementUltimateMath.RainMountSlowMult,
                                 ElementUltimateMath.RainTickSeconds + 0.3f);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     // The blizzard gnaws at the caster's foes.
                     if (r.Ashen)
                         try
@@ -753,15 +753,15 @@ namespace AshAndEmber
                             if (r.CasterTeam != null && a.Team != null && a.Team.IsEnemyOf(r.CasterTeam))
                                 a.SetMorale(a.GetMorale() - ElementUltimateMath.RainAshenMoraleDrainPerTick);
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Standing fire dies under the rain — the burning GROUND itself, not
             // just its warding (QuenchFireAt sweeps both, patches to steam) — and
             // a scatter of spray/snow keeps the zone readable on screen.
-            try { SpellEffects.QuenchFireAt(r.Centre, ElementUltimateMath.RainRadius); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.QuenchFireAt(r.Centre, ElementUltimateMath.RainRadius); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try
             {
                 for (int k = 0; k < 4; k++)
@@ -773,7 +773,7 @@ namespace AshAndEmber
                     else         SpellEffects.SpawnNatureBurst(p, NatureElement.Water, 0.8f);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── SPIRIT — The Bent Knee / The Hollow Oath ─────────────────────────────
@@ -811,7 +811,7 @@ namespace AshAndEmber
                 // body into the caster's formation and set it marching — the exact
                 // treatment the Spirit champion always used (ElementalFactory), so
                 // an NPC lord's thrall advances with his line like any reinforcement.
-                try { ElementalFactory.SetAggressive(best, caster.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementalFactory.SetAggressive(best, caster.Team); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 _thralls.Add(new Thrall
                 {
@@ -827,7 +827,7 @@ namespace AshAndEmber
                     ? $"The frost grips {name}'s will — hollow-eyed, they turn to your command."
                     : $"Something in {name} bends — for a time, they are yours.");
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // =====================================================================
@@ -846,14 +846,14 @@ namespace AshAndEmber
             foreach (Agent a in EnemiesNear(caster, ElementUltimateMath.LightningRadius))
             {
                 if (SpellEffects.IsWarded(a)) continue;
-                try { SpellEffects.DamageAgent(a, ElementUltimateMath.LightningDamage, ColorSchool.White, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { a.SetMaximumSpeedLimit(0f, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { NatureEffects.ApplySpeedToken(a, 0f, ElementUltimateMath.LightningStunSec); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SpellEffects.SpawnTempLightWhite(a.Position + new Vec3(0f, 0f, 1f), 10f, 0.3f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SpellEffects.SpawnNatureBurst(a.Position + new Vec3(0f, 0f, 1f), NatureElement.Storm, 1.0f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.DamageAgent(a, ElementUltimateMath.LightningDamage, ColorSchool.White, caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { a.SetMaximumSpeedLimit(0f, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { NatureEffects.ApplySpeedToken(a, 0f, ElementUltimateMath.LightningStunSec); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SpellEffects.SpawnTempLightWhite(a.Position + new Vec3(0f, 0f, 1f), 10f, 0.3f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SpellEffects.SpawnNatureBurst(a.Position + new Vec3(0f, 0f, 1f), NatureElement.Storm, 1.0f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            try { SpellEffects.SpawnTempLightWhite(pos + new Vec3(0f, 0f, 2f), 22f, 0.4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.White, 1.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempLightWhite(pos + new Vec3(0f, 0f, 2f), 22f, 0.4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.White, 1.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (caster == Agent.Main)
                 Msg(ashen ? "The silent thunder answers — every foe in reach falls still."
                           : "The storm's judgment falls — every foe in reach is struck as one.");
@@ -868,9 +868,9 @@ namespace AshAndEmber
         {
             Vec3 pos; try { pos = caster.Position; } catch { return; }
             try { SpellEffects.SpawnFogPatch(pos, ElementUltimateMath.FogUltimateRadius, ElementUltimateMath.FogUltimateSeconds, caster.Team); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.SpawnTempLightRgb(pos + new Vec3(0f, 0f, 1.5f), ElementSpellEffects.ElementLightRgb(MagicElement.Fog, ashen), 20f, 1.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Nature, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempLightRgb(pos + new Vec3(0f, 0f, 1.5f), ElementSpellEffects.ElementLightRgb(MagicElement.Fog, ashen), 20f, 1.2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Nature, 2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (caster == Agent.Main)
                 Msg(ashen ? "The white blindness rolls out — the field itself disappears."
                           : "The devouring mist rolls out over the field.");
@@ -885,19 +885,19 @@ namespace AshAndEmber
             foreach (Agent a in EnemiesNear(caster, ElementUltimateMath.MagmaUltimateRadius))
             {
                 if (SpellEffects.IsWarded(a)) continue;
-                try { SpellEffects.DamageAgent(a, ElementUltimateMath.MagmaUltimateDamage, ColorSchool.Red, caster, MagicElement.Fire); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                if (!ashen) try { ElementSpellEffects.IgniteTarget(a, caster, 1f, ashen); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.DamageAgent(a, ElementUltimateMath.MagmaUltimateDamage, ColorSchool.Red, caster, MagicElement.Fire); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                if (!ashen) try { ElementSpellEffects.IgniteTarget(a, caster, 1f, ashen); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 Vec3 away = a.Position - pos; away.z = 0f;
                 away = away.Length > 0.1f ? away.NormalizedCopy() : new Vec3(1f, 0f, 0f);
-                try { NatureEffects.KnockbackAgent(a, a.Position + away * 4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { NatureEffects.KnockbackAgent(a, a.Position + away * 4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            try { SpellEffects.ScatterEnemies(pos, ElementUltimateMath.MagmaUltimateRadius, caster.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.ScatterEnemies(pos, ElementUltimateMath.MagmaUltimateRadius, caster.Team); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try { SpellEffects.DamageBurnableStructures(pos, ElementUltimateMath.MagmaUltimateRadius,
-                    ElementUltimateMath.MagmaUltimateDamage * 3f, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    ElementUltimateMath.MagmaUltimateDamage * 3f, caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try { SpellEffects.SpawnMagmaPatch(pos, ElementUltimateMath.MagmaPatchTickDamage,
-                    ElementUltimateMath.MagmaPatchSeconds, caster.Team, ElementUltimateMath.MagmaPatchRadius); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.SpawnBurstExplosion(pos, ColorSchool.Red, ElementUltimateMath.MagmaUltimateRadius * 0.5f, 1.6f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.BeginAgentGlow(caster, ashen ? ColorSchool.Ashen : ColorSchool.Red, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    ElementUltimateMath.MagmaPatchSeconds, caster.Team, ElementUltimateMath.MagmaPatchRadius); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnBurstExplosion(pos, ColorSchool.Red, ElementUltimateMath.MagmaUltimateRadius * 0.5f, 1.6f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ashen ? ColorSchool.Ashen : ColorSchool.Red, 2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (caster == Agent.Main)
                 Msg(ashen ? "The ashen maw opens — the ground itself turns against them."
                           : "The ground ignites — the earth erupts into open flame.");
@@ -912,13 +912,13 @@ namespace AshAndEmber
             foreach (Agent a in EnemiesNear(caster, ElementUltimateMath.IceUltimateRadius))
             {
                 if (SpellEffects.IsWarded(a)) continue;
-                try { a.SetMaximumSpeedLimit(0f, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { NatureEffects.ApplySpeedToken(a, 0f, ElementUltimateMath.IceUltimateFreezeSec); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SpellEffects.SpawnTempSnowParticle(a.Position + new Vec3(0f, 0f, 0.6f), 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { a.SetMaximumSpeedLimit(0f, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { NatureEffects.ApplySpeedToken(a, 0f, ElementUltimateMath.IceUltimateFreezeSec); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SpellEffects.SpawnTempSnowParticle(a.Position + new Vec3(0f, 0f, 0.6f), 2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            try { SpellEffects.SpawnNatureBurst(pos, NatureElement.Water, 2.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.SpawnTempLightRgb(pos + new Vec3(0f, 0f, 1.5f), ElementSpellEffects.ElementLightRgb(MagicElement.Ice, ashen), 18f, 1.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.White, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnNatureBurst(pos, NatureElement.Water, 2.2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempLightRgb(pos + new Vec3(0f, 0f, 1.5f), ElementSpellEffects.ElementLightRgb(MagicElement.Ice, ashen), 18f, 1.2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.White, 2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (caster == Agent.Main)
                 Msg(ashen ? "The endless winter answers — every foe in reach is locked fast."
                           : "The absolute stillness falls — every foe in reach freezes where they stand.");
@@ -933,8 +933,8 @@ namespace AshAndEmber
             foreach (Agent a in EnemiesNear(caster, ElementUltimateMath.SandstormUltimateRadius))
             {
                 if (SpellEffects.IsWarded(a)) continue;
-                try { SpellEffects.DamageAgent(a, ElementUltimateMath.SandstormUltimateDamage, ColorSchool.Nature, caster, MagicElement.Earth); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { NatureEffects.ApplySpeedToken(a, 0.5f, ElementUltimateMath.SandstormUltimateSlowSec); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.DamageAgent(a, ElementUltimateMath.SandstormUltimateDamage, ColorSchool.Nature, caster, MagicElement.Earth); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { NatureEffects.ApplySpeedToken(a, 0.5f, ElementUltimateMath.SandstormUltimateSlowSec); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try
                 {
                     if (a.MountAgent != null && a.MountAgent.IsActive())
@@ -945,11 +945,11 @@ namespace AshAndEmber
                         a.MountAgent.MakeVoice(SkinVoiceManager.VoiceType.Fear, SkinVoiceManager.CombatVoiceNetworkPredictionType.NoPrediction);
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SpellEffects.SpawnTempSandWisp(a.Position + new Vec3(0f, 0f, 1f), 1.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SpellEffects.SpawnTempSandWisp(a.Position + new Vec3(0f, 0f, 1f), 1.2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            try { SpellEffects.SpawnTempSandParticle(pos, 2.4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Nature, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempSandParticle(pos, 2.4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Nature, 2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (caster == Agent.Main)
                 Msg(ashen ? "The bone storm rises — every mount in reach bolts screaming."
                           : "The devouring dunes rise — every mount in reach bolts off the line.");
@@ -964,9 +964,9 @@ namespace AshAndEmber
             Vec3 pos; try { pos = caster.Position; } catch { return; }
             try { SpellEffects.SpawnMirePatch(pos, ElementUltimateMath.MireUltimateTickDamage,
                     ElementUltimateMath.MireUltimateSeconds, caster.Team, ElementUltimateMath.MireUltimateRadius); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.SpawnTempLightRgb(pos + new Vec3(0f, 0f, 1.5f), ElementSpellEffects.ElementLightRgb(MagicElement.Mire, ashen), 18f, 1.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Nature, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempLightRgb(pos + new Vec3(0f, 0f, 1.5f), ElementSpellEffects.ElementLightRgb(MagicElement.Mire, ashen), 18f, 1.2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Nature, 2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (caster == Agent.Main)
                 Msg(ashen ? "The grey sinking opens beneath them."
                           : "The swallowing ground opens — the earth itself gives way.");
@@ -984,9 +984,9 @@ namespace AshAndEmber
                 if (ashen) SpellEffects.SpawnTempSnowParticle(pos + new Vec3(0f, 0f, 0.5f), scale);
                 else       SpellEffects.SpawnTempSmokeParticle(pos + new Vec3(0f, 0f, 0.4f), scale);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try { SpellEffects.SpawnTempLightRgb(pos + new Vec3(0f, 0f, 1f),
-                    ElementSpellEffects.ElementLightRgb(MagicElement.Spirit, ashen), 8f, 0.8f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    ElementSpellEffects.ElementLightRgb(MagicElement.Spirit, ashen), 8f, 0.8f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void TickThralls(float dt)
@@ -995,7 +995,7 @@ namespace AshAndEmber
             {
                 var t = _thralls[i];
                 bool alive = false;
-                try { alive = t.Agent != null && t.Agent.IsActive() && t.Agent.Health > 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { alive = t.Agent != null && t.Agent.IsActive() && t.Agent.Health > 0f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (!alive) { _thralls.RemoveAt(i); continue; }   // died fighting under the borrowed will
 
                 t.Remaining -= dt;
@@ -1007,14 +1007,14 @@ namespace AshAndEmber
                 string name = SafeAgentName(t.Agent);
 
                 TryChangeAgentTeam(t.Agent, t.OriginalTeam);
-                try { ElementalFactory.SetAggressive(t.Agent, t.OriginalTeam); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementalFactory.SetAggressive(t.Agent, t.OriginalTeam); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { NatureEffects.ApplySpeedToken(t.Agent, ElementUltimateMath.ThrallDazedSpeedMult,
-                        ElementUltimateMath.ThrallDazedSeconds); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        ElementUltimateMath.ThrallDazedSeconds); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (t.Ashen)
                 {
                     try { SpellEffects.DamageAgent(t.Agent, ElementUltimateMath.ThrallAshenPartingDamage,
-                            ColorSchool.Ashen, t.Caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            ColorSchool.Ashen, t.Caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     Msg($"The frost in {name} cracks as it withdraws — they reel back to their own line, marked by its parting bite.");
                 }
                 else
@@ -1044,7 +1044,7 @@ namespace AshAndEmber
                     BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 if (prop != null && prop.CanWrite) { prop.SetValue(agent, team); return true; }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try
             {
                 var field = typeof(Agent).GetField("<Team>k__BackingField",
@@ -1052,7 +1052,7 @@ namespace AshAndEmber
                          ?? typeof(Agent).GetField("_team", BindingFlags.NonPublic | BindingFlags.Instance);
                 if (field != null) { field.SetValue(agent, team); return true; }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return false;
         }
 
@@ -1081,7 +1081,7 @@ namespace AshAndEmber
                 InformationManager.DisplayMessage(new InformationMessage(
                     $"{hero.Name} {blurb}", new Color(0.9f, 0.35f, 0.25f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void Msg(string text)

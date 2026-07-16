@@ -30,7 +30,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class TempleSigilEffects
     {
@@ -45,12 +45,12 @@ namespace AshAndEmber
                 if (affectorAgent == Agent.Main && blow.InflictedDamage > 0)
                 {
                     string itemId = null;
-                    try { itemId = affectorWeapon.Item?.StringId; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { itemId = affectorWeapon.Item?.StringId; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     if (itemId == TempleSigilCatalog.HolySigilItemId)
                         ScorchNearbyDemons(affectorAgent);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // ── On block: victim wields the Sigil and blocks/parries the blow ──
             try
@@ -64,18 +64,18 @@ namespace AshAndEmber
                                || attackCollisionData.CollisionResult == CombatCollisionResult.Blocked
                                || attackCollisionData.CollisionResult == CombatCollisionResult.Parried;
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                     if (blocked)
                     {
                         string itemId = null;
-                        try { itemId = affectedAgent.WieldedWeapon.Item?.StringId; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { itemId = affectedAgent.WieldedWeapon.Item?.StringId; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         if (itemId == TempleSigilCatalog.HolySigilItemId)
                             RestoreBearerMorale(affectedAgent);
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ScorchNearbyDemons(Agent bearer)
@@ -95,7 +95,7 @@ namespace AshAndEmber
                     hit++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (hit > 0)
                 try
@@ -104,7 +104,7 @@ namespace AshAndEmber
                         $"The Holy Sigil flares — {hit} demon(s) seared by the Light.",
                         new Color(0.90f, 0.82f, 0.42f)));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void RestoreBearerMorale(Agent bearer)
@@ -114,7 +114,7 @@ namespace AshAndEmber
                 float m = bearer.GetMorale();
                 bearer.SetMorale(Math.Min(m + TempleMath.SigilOnBlockMoraleGain, 100f));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

@@ -18,7 +18,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal sealed class AshenDiplomacyModel : DefaultDiplomacyModel
     {
@@ -159,7 +159,7 @@ namespace AshAndEmber
                 if (IsImperial(factionDeclaresWar) && IsImperial(factionDeclaredWar))
                     score = score > 0f ? score * EmpireCivilWarScoreMult : score + EmpireCivilWarFlatBonus;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return score;
         }
 
@@ -187,7 +187,7 @@ namespace AshAndEmber
                 if (stance != null && stance.IsAtWar && stance.WarStartDate.ElapsedDaysUntilNow < MinWarDays)
                     return -5000f;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             return base.GetScoreOfDeclaringPeace(factionDeclaresPeace, factionDeclaredPeace);
         }

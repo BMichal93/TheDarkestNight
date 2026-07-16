@@ -18,7 +18,7 @@
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class LegionQuestCampaignBehavior
     {
@@ -47,7 +47,7 @@ namespace AshAndEmber
 
                 LegionQuestLog.Current?.LogStockProgress(_hardwood, _iron);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void ApplyDecayWeeklyTick()
@@ -61,7 +61,7 @@ namespace AshAndEmber
                 _iron     = LegionQuestMath.ApplyWeeklyDecay(_iron);
                 LegionQuestLog.Current?.LogStockProgress(_hardwood, _iron);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

@@ -12,7 +12,7 @@
 // block, and TempleSigilEffects.cs for the on-hit/on-block battle wiring.
 // =============================================================================
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class TempleSigilCatalog
     {

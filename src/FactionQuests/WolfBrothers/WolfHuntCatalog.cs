@@ -6,7 +6,7 @@
 // DemonCatalog/MiracleCatalog "enum index + data row" pattern.
 // =============================================================================
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class WolfHuntCatalog
     {

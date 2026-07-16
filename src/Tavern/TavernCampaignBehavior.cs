@@ -26,7 +26,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class TavernCampaignBehavior : CampaignBehaviorBase
     {
@@ -64,8 +64,8 @@ namespace AshAndEmber
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
             ResetSessionState();
-            try { RegisterDialogue(starter);  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { RegisterMenus(starter);     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterDialogue(starter);  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { RegisterMenus(starter);     } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ResetSessionState()

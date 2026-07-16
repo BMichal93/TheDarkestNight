@@ -9,7 +9,7 @@
 
 using TaleWorlds.CampaignSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class GreatAwakeningCampaignBehavior
     {
@@ -24,7 +24,7 @@ namespace AshAndEmber
                     "I have heard whispers of... the Great Awakening. Tell me what you know.",
                     CondCanAsk, null, DialoguePriority);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -38,7 +38,7 @@ namespace AshAndEmber
                     "to rule it. We mean to give it that chance.",
                     CondCanAsk, null, DialoguePriority);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -47,7 +47,7 @@ namespace AshAndEmber
                     "Then it has already begun.",
                     null, OnAskConsequence, DialoguePriority);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static bool CondCanAsk()
@@ -69,7 +69,7 @@ namespace AshAndEmber
                 _phase = PhaseActive;
                 GreatAwakeningQuestLog.Start();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

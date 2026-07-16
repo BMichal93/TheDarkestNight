@@ -34,7 +34,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class LegionCulture
     {
@@ -91,7 +91,7 @@ namespace AshAndEmber
                     new TextObject(RulerTitle));
                 SetKingdomEncyclopediaText(kingdom, Lore);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void SetKingdomField(Kingdom kingdom, string[] candidates, TextObject value)
@@ -103,7 +103,7 @@ namespace AshAndEmber
                     var f = typeof(Kingdom).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
                     if (f != null) { f.SetValue(kingdom, value); return; }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 

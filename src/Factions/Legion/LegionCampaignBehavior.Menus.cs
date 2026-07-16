@@ -20,7 +20,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class LegionCampaignBehavior
     {
@@ -62,15 +62,15 @@ namespace AshAndEmber
                                 ready ? $"Train at the fields  [{LegionMath.TrainingFieldFocusCost} focus point -> 2 skills]"
                                       : "Train at the fields (no focus points to spend)");
                             args.IsEnabled = ready;
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { DoTrainAtFields(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { DoTrainAtFields(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void DoTrainAtFields()
@@ -111,7 +111,7 @@ namespace AshAndEmber
                 hero.HeroDeveloper.AddFocus(skill, LegionMath.TrainingFieldFocusPerSkill, false);
                 return $" +{LegionMath.TrainingFieldFocusPerSkill} focus in {skill.Name}.";
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return ""; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return ""; }
         }
     }
 }

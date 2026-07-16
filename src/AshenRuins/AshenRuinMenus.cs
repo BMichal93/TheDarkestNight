@@ -15,7 +15,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class AshenRuinMenus
     {
@@ -25,9 +25,9 @@ namespace AshAndEmber
         // ── Session launch ─────────────────────────────────────────────────────
         public static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { ResolveVillages(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { RegisterMenus(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpawnInitialGuards(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ResolveVillages(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { RegisterMenus(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpawnInitialGuards(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ResolveVillages()
@@ -43,7 +43,7 @@ namespace AshAndEmber
                 {
                     if (s == null || !s.IsVillage) continue;
                     string name = null;
-                    try { name = s.Name?.ToString()?.Trim(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { name = s.Name?.ToString()?.Trim(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     if (string.IsNullOrEmpty(name)) continue;
                     if (!string.Equals(name, def.VillageName, StringComparison.OrdinalIgnoreCase)) continue;
                     _ruinVillages.Add(s);
@@ -55,7 +55,7 @@ namespace AshAndEmber
                 // spawns a menu option — surface that instead of failing silently,
                 // so a mistyped or non-village name is caught on first launch.
                 if (!matched)
-                    AshAndEmber.ModLog.Error(new System.Exception(
+                    TheDarkestNight.ModLog.Error(new System.Exception(
                         $"AshenRuins: '{def.RuinName}' expects a village named '{def.VillageName}' but none was found on this map — it will never appear."));
             }
         }
@@ -63,12 +63,12 @@ namespace AshAndEmber
         private static void SpawnInitialGuards()
         {
             foreach (var def in AshenRuinDefs.All)
-                try { AshenRuinSystem.SpawnGuardsForRuin(def); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { AshenRuinSystem.SpawnGuardsForRuin(def); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void WeeklySpawnGuards()
         {
-            try { AshenRuinSystem.WeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { AshenRuinSystem.WeeklyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Menu registration ──────────────────────────────────────────────────
@@ -97,7 +97,7 @@ namespace AshAndEmber
                             else if (contested)  note = " [contested by a lord]";
 
                             MBTextManager.SetTextVariable("AR_RUIN_LABEL", $"Explore {def.RuinName}{note}");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = !onCd;
                             return true;
                         }
@@ -111,11 +111,11 @@ namespace AshAndEmber
                             if (s == null || !_bySettlementId.TryGetValue(s.StringId, out var def)) return;
                             GameMenu.SwitchToMenu("ar_ruin_enter");
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Entry confirmation menu
             try
@@ -142,10 +142,10 @@ namespace AshAndEmber
                         MBTextManager.SetTextVariable("AR_RUIN_HDR",
                             $"{def.RuinName}  [{tierStr}]  [{def.Challenges.Length} room(s)]{soloNote}\n\n{def.EntryLore}");
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Option: Slip past guards (Tier 3+) vs Enter directly (Tier 1-2)
             try
@@ -161,7 +161,7 @@ namespace AshAndEmber
                             bool needsSlip = def.Tier >= RuinTier.Brutal && isSolo;
                             string label = needsSlip ? "Slip past the wardens and enter" : "Enter the ruin";
                             MBTextManager.SetTextVariable("AR_RUIN_GO", label);
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             return true;
                         }
                         catch { return false; }
@@ -180,11 +180,11 @@ namespace AshAndEmber
                             else
                                 AshenRuinSystem.BeginExploration(def, isSolo);
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Option: Leave
             try
@@ -192,20 +192,20 @@ namespace AshAndEmber
                 starter.AddGameMenuOption("ar_ruin_enter", "ar_ruin_leave", "Walk away",
                     args =>
                     {
-                        try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
-                    args => { try { GameMenu.SwitchToMenu("village"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { GameMenu.SwitchToMenu("village"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     true, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Solo Tier-3/4 slip-past gate ──────────────────────────────────────
         private static void ShowSlipPastDialog(RuinDef def, bool isSolo)
         {
             int roguery = 0;
-            try { roguery = Hero.MainHero?.GetSkillValue(DefaultSkills.Roguery) ?? 0; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { roguery = Hero.MainHero?.GetSkillValue(DefaultSkills.Roguery) ?? 0; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             int proficiency = TalentSystem.PurchasedCount;
             bool autoPass = roguery > 150 || proficiency >= 10;
 

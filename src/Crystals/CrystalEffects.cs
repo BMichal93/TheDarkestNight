@@ -23,7 +23,7 @@ using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class CrystalEffects
     {
@@ -80,14 +80,14 @@ namespace AshAndEmber
             if (attacker == null || attacker != Agent.Main) return; // player swings only
 
             string itemId = null;
-            try { itemId = weapon.Item?.StringId; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { itemId = weapon.Item?.StringId; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (!CrystalCatalog.IsCrystalItemId(itemId)) return;
 
             // A crystal deals no physical harm — restore whatever it inflicted.
             // (Activation is driven by the attack INPUT in MissionTick, not the hit,
             // so a crystal fires instantly on the swing whether or not it connects.)
             if (victim != null && victim.IsActive() && inflictedDamage > 0)
-                try { SpellEffects.HealAgent(victim, inflictedDamage); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.HealAgent(victim, inflictedDamage); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Looses the wielded crystal's light the instant the player strikes with it —
@@ -96,7 +96,7 @@ namespace AshAndEmber
         private static void TryActivateCrystal(Agent main)
         {
             string itemId = null;
-            try { itemId = main.WieldedWeapon.Item?.StringId; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { itemId = main.WieldedWeapon.Item?.StringId; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (!CrystalCatalog.IsCrystalItemId(itemId)) return;
             if (!CrystalCatalog.TryGetByItemId(itemId, out var def)) return;
             FireEffect(main, def.Type);
@@ -128,7 +128,7 @@ namespace AshAndEmber
                     _prevAttackDown = attackDown;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Expire Rimeshard slow.
             foreach (var kvp in _rimeSlow.ToList())
@@ -138,7 +138,7 @@ namespace AshAndEmber
                 {
                     _rimeSlow.Remove(kvp.Key);
                     if (kvp.Key.IsActive())
-                        try { kvp.Key.SetMaximumSpeedLimit(1f, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { kvp.Key.SetMaximumSpeedLimit(1f, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
                 else _rimeSlow[kvp.Key] = left;
             }
@@ -151,7 +151,7 @@ namespace AshAndEmber
                 {
                     _veilSlow.Remove(kvp.Key);
                     if (kvp.Key.IsActive())
-                        try { kvp.Key.SetMaximumSpeedLimit(1f, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { kvp.Key.SetMaximumSpeedLimit(1f, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
                 else _veilSlow[kvp.Key] = left;
             }
@@ -164,7 +164,7 @@ namespace AshAndEmber
                 {
                     _duskSlow.Remove(kvp.Key);
                     if (kvp.Key.IsActive())
-                        try { kvp.Key.SetMaximumSpeedLimit(1f, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { kvp.Key.SetMaximumSpeedLimit(1f, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
                 else _duskSlow[kvp.Key] = left;
             }
@@ -177,7 +177,7 @@ namespace AshAndEmber
                 {
                     _thornRoot.Remove(kvp.Key);
                     if (kvp.Key.IsActive())
-                        try { kvp.Key.SetMaximumSpeedLimit(1f, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { kvp.Key.SetMaximumSpeedLimit(1f, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
                 else _thornRoot[kvp.Key] = left;
             }
@@ -190,7 +190,7 @@ namespace AshAndEmber
                 {
                     _zephyrHaste.Remove(kvp.Key);
                     if (kvp.Key.IsActive())
-                        try { kvp.Key.SetMaximumSpeedLimit(1f, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { kvp.Key.SetMaximumSpeedLimit(1f, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
                 else _zephyrHaste[kvp.Key] = left;
             }
@@ -220,7 +220,7 @@ namespace AshAndEmber
                 SpellEffects.SpawnTempLight(at, def.GlowColor, 11f, 1.2f);
                 SpellEffects.TryCastSound(caster.Position, def.GlowColor);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             switch (type)
             {
@@ -242,7 +242,7 @@ namespace AshAndEmber
             if (caster == Agent.Main)
             {
                 float mend = CrystalTalents.MendOnUse;
-                if (mend > 0f) try { SpellEffects.HealAgent(caster, mend); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                if (mend > 0f) try { SpellEffects.HealAgent(caster, mend); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 TryBurndown(caster, type);
             }
         }
@@ -252,8 +252,8 @@ namespace AshAndEmber
         private static void EffectSunstone(Agent caster)
         {
             float pot = Potency(caster);   // Brilliant Lattice: harder heals (player)
-            try { SpellEffects.HealAgent(caster, CrystalMath.SunSelfHeal * pot); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Yellow, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.HealAgent(caster, CrystalMath.SunSelfHeal * pot); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Yellow, 2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             Vec3 pos;
             try { pos = caster.Position; } catch { return; }
@@ -267,11 +267,11 @@ namespace AshAndEmber
                     if (caster.Team == null || a.Team != caster.Team) continue;
                     float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                     if (dx * dx + dy * dy > r2) continue;
-                    try { SpellEffects.HealAgent(a, CrystalMath.SunAllyHeal * pot); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpellEffects.HealAgent(a, CrystalMath.SunAllyHeal * pot); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     mended++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             Announce(caster, mended > 0
                 ? $"Sunstone — warmth pulse (+{(int)CrystalMath.SunSelfHeal} HP self, +{(int)CrystalMath.SunAllyHeal} HP to {mended} allies)."
@@ -311,8 +311,8 @@ namespace AshAndEmber
             };
             _crystalMissiles.Add(missile);
 
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Red, 1.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.SpawnTempLight(startPos, ColorSchool.Red, 6f, 10f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Red, 1.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempLight(startPos, ColorSchool.Red, 6f, 10f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             Announce(caster,
                 $"Embershard — burning shards launch ({range:F0}m, {explRadius:F0}m blast).",
@@ -337,15 +337,15 @@ namespace AshAndEmber
                     float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                     if (dx * dx + dy * dy > r2) continue;
                     // Walls of wind and stone stop the crystal's reach.
-                    try { if (ElementWallWards.BlocksCrystal(pos, a.Position)) continue; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { if (ElementWallWards.BlocksCrystal(pos, a.Position)) continue; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     _rimeSlow[a] = CrystalMath.RimeDurationSec;
-                    try { a.SetMaximumSpeedLimit(CrystalMath.RimeSlowMult, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { a.SetMaximumSpeedLimit(CrystalMath.RimeSlowMult, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     slowed++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Blue, 1.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Blue, 1.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             int rimePct = (int)((1f - CrystalMath.RimeSlowMult) * 100f);
             Announce(caster, slowed > 0
                 ? $"Rimeshard — frost pulse ({slowed} enemies stilled, {rimePct} % slow for {(int)CrystalMath.RimeDurationSec} s)."
@@ -373,13 +373,13 @@ namespace AshAndEmber
                     float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                     if (dx * dx + dy * dy > r2) continue;
                     // The veil's grasp is shard-force too — walls of wind/stone bar it.
-                    try { if (ElementWallWards.BlocksCrystal(pos, a.Position)) continue; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { if (ElementWallWards.BlocksCrystal(pos, a.Position)) continue; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     candidates.Add(a);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Purple, 1.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Purple, 1.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (candidates.Count == 0)
             {
@@ -388,9 +388,9 @@ namespace AshAndEmber
             }
 
             var target = candidates[_rng.Next(candidates.Count)];
-            try { SpellEffects.DamageAgent(target, CrystalMath.VeilDamage * Potency(caster), ColorSchool.Purple, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.DamageAgent(target, CrystalMath.VeilDamage * Potency(caster), ColorSchool.Purple, caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _veilSlow[target] = CrystalMath.VeilDurationSec;
-            try { target.SetMaximumSpeedLimit(CrystalMath.VeilSlowMult, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { target.SetMaximumSpeedLimit(CrystalMath.VeilSlowMult, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             int slowPct = (int)((1f - CrystalMath.VeilSlowMult) * 100f);
             Announce(caster,
@@ -416,15 +416,15 @@ namespace AshAndEmber
                     float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                     if (dx * dx + dy * dy > r2) continue;
                     // Walls of wind and stone stop the crystal's reach.
-                    try { if (ElementWallWards.BlocksCrystal(pos, a.Position)) continue; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { SpellEffects.DamageAgent(a, CrystalMath.StormDamage * Potency(caster), ColorSchool.Orange, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { a.ChangeMorale(-CrystalMath.StormMoraleDrain); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { if (ElementWallWards.BlocksCrystal(pos, a.Position)) continue; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { SpellEffects.DamageAgent(a, CrystalMath.StormDamage * Potency(caster), ColorSchool.Orange, caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { a.ChangeMorale(-CrystalMath.StormMoraleDrain); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     hit++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Orange, 1.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Orange, 1.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             Announce(caster, hit > 0
                 ? $"Stormcrystal — thunder clap ({hit} enemies struck, {(int)CrystalMath.StormDamage} HP, −{(int)CrystalMath.StormMoraleDrain} morale)."
                 : "Stormcrystal — thunder clap (no enemies in range).",
@@ -448,15 +448,15 @@ namespace AshAndEmber
                     if (caster.Team != null && a.Team == caster.Team) continue;
                     float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                     if (dx * dx + dy * dy > r2) continue;
-                    try { a.ChangeMorale(-CrystalMath.DuskMoraleDrain); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { a.ChangeMorale(-CrystalMath.DuskMoraleDrain); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     _duskSlow[a] = CrystalMath.DuskDurationSec;
-                    try { a.SetMaximumSpeedLimit(CrystalMath.DuskSlowMult, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { a.SetMaximumSpeedLimit(CrystalMath.DuskSlowMult, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     drained++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Ashen, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Ashen, 2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             int duskSlowPct = (int)((1f - CrystalMath.DuskSlowMult) * 100f);
             Announce(caster, drained > 0
                 ? $"Duskstone — despair wave ({drained} enemies: −{(int)CrystalMath.DuskMoraleDrain} morale, {duskSlowPct} % slow for {(int)CrystalMath.DuskDurationSec} s)."
@@ -482,13 +482,13 @@ namespace AshAndEmber
                     if (caster.Team != null && a.Team == caster.Team) continue;
                     float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                     if (dx * dx + dy * dy > r2) continue;
-                    try { if (ElementWallWards.BlocksCrystal(pos, a.Position)) continue; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { if (ElementWallWards.BlocksCrystal(pos, a.Position)) continue; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     candidates.Add(a);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Green, 1.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Green, 1.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (candidates.Count == 0)
             {
@@ -497,9 +497,9 @@ namespace AshAndEmber
             }
 
             var target = candidates[_rng.Next(candidates.Count)];
-            try { SpellEffects.DamageAgent(target, CrystalMath.ThornDamage * Potency(caster), ColorSchool.Green, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.DamageAgent(target, CrystalMath.ThornDamage * Potency(caster), ColorSchool.Green, caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _thornRoot[target] = CrystalMath.ThornRootDurationSec;
-            try { target.SetMaximumSpeedLimit(CrystalMath.ThornRootMult, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { target.SetMaximumSpeedLimit(CrystalMath.ThornRootMult, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             Announce(caster,
                 $"Thornveil — root grasp ({target.Name} struck for {(int)CrystalMath.ThornDamage} HP, rooted for {(int)CrystalMath.ThornRootDurationSec} s).",
@@ -515,8 +515,8 @@ namespace AshAndEmber
             float r  = solarFlare ? CrystalMath.SolarFlareRadius(CrystalMath.AegisRadius) : CrystalMath.AegisRadius;
             float r2 = r * r;
 
-            try { SpellEffects.HealAgent(caster, CrystalMath.AegisSelfHeal * Potency(caster)); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.White, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.HealAgent(caster, CrystalMath.AegisSelfHeal * Potency(caster)); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.White, 2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             int pushed = 0;
             try
@@ -527,14 +527,14 @@ namespace AshAndEmber
                     if (caster.Team != null && a.Team == caster.Team) continue;
                     float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                     if (dx * dx + dy * dy > r2) continue;
-                    try { if (ElementWallWards.BlocksCrystal(pos, a.Position)) continue; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { if (ElementWallWards.BlocksCrystal(pos, a.Position)) continue; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     Vec3 away = (a.Position - pos);
                     away = away.LengthSquared > 0.001f ? away.NormalizedCopy() : new Vec3(1f, 0f, 0f);
-                    try { NatureEffects.KnockbackAgent(a, a.Position + away * CrystalMath.AegisKnockback); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { NatureEffects.KnockbackAgent(a, a.Position + away * CrystalMath.AegisKnockback); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     pushed++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             Announce(caster, pushed > 0
                 ? $"Aegisstone — bulwark pulse (+{(int)CrystalMath.AegisSelfHeal} HP, {pushed} enemies hurled back)."
@@ -560,13 +560,13 @@ namespace AshAndEmber
                     if (caster.Team != null && a.Team == caster.Team) continue;
                     float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                     if (dx * dx + dy * dy > r2) continue;
-                    try { if (ElementWallWards.BlocksCrystal(pos, a.Position)) continue; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { if (ElementWallWards.BlocksCrystal(pos, a.Position)) continue; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     candidates.Add(a);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Nature, 1.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Nature, 1.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (candidates.Count == 0)
             {
@@ -575,7 +575,7 @@ namespace AshAndEmber
             }
 
             var target = candidates[_rng.Next(candidates.Count)];
-            try { target.ChangeMorale(-CrystalMath.WillowMoraleDrain); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { target.ChangeMorale(-CrystalMath.WillowMoraleDrain); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             Announce(caster,
                 $"Willowisp — dread whisper ({target.Name}'s nerve shatters, −{(int)CrystalMath.WillowMoraleDrain} morale).",
@@ -600,19 +600,19 @@ namespace AshAndEmber
                     if (caster.Team != null && a.Team == caster.Team) continue;
                     float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                     if (dx * dx + dy * dy > r2) continue;
-                    try { if (ElementWallWards.BlocksCrystal(pos, a.Position)) continue; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { if (ElementWallWards.BlocksCrystal(pos, a.Position)) continue; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     float dmg = CrystalMath.BloodDamage * Potency(caster);
-                    try { SpellEffects.DamageAgent(a, dmg, ColorSchool.Red, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpellEffects.DamageAgent(a, dmg, ColorSchool.Red, caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     totalDealt += dmg;
                     hit++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (totalDealt > 0f)
-                try { SpellEffects.HealAgent(caster, totalDealt * CrystalMath.BloodLifestealFrac); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.HealAgent(caster, totalDealt * CrystalMath.BloodLifestealFrac); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Red, 1.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Red, 1.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             Announce(caster, hit > 0
                 ? $"Bloodstone — vampiric burst ({hit} enemies struck, +{(int)(totalDealt * CrystalMath.BloodLifestealFrac)} HP returned)."
                 : "Bloodstone — vampiric burst (no enemies in range).",
@@ -629,8 +629,8 @@ namespace AshAndEmber
             float r2 = CrystalMath.ZephyrRadius * CrystalMath.ZephyrRadius;
 
             _zephyrHaste[caster] = CrystalMath.ZephyrDurationSec;
-            try { caster.SetMaximumSpeedLimit(CrystalMath.ZephyrHasteMult, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Yellow, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { caster.SetMaximumSpeedLimit(CrystalMath.ZephyrHasteMult, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Yellow, 2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             int hastened = 0;
             try
@@ -642,11 +642,11 @@ namespace AshAndEmber
                     float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                     if (dx * dx + dy * dy > r2) continue;
                     _zephyrHaste[a] = CrystalMath.ZephyrDurationSec;
-                    try { a.SetMaximumSpeedLimit(CrystalMath.ZephyrHasteMult, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { a.SetMaximumSpeedLimit(CrystalMath.ZephyrHasteMult, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     hastened++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             int hastePct = (int)((CrystalMath.ZephyrHasteMult - 1f) * 100f);
             Announce(caster, hastened > 0
@@ -672,7 +672,7 @@ namespace AshAndEmber
                 if (m.TrailTimer <= 0f)
                 {
                     m.TrailTimer = CrystalMissileState.TrailInterval;
-                    try { SpellEffects.SpawnTempLight(m.Position, ColorSchool.Red, 3f, 0.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpellEffects.SpawnTempLight(m.Position, ColorSchool.Red, 3f, 0.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 Vec3 mpos = m.Position;
@@ -687,14 +687,14 @@ namespace AshAndEmber
                     if (ward != null)
                     {
                         if (WallWardMath.QuenchesFireMissile(ward.Value))
-                            try { SpellEffects.SpawnNatureBurst(mpos, NatureElement.Water, 0.8f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { SpellEffects.SpawnNatureBurst(mpos, NatureElement.Water, 0.8f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         else
                             ExplodeCrystalMissile(m, mpos);
                         _crystalMissiles.RemoveAt(i);
                         continue;
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Check for enemy collision.
                 try
@@ -711,7 +711,7 @@ namespace AshAndEmber
                         break;
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (!exploded && m.TravelLeft <= 0f)
                 {
@@ -736,10 +736,10 @@ namespace AshAndEmber
                 SpellEffects.SpawnExplosionEffect(pos, ColorSchool.Red, radius, 5f);
                 SpellEffects.TryCastSound(pos, ColorSchool.Red);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Burning shards take to timber — machines and gates in the blast char.
-            try { SpellEffects.DamageBurnableStructures(pos, radius, CrystalMath.EmberDamage * 2f, m.Caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.DamageBurnableStructures(pos, radius, CrystalMath.EmberDamage * 2f, m.Caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -757,10 +757,10 @@ namespace AshAndEmber
                         SpellEffects.SpawnImpactBurst(a.Position, ColorSchool.Red, 4f);
                         hit++;
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             Announce(m.Caster, hit > 0
                 ? $"Embershard detonates — {hit} enemies scorched ({(int)CrystalMath.EmberDamage} HP each)."
@@ -788,11 +788,11 @@ namespace AshAndEmber
                 EquipmentIndex slot = caster.GetPrimaryWieldedItemIndex();
                 if (slot != EquipmentIndex.None)
                 {
-                    try { caster.RemoveEquippedWeapon(slot); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { Hero.MainHero.BattleEquipment[slot] = default(EquipmentElement); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { caster.RemoveEquippedWeapon(slot); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { Hero.MainHero.BattleEquipment[slot] = default(EquipmentElement); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -801,7 +801,7 @@ namespace AshAndEmber
                 if (roster != null && item != null && roster.GetItemNumber(item) > 0)
                     roster.AddToCounts(item, -1);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             InformationManager.DisplayMessage(new InformationMessage(
                 $"{def.Name} — the lattice fractures. The crystal is spent.",
@@ -820,7 +820,7 @@ namespace AshAndEmber
                     InformationManager.DisplayMessage(new InformationMessage(
                         $"{caster.Name} — {msg}", CrystalColor(school)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Brilliant Lattice potency — player only (an NPC bearer's crystal must not
@@ -839,7 +839,7 @@ namespace AshAndEmber
                 int med = Hero.MainHero?.GetSkillValue(DefaultSkills.Medicine) ?? 0;
                 return CrystalMath.MasteryScale(med);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return 1f; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return 1f; }
         }
 
         private static Color CrystalColor(ColorSchool school)

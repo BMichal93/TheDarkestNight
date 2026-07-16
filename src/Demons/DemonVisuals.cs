@@ -37,7 +37,7 @@ using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class DemonVisuals
     {
@@ -93,25 +93,25 @@ namespace AshAndEmber
                         if (ps != null)
                             shroud.Systems.Add(new KeyValuePair<sbyte, ParticleSystem>(bone, ps));
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 try { shroud.Light = SpellEffects.CreateFollowerLight(agent.Position + new Vec3(0f, 0f, 1.1f), Rgb(tier), BodyLightRadiusMetres); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 try { shroud.EyeLight = SpellEffects.CreateFollowerLight(agent.Position + new Vec3(0f, 0f, EyeLightHeightMetres), EyeRgb, EyeLightRadiusMetres); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 shroud.Contour = Argb(tier);
                 _shrouds[agent] = shroud;
 
                 try { agent.AgentVisuals?.GetEntity()?.SetContourColor(shroud.Contour, true); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 try { agent.AgentVisuals?.GetEntity()?.SetAlpha(BodyAlpha); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void Follow(Agent agent)
@@ -131,7 +131,7 @@ namespace AshAndEmber
                     entity.SetAlpha(BodyAlpha);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void Detach(Agent agent)
@@ -153,8 +153,8 @@ namespace AshAndEmber
             if (shroud == null) return;
             foreach (var pair in shroud.Systems)
             {
-                try { pair.Value?.SetEnable(false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { shroud.Skeleton?.RemoveBoneComponent(pair.Key, pair.Value); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { pair.Value?.SetEnable(false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { shroud.Skeleton?.RemoveBoneComponent(pair.Key, pair.Value); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             shroud.Systems.Clear();
             SpellEffects.RemoveFollowerLight(shroud.Light);
@@ -170,7 +170,7 @@ namespace AshAndEmber
                     entity.SetAlpha(1f);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Fewer points than the Kindled's full column — chest, shoulders and

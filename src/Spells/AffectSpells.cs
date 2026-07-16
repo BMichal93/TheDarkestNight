@@ -4,7 +4,7 @@
 // This file is retained for the partial class structure.
 // =============================================================================
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SpellEffects
     {

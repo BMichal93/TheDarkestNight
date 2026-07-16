@@ -7,7 +7,7 @@
 // lives in NorthmenStonesCampaignBehavior.*.
 // =============================================================================
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class NorthmenStonesMath
     {

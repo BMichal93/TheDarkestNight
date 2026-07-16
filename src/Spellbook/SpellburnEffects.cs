@@ -27,7 +27,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class SpellburnEffects
     {
@@ -38,7 +38,7 @@ namespace AshAndEmber
             if (caster == null || !caster.IsActive()) return;
             SpellbookMath.SpellburnKind kind = SpellbookMath.RollKind(_rng);
             try { Apply(kind, caster); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void Apply(SpellbookMath.SpellburnKind kind, Agent caster)
@@ -64,13 +64,13 @@ namespace AshAndEmber
         private static void BurnSelf(Agent caster)
         {
             SpellEffects.DamageAgent(caster, SpellbookMath.BurnSelfDamage, ColorSchool.Red, caster, MagicElement.Fire);
-            try { SpellEffects.SpawnTempFireParticle(caster.Position + new Vec3(0f, 0f, 0.6f), 1.4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempFireParticle(caster.Position + new Vec3(0f, 0f, 0.6f), 1.4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             Msg("The formula turns on you — the fire bites your own hand.");
         }
 
         private static void Immobilise(Agent caster)
         {
-            try { caster.SetMaximumSpeedLimit(0f, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { caster.SetMaximumSpeedLimit(0f, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             NatureEffects.ApplySpeedToken(caster, 0f, SpellbookMath.ImmobiliseSeconds);
             Msg("Your feet root to the ground — the working has you, not the other way around.");
         }
@@ -91,7 +91,7 @@ namespace AshAndEmber
                 }
                 Msg("The formula slips loose and shouts through your own ranks instead of your enemy's.");
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void Explode(Agent caster)
@@ -109,7 +109,7 @@ namespace AshAndEmber
                     // working does not sort its blast by allegiance.
                     SpellEffects.DamageAgent(a, SpellbookMath.ExplodeDamage, ColorSchool.Red, null, MagicElement.Fire);
                 }
-            try { SpellEffects.SpawnBurstExplosion(pos, ColorSchool.Red, SpellbookMath.ExplodeRadius * 0.5f, 1.3f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnBurstExplosion(pos, ColorSchool.Red, SpellbookMath.ExplodeRadius * 0.5f, 1.3f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             Msg("The formula collapses on itself — everyone nearby feels it, friend and foe alike.");
         }
 
@@ -143,7 +143,7 @@ namespace AshAndEmber
                 foreach (Team t in Mission.Current.Teams)
                     if (t != null && t.IsValid && t != team && t.IsEnemyOf(team)) return t;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return null;
         }
 
@@ -154,7 +154,7 @@ namespace AshAndEmber
             {
                 var w = _wildDemons[i];
                 bool alive = false;
-                try { alive = w.Agent != null && w.Agent.IsActive() && w.Agent.Health > 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { alive = w.Agent != null && w.Agent.IsActive() && w.Agent.Health > 0f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (!alive) { _wildDemons.RemoveAt(i); continue; }
 
                 w.Remaining -= dt;
@@ -170,7 +170,7 @@ namespace AshAndEmber
                         if (newTeam != null && TryChangeAgentTeam(w.Agent, newTeam))
                             DemonFactory.SetAggressive(w.Agent, newTeam);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
         }
@@ -186,14 +186,14 @@ namespace AshAndEmber
                 var prop = typeof(Agent).GetProperty("Team", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 if (prop != null && prop.CanWrite) { prop.SetValue(agent, team); return true; }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try
             {
                 var field = typeof(Agent).GetField("<Team>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance)
                          ?? typeof(Agent).GetField("_team", BindingFlags.NonPublic | BindingFlags.Instance);
                 if (field != null) { field.SetValue(agent, team); return true; }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return false;
         }
 
@@ -206,7 +206,7 @@ namespace AshAndEmber
             // (SpellEffects.TryFreeHandForCast already does this for NPC casts)
             // and reads the same at the table: your weapon-hand is not yours
             // to use for a moment.
-            try { SpellEffects.TryFreeHandForCast(caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.TryFreeHandForCast(caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             Msg("Your weapon-hand sears shut — the blade is not yours to hold, for now.");
         }
 
@@ -218,7 +218,7 @@ namespace AshAndEmber
                 double ang = _rng.NextDouble() * Math.PI * 2.0;
                 float dist = (float)_rng.NextDouble() * 10f;
                 Vec3 p = pos + new Vec3((float)Math.Cos(ang) * dist, (float)Math.Sin(ang) * dist, 1.0f);
-                try { SpellEffects.SpawnTempSmokeParticle(p, SpellbookMath.FalseNightSeconds * 0.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.SpawnTempSmokeParticle(p, SpellbookMath.FalseNightSeconds * 0.2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             // The false dark bolsters the very thing it should have banished —
             // nearby demons quicken while the field is blind.
@@ -242,7 +242,7 @@ namespace AshAndEmber
                 if (caster == Agent.Main)
                     MobileParty.MainParty.RecentEventsMorale -= SpellbookMath.VoiceTearsMoraleLoss;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             Msg("Your voice tears on the last word — the column heard it break.");
         }
 

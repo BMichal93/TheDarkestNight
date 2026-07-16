@@ -37,7 +37,7 @@ using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class BloodAttunement
     {
@@ -149,20 +149,20 @@ namespace AshAndEmber
                 }
                 ElementMasks[idx] |= (1 << (int)el);
 
-                try { ApplyRelationFallout(hero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ApplyRelationFallout(hero); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 penalty = BloodAttunementMath.RollPenalty(rng.NextDouble());
-                try { ApplyPenalty(hero, idx, penalty); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ApplyPenalty(hero, idx, penalty); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 return true;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return false; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return false; }
         }
 
         private static void ApplyRelationFallout(Hero hero)
         {
             string ownKingdomId = null;
-            try { ownKingdomId = hero.MapFaction?.StringId; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ownKingdomId = hero.MapFaction?.StringId; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             List<Kingdom> kingdoms;
             try { kingdoms = Kingdom.All.ToList(); } catch { return; }
@@ -181,7 +181,7 @@ namespace AshAndEmber
                         : BloodAttunementMath.RelationPenaltyOther;
                     ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, leader, delta, false);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -191,11 +191,11 @@ namespace AshAndEmber
             {
                 case BloodAttunementMath.PenaltyKind.SocialDown:
                     try { hero.HeroDeveloper?.RemoveAttribute(DefaultCharacterAttributes.Social, 1); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     break;
                 case BloodAttunementMath.PenaltyKind.IntellectDown:
                     try { hero.HeroDeveloper?.RemoveAttribute(DefaultCharacterAttributes.Intelligence, 1); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     break;
                 case BloodAttunementMath.PenaltyKind.DaytimeMorale:
                     DaytimeMoraleStacks[idx] = DaytimeMoraleStacks[idx] + 1;
@@ -241,10 +241,10 @@ namespace AshAndEmber
 
                         party.RecentEventsMorale -= BloodAttunementMath.DaytimeMoraleDrainPerDay * stacks;
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 
@@ -281,7 +281,7 @@ namespace AshAndEmber
                 result.AddFactor(BloodAttunementMath.DaytimeSpeedPenaltyFactor * stacks,
                     new TextObject("{=ae_blood_burden}The Blood's Burden"));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return result;
         }
     }

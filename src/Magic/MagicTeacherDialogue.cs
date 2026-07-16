@@ -16,7 +16,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class MagicTeacherDialogue
     {
@@ -42,7 +42,7 @@ namespace AshAndEmber
                 starter.AddDialogLine("ae_teach_done", "ae_teach_done", "hero_main_options",
                     "\"The fire keeps its own counsel. Come back to it.\"", null, null, P);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // The conversation partner is an attuned teacher; the player is a mage who
@@ -80,7 +80,7 @@ namespace AshAndEmber
                 else
                     InformationManager.DisplayMessage(new InformationMessage(msg, Dim));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Which craft a teacher carries ────────────────────────────────────────

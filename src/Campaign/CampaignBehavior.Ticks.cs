@@ -17,7 +17,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class MagicCampaignBehavior
     {
@@ -31,60 +31,60 @@ namespace AshAndEmber
                 {
                     foreach (var h in Hero.AllAliveHeroes)
                         if (ElementLordRegistry.IsAshenLord(h))
-                            try { MageKnowledge.ApplyAshenAppearance(h); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { MageKnowledge.ApplyAshenAppearance(h); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     if (MageKnowledge.IsAshen)
-                        try { MageKnowledge.ApplyAshenAppearance(Hero.MainHero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { MageKnowledge.ApplyAshenAppearance(Hero.MainHero); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             try
             {
                 if (!_selectionDone)
                 {
                     _selectionDone = true;
-                    try { ElementLordRegistry.SeedInitialLords(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ElementLordRegistry.SeedInitialLords(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     // Establish the Ashen claims BEFORE the Empire reassignment —
                     // ReassignImperialSettlements guards on IsAshenSettlement, which
                     // is empty until Initialize() runs, so the reverse order let the
                     // border sweeps and the Ashen swap fight over the same fiefs.
-                    try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { ReassignImperialSettlements(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { ReassignImperialSettlements(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
-                try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AshenCitySystem.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ElementLordRegistry.DailyMapCast(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { TalentSystem.ResetDailyCastCount(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { TalentSystem.EnforceKinship(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { TalentSystem.DailyFadeTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AgingSystem.DailyAgeCheck(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AgingSystem.FlushPendingMilestone(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { RivalShadowSystem.TryDesignateShadow(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { RivalShadowSystem.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { MageKnowledge.DailyWhisperTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { CampaignMapEvents.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SettlementEncounters.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ScholarBargainQuestSystem.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { DragonQuestSystem.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { KeybindReferenceSystem.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AshenQuestSystem.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { BurningLabQuestSystem.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { EmberConclaveSystem.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AshenMapTone.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { MageKnowledge.DailyDreamTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { CheckReapPrisonerYield(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { AshenCitySystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ElementLordRegistry.DailyMapCast(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { TalentSystem.ResetDailyCastCount(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { TalentSystem.EnforceKinship(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { TalentSystem.DailyFadeTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { AgingSystem.DailyAgeCheck(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { AgingSystem.FlushPendingMilestone(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { RivalShadowSystem.TryDesignateShadow(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { RivalShadowSystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { MageKnowledge.DailyWhisperTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { CampaignMapEvents.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SettlementEncounters.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ScholarBargainQuestSystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { DragonQuestSystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { KeybindReferenceSystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { AshenQuestSystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { BurningLabQuestSystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { EmberConclaveSystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { AshenMapTone.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { MageKnowledge.DailyDreamTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { CheckReapPrisonerYield(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (_reapRaidCooldown > 0) _reapRaidCooldown--;
-                try { CheckAshenPrisonerEscape(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { CheckMageOverexertion(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { TickLordAnnouncement(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AshenRuinSystem.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ApprenticeSystem.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AmbientRemarks.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { TempleCulture.DailyTick();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { TribalCulture.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { CheckAshenPrisonerEscape(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { CheckMageOverexertion(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { TickLordAnnouncement(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { AshenRuinSystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ApprenticeSystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { AmbientRemarks.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { TempleCulture.DailyTick();  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { TribalCulture.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 _dayCounter++;
-                if (_dayCounter % 30 == 0) try { OnMonthlyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                if (_dayCounter % 30 == 0) try { OnMonthlyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Weekly tick ───────────────────────────────────────────────────────
@@ -92,16 +92,16 @@ namespace AshAndEmber
         {
             try
             {
-                try { ElementLordRegistry.CheckPopulationBounds(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ElementLordRegistry.CheckAgeLimit(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { NatureSeerRegistry.CheckPopulationBounds(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { CampaignMapEvents.WeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { BurningLabQuestSystem.WeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { EmberConclaveSystem.WeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AshenRuinMenus.WeeklySpawnGuards(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { PriestTroops.WeeklySeed(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementLordRegistry.CheckPopulationBounds(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ElementLordRegistry.CheckAgeLimit(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { NatureSeerRegistry.CheckPopulationBounds(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { CampaignMapEvents.WeeklyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { BurningLabQuestSystem.WeeklyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { EmberConclaveSystem.WeeklyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { AshenRuinMenus.WeeklySpawnGuards(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { PriestTroops.WeeklySeed(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Mission ended ─────────────────────────────────────────────────────
@@ -109,14 +109,14 @@ namespace AshAndEmber
         {
             try
             {
-                try { ElementLordAI.ClearCooldowns(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SpellEffects.ClearAreaEffects(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SpellEffects.ClearSelfEffects(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SpellEffects.ClearGlows(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SpellEffects.ClearMoves(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AgingSystem.FlushPendingMilestone(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementLordAI.ClearCooldowns(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SpellEffects.ClearAreaEffects(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SpellEffects.ClearSelfEffects(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SpellEffects.ClearGlows(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SpellEffects.ClearMoves(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { AgingSystem.FlushPendingMilestone(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Map event ended (battle result) ───────────────────────────────────
@@ -143,7 +143,7 @@ namespace AshAndEmber
                                 MageKnowledge.AddWhispers(1);
                         }
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 // Known Mage: occasionally word of a mage's battles reaches courts and merchants
@@ -158,28 +158,28 @@ namespace AshAndEmber
                         if (_rng.Next(20) == 0)
                             MageKnowledge.BecomeKnown();
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-                try { ApplyNpcBattleAging(mapEvent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ApplyNpcBattleAging(mapEvent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Flush any battle casts not consumed above (NPCs absent from this event).
                 // Must run after aging so _battleCasts still holds data during ApplyNpcBattleAging.
-                try { ElementLordAI.FlushBattleCasts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ApplyNpcBattleMoraleBonus(mapEvent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ApplyNpcMagicCombatBonus(mapEvent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { CheckReapRaidYield(mapEvent);           } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { TribalCulture.CheckRaidBonus(mapEvent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SettlementEncounters.OnMapEventEnded(mapEvent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { DragonQuestSystem.OnMapEventEnded(mapEvent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementLordAI.FlushBattleCasts(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ApplyNpcBattleMoraleBonus(mapEvent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ApplyNpcMagicCombatBonus(mapEvent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { CheckReapRaidYield(mapEvent);           } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { TribalCulture.CheckRaidBonus(mapEvent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SettlementEncounters.OnMapEventEnded(mapEvent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { DragonQuestSystem.OnMapEventEnded(mapEvent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Refresh snapshot so battle-captured prisoners don't count as discards
-                try { _prisonerCountSnapshot = MobileParty.MainParty?.PrisonRoster?.TotalManCount ?? _prisonerCountSnapshot; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { _prisonerCountSnapshot = MobileParty.MainParty?.PrisonRoster?.TotalManCount ?? _prisonerCountSnapshot; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Monthly atmospheric events ────────────────────────────────────────
         private void OnMonthlyTick()
         {
-            try { EmberConclaveSystem.OnMonthlyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { EmberConclaveSystem.OnMonthlyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (!MageKnowledge.IsMage) return;
             // Random premonition message
             if (_rng.Next(3) == 0) // ~33% chance each month
@@ -204,7 +204,7 @@ namespace AshAndEmber
                         $"You sense another fire nearby — {nearMage.Name} burns with it.",
                         new Color(0.9f, 0.6f, 0.2f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Lord flame announcement (fires once, ~3 days after game start) ──────
@@ -257,7 +257,7 @@ namespace AshAndEmber
                     string.Join(", ", named) + tail,
                     new Color(0.6f, 0.45f, 0.9f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
     }

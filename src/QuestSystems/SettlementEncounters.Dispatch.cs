@@ -18,7 +18,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SettlementEncounters
     {
@@ -193,7 +193,7 @@ namespace AshAndEmber
                 _recentEncounters.RemoveAt(0);
 
             ShowEncounterHint(s);
-            MageKnowledge._deferredInquiry = () => { try { chosen(s); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } };
+            MageKnowledge._deferredInquiry = () => { try { chosen(s); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } };
         }
 
         private static readonly string[] _enterVillageHints = {
@@ -223,7 +223,7 @@ namespace AshAndEmber
                     : (s.IsTown ? _enterTownHints : _enterCastleHints);
                 MBInformationManager.AddQuickInformation(new TextObject(pool[_rng.Next(pool.Length)]));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void FireBattle(List<Action> pool)
@@ -232,7 +232,7 @@ namespace AshAndEmber
             if (MageKnowledge._deferredInquiry != null) return; // don't clobber a queued quest popup
             _cooldown = MinDaysBetween;
             Action chosen = pool[_rng.Next(pool.Count)];
-            MageKnowledge._deferredInquiry = () => { try { chosen(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } };
+            MageKnowledge._deferredInquiry = () => { try { chosen(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } };
         }
 
         private static void TryFireBattle()

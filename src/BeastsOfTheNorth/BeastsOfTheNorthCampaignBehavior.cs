@@ -19,7 +19,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class BeastsOfTheNorthCampaignBehavior : CampaignBehaviorBase
     {
@@ -40,11 +40,11 @@ namespace AshAndEmber
             {
                 if (agent == null || agent.IsMount) return;
                 string id = null;
-                try { id = agent.Character?.StringId; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { id = agent.Character?.StringId; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (!string.Equals(id, GiantTroopId, StringComparison.OrdinalIgnoreCase)) return;
                 DemonFactory.SetAgentScale(agent, BeastsOfTheNorthMath.GiantAgentScale);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Per-town monthly purchase tally, one set of parallel lists per
@@ -73,7 +73,7 @@ namespace AshAndEmber
                 SyncTally(dataStore, "BOTN_RiderTowns", "BOTN_RiderMonths", "BOTN_RiderCounts",
                     _riderTownIds, _riderMonths, _riderCounts);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void SyncTally(IDataStore dataStore, string idsKey, string monthsKey, string countsKey,
@@ -101,7 +101,7 @@ namespace AshAndEmber
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterBeastsOfTheNorthMenus(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterBeastsOfTheNorthMenus(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Gating ────────────────────────────────────────────────────────────
@@ -171,7 +171,7 @@ namespace AshAndEmber
                 if (fish == null || roster == null) return 0;
                 return roster.GetItemNumber(fish);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return 0; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return 0; }
         }
 
         internal static void SpendFish(int amount)
@@ -183,7 +183,7 @@ namespace AshAndEmber
                 if (fish == null || roster == null) return;
                 roster.AddToCounts(fish, -amount);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

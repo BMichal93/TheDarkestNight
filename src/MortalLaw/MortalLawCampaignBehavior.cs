@@ -42,7 +42,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class MortalLawCampaignBehavior : CampaignBehaviorBase
     {
@@ -79,17 +79,17 @@ namespace AshAndEmber
 
         private void OnDailyTick()
         {
-            try { TickHungerRaids(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TickHungerRaids(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnHourlyTick()
         {
-            try { TickNightFear(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TickNightFear(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnWeeklyTick()
         {
-            try { TickRosterTrim(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TickRosterTrim(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static bool IsOneOfOurKingdoms(Kingdom kingdom)
@@ -119,9 +119,9 @@ namespace AshAndEmber
                 if (!MortalLawMath.ShouldTurnAwayDefector(FiefCount(newKingdom))) return;
 
                 try { ChangeKingdomAction.ApplyByLeaveKingdom(clan, showNotification: false); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── a) No great kingdoms: throttle war declarations ────────────────────
@@ -142,9 +142,9 @@ namespace AshAndEmber
                 if (playerKingdom != null && (playerKingdom == k1 || playerKingdom == k2)) return;
 
                 try { MakePeaceAction.Apply(k1, k2); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

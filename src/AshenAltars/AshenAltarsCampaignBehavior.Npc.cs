@@ -8,7 +8,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class AshenAltarsCampaignBehavior
     {
@@ -20,7 +20,7 @@ namespace AshAndEmber
             // NEW campaign — the Ashen kingdom receives its cities only after character
             // creation, and OnNewGameCreated resets this behaviour besides. Retry here
             // until the world has Ashen towns to pick, then announce the full set once.
-            try { EnsureDynamicAltars(); AnnounceAltars(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { EnsureDynamicAltars(); AnnounceAltars(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (!DarkGiftSystem.HasAnyGift) { _giftDisabledNotified = false; return; }
 

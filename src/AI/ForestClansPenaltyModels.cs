@@ -19,7 +19,7 @@ using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal sealed class ForestClansWageModel : DefaultPartyWageModel
     {
@@ -32,7 +32,7 @@ namespace AshAndEmber
                     result.AddFactor(ForestClansCulture.WildWageFactor,
                         new TextObject("{=ae_wild_and_few}Wild and Few"));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return result;
         }
     }
@@ -48,7 +48,7 @@ namespace AshAndEmber
                     result.AddFactor(-ForestClansCulture.WildSizeFactor,
                         new TextObject("{=ae_wild_and_few}Wild and Few"));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return result;
         }
     }

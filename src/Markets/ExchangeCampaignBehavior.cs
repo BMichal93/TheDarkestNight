@@ -32,7 +32,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class ExchangeCampaignBehavior : CampaignBehaviorBase
     {
@@ -144,7 +144,7 @@ namespace AshAndEmber
                 store.SyncData("LDX_TownId",       ref _ventureTownId);
                 store.SyncData("LDX_Commodity",    ref _ventureCommodity);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void ResetState()

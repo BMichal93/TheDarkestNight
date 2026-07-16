@@ -15,7 +15,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class MageKnowledge
     {
@@ -80,7 +80,7 @@ namespace AshAndEmber
             if (_whisperCount >= 100 && _coldCallCountdown == 0)
                 _coldCallCountdown = 7; // fires in 7 days
             if (WhisperTier > tierBefore)
-                try { AnnounceWhisperTier(WhisperTier); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { AnnounceWhisperTier(WhisperTier); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void RemoveWhispers(int n)
@@ -142,7 +142,7 @@ namespace AshAndEmber
                         line, new Color(0.45f, 0.45f, 0.65f)));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Passive decay: honourable, merciful players shed whispers slowly
             try
@@ -155,7 +155,7 @@ namespace AshAndEmber
                         _whisperCount = Math.Max(0, _whisperCount - 1);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Possession strain heals with time.
             if (_possessionStrainDays > 0) _possessionStrainDays--;
@@ -169,7 +169,7 @@ namespace AshAndEmber
                 if (_whisperCount > 0 && _daysSinceWhisperGain >= 10 && _rng.Next(3) == 0)
                     _whisperCount = Math.Max(0, _whisperCount - 1);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // A whisper that is also intelligence: the compass bearing of the
@@ -269,7 +269,7 @@ namespace AshAndEmber
                 var skill = _rng.Next(2) == 0 ? DefaultSkills.Athletics : DefaultSkills.Leadership;
                 h.HeroDeveloper.AddSkillXp(skill, CastSkillXp);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 

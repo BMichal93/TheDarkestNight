@@ -22,7 +22,7 @@ using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.ScreenSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public class AshEmberLoreVM : ViewModel
     {
@@ -127,7 +127,7 @@ namespace AshAndEmber
             }
             catch
             {
-                try { Finish(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { Finish(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -201,8 +201,8 @@ namespace AshAndEmber
                 if (_hostScreen != null && _layer != null && _hostScreen.HasLayer(_layer))
                     _hostScreen.RemoveLayer(_layer);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { _layer?.ReleaseMovie(_movie); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { _layer?.ReleaseMovie(_movie); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _layer      = null;
             _hostScreen = null;
             _vm         = null;

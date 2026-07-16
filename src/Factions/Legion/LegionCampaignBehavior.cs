@@ -42,7 +42,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class LegionCampaignBehavior : CampaignBehaviorBase
     {
@@ -59,7 +59,7 @@ namespace AshAndEmber
 
         public override void SyncData(IDataStore store)
         {
-            try { store.SyncData("LEG_PEACE_STREAK", ref _peaceDayStreak); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("LEG_PEACE_STREAK", ref _peaceDayStreak); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void ResetForNewGame()
@@ -69,14 +69,14 @@ namespace AshAndEmber
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterLegionMenus(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterLegionMenus(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnDailyTick()
         {
-            try { LegionSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TickRaidNudges();                        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TickWarEagerness();                       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { LegionSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TickRaidNudges();                        } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TickWarEagerness();                       } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static Kingdom GetLegionKingdom()
@@ -114,9 +114,9 @@ namespace AshAndEmber
                     if (target == null) continue;
 
                     try { party.SetMoveRaidSettlement(target, MobileParty.NavigationType.Default, false); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -165,7 +165,7 @@ namespace AshAndEmber
             if (target == null) return;
 
             try { DeclareWarAction.ApplyByDefault(legion, target); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             _peaceDayStreak = 0;
 

@@ -17,7 +17,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class SeaCampaignBehavior
     {
@@ -73,7 +73,7 @@ namespace AshAndEmber
                     },
                     null, "", false), false, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void LaunchVenture(Settlement dest, float dist, int invested, bool blessed)
@@ -83,7 +83,7 @@ namespace AshAndEmber
                 if (Hero.MainHero.Gold < invested) return;
                 GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, null, invested, true);
                 if (blessed)
-                    try { AgingSystem.AgeHero(Hero.MainHero, SeaMath.BlessVentureAgingDays); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { AgingSystem.AgeHero(Hero.MainHero, SeaMath.BlessVentureAgingDays); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 _ventures.Add(new Venture
                 {
@@ -96,9 +96,9 @@ namespace AshAndEmber
                 MBInformationManager.AddQuickInformation(new TextObject(
                     $"The cog warps out on the evening tide, {invested} denars of cargo in her hold" +
                     (blessed ? ", a faint warmth clinging to her timbers." : ".")));
-                try { GameMenu.SwitchToMenu("sea_harbor"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { GameMenu.SwitchToMenu("sea_harbor"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void TickVentures()
@@ -114,7 +114,7 @@ namespace AshAndEmber
                 var outcome = SeaMath.ResolveVenture(v.Invested, v.Distance, v.Blessed,
                                                      _rng.NextDouble(), _rng.NextDouble());
                 if (outcome.Payout > 0)
-                    try { GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, outcome.Payout, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, outcome.Payout, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (outcome.Lost)
                 {
@@ -126,7 +126,7 @@ namespace AshAndEmber
                 else
                 {
                     int profit = outcome.Payout - v.Invested;
-                    try { Hero.MainHero.AddSkillXp(DefaultSkills.Trade, Math.Max(10, profit / 10)); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { Hero.MainHero.AddSkillXp(DefaultSkills.Trade, Math.Max(10, profit / 10)); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     InformationManager.DisplayMessage(new InformationMessage(
                         $"Your factor returns from {v.DestName}: {outcome.Payout} denars back on {v.Invested} invested" +
                         $" ({(profit >= 0 ? "+" : "")}{profit}).",

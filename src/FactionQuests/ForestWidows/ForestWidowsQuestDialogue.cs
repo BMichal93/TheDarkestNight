@@ -15,7 +15,7 @@
 
 using TaleWorlds.CampaignSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class ForestWidowsQuestDialogue
     {
@@ -24,22 +24,22 @@ namespace AshAndEmber
             const int P = 210; // above ForestWidowsDialogue (193) and AshenDialogue (200)
 
             // ── Opening and any standard lord sub-state ─────────────────────────
-            try { starter.AddDialogLine("fwq_silence_start",   "start",                  "fwq_silence_done", "...", IsSilencedContext, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { starter.AddDialogLine("fwq_silence_pretalk", "lord_pretalk",           "fwq_silence_done", "...", IsSilencedContext, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("fwq_silence_start",   "start",                  "fwq_silence_done", "...", IsSilencedContext, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("fwq_silence_pretalk", "lord_pretalk",           "fwq_silence_done", "...", IsSilencedContext, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Player's only available response — also "..."
-            try { starter.AddPlayerLine("fwq_silence_close",   "fwq_silence_done", "close_window", "...", null, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { starter.AddPlayerLine("fwq_silence_close",   "fwq_silence_done", "close_window", "...", null, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // ── Barter / negotiation ─────────────────────────────────────────────
-            try { starter.AddDialogLine("fwq_silence_barter",  "lord_barter_question",   "close_window", "...", IsSilencedLord, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("fwq_silence_barter",  "lord_barter_question",   "close_window", "...", IsSilencedLord, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // ── Defeat / surrender offers ─────────────────────────────────────────
-            try { starter.AddDialogLine("fwq_silence_defeat1", "defeated_lord_start_1",  "close_window", "...", IsSilencedLord, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { starter.AddDialogLine("fwq_silence_defeat2", "defeated_lord_start_2",  "close_window", "...", IsSilencedLord, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { starter.AddDialogLine("fwq_silence_special", "lord_special_request",   "close_window", "...", IsSilencedLord, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("fwq_silence_defeat1", "defeated_lord_start_1",  "close_window", "...", IsSilencedLord, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("fwq_silence_defeat2", "defeated_lord_start_2",  "close_window", "...", IsSilencedLord, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("fwq_silence_special", "lord_special_request",   "close_window", "...", IsSilencedLord, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // ── Prisoner conversation ─────────────────────────────────────────────
-            try { starter.AddDialogLine("fwq_silence_prisoner","prisoner_chat",          "close_window", "...", IsSilencedLord, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("fwq_silence_prisoner","prisoner_chat",          "close_window", "...", IsSilencedLord, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Guarded exactly like AshenDialogue.IsAshenFlavourContext — vanilla still

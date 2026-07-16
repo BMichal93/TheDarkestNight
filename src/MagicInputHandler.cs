@@ -25,7 +25,7 @@ using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class MagicInputHandler
     {
@@ -62,7 +62,7 @@ namespace AshAndEmber
             {
                 if (!_wasFocusing && inMission)
                 {
-                    try { if (Agent.Main != null) SpellEffects.BeginCastLoop(Agent.Main); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { if (Agent.Main != null) SpellEffects.BeginCastLoop(Agent.Main); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     try
                     {
                         if (Agent.Main != null)
@@ -73,7 +73,7 @@ namespace AshAndEmber
                             SpellEffects.BeginFocusVisual(Agent.Main, focusSchool);
                         }
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 _wasFocusing = true;
@@ -193,8 +193,8 @@ namespace AshAndEmber
                 // Stop the looping animation and focus visuals before casting
                 if (inMission)
                 {
-                    try { SpellEffects.EndCastLoop(Agent.Main); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { SpellEffects.EndFocusVisual(Agent.Main); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpellEffects.EndCastLoop(Agent.Main); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { SpellEffects.EndFocusVisual(Agent.Main); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 TryCast(inMission);
@@ -270,7 +270,7 @@ namespace AshAndEmber
                     return;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (IsInTournament())
             {
@@ -307,9 +307,9 @@ namespace AshAndEmber
 
             if (success)
             {
-                try { if (Agent.Main != null) SpellEffects.RecordMagicCast(Agent.Main.Position); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AgingSystem.RecordBattleCast(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { MageKnowledge.RewardCastSkill(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { if (Agent.Main != null) SpellEffects.RecordMagicCast(Agent.Main.Position); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { AgingSystem.RecordBattleCast(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { MageKnowledge.RewardCastSkill(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 int agingDays = cast.AgingDays(hasBattleMage);
 
                 // Kinship: each allied mage lord in this battle reduces aging cost by 10% (max 50%)
@@ -343,7 +343,7 @@ namespace AshAndEmber
                 }
                 // Flashfire: 10% chance to echo the spell — no additional aging cost.
                 if (inMission)
-                    try { SpellEffects.TryFlashfire(cast); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpellEffects.TryFlashfire(cast); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -373,7 +373,7 @@ namespace AshAndEmber
                         new Color(0.3f, 0.35f, 0.7f)));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static int CountAlliedMagesInBattle()
@@ -389,7 +389,7 @@ namespace AshAndEmber
                     if (h != null && ElementLordRegistry.IsElementLord(h)) count++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return count;
         }
 

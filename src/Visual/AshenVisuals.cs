@@ -21,7 +21,7 @@ using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class AshenVisuals
     {
@@ -243,7 +243,7 @@ namespace AshAndEmber
                 if (mobile != null && FireWorshippersSystem.IsAshenSpawn(mobile)) return true;
                 if (party.MapFaction?.StringId == AshenKingdomId) return true;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return false;
         }
 
@@ -266,7 +266,7 @@ namespace AshAndEmber
             {
                 TryUpdateAgentBodyProperties(agent, MakeAshenBodyProperties(agent.BodyPropertiesValue));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Cold ash-grey / frost-blue clothing tint. Unlike the face-key transform
             // above — whose exact colour-bit layout drifts between game builds and may
@@ -278,7 +278,7 @@ namespace AshAndEmber
                 agent.SetClothingColor1(ClothAshGrey);
                 agent.SetClothingColor2(ClothColdBlue);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (includeArmour)
                 TryApplyAshenArmour(agent);
@@ -325,7 +325,7 @@ namespace AshAndEmber
                 if (changed)
                     refresh.Invoke(agent, new object[] { eq });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── In-battle unit rename ─────────────────────────────────────────────
@@ -350,7 +350,7 @@ namespace AshAndEmber
                     _agentNameField = field;
             }
             if (_agentNameField == null) return;
-            try { _agentNameField.SetValue(agent, new TextObject("Ashen Warrior")); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { _agentNameField.SetValue(agent, new TextObject("Ashen Warrior")); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static bool ShouldRenameAshenAgent(Agent agent)
@@ -366,7 +366,7 @@ namespace AshAndEmber
 
                 if (party.MapFaction?.StringId == AshenKingdomId) return true;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return false;
         }
 
@@ -418,7 +418,7 @@ namespace AshAndEmber
                      || mesh.IndexOf(h, StringComparison.OrdinalIgnoreCase) >= 0)
                         return true;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return false;
         }
     }

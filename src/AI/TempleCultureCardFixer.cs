@@ -26,7 +26,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class TempleCultureCardFixer
     {
@@ -197,7 +197,7 @@ namespace AshAndEmber
             try
             {
                 object screen = null;
-                try { screen = TaleWorlds.ScreenSystem.ScreenManager.TopScreen; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { screen = TaleWorlds.ScreenSystem.ScreenManager.TopScreen; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (screen == null) { _lastScreen = null; _doneThisScreen = false; _gateAttempts = 0; return; }
                 if (!ReferenceEquals(screen, _lastScreen)) { _lastScreen = screen; _doneThisScreen = false; _gateAttempts = 0; }
@@ -256,7 +256,7 @@ namespace AshAndEmber
                 }
                 _stageVmThisPass = null;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // The current stage's view-model, straight off the screen:
@@ -315,7 +315,7 @@ namespace AshAndEmber
                         Walk(item, visited, depth + 1, ref budget, pending);
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 return;
             }
 
@@ -342,7 +342,7 @@ namespace AshAndEmber
             {
                 object culture = type.GetProperty("Culture", F)?.GetValue(vm);
                 string id = null;
-                try { id = culture?.GetType().GetProperty("StringId")?.GetValue(culture) as string; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { id = culture?.GetType().GetProperty("StringId")?.GetValue(culture) as string; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (id == null) return;
 
                 CultureCard card = null;
@@ -360,12 +360,12 @@ namespace AshAndEmber
                 RewriteFeats(vm, type, card.Feats);
                 pending.Remove(id);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void SetStringProp(object vm, Type type, string prop, string value)
         {
-            try { type.GetProperty(prop, F)?.SetValue(vm, value); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { type.GetProperty(prop, F)?.SetValue(vm, value); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Rewrites the card's bound feat descriptions: positives in order, then the
@@ -389,10 +389,10 @@ namespace AshAndEmber
                     string desc = isPositive
                         ? (posIdx < lastPositive ? feats[posIdx++] : feats[Math.Max(0, lastPositive - 1)])
                         : negative;
-                    try { ft.GetProperty("Description", F)?.SetValue(feat, desc); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ft.GetProperty("Description", F)?.SetValue(feat, desc); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Removes every non-Empire card from the culture stage's bound Cultures
@@ -418,20 +418,20 @@ namespace AshAndEmber
                     object culture = card.GetType().GetProperty("Culture", F)?.GetValue(card);
                     string id = null;
                     try { id = culture?.GetType().GetProperty("StringId")?.GetValue(culture) as string; }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     if (!string.Equals(id, EmpireId, StringComparison.OrdinalIgnoreCase)) toRemove.Add(card);
                 }
                 foreach (var card in toRemove)
-                    try { cards.Remove(card); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { cards.Remove(card); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Sets a bool property on the stage VM (used to gate "Next"); no-op if absent.
         private static void SetStageBool(object stageVm, string prop, bool value)
         {
             if (stageVm == null) return;
-            try { stageVm.GetType().GetProperty(prop, F)?.SetValue(stageVm, value); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { stageVm.GetType().GetProperty(prop, F)?.SetValue(stageVm, value); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Releases the gate: restore CanAdvance to whatever the player's current
@@ -445,7 +445,7 @@ namespace AshAndEmber
                 bool anySelected = (bool)(t.GetProperty("AnyItemSelected", F)?.GetValue(stageVm) ?? false);
                 t.GetProperty("CanAdvance", F)?.SetValue(stageVm, anySelected);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Reference-identity comparer (.NET Framework 4.7.2 has no built-in one).

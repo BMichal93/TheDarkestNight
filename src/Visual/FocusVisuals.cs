@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SpellEffects
     {
@@ -47,7 +47,7 @@ namespace AshAndEmber
             int idx = _focusVisuals.FindIndex(x => x.agent == agent);
             if (idx >= 0) _focusVisuals.RemoveAt(idx);
             if (agent == null) return;
-            try { agent.AgentVisuals?.GetEntity()?.SetContourColor(null, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { agent.AgentVisuals?.GetEntity()?.SetContourColor(null, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Remove any pending glow timer so it cannot restore the colour later.
             int gi = _glowTimers.FindIndex(x => x.agent == agent);
             if (gi >= 0) _glowTimers.RemoveAt(gi);
@@ -95,7 +95,7 @@ namespace AshAndEmber
             foreach (var (a, _, _, _) in _focusVisuals)
             {
                 if (a == null) continue;
-                try { a.AgentVisuals?.GetEntity()?.SetContourColor(null, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { a.AgentVisuals?.GetEntity()?.SetContourColor(null, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 int gi = _glowTimers.FindIndex(x => x.agent == a);
                 if (gi >= 0) _glowTimers.RemoveAt(gi);
             }

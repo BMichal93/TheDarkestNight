@@ -16,7 +16,7 @@
 // hidden discovery; this gates eight quests that must all become reachable.
 // =============================================================================
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class FactionQuestMath
     {

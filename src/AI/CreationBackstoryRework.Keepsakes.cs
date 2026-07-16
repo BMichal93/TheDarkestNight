@@ -77,7 +77,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal sealed partial class CreationBackstoryRework
     {
@@ -139,7 +139,7 @@ namespace AshAndEmber
                     + "behind you, and the night already taking its measure of you. You did not carry much. What "
                     + "you carried out that door was..."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             Edit(m, KeepsakeMenuId, "adulthood_defeated_enemy_option",
                 "your blade.",
@@ -212,7 +212,7 @@ namespace AshAndEmber
                 var list = MenuOptionsField?.GetValue(menu) as MBList<NarrativeMenuOption>;
                 list?.Remove(o);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Args getters (panel-expressible effects) ─────────────────────────
@@ -287,7 +287,7 @@ namespace AshAndEmber
             {
                 case KeepsakeId.Blade:
                     try { GrantRandomItemToRoster(FindOneHandedSwordPool(), rng); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     break;
 
                 case KeepsakeId.Book:
@@ -298,28 +298,28 @@ namespace AshAndEmber
                         foreach (int i in picks)
                             SpellbookCampaignBehavior.GrantStartingSpell(pool[i].Id);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     break;
 
                 case KeepsakeId.Mount:
                     try { GrantRandomItemToRoster(FindWarHorsePool(), rng); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     try { GrantTradeGood("fish", 3); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     break;
 
                 case KeepsakeId.Goods:
-                    try { GrantTradeGood("cheese", 3); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { GrantTradeGood("butter", 3); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { GrantTradeGood("fish", 3); }   catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { GrantTradeGood("mule", 1); }   catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { GrantTradeGood("cheese", 3); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { GrantTradeGood("butter", 3); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { GrantTradeGood("fish", 3); }   catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { GrantTradeGood("mule", 1); }   catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     break;
 
                 case KeepsakeId.Heirloom:
                     try { ClanRenown.Gain(Hero.MainHero?.Clan, 20f); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     try { GrantRandomWand(rng); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     break;
 
                 case KeepsakeId.Luck:
@@ -363,7 +363,7 @@ namespace AshAndEmber
         private static List<ItemObject> PreferHeroCulture(List<ItemObject> pool)
         {
             string cultureId = null;
-            try { cultureId = Hero.MainHero?.Culture?.StringId; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { cultureId = Hero.MainHero?.Culture?.StringId; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (cultureId == null) return pool;
 
             var preferred = pool.Where(it => it.Culture == null || it.Culture.StringId == cultureId).ToList();

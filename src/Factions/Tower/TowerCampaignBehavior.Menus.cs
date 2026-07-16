@@ -30,7 +30,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class TowerCampaignBehavior
     {
@@ -52,16 +52,16 @@ namespace AshAndEmber
                         {
                             if (!TowerSettlements.IsTowerSettlement(Settlement.CurrentSettlement)) return false;
                             MBTextManager.SetTextVariable("TOWER_TEACHING_ENTER_TEXT", "Seek the Tower's teaching");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = true;
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { GameMenu.SwitchToMenu("tower_teaching_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { GameMenu.SwitchToMenu("tower_teaching_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Main menu ──────────────────────────────────────────────────────────
@@ -78,10 +78,10 @@ namespace AshAndEmber
                           + "The Tower will teach what it knows, or remake a soldier into something that reads "
                           + "the Fire — for those who bring influence enough to be worth the lesson.");
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             RegisterSpellOptions(starter);
             RegisterTransmuteOption(starter);
@@ -89,11 +89,11 @@ namespace AshAndEmber
             try
             {
                 starter.AddGameMenuOption("tower_teaching_main", "tower_teaching_leave", "Leave the Tower",
-                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } return true; },
-                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } return true; },
+                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     true, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── The six offered formulas ──────────────────────────────────────────
@@ -102,7 +102,7 @@ namespace AshAndEmber
         private static List<SpellDef> CurrentOffer()
         {
             int day = 0;
-            try { day = (int)CampaignTime.Now.ToDays; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { day = (int)CampaignTime.Now.ToDays; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             int seed = TowerMath.OfferSeedForDay(day);
 
             var unknown = SpellbookCatalog.All
@@ -137,14 +137,14 @@ namespace AshAndEmber
                                 MBTextManager.SetTextVariable($"TOWER_TEACHING_SPELL_{captured}_TEXT",
                                     $"Learn {def.Name}  [{cost} influence]");
                                 args.IsEnabled = (Hero.MainHero?.Clan?.Influence ?? 0f) >= cost;
-                                try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             return true;
                         },
-                        args => { try { DoLearnSpell(captured); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                        args => { try { DoLearnSpell(captured); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -154,7 +154,7 @@ namespace AshAndEmber
             if (slot >= offer.Count)
             {
                 ShowDialog("Nothing Left To Teach", "The Tower has nothing further to teach you this week.",
-                    () => { try { GameMenu.SwitchToMenu("tower_teaching_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("tower_teaching_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
@@ -164,15 +164,15 @@ namespace AshAndEmber
             if (clan == null || clan.Influence < cost)
             {
                 ShowDialog("Insufficient Influence", $"You need {cost} influence for this lesson.",
-                    () => { try { GameMenu.SwitchToMenu("tower_teaching_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("tower_teaching_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
-            try { clan.Influence -= cost; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellbookCampaignBehavior.LearnSpellFromTower(def.Id); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { clan.Influence -= cost; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellbookCampaignBehavior.LearnSpellFromTower(def.Id); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             ShowDialog("Taught", $"The Tower teaches you {def.Name}. (-{cost} influence)",
-                () => { try { GameMenu.SwitchToMenu("tower_teaching_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("tower_teaching_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 
         // ── Transmute a soldier into a Hollow Choir spellcaster ────────────────
@@ -191,14 +191,14 @@ namespace AshAndEmber
                                 : "  [no soldier of tier 2 or higher to spare]";
                             MBTextManager.SetTextVariable("TOWER_TEACHING_TRANSMUTE_TEXT", "Remake a soldier into a spellcaster" + note);
                             args.IsEnabled = has && (Hero.MainHero?.Clan?.Influence ?? 0f) >= cost;
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
-                    args => { try { DoTransmute(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    args => { try { DoTransmute(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void DoTransmute()
@@ -206,7 +206,7 @@ namespace AshAndEmber
             if (!TryGetTransmuteCandidate(out var character, out int rank, out var troopId, out int cost))
             {
                 ShowDialog("Nothing To Remake", "You have no soldier of tier 2 or higher to spare.",
-                    () => { try { GameMenu.SwitchToMenu("tower_teaching_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("tower_teaching_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
@@ -214,7 +214,7 @@ namespace AshAndEmber
             if (clan == null || clan.Influence < cost)
             {
                 ShowDialog("Insufficient Influence", $"You need {cost} influence for this working.",
-                    () => { try { GameMenu.SwitchToMenu("tower_teaching_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("tower_teaching_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
@@ -222,17 +222,17 @@ namespace AshAndEmber
             if (hollow == null)
             {
                 ShowDialog("The Working Fails", "Something in the rite falters — the Tower cannot complete it right now.",
-                    () => { try { GameMenu.SwitchToMenu("tower_teaching_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("tower_teaching_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
             var party = MobileParty.MainParty;
             party.MemberRoster.AddToCounts(character, -1);
             party.MemberRoster.AddToCounts(hollow, 1);
-            try { clan.Influence -= cost; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { clan.Influence -= cost; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             ShowDialog("Remade", $"{character.Name} is led into the Tower and returns changed. (+1 {hollow.Name}, -{cost} influence)",
-                () => { try { GameMenu.SwitchToMenu("tower_teaching_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("tower_teaching_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 
         // Picks the weakest tier-2+ troop the player carries (mirrors
@@ -278,7 +278,7 @@ namespace AshAndEmber
             {
                 string brief = body.Length > 100 ? body.Substring(0, 100) + "…" : body;
                 MBInformationManager.AddQuickInformation(new TextObject(brief));
-                try { onClose?.Invoke(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { onClose?.Invoke(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
     }

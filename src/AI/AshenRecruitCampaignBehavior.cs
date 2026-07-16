@@ -18,7 +18,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class AshenRecruitCampaignBehavior : CampaignBehaviorBase
     {
@@ -40,7 +40,7 @@ namespace AshAndEmber
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterAshenRecruitMenus(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterAshenRecruitMenus(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Called by ScholarBargainQuestSystem when the scholar's bargain pays off:
@@ -115,7 +115,7 @@ namespace AshAndEmber
                     left -= take;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void GrantAshenTroop(AshenRecruitDef def)
@@ -127,7 +127,7 @@ namespace AshAndEmber
                 if (party?.MemberRoster != null && troop != null)
                     party.MemberRoster.AddToCounts(troop, 1);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

@@ -24,7 +24,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class ForestWidowsQuestCampaignBehavior
     {
@@ -44,14 +44,14 @@ namespace AshAndEmber
                                 $"Pledge every prisoner you hold to the Grand Widow's lasting peace " +
                                 $"[{_menSacrificed:N0} / {ForestWidowsQuestMath.SacrificeTarget:N0}]{note}");
                             args.IsEnabled = held > 0;
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Continue; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Continue; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             return true;
                         }
                         catch { return false; }
                     },
                     args => DoPledge());
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static int PlayerPrisonerCount()
@@ -87,7 +87,7 @@ namespace AshAndEmber
                     $"{given} are led to the altar and do not come back. The Grand Widow's ledger stands at " +
                     $"{_menSacrificed:N0} / {ForestWidowsQuestMath.SacrificeTarget:N0}."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── NPC contribution — background trickle ────────────────────────────────
@@ -125,7 +125,7 @@ namespace AshAndEmber
                     total += give - left;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (total > 0) AddSacrifice(total);
         }
@@ -137,7 +137,7 @@ namespace AshAndEmber
             if (!ForestWidowsQuestMath.HasReachedThreshold(_menSacrificed)) return;
 
             _phase = PhaseAwaitingChoice;
-            try { ShowResolutionChoice(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ShowResolutionChoice(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

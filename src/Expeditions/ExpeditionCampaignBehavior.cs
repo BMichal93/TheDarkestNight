@@ -29,7 +29,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class ExpeditionCampaignBehavior : CampaignBehaviorBase
     {
@@ -64,12 +64,12 @@ namespace AshAndEmber
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterExpeditionMenus(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterExpeditionMenus(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnDailyTick()
         {
-            try { TickExpedition(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TickExpedition(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public override void SyncData(IDataStore store)
@@ -113,7 +113,7 @@ namespace AshAndEmber
                     GenerateFreshPool();
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void ResetForNewGame()
@@ -225,8 +225,8 @@ namespace AshAndEmber
                 bool grantsCrystal = ExpeditionMath.RollGrantsCrystal(_rng.Next(100), tier);
                 bool grantsRelic   = !grantsCrystal && ExpeditionMath.RollGrantsRelic(_rng.Next(100), tier);
 
-                try { Hero.MainHero.ChangeHeroGold(keptGold); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ClanRenown.Gain(Hero.MainHero.Clan, renown); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { Hero.MainHero.ChangeHeroGold(keptGold); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ClanRenown.Gain(Hero.MainHero.Clan, renown); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (grantsCrystal) GrantRandomCrystal();
                 else if (grantsRelic) GrantRandomRelic();
 
@@ -234,7 +234,7 @@ namespace AshAndEmber
 
                 // Put the ruin on cooldown exactly as if an NPC lord had cleared it —
                 // via the public hook, never touching AshenRuinSystem's private state.
-                try { AshenRuinSystem.MarkClearedByExpedition(_activeVillage); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { AshenRuinSystem.MarkClearedByExpedition(_activeVillage); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 string absconLine = absconded > 0
                     ? $" {leaderName} quietly pockets {absconded} denars before the tally is even written down."
@@ -294,7 +294,7 @@ namespace AshAndEmber
                         capturedTitle, capturedBody, true, false, "Acknowledge", "",
                         () => { }, null), true);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             };
         }
 
@@ -308,7 +308,7 @@ namespace AshAndEmber
                 var roster = TaleWorlds.CampaignSystem.Party.MobileParty.MainParty?.ItemRoster;
                 if (item != null && roster != null) roster.AddToCounts(item, 1);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void GrantRandomRelic()
@@ -322,7 +322,7 @@ namespace AshAndEmber
                 var roster = TaleWorlds.CampaignSystem.Party.MobileParty.MainParty?.ItemRoster;
                 if (item != null && roster != null) roster.AddToCounts(item, 1);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

@@ -7,7 +7,7 @@
 
 using System;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public enum ShiftingHallOutcome { RenownGain, Desertion, WhisperGain }
 

@@ -23,7 +23,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     // The old civilization's remains, room by room — collapsed stonework,
     // drowned cellars, a lord's last door, a chapel nobody prays in anymore.

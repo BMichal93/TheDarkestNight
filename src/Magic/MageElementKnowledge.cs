@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class MageElementKnowledge
     {
@@ -67,7 +67,7 @@ namespace AshAndEmber
         public static string LoadedName()
         {
             bool ashen = false;
-            try { ashen = MageKnowledge.IsAshen; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ashen = MageKnowledge.IsAshen; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             bool combo = ElementComboMath.IsFusion(_loaded) || ElementComboMath.IsCommand(_loaded);
             if (combo) return ashen ? ElementComboMath.AshenElementName(_loaded) : ElementComboMath.ElementName(_loaded);
             return ashen ? ElementMagicMath.AshenElementName(_loaded) : ElementMagicMath.ElementName(_loaded);
@@ -111,7 +111,7 @@ namespace AshAndEmber
                     foreach (int i in learned) _learned.Add((MagicElement)i);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

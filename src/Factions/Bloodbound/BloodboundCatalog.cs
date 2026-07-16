@@ -9,7 +9,7 @@
 // ModuleData/items.xml for the matching <Item id="aae_demon_blood"> block.
 // =============================================================================
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class BloodboundCatalog
     {

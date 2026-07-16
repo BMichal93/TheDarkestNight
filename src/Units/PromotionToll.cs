@@ -25,7 +25,7 @@ using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class PromotionToll
     {
@@ -39,7 +39,7 @@ namespace AshAndEmber
             {
                 return source.UpgradeTargets.Any(t => t != null && UnitsMath.RequiresPromotionToll(t.Tier));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return false; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return false; }
         }
 
         // ── Gate: does the party carry a full toll (horse + armour + good weapon)? ──
@@ -51,7 +51,7 @@ namespace AshAndEmber
                 if (roster == null) return false;
                 return HasHorse(roster) && HasArmourPiece(roster) && HasGoodPriceWeapon(roster);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return false; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return false; }
         }
 
         // Requirement 30b: armour + good weapon, no horse required.
@@ -63,7 +63,7 @@ namespace AshAndEmber
                 if (roster == null) return false;
                 return HasArmourPiece(roster) && HasGoodPriceWeapon(roster);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return false; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return false; }
         }
 
         private static bool IsArmourType(ItemObject.ItemTypeEnum t)
@@ -119,7 +119,7 @@ namespace AshAndEmber
                         && UnitsMath.IsGoodPriceWeapon(e.EquipmentElement.ItemValue));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void ConsumeRecruitToll(PartyBase party, int count)
@@ -139,7 +139,7 @@ namespace AshAndEmber
                         && UnitsMath.IsGoodPriceWeapon(e.EquipmentElement.ItemValue));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ConsumeCheapest(ItemRoster roster,

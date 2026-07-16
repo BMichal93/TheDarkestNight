@@ -18,7 +18,7 @@ using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public class MiracleCampaignBehavior : CampaignBehaviorBase
     {
@@ -31,9 +31,9 @@ namespace AshAndEmber
 
         public override void SyncData(IDataStore store)
         {
-            try { store.SyncData("MIRACLE_Grace", ref MiracleInventory._grace); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { int dummy = 0; store.SyncData("MIRACLE_Cold", ref dummy); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } // Cold removed
-            try { MiracleTalents.Save(store); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("MIRACLE_Grace", ref MiracleInventory._grace); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { int dummy = 0; store.SyncData("MIRACLE_Cold", ref dummy); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } // Cold removed
+            try { MiracleTalents.Save(store); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void ResetForNewGame()
@@ -75,11 +75,11 @@ namespace AshAndEmber
                                 InformationManager.DisplayMessage(new InformationMessage(
                                     $"{hero.Name} — {result}", new Color(0.90f, 0.78f, 0.35f)));
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static MiracleType GraceCampaignChoice(Hero hero)
@@ -93,7 +93,7 @@ namespace AshAndEmber
                     if (wounded > 5) return MiracleType.MercyRelief;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return MiracleType.ValorMarch;
         }
 

@@ -16,7 +16,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class NatureSeerRegistry
     {
@@ -77,10 +77,10 @@ namespace AshAndEmber
                         if ((float)_rng.NextDouble() < fraction)
                             _seerIds.Add(h.StringId);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static float GetFraction(Hero h)
@@ -92,7 +92,7 @@ namespace AshAndEmber
                 if (culture == "sturgia")  return SturgiaFraction;
                 if (culture == "khuzait")  return KhuzaitFraction;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return OtherFraction;
         }
 
@@ -115,7 +115,7 @@ namespace AshAndEmber
                         _seerIds.Add(candidates[i].StringId);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Save / Load ───────────────────────────────────────────────────────

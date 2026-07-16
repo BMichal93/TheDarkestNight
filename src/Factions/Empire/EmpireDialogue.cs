@@ -18,7 +18,7 @@
 using System;
 using TaleWorlds.CampaignSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class EmpireDialogue
     {
@@ -61,7 +61,7 @@ namespace AshAndEmber
                         null,
                         priority);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 

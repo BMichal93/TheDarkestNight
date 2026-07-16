@@ -31,7 +31,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class MortalLawCampaignBehavior
     {
@@ -50,7 +50,7 @@ namespace AshAndEmber
                     TrimRosterTier(party.MemberRoster, 5);
                     TrimRosterTier(party.MemberRoster, 4);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -85,7 +85,7 @@ namespace AshAndEmber
                     excess -= take;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

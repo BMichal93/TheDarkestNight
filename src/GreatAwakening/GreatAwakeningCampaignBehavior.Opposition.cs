@@ -10,7 +10,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class GreatAwakeningCampaignBehavior
     {
@@ -21,14 +21,14 @@ namespace AshAndEmber
         private void OppositionWeeklyTick()
         {
             if (_phase != PhaseActive) return;
-            try { RousedOppositionTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RousedOppositionTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             bool dunebornDestroyed = false;
             try
             {
                 dunebornDestroyed = !Kingdom.All.Any(k => k.StringId == DunebornKingdomId && !k.IsEliminated);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (!dunebornDestroyed) return;
 
             _phase = PhaseOppositionWon;
@@ -38,8 +38,8 @@ namespace AshAndEmber
                     "The Tower's kingdom is destroyed. Whatever waited beyond the Sands waits still — the Great " +
                     "Awakening has failed. The Dark Altar stands cold and unfinished."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { GreatAwakeningQuestLog.CompleteOppositionWon(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { GreatAwakeningQuestLog.CompleteOppositionWon(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Past 60% of the count the world starts to move against Duneborn: every
@@ -62,7 +62,7 @@ namespace AshAndEmber
                         "Word of the Dark Altar's count has spread beyond hiding. Thousands of the taken have " +
                         "vanished into the Tower's south, and the courts of Calradia begin to speak of war."));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             foreach (Kingdom k in Kingdom.All.ToList())
@@ -77,7 +77,7 @@ namespace AshAndEmber
                     MBInformationManager.AddQuickInformation(new TextObject(
                         $"{k.Name} has declared war on {duneborn.Name} — the Great Awakening will not go unanswered."));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
     }

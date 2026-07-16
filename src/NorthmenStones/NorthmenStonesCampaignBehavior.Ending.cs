@@ -23,7 +23,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class NorthmenStonesCampaignBehavior
     {
@@ -48,7 +48,7 @@ namespace AshAndEmber
                             "It needs the Forest Clans standing truly allied with the Northmen, and Varcheg " +
                             "still theirs, before the final spark can be asked for."));
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
                 return;
             }
@@ -120,13 +120,13 @@ namespace AshAndEmber
                     chosen =>
                     {
                         try { HandleFinalChoice(chosen?.FirstOrDefault()?.Identifier as string ?? "disagree"); }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     },
                     _ => { },
                     "", false
                 ), false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void HandleFinalChoice(string choice)
@@ -138,7 +138,7 @@ namespace AshAndEmber
                     _endingKind = EndingSelf;
                     ShiftTrait(DefaultTraits.Valor, 2);
                     RaiseTheStones();
-                    try { NorthmenStonesQuestLog.CompleteSelfSacrifice(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { NorthmenStonesQuestLog.CompleteSelfSacrifice(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     ShowSelfSacrificeEnding();
                     break;
 
@@ -148,7 +148,7 @@ namespace AshAndEmber
                     ShiftTrait(DefaultTraits.Mercy, -2);
                     ShiftTrait(DefaultTraits.Valor, 1);
                     RaiseTheStones();
-                    try { NorthmenStonesQuestLog.CompleteChildSacrifice(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { NorthmenStonesQuestLog.CompleteChildSacrifice(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     ShowChildSacrificeEnding();
                     break;
 
@@ -158,7 +158,7 @@ namespace AshAndEmber
                     ShiftTrait(DefaultTraits.Honor, -1);
                     ShiftTrait(DefaultTraits.Mercy, 1);
                     ApplyNorthmenVendetta();
-                    try { NorthmenStonesQuestLog.CompleteDisagree(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { NorthmenStonesQuestLog.CompleteDisagree(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     ShowDisagreeEnding();
                     break;
             }
@@ -179,7 +179,7 @@ namespace AshAndEmber
                 int v = h.GetTraitLevel(trait);
                 h.SetTraitLevel(trait, System.Math.Max(-2, System.Math.Min(2, v + delta)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ApplyNorthmenVendetta()
@@ -191,10 +191,10 @@ namespace AshAndEmber
                 foreach (Hero lord in northmen.Heroes.Where(h => h != null && h.IsLord && h.IsAlive).ToList())
                 {
                     try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, lord, -100, false); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ShowDisagreeEnding()
@@ -215,7 +215,7 @@ namespace AshAndEmber
                     () => { }, () => { }
                 ), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ShowSelfSacrificeEnding()
@@ -232,11 +232,11 @@ namespace AshAndEmber
                     "The Bonefire Circle stands at Varcheg. You will not see what it does.",
 
                     true, false, "It is done.", "",
-                    () => { try { KillCharacterAction.ApplyByMurder(Hero.MainHero, null, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    () => { try { KillCharacterAction.ApplyByMurder(Hero.MainHero, null, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     () => { }
                 ), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ShowChildSacrificeEnding()
@@ -265,7 +265,7 @@ namespace AshAndEmber
                         {
                             if (child != null) KillCharacterAction.ApplyByMurder(child, Hero.MainHero, false);
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         try
                         {
                             if (spouse != null && spouse.IsAlive)
@@ -276,12 +276,12 @@ namespace AshAndEmber
                                     new Color(0.55f, 0.55f, 0.60f)));
                             }
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     },
                     () => { }
                 ), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── The Greater Emberfall ─────────────────────────────────────────────
@@ -300,9 +300,9 @@ namespace AshAndEmber
                 if (candidates.Count == 0) return;
                 Settlement target = candidates[_rng.Next(candidates.Count)];
 
-                try { target.Town.Prosperity *= NorthmenStonesMath.EmberfallStatRemainingFrac; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { target.Town.Security   *= NorthmenStonesMath.EmberfallStatRemainingFrac; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { target.Town.FoodStocks *= NorthmenStonesMath.EmberfallStatRemainingFrac; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { target.Town.Prosperity *= NorthmenStonesMath.EmberfallStatRemainingFrac; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { target.Town.Security   *= NorthmenStonesMath.EmberfallStatRemainingFrac; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { target.Town.FoodStocks *= NorthmenStonesMath.EmberfallStatRemainingFrac; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 int killed = 0;
                 try
@@ -320,13 +320,13 @@ namespace AshAndEmber
                         }
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 MBInformationManager.AddQuickInformation(new TextObject(
                     $"The Bonefire Circle turns toward {target.Name}. Fire that answers to no living hand pours " +
                     $"over the walls — {killed} of its soldiers do not answer muster, and its stores burn with them."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

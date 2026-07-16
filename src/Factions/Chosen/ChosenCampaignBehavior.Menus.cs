@@ -24,7 +24,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class ChosenCampaignBehavior
     {
@@ -46,16 +46,16 @@ namespace AshAndEmber
                         {
                             if (!ChosenSettlements.IsChosenSettlement(Settlement.CurrentSettlement)) return false;
                             MBTextManager.SetTextVariable("CHOSEN_ORDER_ENTER_TEXT", "Seek the Chosen");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = true;
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { GameMenu.SwitchToMenu("chosen_order_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { GameMenu.SwitchToMenu("chosen_order_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Main menu ──────────────────────────────────────────────────────────
@@ -72,10 +72,10 @@ namespace AshAndEmber
                           + "not praying so much as counting. \"The PriestKing's line does not want for coin, only "
                           + "for hands willing to carry what Heaven demands of us.\"");
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             RegisterBuyRodOption(starter);
             RegisterTakeWifeOption(starter);
@@ -83,11 +83,11 @@ namespace AshAndEmber
             try
             {
                 starter.AddGameMenuOption("chosen_order_main", "chosen_order_leave", "Leave",
-                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } return true; },
-                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } return true; },
+                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     true, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Option 1: buy a Rod of the Apostle ────────────────────────────────
@@ -103,14 +103,14 @@ namespace AshAndEmber
                             MBTextManager.SetTextVariable("CHOSEN_ORDER_ROD_TEXT",
                                 $"Buy a Rod of the Apostle  [{ChosenMath.RodPurchaseCostGold} denars]");
                             args.IsEnabled = (Hero.MainHero?.Gold ?? 0) >= ChosenMath.RodPurchaseCostGold;
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
-                    args => { try { DoBuyRod(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    args => { try { DoBuyRod(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void DoBuyRod()
@@ -119,15 +119,15 @@ namespace AshAndEmber
             if (hero == null || hero.Gold < ChosenMath.RodPurchaseCostGold)
             {
                 ShowDialog("Not Enough Coin", $"You need {ChosenMath.RodPurchaseCostGold} denars for a relic of that weight.",
-                    () => { try { GameMenu.SwitchToMenu("chosen_order_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("chosen_order_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
-            try { hero.ChangeHeroGold(-ChosenMath.RodPurchaseCostGold); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { hero.ChangeHeroGold(-ChosenMath.RodPurchaseCostGold); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             GrantRodOfApostle(hero, announce: false);
 
             ShowDialog("Purchased", "The iron is cold, then it isn't. \"Carry it well,\" the Apostle says, and does not explain further.",
-                () => { try { GameMenu.SwitchToMenu("chosen_order_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("chosen_order_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 
         // ── Option 2: take a qualifying female prisoner as a new wife ──────────
@@ -149,14 +149,14 @@ namespace AshAndEmber
                                     : $"  [{prisonerTemplate.Name}]";
                             MBTextManager.SetTextVariable("CHOSEN_ORDER_WIFE_TEXT", "Take a prisoner as a wife" + note);
                             args.IsEnabled = eligiblePlayer && hasPrisoner;
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
-                    args => { try { DoTakePrisonerAsWife(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    args => { try { DoTakePrisonerAsWife(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void DoTakePrisonerAsWife()
@@ -164,14 +164,14 @@ namespace AshAndEmber
             if (!IsMalePlayerEligibleForMoreWives())
             {
                 ShowDialog("Cannot Wed", "This is not a road open to you.",
-                    () => { try { GameMenu.SwitchToMenu("chosen_order_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("chosen_order_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
             if (!TryGetQualifyingFemalePrisoner(out var prisonerTemplate))
             {
                 ShowDialog("Nothing To Give", "You hold no qualifying captive to offer the Apostle's blessing.",
-                    () => { try { GameMenu.SwitchToMenu("chosen_order_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("chosen_order_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
@@ -179,7 +179,7 @@ namespace AshAndEmber
             ConsumePrisonerAndWed(prisonerTemplate);
 
             ShowDialog("Wed", $"{wifeName} is led from the cage and into the PriestKing's own rite. She does not leave your household again.",
-                () => { try { GameMenu.SwitchToMenu("chosen_order_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("chosen_order_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 
         // ── Helpers ────────────────────────────────────────────────────────────
@@ -195,7 +195,7 @@ namespace AshAndEmber
             {
                 string brief = body.Length > 100 ? body.Substring(0, 100) + "…" : body;
                 MBInformationManager.AddQuickInformation(new TextObject(brief));
-                try { onClose?.Invoke(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { onClose?.Invoke(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
     }

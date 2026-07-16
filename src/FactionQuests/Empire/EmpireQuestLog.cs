@@ -11,7 +11,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed class EmpireQuestLog : QuestBase
     {
@@ -45,7 +45,7 @@ namespace AshAndEmber
                 if (_objTowns == null && JournalEntries.Count >= 2) _objTowns = JournalEntries[1];
                 if (_objKills == null && JournalEntries.Count >= 3) _objKills = JournalEntries[2];
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void Start()
@@ -66,7 +66,7 @@ namespace AshAndEmber
                     new TextObject("Conquer cities for the Empire, until two-thirds of Calradia's cities answer to it again."),
                     new TextObject("Cities Reclaimed"), 0, EmpireQuestMath.ConquestTownThreshold, null, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogTownProgress(int currentTowns)
@@ -76,7 +76,7 @@ namespace AshAndEmber
                 RebindObjectives();
                 _objTowns?.UpdateCurrentProgress(EmpireQuestMath.ClampedTownProgress(currentTowns));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogCrowned()
@@ -94,7 +94,7 @@ namespace AshAndEmber
                     new TextObject("Stand with the reunified Empire's war on the demons."),
                     new TextObject("Demons Slain in the Emperor's War"), 0, EmpireQuestMath.KillTarget, null, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogKillProgress(int demonsKilled)
@@ -104,7 +104,7 @@ namespace AshAndEmber
                 RebindObjectives();
                 _objKills?.UpdateCurrentProgress(EmpireQuestMath.ClampedKillProgress(demonsKilled));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogVictory()
@@ -119,7 +119,7 @@ namespace AshAndEmber
                     "an Emperor's banner did that. The Legates drink to it, and mean it."));
                 CompleteQuestWithSuccess();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Reliability closure — the Empire was wiped out before it ever
@@ -136,7 +136,7 @@ namespace AshAndEmber
                     "not a broken promise."));
                 CompleteQuestWithFail();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

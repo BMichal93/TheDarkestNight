@@ -16,7 +16,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class AshenCitySystem
     {
@@ -40,7 +40,7 @@ namespace AshAndEmber
             // The Ashen settlement rename genuinely needs the Ashen clans to exist.
             if (_settlementsRenamed) return;
             if (_ashenClanIds.Count == 0) return;          // clans not established yet
-            try { RenameAshenSettlements();          } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RenameAshenSettlements();          } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _settlementsRenamed = true;
         }
 
@@ -53,56 +53,56 @@ namespace AshAndEmber
         {
             if (_kingdomsRenamed) return;
             if (DragonQuestSystem.WorldRekindled) return;
-            try { RenameHolyTempleKingdom();         } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { RenameVlandianTroops();             } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TempleCulture.SetupTempleKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { RenameKhuzaitTroops();              } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RenameHolyTempleKingdom();         } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { RenameVlandianTroops();             } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TempleCulture.SetupTempleKingdom(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { RenameKhuzaitTroops();              } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Faction D of The Darkest Night's Phase 7: Khuzait is now the
             // Bloodbound, not the (retired) Tribes of the East — both target the
             // same "khuzait" StringId, and a kingdom can only wear one name. The old
             // RenameTribesKingdom()/ApplyTribalCultureTexts() helpers are left in
             // AshenCitySystem.Renaming.cs, unreferenced, for save compatibility;
             // only this call site moved. See Factions/Bloodbound/BloodboundCulture.cs.
-            try { BloodboundCulture.RenameBloodboundKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { BloodboundCulture.RenameBloodboundKingdom(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Faction A of The Darkest Night's Phase 7: Sturgia is now the Wolf
             // Brothers, not the (retired) Northmen — both target the same
             // "sturgia" StringId, and a kingdom can only wear one name. The old
             // RenameNorthmenKingdom()/ApplyNorthmenCultureTexts() helpers are left
             // in AshenCitySystem.Renaming.cs, unreferenced, for save compatibility;
             // only this call site moved. See Factions/WolfBrothers/WolfBrothersCulture.cs.
-            try { WolfBrothersCulture.RenameWolfBrothersKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { RenameSturgianTroops();             } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { WolfBrothersCulture.RenameWolfBrothersKingdom(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { RenameSturgianTroops();             } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Faction B of The Darkest Night's Phase 7: Aserai is now the Tower,
             // not the (retired) Duneborn — both target the same "aserai"
             // StringId, and a kingdom can only wear one name. The old
             // RenameDunebornKingdom()/ApplyDunebornCultureTexts() helpers are left
             // in AshenCitySystem.Renaming.cs, unreferenced, for save compatibility;
             // only this call site moved. See Factions/Tower/TowerCulture.cs.
-            try { TowerCulture.RenameTowerKingdom();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { RenameAseraiTroops();               } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TowerCulture.RenameTowerKingdom();  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { RenameAseraiTroops();               } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Faction C of The Darkest Night's Phase 7: Battania is now the
             // Forest Widows, not the (deleted) Hive nor the (retired) Forest
             // Clans — Battania owns its own unshared culture, so this follows
             // the WolfBrothers/Tower own-culture rename pattern (both Kingdom
             // AND CultureObject), not the Empire-family pattern. See
             // Factions/ForestWidows/ForestWidowsCulture.cs.
-            try { ForestWidowsCulture.RenameForestWidowsKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { RenameBattanianTroops();            } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ForestWidowsCulture.RenameForestWidowsKingdom(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { RenameBattanianTroops();            } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Faction F of The Darkest Night's Phase 7: the Northern Empire is
             // now simply "The Empire" — a fresh identity, not a supersession
             // (the baseline mod never renamed any of the three Empire
             // kingdoms). See Factions/Empire/EmpireCulture.cs.
-            try { EmpireCulture.RenameEmpireKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { EmpireCulture.RenameEmpireKingdom(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Faction G of The Darkest Night's Phase 7: the Western Empire is
             // now Legion — a fresh identity sharing the Empire's CultureObject
             // but renaming only its own Kingdom object (StringId "empire_w").
             // See Factions/Legion/LegionCulture.cs.
-            try { LegionCulture.RenameLegionKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { LegionCulture.RenameLegionKingdom(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Faction H of The Darkest Night's Phase 7: the Southern Empire is
             // now the Chosen — a fresh identity sharing the Empire's
             // CultureObject but renaming only its own Kingdom object (StringId
             // "empire_s"). See Factions/Chosen/ChosenCulture.cs.
-            try { ChosenCulture.RenameChosenKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ChosenCulture.RenameChosenKingdom(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _kingdomsRenamed = true;
         }
 
@@ -150,7 +150,7 @@ namespace AshAndEmber
             // One-time ownership initialisation
             if (!_ownershipInitDone)
             {
-                try { InitialiseSettlementOwnership(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { InitialiseSettlementOwnership(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 _ownershipInitDone = true;
             }
 
@@ -182,7 +182,7 @@ namespace AshAndEmber
             // Lord party composition — every LordPartyInterval days, one party per tick
             if (_lordPartyThrottle == 0)
             {
-                try { RefillAshenLordParties(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { RefillAshenLordParties(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 _lordPartyThrottle = LordPartyInterval;
             }
 
@@ -212,13 +212,13 @@ namespace AshAndEmber
                     if (currentAge > targetAge + 0.5f)
                     {
                         float excessDays = (currentAge - targetAge) * 365f;
-                        try { h.SetBirthDay(h.BirthDay + CampaignTime.Days(excessDays)); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { h.SetBirthDay(h.BirthDay + CampaignTime.Days(excessDays)); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                     if (playerIsAshen)
                         MaxRelationsWithPlayer(h);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Kingdom rejoin prevention ─────────────────────────────────────────
@@ -241,23 +241,23 @@ namespace AshAndEmber
                 if (clan != null && _ashenKingdom != null)
                 {
                     if (clan.Kingdom != null && clan.Kingdom != _ashenKingdom)
-                        try { ChangeKingdomAction.ApplyByLeaveKingdom(clan, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { ChangeKingdomAction.ApplyByLeaveKingdom(clan, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                     if (clan.Kingdom?.StringId != AshenKingdomId)
                     {
                         bool needsRuler = _ashenKingdom.RulingClan == null;
                         if (needsRuler)
-                            try { ChangeKingdomAction.ApplyByCreateKingdom(clan, _ashenKingdom, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { ChangeKingdomAction.ApplyByCreateKingdom(clan, _ashenKingdom, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         else
                             try { ChangeKingdomAction.ApplyByJoinToKingdom(
                                     clan, _ashenKingdom,
                                     CampaignTime.Now + CampaignTime.Years(1000),
                                     false); }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Max relations with all Ashen lords
             try
@@ -266,7 +266,7 @@ namespace AshAndEmber
                     if (IsAshenClanMember(h))
                         MaxRelationsWithPlayer(h);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

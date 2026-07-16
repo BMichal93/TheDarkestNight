@@ -14,7 +14,7 @@ using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     // =========================================================================
     // MODULE ENTRY POINT
@@ -26,60 +26,60 @@ namespace AshAndEmber
             // Reset all in-mission static state that may be stale from a previous
             // game session running in the same process (save load without restart).
             // ClearAreaEffects / ClearSelfEffects are internally try/catch'd.
-            try { SpellEffects.ClearAreaEffects();   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearSelfEffects();   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearGlows();         } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearMoves();         } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearPendingDeaths(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearAnimTimers();    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearCastLoops();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearWard();          } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearStoneskin();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearSunder();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearChar();          } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearReflect();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearAttackWeaken();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearScorch();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearAshmark();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearInnerFireHeat(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearMagicMemory();           } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearDarkGiftsBattleState();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { MagicInputHandler.ResetInputState();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ElementWallWards.Clear();              } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ElementSpellEffects.ClearBattleState();} catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ElementUltimates.ClearBattleState();   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ElementalBeings.ClearBattleState();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { DemonBattleBehavior.ClearBattleState(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { MiracleEffects.ClearBattleState();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { MiracleBattleAI.Reset();               } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { MiracleInputHandler.ResetInputState(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { CrystalEffects.ClearBattleState();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { CrystalBattleAI.Reset();               } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { NatureEffects.ClearBattleState();      } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellbookInputHandler.ResetInputState(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { BloodAttunementInputHandler.ResetInputState(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { BloodAttunementLordAI.ClearCooldowns();    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellburnEffects.ClearBattleState();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { RelicEffects.ClearBattleState();          } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { WandEffects.ClearBattleState();           } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TalismanEffects.ClearBattleState();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.ClearAreaEffects();   } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearSelfEffects();   } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearGlows();         } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearMoves();         } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearPendingDeaths(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearAnimTimers();    } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearCastLoops();     } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearWard();          } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearStoneskin();     } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearSunder();        } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearChar();          } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearReflect();       } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearAttackWeaken();  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearScorch();        } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearAshmark();       } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearInnerFireHeat(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearMagicMemory();           } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearDarkGiftsBattleState();  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { MagicInputHandler.ResetInputState();        } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ElementWallWards.Clear();              } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ElementSpellEffects.ClearBattleState();} catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ElementUltimates.ClearBattleState();   } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ElementalBeings.ClearBattleState();     } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { DemonBattleBehavior.ClearBattleState(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { MiracleEffects.ClearBattleState();     } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { MiracleBattleAI.Reset();               } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { MiracleInputHandler.ResetInputState(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { CrystalEffects.ClearBattleState();     } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { CrystalBattleAI.Reset();               } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { NatureEffects.ClearBattleState();      } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellbookInputHandler.ResetInputState(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { BloodAttunementInputHandler.ResetInputState(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { BloodAttunementLordAI.ClearCooldowns();    } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellburnEffects.ClearBattleState();     } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { RelicEffects.ClearBattleState();          } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { WandEffects.ClearBattleState();           } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TalismanEffects.ClearBattleState();       } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Wire the Grace bank to the live Abundant Grace devotion (the bank itself
             // is kept TaleWorlds-free so it stays unit-testable — see behaviour.md).
             MiracleInventory.TalentCapBonusProvider = () =>
             { try { return MiracleTalents.GraceCapBonus; } catch { return 0; } };
-            try { NatureCharge.ClearForMission();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { NatureChargeBar.Reset();               } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { NatureSeerAI.ClearCooldowns();         } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { NatureInputHandler.ResetInputState();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ElementLordAI.ClearCooldowns();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ElementLordAI.FlushBattleCasts();      } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellcasterLords.ClearCooldowns();    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellcasterTroops.ClearBattleState();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { BanditMageAI.OnMissionEnd();           } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { AshenSceneTone.Reset();                } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { BattleWhispers.Reset();                } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { AshenVisuals.Reset();                  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { GreatOtherParty.ClearMissionLatch();    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { NatureCharge.ClearForMission();        } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { NatureChargeBar.Reset();               } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { NatureSeerAI.ClearCooldowns();         } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { NatureInputHandler.ResetInputState();  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ElementLordAI.ClearCooldowns();        } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ElementLordAI.FlushBattleCasts();      } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellcasterLords.ClearCooldowns();    } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellcasterTroops.ClearBattleState();  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { BanditMageAI.OnMissionEnd();           } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { AshenSceneTone.Reset();                } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { BattleWhispers.Reset();                } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { AshenVisuals.Reset();                  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { GreatOtherParty.ClearMissionLatch();    } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (game.GameType is Campaign &&
                 gameStarterObject is CampaignGameStarter campaignStarter)
@@ -160,12 +160,12 @@ namespace AshAndEmber
                 // Magical wands (mod-author-directed addition) — a small,
                 // separate item category riding the same choke points the
                 // Rod of the Apostle/Holy Sigil already use. See Wands/.
-                try { campaignStarter.AddBehavior(new WandsCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { campaignStarter.AddBehavior(new WandsCampaignBehavior()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Holy talismans (mod-author-directed addition) — a small,
                 // separate Temple item category riding the same passive-while-
                 // carried choke point Dark Gift-sourced Relics already use.
                 // See Talismans/.
-                try { campaignStarter.AddBehavior(new TalismansCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { campaignStarter.AddBehavior(new TalismansCampaignBehavior()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Phase 8 — the wretched free towns. Turns every town the eight
                 // Phase 7 factions ejected into its own permanent one-city
                 // kingdom (modelled on AshenCitySystem's mechanics).
@@ -181,127 +181,128 @@ namespace AshAndEmber
                 // the night, fight for food, and NPC rosters trimmed toward
                 // the same scarcity silhouette the player already lives under.
                 // See MortalLaw/MortalLawCampaignBehavior.cs for the full design note.
-                try { campaignStarter.AddBehavior(new MortalLawCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { campaignStarter.AddBehavior(new MortalLawCampaignBehavior()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Phase 11 — the clock of the apocalypse. The Night of the Hunt
                 // (requirement 32), the day-300/600/1000 escalation stages, and
                 // the Demon Lord's rise/victory/defeat (requirement 33). See
                 // Apocalypse/ApocalypseCampaignBehavior.cs.
-                try { campaignStarter.AddBehavior(new ApocalypseCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { campaignStarter.AddBehavior(new ApocalypseCampaignBehavior()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Phase 12 — eight faction questlines, from ~day 50. The shared,
                 // generic trigger (FactionQuests/FactionQuestTrigger.cs) is
                 // registered once; each questline's own behavior plugs into it
                 // from its own constructor. Faction A (Wolf Brothers' "The Great
                 // Hunt") and Faction B (the Tower's "The Unbinding Rite") exist
                 // so far — see FactionQuests/WolfBrothers/ and FactionQuests/Tower/.
-                try { campaignStarter.AddBehavior(new FactionQuestTriggerCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { campaignStarter.AddBehavior(new WolfHuntQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { campaignStarter.AddBehavior(new TowerRiteQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { campaignStarter.AddBehavior(new ChosenQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { campaignStarter.AddBehavior(new FactionQuestTriggerCampaignBehavior()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { campaignStarter.AddBehavior(new WolfHuntQuestCampaignBehavior()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { campaignStarter.AddBehavior(new TowerRiteQuestCampaignBehavior()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { campaignStarter.AddBehavior(new ChosenQuestCampaignBehavior()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Phase 12, Faction C — the Forest Widows' "The Final Peace" (see
                 // FactionQuests/ForestWidows/).
-                try { campaignStarter.AddBehavior(new ForestWidowsQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { campaignStarter.AddBehavior(new ForestWidowsQuestCampaignBehavior()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Phase 12, Faction D — the Bloodbound's "The Surpassing Rite" (see
                 // FactionQuests/Bloodbound/).
-                try { campaignStarter.AddBehavior(new BloodboundQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { campaignStarter.AddBehavior(new BloodboundQuestCampaignBehavior()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Phase 12, Faction E — the Temple's "The Unbroken Vow" (see
                 // FactionQuests/Temple/).
-                try { campaignStarter.AddBehavior(new TempleQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { campaignStarter.AddBehavior(new TempleQuestCampaignBehavior()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Phase 12, Faction F — the Empire's "The Reunification" (see
                 // FactionQuests/Empire/).
-                try { campaignStarter.AddBehavior(new EmpireQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { campaignStarter.AddBehavior(new EmpireQuestCampaignBehavior()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Phase 12, Faction G — Legion's "The Far Shore" (see
                 // FactionQuests/Legion/).
-                try { campaignStarter.AddBehavior(new LegionQuestCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                // Legion Expeditions — "Charter an Expedition" (the Antiquarian
-                // Charter), a background ruin-expedition system in Legion
-                // (empire_w) towns. See Expeditions/ExpeditionCampaignBehavior.cs.
-                try { campaignStarter.AddBehavior(new ExpeditionCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { campaignStarter.AddBehavior(new LegionQuestCampaignBehavior()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                // Expeditions — "Charter an Expedition" (the Antiquarian
+                // Charter), a background ruin-expedition system run out of The
+                // Camp (CityStateSystem.IsCampSettlement; Legion-gated until
+                // v0.4.0). See Expeditions/ExpeditionCampaignBehavior.cs.
+                try { campaignStarter.AddBehavior(new ExpeditionCampaignBehavior()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // The Foreign Muster — Legion (empire_w) towns offer one other
                 // main culture's tier-1 recruit, rotating weekly. See
                 // ForeignMuster/ForeignMusterCampaignBehavior.cs.
-                try { campaignStarter.AddBehavior(new ForeignMusterCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { campaignStarter.AddBehavior(new ForeignMusterCampaignBehavior()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Beasts of the North — Sturgia (Wolf Brothers) towns offer
                 // costly Jotunn-Blooded / Ulfhednar recruits, paid in fish and
                 // gold. See BeastsOfTheNorth/BeastsOfTheNorthCampaignBehavior.cs.
-                try { campaignStarter.AddBehavior(new BeastsOfTheNorthCampaignBehavior()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { TempleDialogue.Register(campaignStarter);   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { campaignStarter.AddBehavior(new BeastsOfTheNorthCampaignBehavior()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { AshenDialogue.Register(campaignStarter);    } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ElementalDialogue.Register(campaignStarter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ArenicosDialogue.Register(campaignStarter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { TempleDialogue.Register(campaignStarter);   } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Sturgia is now the Wolf Brothers, not the (retired) Northmen —
                 // see Factions/WolfBrothers/WolfBrothersDialogue.cs. NorthmenDialogue.cs
                 // is left in place, unreferenced, for save compatibility.
-                try { WolfBrothersDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { WolfBrothersDialogue.Register(campaignStarter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Aserai is now the Tower, not the (retired) Duneborn — see
                 // Factions/Tower/TowerDialogue.cs. DunebornDialogue.cs is left in
                 // place, unreferenced, for save compatibility.
-                try { TowerDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { TowerDialogue.Register(campaignStarter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Battania is now the Forest Widows, not the (deleted) Hive nor
                 // the (retired) Forest Clans — see
                 // Factions/ForestWidows/ForestWidowsDialogue.cs.
-                try { ForestWidowsDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ForestWidowsDialogue.Register(campaignStarter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Once "The Final Peace" seals the dark pact, every Forest Widows
                 // lord's dialogue is overridden with "..." — see
                 // FactionQuests/ForestWidows/ForestWidowsQuestDialogue.cs.
-                try { ForestWidowsQuestDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ForestWidowsQuestDialogue.Register(campaignStarter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Khuzait is now the Bloodbound, not the (retired) Tribes of the East —
                 // see Factions/Bloodbound/BloodboundDialogue.cs. TribesDialogue.cs is
                 // left in place, unreferenced, for save compatibility.
-                try { BloodboundDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { BloodboundDialogue.Register(campaignStarter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // The Northern Empire is now simply "The Empire" — see
                 // Factions/Empire/EmpireDialogue.cs.
-                try { EmpireDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { EmpireDialogue.Register(campaignStarter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // The Western Empire is now Legion — see Factions/Legion/LegionDialogue.cs.
-                try { LegionDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { LegionDialogue.Register(campaignStarter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // The Southern Empire is now the Chosen — see Factions/Chosen/ChosenDialogue.cs.
-                try { ChosenDialogue.Register(campaignStarter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SchemeSystem.Initialize();              } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ChosenDialogue.Register(campaignStarter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SchemeSystem.Initialize();              } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Drop the previous campaign's Ashen rolls before this one's data loads.
                 // A save reload repopulates them in SyncData, which runs before
                 // OnSessionLaunched; a NEW game leaves them empty until Initialize claims
                 // the realm. Without this, a new game started without restarting the game
                 // inherits the old campaign's clan list and renames the fresh world's
                 // settlements at session launch, out of any clan's hands.
-                try { AshenCitySystem.ResetForNewGame();      } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ExchangeCampaignBehavior.ResetState();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SeaCampaignBehavior.ResetForNewGame();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ClanOrdersCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SoldierServiceCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ElementalWildsBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { DemonSpawnCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { BattleEvents.ResetForNewGame();           } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { GreatAwakeningCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { NorthmenStonesCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SandboxOnlyGate.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SpellcasterLords.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SpellcasterTroopBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SpellbookCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ForestWidowsCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { BloodboundCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { TempleCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { EmpireCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { LegionCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ChosenCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { WandsCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { TalismansCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { CityStateCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { RuinsCastleSystem.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { MortalLawCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ApocalypseCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { FactionQuestTriggerCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { WolfHuntQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { TowerRiteQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ChosenQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ForestWidowsQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { BloodboundQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { TempleQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { EmpireQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { LegionQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ExpeditionCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { AshenCitySystem.ResetForNewGame();      } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ExchangeCampaignBehavior.ResetState();  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SeaCampaignBehavior.ResetForNewGame();  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ClanOrdersCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SoldierServiceCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ElementalWildsBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { DemonSpawnCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { BattleEvents.ResetForNewGame();           } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { GreatAwakeningCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { NorthmenStonesCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SandboxOnlyGate.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SpellcasterLords.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SpellcasterTroopBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SpellbookCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ForestWidowsCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { BloodboundCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { TempleCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { EmpireCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { LegionCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ChosenCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { WandsCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { TalismansCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { CityStateCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { RuinsCastleSystem.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { MortalLawCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ApocalypseCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { FactionQuestTriggerCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { WolfHuntQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { TowerRiteQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ChosenQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ForestWidowsQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { BloodboundQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { TempleQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { EmpireQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { LegionQuestCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ExpeditionCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // A quest whose type is missing from the save definer only fails when the
                 // player hits Save — long after the quest triggered. Audit at boot instead.
-                try { AshAndEmberSaveDefiner.SelfCheck(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { TheDarkestNightSaveDefiner.SelfCheck(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -312,30 +313,30 @@ namespace AshAndEmber
         public override void OnGameInitializationFinished(Game game)
         {
             base.OnGameInitializationFinished(game);
-            try { AshenCitySystem.ApplyTempleCultureTexts();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { AshenCitySystem.ApplyTempleCultureTexts();        } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Sturgia is now the Wolf Brothers, not the (retired) Northmen.
-            try { WolfBrothersCulture.ApplyWolfBrothersCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { WolfBrothersCulture.ApplyWolfBrothersCultureTexts(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Aserai is now the Tower, not the (retired) Duneborn.
-            try { TowerCulture.ApplyTowerCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TowerCulture.ApplyTowerCultureTexts(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Battania is now the Forest Widows, not the (deleted) Hive nor the
             // (retired) Forest Clans — see Factions/ForestWidows/
             // ForestWidowsCulture.cs. AshenCitySystem.ApplyForestClansCultureTexts
             // (and the Forest Clans rename helpers behind it) are left in place,
             // unreferenced, for save compatibility — only the call site moves.
-            try { ForestWidowsCulture.ApplyForestWidowsCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ForestWidowsCulture.ApplyForestWidowsCultureTexts(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Khuzait is now the Bloodbound, not the (retired) Tribes of the East —
             // see Factions/Bloodbound/BloodboundCulture.cs. AshenCitySystem.ApplyTribalCultureTexts
             // (and the Tribal rename helpers behind it) are left in place,
             // unreferenced, for save compatibility — only the call site moves.
-            try { BloodboundCulture.ApplyBloodboundCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { BloodboundCulture.ApplyBloodboundCultureTexts(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // The Northern Empire is now simply "The Empire" — a fresh
             // identity, see Factions/Empire/EmpireCulture.cs.
-            try { EmpireCulture.ApplyEmpireCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { EmpireCulture.ApplyEmpireCultureTexts(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Phase 3 — Requirement 30a: tier 3-4 troop trees (every culture) are
             // re-equipped with the cheapest real armour of the same slot type;
             // Requirement 29: lords are stripped of gold/ornate/rich gear.
-            try { GearWeathering.ApplyShabbyGearToTroopTrees(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { LordGearWeathering.ApplyToAllLords();         } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { GearWeathering.ApplyShabbyGearToTroopTrees(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { LordGearWeathering.ApplyToAllLords();         } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Re-applies the Templar culture text while still in the menu / intro-video /
@@ -344,30 +345,30 @@ namespace AshAndEmber
         private static void EnsureTempleCultureTextPreGame()
         {
             object st = null;
-            try { st = GameStateManager.Current?.ActiveState; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { st = GameStateManager.Current?.ActiveState; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             bool preGame = Campaign.Current == null
                 || st is TaleWorlds.CampaignSystem.CharacterCreationContent.CharacterCreationState
                 || st is VideoPlaybackState;
             if (preGame)
             {
-                try { AshenCitySystem.ApplyTempleCultureTexts();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { AshenCitySystem.ApplyTempleCultureTexts();        } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Sturgia is now the Wolf Brothers, not the (retired) Northmen.
-            try { WolfBrothersCulture.ApplyWolfBrothersCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { WolfBrothersCulture.ApplyWolfBrothersCultureTexts(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Aserai is now the Tower, not the (retired) Duneborn.
-                try { TowerCulture.ApplyTowerCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { TowerCulture.ApplyTowerCultureTexts(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Battania is now the Forest Widows, not the (deleted) Hive nor
                 // the (retired) Forest Clans.
-                try { ForestWidowsCulture.ApplyForestWidowsCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ForestWidowsCulture.ApplyForestWidowsCultureTexts(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Khuzait is now the Bloodbound, not the (retired) Tribes of the East.
-                try { BloodboundCulture.ApplyBloodboundCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { BloodboundCulture.ApplyBloodboundCultureTexts(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // The Northern Empire is now simply "The Empire".
-                try { EmpireCulture.ApplyEmpireCultureTexts(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { EmpireCulture.ApplyEmpireCultureTexts(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // The character-creation culture cards cache their name when built, so
                 // the text override above never reaches them — rename the card directly.
-                try { TempleCultureCardFixer.TickTryFix(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { TempleCultureCardFixer.TickTryFix(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // The backstory option VMs cache their labels the same way (they only
                 // re-read on hover) — keep them synced with the narrative rewrites.
-                try { NarrativeStageTextFixer.TickTryFix(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { NarrativeStageTextFixer.TickTryFix(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -385,23 +386,23 @@ namespace AshAndEmber
             // is cheap and idempotent, so re-apply it every frame through the
             // pre-campaign flow, and do it BEFORE SkipIntroVideos hands off to the
             // character-creation screen, so the card is guaranteed to read "Templars".
-            try { EnsureTempleCultureTextPreGame(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { EnsureTempleCultureTextPreGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Runs before the campaign gate below so it also fires at the main menu and
             // during the new-game flow, where Campaign.Current is still null.
-            try { SkipIntroVideos(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { AshEmberSplash.Tick(dt); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { AshEmberLoreIntro.Tick(dt); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { AshEmberLoadingScreen.Tick(dt); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SkipIntroVideos(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { AshEmberSplash.Tick(dt); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { AshEmberLoreIntro.Tick(dt); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { AshEmberLoadingScreen.Tick(dt); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
                 if (Campaign.Current == null || Mission.Current != null) return;
-                try { SandboxOnlyGate.Tick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { MagicInputHandler.Tick(inMission: false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { MiracleInputHandler.Tick(inMission: false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { NatureInputHandler.Tick(inMission: false);  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ActiveEffectManager.MapTick(dt); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SandboxOnlyGate.Tick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { MagicInputHandler.Tick(inMission: false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { MiracleInputHandler.Tick(inMission: false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { NatureInputHandler.Tick(inMission: false);  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ActiveEffectManager.MapTick(dt); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // The spell-list keybind — Left Alt + L. Requirement 17: this now
                 // opens the new Spellbook (a read-only list of every formula known)
@@ -422,7 +423,7 @@ namespace AshAndEmber
                             MageKnowledge._deferredInquiry = SpellbookCampaignBehavior.ShowSpellbook;
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Litany of Devotions — Left Shift + L opens the Grace talent list on the
                 // map, for the faithful (not mages, not the land-attuned, not the dark).
@@ -436,7 +437,7 @@ namespace AshAndEmber
                         MageKnowledge._deferredInquiry = MiracleTalents.ShowCodex;
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Ctrl+Shift+F10 — toggle scheme debug mode
                 try
@@ -452,7 +453,7 @@ namespace AshAndEmber
                                 : "[DEBUG] Schemes: normal mode restored."));
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Ctrl+Shift+F11 — debug combat trigger: warp nearest hostile to player (or spawn one)
                 try
@@ -464,7 +465,7 @@ namespace AshAndEmber
                         DebugTriggerCombat();
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Ctrl+Shift+F9 — debug: spawn a Kindled (elemental) band beside the player
                 try
@@ -476,7 +477,7 @@ namespace AshAndEmber
                         ElementalWildsBehavior.DebugSpawnNearPlayer();
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Ctrl+Shift+F12 — debug grant: 100 fp, all dark gifts, max grace,
                 // all nature talents, and one of each crystal. Nature must be granted
@@ -490,9 +491,9 @@ namespace AshAndEmber
                         DebugGrantAll();
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Skips TaleWorlds' intro cinematics — the logo reels at launch and, more
@@ -509,7 +510,7 @@ namespace AshAndEmber
                 if (active is VideoPlaybackState video)
                     video.OnVideoFinished();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
 
@@ -535,7 +536,7 @@ namespace AshAndEmber
                             .FirstOrDefault();
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (enemy != null)
                 {
@@ -550,12 +551,12 @@ namespace AshAndEmber
                         CampaignMapEvents.SpawnAshenAmbushNear(
                             main.GetPosition2D + new Vec2(0.1f, 0f), 30, 0f);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     MBInformationManager.AddQuickInformation(new TaleWorlds.Localization.TextObject(
                         "[DEBUG] No hostile found — Ashen ambush spawned nearby."));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void DebugGrantAll()
@@ -573,7 +574,7 @@ namespace AshAndEmber
                 TalentSystem.GrantFree(TalentId.NatureDeepEarth,  hero);
                 TalentSystem.GrantFree(TalentId.NatureDawnCall,   hero);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // 2. All Dark Gifts (DarkSpirit stacks to 3, grant it three times).
             try
@@ -592,16 +593,16 @@ namespace AshAndEmber
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // 3. Max grace — set directly because dark gifts would otherwise block AddGrace.
-            try { MiracleInventory._grace = MiracleMath.GraceCap(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { MiracleInventory._grace = MiracleMath.GraceCap(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // 4. 100 focus points.
-            try { hero.HeroDeveloper.UnspentFocusPoints += 100; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { hero.HeroDeveloper.UnspentFocusPoints += 100; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // 5. Spellbook (Requirement 26): unlock it and learn every formula.
-            try { SpellbookCampaignBehavior.DebugUnlockAll(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellbookCampaignBehavior.DebugUnlockAll(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // 6. One of every crystal into the player party's inventory.
             try
@@ -616,7 +617,7 @@ namespace AshAndEmber
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // 7. A few magical items (Requirement 26, extended once relics/wands/
             //    talismans existed — Phases 6/mid-build): one of each rather than
@@ -644,7 +645,7 @@ namespace AshAndEmber
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             MBInformationManager.AddQuickInformation(new TaleWorlds.Localization.TextObject(
                 "[DEBUG] Granted: 100 focus points, all Dark Gifts, max Grace, all Nature talents, all crystals, a relic/wand/talisman, spellbook unlocked with every formula known."));
@@ -721,58 +722,58 @@ namespace AshAndEmber
 
         protected override void OnEndMission()
         {
-            try { SpellEffects.ClearAnimTimers();    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearCastLoops();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearPendingDeaths(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearAreaEffects();   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearMissile();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearWard();          } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearStoneskin();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearSunder();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearChar();          } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearReflect();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearAttackWeaken();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearScorch();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearAshmark();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearInnerFireHeat(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearMagicMemory();         } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearDarkGiftsBattleState(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearFocusVisuals();  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearGlows();         } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearColourCooldown();} catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ClearMoves();         } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ElementLordAI.ClearCooldowns();            } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { BanditMageAI.OnMissionEnd();             } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { AgingSystem.ClearKnockdowns();           } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ActiveEffectManager.ClearMissionEffects(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ElementMagicInput.ResetInputState();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { MagicInputHandler.ResetInputState();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { CrystalEffects.ClearBattleState();           } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { CrystalBattleAI.Reset();                    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { MiracleEffects.ClearBattleState();          } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { MiracleBattleAI.Reset();                    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { MiracleInputHandler.ResetInputState();      } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ElementWallWards.Clear();                   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ElementSpellEffects.ClearBattleState();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ElementUltimates.ClearBattleState();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ElementalBeings.ClearBattleState();          } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { DemonBattleBehavior.ClearBattleState();      } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { NatureEffects.ClearBattleState();           } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { NatureCharge.ClearForMission();             } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { NatureChargeBar.Reset();                    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { NatureSeerAI.ClearCooldowns();              } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { NatureInputHandler.ResetInputState();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellbookInputHandler.ResetInputState();    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { BloodAttunementInputHandler.ResetInputState(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { BloodAttunementLordAI.ClearCooldowns();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellburnEffects.ClearBattleState();        } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { RelicEffects.ClearBattleState();            } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { WandEffects.ClearBattleState();             } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TalismanEffects.ClearBattleState();         } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { BattleEvents.OnMissionEnd();               } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { AshenSceneTone.Reset();                    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { BattleWhispers.Reset();                    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { GreatOtherParty.ClearMissionLatch();       } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.ClearAnimTimers();    } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearCastLoops();     } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearPendingDeaths(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearAreaEffects();   } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearMissile();       } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearWard();          } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearStoneskin();     } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearSunder();        } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearChar();          } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearReflect();       } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearAttackWeaken();  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearScorch();        } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearAshmark();       } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearInnerFireHeat(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearMagicMemory();         } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearDarkGiftsBattleState(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearFocusVisuals();  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearGlows();         } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearColourCooldown();} catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ClearMoves();         } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ElementLordAI.ClearCooldowns();            } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { BanditMageAI.OnMissionEnd();             } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { AgingSystem.ClearKnockdowns();           } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ActiveEffectManager.ClearMissionEffects(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ElementMagicInput.ResetInputState();       } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { MagicInputHandler.ResetInputState();       } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { CrystalEffects.ClearBattleState();           } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { CrystalBattleAI.Reset();                    } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { MiracleEffects.ClearBattleState();          } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { MiracleBattleAI.Reset();                    } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { MiracleInputHandler.ResetInputState();      } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ElementWallWards.Clear();                   } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ElementSpellEffects.ClearBattleState();     } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ElementUltimates.ClearBattleState();        } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ElementalBeings.ClearBattleState();          } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { DemonBattleBehavior.ClearBattleState();      } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { NatureEffects.ClearBattleState();           } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { NatureCharge.ClearForMission();             } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { NatureChargeBar.Reset();                    } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { NatureSeerAI.ClearCooldowns();              } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { NatureInputHandler.ResetInputState();       } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellbookInputHandler.ResetInputState();    } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { BloodAttunementInputHandler.ResetInputState(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { BloodAttunementLordAI.ClearCooldowns();     } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellburnEffects.ClearBattleState();        } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { RelicEffects.ClearBattleState();            } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { WandEffects.ClearBattleState();             } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TalismanEffects.ClearBattleState();         } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { BattleEvents.OnMissionEnd();               } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { AshenSceneTone.Reset();                    } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { BattleWhispers.Reset();                    } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { GreatOtherParty.ClearMissionLatch();       } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public override void OnAgentBuild(Agent agent, Banner banner)
@@ -780,31 +781,31 @@ namespace AshAndEmber
             // Witchy-ashen look (grey skin, cold-blue eyes, ragged armour
             // elements) for Ashen Spawn units, Ashen kingdom soldiers and
             // Ashen heroes.
-            try { AshenVisuals.TryApply(agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { AshenVisuals.TryApply(agent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // All non-hero soldiers fighting for the Ashen (kingdom or Ashen player)
             // are called "Ashen Warrior" in battle — they have abandoned their old names.
-            try { AshenVisuals.TryRenameToAshenWarrior(agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { AshenVisuals.TryRenameToAshenWarrior(agent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Dark Gifts: apply persistent contour to player if gifts are active.
-            try { SpellEffects.ApplyDarkGiftAgentBuild(agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.ApplyDarkGiftAgentBuild(agent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // The Kindled: if the player marched on a wild elemental band, remake
             // the enemy bodies into that kind (aura + weakness). No-op otherwise.
-            try { ElementalBeings.ConvertBattleAgent(agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ElementalBeings.ConvertBattleAgent(agent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Sacred-site-crafted Kindled fielded as real army troops: register
             // the same aura/weakness/self-cast behaviour by troop id. No-op for
             // every other troop.
-            try { ElementalBeings.RegisterSacredKindled(agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ElementalBeings.RegisterSacredKindled(agent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // The Night Tide: identifies a troops.xml demon id (Fiend/Stalker/
             // Ravager/Hellsteed) the moment its Agent is built, wreathes it in
             // DemonVisuals, scales its health for its region, and forces it to
             // charge. No-op for every other troop.
-            try { DemonBattleBehavior.OnAgentBuild(agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { DemonBattleBehavior.OnAgentBuild(agent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Beasts of the North: the Jotunn-Blooded stands giant-tall in the
             // flesh (real skeleton scale). No-op for every other troop.
-            try { BeastsOfTheNorthCampaignBehavior.TryApplyGiantScale(agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { BeastsOfTheNorthCampaignBehavior.TryApplyGiantScale(agent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // The Great Awakening: the one Great Other champion, the moment its
             // own party's mission builds it. No-op unless this mission actually
             // involves that party (GreatOtherParty.OnMapEventStarted).
-            try { GreatOtherParty.TryRegisterChampion(agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { GreatOtherParty.TryRegisterChampion(agent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public override void OnAgentHit(Agent affectedAgent, Agent affectorAgent,
@@ -812,43 +813,43 @@ namespace AshAndEmber
         {
             // Reflect enchantment: melee hits only — ranged weapons are excluded.
             bool isMeleeHit = true;
-            try { isMeleeHit = affectorWeapon.IsEmpty || !(affectorWeapon.CurrentUsageItem?.IsRangedWeapon ?? false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { isMeleeHit = affectorWeapon.IsEmpty || !(affectorWeapon.CurrentUsageItem?.IsRangedWeapon ?? false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (isMeleeHit)
-                try { SpellEffects.TryApplyReflect(affectedAgent, affectorAgent, blow.InflictedDamage); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.TryApplyReflect(affectedAgent, affectorAgent, blow.InflictedDamage); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // The Unbinding (element ultimates): a struck flyer falls, a struck
             // channelling lord loses the working, the stone mantle drinks most of
             // the blow, and rain-soaked bowstrings cost a ranged hit its bite.
-            try { ElementUltimates.OnAgentHit(affectedAgent, affectorAgent, blow.InflictedDamage, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ElementUltimates.OnAgentHit(affectedAgent, affectorAgent, blow.InflictedDamage, isMeleeHit); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Fog: a ranged hit loosed from inside a standing fog bank loses half
             // its bite — the shooter cannot find the mark true through their own cloud.
-            try { ElementSpellEffects.OnRangedHitThroughFog(affectedAgent, affectorAgent, blow.InflictedDamage, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ElementSpellEffects.OnRangedHitThroughFog(affectedAgent, affectorAgent, blow.InflictedDamage, isMeleeHit); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // The Kindled: stone and ice shatter under blunt force; blades pass
             // half-harmless through flame, tide and storm. Corrected after the blow.
-            try { ElementalBeings.OnWeaponHit(affectedAgent, affectorAgent, blow.DamageType, blow.InflictedDamage); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ElementalBeings.OnWeaponHit(affectedAgent, affectorAgent, blow.DamageType, blow.InflictedDamage); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Sunder enchantment: applies to all hits (attacker is globally weakened).
-            try { SpellEffects.TryApplyAttackWeakening(affectedAgent, affectorAgent, blow.InflictedDamage); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.TryApplyAttackWeakening(affectedAgent, affectorAgent, blow.InflictedDamage); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Dark Gifts: passive on-hit effects for attacker and defender.
-            try { SpellEffects.ApplyDarkGiftAttackEffects(affectedAgent, affectorAgent, blow.InflictedDamage, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.ApplyDarkGiftDefenseEffects(affectedAgent, affectorAgent, blow.InflictedDamage, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { MiracleEffects.OnAgentHit(affectedAgent, affectorAgent, blow.InflictedDamage); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { CrystalEffects.OnCrystalHit(affectedAgent, affectorAgent, affectorWeapon, blow.InflictedDamage); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.ApplyDarkGiftAttackEffects(affectedAgent, affectorAgent, blow.InflictedDamage, isMeleeHit); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.ApplyDarkGiftDefenseEffects(affectedAgent, affectorAgent, blow.InflictedDamage, isMeleeHit); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { MiracleEffects.OnAgentHit(affectedAgent, affectorAgent, blow.InflictedDamage); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { CrystalEffects.OnCrystalHit(affectedAgent, affectorAgent, affectorWeapon, blow.InflictedDamage); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Relics: Dark-Gift-sourced relic on-hit procs (weaker, per-item).
-            try { RelicEffects.OnAgentHitAttack(affectedAgent, affectorAgent, blow.InflictedDamage, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { RelicEffects.OnAgentHitDefense(affectedAgent, affectorAgent, blow.InflictedDamage, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RelicEffects.OnAgentHitAttack(affectedAgent, affectorAgent, blow.InflictedDamage, isMeleeHit); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { RelicEffects.OnAgentHitDefense(affectedAgent, affectorAgent, blow.InflictedDamage, isMeleeHit); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Phase 7, Faction E — the Holy Sigil: small damage to nearby demons
             // on a landed blow, slight morale restore on a block/parry.
-            try { TempleSigilEffects.OnAgentHit(affectedAgent, affectorAgent, affectorWeapon, blow, attackCollisionData, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TempleSigilEffects.OnAgentHit(affectedAgent, affectorAgent, affectorWeapon, blow, attackCollisionData, isMeleeHit); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Phase 7, Faction H — the Rod of the Apostle: a cursed instrument of
             // zealotry. On block: 50 damage to a random nearby ally, wielder heals
             // 100. On a landed hit: kills a random nearby ally AND summons a demon.
-            try { ChosenRodEffects.OnAgentHit(affectedAgent, affectorAgent, affectorWeapon, blow, attackCollisionData, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ChosenRodEffects.OnAgentHit(affectedAgent, affectorAgent, affectorWeapon, blow, attackCollisionData, isMeleeHit); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Holy talismans (mod-author-directed addition): Cleansing Brand
             // (bonus damage to a struck demon) + Last Ward (heal back a
             // fraction of a blocked/parried blow) — passive while carried.
-            try { TalismanEffects.OnAgentHit(affectedAgent, affectorAgent, blow, attackCollisionData, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TalismanEffects.OnAgentHit(affectedAgent, affectorAgent, blow, attackCollisionData, isMeleeHit); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Magical wands: a fixed spoken formula released on a landed hit,
             // gated by a short cooldown. Fires for any wielder.
-            try { WandEffects.OnAgentHit(affectedAgent, affectorAgent, affectorWeapon, blow, isMeleeHit); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { WandEffects.OnAgentHit(affectedAgent, affectorAgent, affectorWeapon, blow, isMeleeHit); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Nature resistance (reserved for future barrier talents): OnAgentHit fires after
             // damage is applied; heal back the mitigated portion against real weapon hits.
             try
@@ -862,7 +863,7 @@ namespace AshAndEmber
                         affectedAgent.Health = Math.Min(affectedAgent.HealthLimit, affectedAgent.Health + mitigated);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public override void OnAgentRemoved(Agent affectedAgent, Agent affectorAgent,
@@ -873,21 +874,21 @@ namespace AshAndEmber
                 if (affectedAgent == null || affectedAgent.IsMount) return;
                 if (agentState != AgentState.Killed) return;
                 // Blood Pact gift: heal killer on kill (player and gifted NPC lords)
-                try { SpellEffects.ApplyDarkGiftKillEffects(affectedAgent, affectorAgent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.ApplyDarkGiftKillEffects(affectedAgent, affectorAgent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // MartyrsRefusal relic: weaker per-item BloodPact.
-                try { RelicEffects.OnAgentKill(affectedAgent, affectorAgent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { RelicEffects.OnAgentKill(affectedAgent, affectorAgent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Phase 12, Faction E — the Temple's "The Unbroken Vow": counts
                 // every demon kill toward the 50,000 target once the Vow is bound.
-                try { TempleQuestCampaignBehavior.OnDemonAgentKilled(affectedAgent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { TempleQuestCampaignBehavior.OnDemonAgentKilled(affectedAgent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Phase 12, Faction F — the Empire's "The Reunification": counts
                 // every demon kill toward the 15,000 target once the war is declared.
-                try { EmpireQuestCampaignBehavior.OnDemonAgentKilled(affectedAgent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { EmpireQuestCampaignBehavior.OnDemonAgentKilled(affectedAgent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Ember passive (legacy): a kill sometimes repays the fire's debt
                 if (affectorAgent == Agent.Main && MageKnowledge.IsMage && TalentSystem.Has(TalentId.Ember))
                     if (_rng.NextDouble() < 0.10)
                         AgingSystem.RestoreLifeExpectancy(Hero.MainHero, 1);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

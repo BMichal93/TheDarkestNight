@@ -33,7 +33,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class ForestWidowsCampaignBehavior
     {
@@ -57,16 +57,16 @@ namespace AshAndEmber
                         {
                             if (!ForestWidowsSettlements.IsForestWidowsSettlement(Settlement.CurrentSettlement)) return false;
                             MBTextManager.SetTextVariable("FORESTWIDOWS_ALTAR_ENTER_TEXT", "Offer to the dark");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = true;
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { GameMenu.SwitchToMenu("forestwidows_altar_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { GameMenu.SwitchToMenu("forestwidows_altar_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Main menu ──────────────────────────────────────────────────────────
@@ -84,10 +84,10 @@ namespace AshAndEmber
                           + "days of being overlooked; a lord's life buys soldiers of the dark itself, for a "
                           + "season.");
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             RegisterSoldierOption(starter);
             RegisterPrisonerOption(starter);
@@ -96,11 +96,11 @@ namespace AshAndEmber
             try
             {
                 starter.AddGameMenuOption("forestwidows_altar_main", "forestwidows_altar_leave", "Leave the altar",
-                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } return true; },
-                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } return true; },
+                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     true, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Option A: sacrifice a soldier of your own ────────────────────────────
@@ -119,14 +119,14 @@ namespace AshAndEmber
                                 : "  [no soldiers to spare]";
                             MBTextManager.SetTextVariable("FORESTWIDOWS_ALTAR_SOLDIER_TEXT", "Give a soldier to the dark" + note);
                             args.IsEnabled = has;
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
-                    args => { try { DoSacrificeSoldier(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    args => { try { DoSacrificeSoldier(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void DoSacrificeSoldier()
@@ -134,7 +134,7 @@ namespace AshAndEmber
             if (!TryGetWeakestTroop(out var character))
             {
                 ShowDialog("Nothing To Give", "You have no soldiers you can spare.",
-                    () => { try { GameMenu.SwitchToMenu("forestwidows_altar_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("forestwidows_altar_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
@@ -144,7 +144,7 @@ namespace AshAndEmber
 
             ShowDialog("Given", $"{character.Name} is taken by the dark without a sound. The road ahead is quieter for it. "
                 + $"({(int)ForestWidowsMath.IgnoreDaysPerSoldierSacrificed} day(s) unseen)",
-                () => { try { GameMenu.SwitchToMenu("forestwidows_altar_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("forestwidows_altar_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 
         // ── Option B: sacrifice a captive lord ───────────────────────────────────
@@ -161,14 +161,14 @@ namespace AshAndEmber
                             string note = has ? $"  [{hero.Name}]" : "  [no captive lord to offer]";
                             MBTextManager.SetTextVariable("FORESTWIDOWS_ALTAR_PRISONER_TEXT", "Offer a captive lord" + note);
                             args.IsEnabled = has;
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
-                    args => { try { DoSacrificePrisonerLord(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    args => { try { DoSacrificePrisonerLord(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void DoSacrificePrisonerLord()
@@ -176,7 +176,7 @@ namespace AshAndEmber
             if (!TryGetMalePrisonerLord(out var hero))
             {
                 ShowDialog("Nothing To Give", "You hold no captive lord you can offer.",
-                    () => { try { GameMenu.SwitchToMenu("forestwidows_altar_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("forestwidows_altar_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
@@ -184,11 +184,11 @@ namespace AshAndEmber
                 return; // the player paid the price instead — no reward, see the roll's own dialog
 
             var executor = Hero.MainHero;
-            try { KillCharacterAction.ApplyByExecution(hero, executor); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { KillCharacterAction.ApplyByExecution(hero, executor); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             GrantLordlyReward();
 
             ShowDialog("Taken", $"{hero.Name} is led to the altar and does not come back from it. The dark holds up its end of the bargain.",
-                () => { try { GameMenu.SwitchToMenu("forestwidows_altar_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("forestwidows_altar_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 
         // ── Option C: sacrifice a male clan member ───────────────────────────────
@@ -205,14 +205,14 @@ namespace AshAndEmber
                             string note = has ? $"  [{hero.Name}]" : "  [no man of your clan to offer]";
                             MBTextManager.SetTextVariable("FORESTWIDOWS_ALTAR_KINSMAN_TEXT", "Offer a man of your own clan" + note);
                             args.IsEnabled = has;
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
-                    args => { try { DoSacrificeKinsman(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    args => { try { DoSacrificeKinsman(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void DoSacrificeKinsman()
@@ -220,18 +220,18 @@ namespace AshAndEmber
             if (!TryGetMaleClanMember(out var hero))
             {
                 ShowDialog("Nothing To Give", "There is no man of your clan you can offer.",
-                    () => { try { GameMenu.SwitchToMenu("forestwidows_altar_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("forestwidows_altar_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
             if (RollSelfSacrificeIfMalePlayer())
                 return;
 
-            try { KillCharacterAction.ApplyByMurder(hero, Hero.MainHero, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { KillCharacterAction.ApplyByMurder(hero, Hero.MainHero, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             GrantLordlyReward();
 
             ShowDialog("Taken", $"{hero.Name} walks to the altar without being made to. The dark holds up its end of the bargain.",
-                () => { try { GameMenu.SwitchToMenu("forestwidows_altar_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("forestwidows_altar_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 
         // ── Shared reward / self-sacrifice roll for the two lordly options ───────
@@ -253,13 +253,13 @@ namespace AshAndEmber
             if (player == null || player.IsFemale) return false;
             if (!ForestWidowsMath.RollSelfSacrifice(_menuRng.NextDouble())) return false;
 
-            try { player.HitPoints = ForestWidowsMath.SelfSacrificeHpFloor; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ClanRenown.Lose(player.Clan, ForestWidowsMath.SelfSacrificeRenownLoss); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { player.HitPoints = ForestWidowsMath.SelfSacrificeHpFloor; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ClanRenown.Lose(player.Clan, ForestWidowsMath.SelfSacrificeRenownLoss); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             ShowDialog("The Altar Chooses", "The Widows' knives are not always particular about whose blood pays the debt. "
                 + "Hands seize you before you can protest — when they let go, you are bled near to death and the court has "
                 + "watched every moment of it.",
-                () => { try { GameMenu.SwitchToMenu("forestwidows_altar_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("forestwidows_altar_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
             return true;
         }
 
@@ -323,7 +323,7 @@ namespace AshAndEmber
             {
                 string brief = body.Length > 100 ? body.Substring(0, 100) + "…" : body;
                 MBInformationManager.AddQuickInformation(new TextObject(brief));
-                try { onClose?.Invoke(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { onClose?.Invoke(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
     }

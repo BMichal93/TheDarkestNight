@@ -26,7 +26,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class NorthmenStonesCampaignBehavior : CampaignBehaviorBase
     {
@@ -86,21 +86,21 @@ namespace AshAndEmber
 
         public override void SyncData(IDataStore store)
         {
-            try { store.SyncData("NSTONES_Phase",      ref _phase); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("NSTONES_Ending",     ref _endingKind); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("NSTONES_Phase",      ref _phase); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("NSTONES_Ending",     ref _endingKind); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-            try { store.SyncData("NSTONES_Iron",       ref _iron); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("NSTONES_Hardwood",   ref _hardwood); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("NSTONES_Tools",      ref _tools); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("NSTONES_Silver",     ref _silver); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("NSTONES_Denars",     ref _denars); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("NSTONES_Iron",       ref _iron); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("NSTONES_Hardwood",   ref _hardwood); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("NSTONES_Tools",      ref _tools); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("NSTONES_Silver",     ref _silver); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("NSTONES_Denars",     ref _denars); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-            try { store.SyncData("NSTONES_KStone",     ref _kindledStone); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("NSTONES_KFrost",     ref _kindledFrost); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("NSTONES_KSand",      ref _kindledSand); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("NSTONES_KFlame",     ref _kindledFlame); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("NSTONES_KTide",      ref _kindledTide); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("NSTONES_KGale",      ref _kindledGale); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("NSTONES_KStone",     ref _kindledStone); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("NSTONES_KFrost",     ref _kindledFrost); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("NSTONES_KSand",      ref _kindledSand); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("NSTONES_KFlame",     ref _kindledFlame); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("NSTONES_KTide",      ref _kindledTide); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("NSTONES_KGale",      ref _kindledGale); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             int inv50 = _invasion50Fired ? 1 : 0;
             store.SyncData("NSTONES_Inv50", ref inv50);
@@ -126,7 +126,7 @@ namespace AshAndEmber
             store.SyncData("NSTONES_StoneBuilt", ref built);
             _stoneBuilt = built != 0;
 
-            try { store.SyncData("NSTONES_LastEmberfallDay", ref _lastEmberfallDay); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("NSTONES_LastEmberfallDay", ref _lastEmberfallDay); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void ResetForNewGame()
@@ -150,16 +150,16 @@ namespace AshAndEmber
 
         private void OnWeeklyTick()
         {
-            try { TriggerWeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { NpcContributionWeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ApplyDecayWeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { InvasionWeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TriggerWeeklyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { NpcContributionWeeklyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ApplyDecayWeeklyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { InvasionWeeklyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnDailyTick()
         {
-            try { EndingDailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { EmberfallDailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { EndingDailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { EmberfallDailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static int CurrentCampaignDay()

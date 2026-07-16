@@ -21,7 +21,7 @@ using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class TempleCulture
     {
@@ -106,9 +106,9 @@ namespace AshAndEmber
                 }
 
                 foreach (var c in ordered.Where(c => !toKeep.Contains(c)))
-                    try { ChangeKingdomAction.ApplyByLeaveKingdom(c, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ChangeKingdomAction.ApplyByLeaveKingdom(c, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void EnsureTemplarGrace()
@@ -131,11 +131,11 @@ namespace AshAndEmber
                             if (hero.GetTraitLevel(DefaultTraits.Mercy) < 1)
                                 hero.SetTraitLevel(DefaultTraits.Mercy, 1);
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Daily tick — called from MagicCampaignBehavior.OnDailyTick ────────
@@ -169,11 +169,11 @@ namespace AshAndEmber
                             if (party.RecentEventsMorale < VigilMoraleFloor)
                                 party.RecentEventsMorale = VigilMoraleFloor;
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

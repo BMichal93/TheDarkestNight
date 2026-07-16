@@ -18,7 +18,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class SacredSitesCampaignBehavior
     {
@@ -43,16 +43,16 @@ namespace AshAndEmber
                             if (!HasSacredSite(Settlement.CurrentSettlement)) return false;
                             string note = HasElementalBond ? "  [the old ways already know you]" : "";
                             MBTextManager.SetTextVariable("SACRED_SITE_ENTER_TEXT", "Visit the Standing Stones" + note);
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = true;
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { GameMenu.SwitchToMenu("sacred_site_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { GameMenu.SwitchToMenu("sacred_site_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Main menu ──────────────────────────────────────────────────────────
@@ -66,7 +66,7 @@ namespace AshAndEmber
                     {
                         int smithing = 0;
                         try { smithing = Hero.MainHero?.GetSkillValue(DefaultSkills.Crafting) ?? 0; }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         float odds = CurrentBindingOdds();
 
                         string blockNote = "";
@@ -84,19 +84,19 @@ namespace AshAndEmber
                           + $"Binding chance: {(int)(odds * 100)} % (Smithing {smithing})."
                           + blockNote + talentNote);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
                 starter.AddGameMenuOption("sacred_site_main", "sacred_site_leave", "Leave the Standing Stones",
-                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } return true; },
-                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } return true; },
+                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     true, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Study option (the old ways' learnable talents) ────────────────────
@@ -110,12 +110,12 @@ namespace AshAndEmber
                         try
                         {
                             int have = 0;
-                            try { have = Hero.MainHero?.HeroDeveloper?.UnspentFocusPoints ?? 0; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { have = Hero.MainHero?.HeroDeveloper?.UnspentFocusPoints ?? 0; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             MBTextManager.SetTextVariable("SACRED_SITE_STUDY_TEXT",
                                 $"Study the old ways  [Focus: {have}] [{SacredSiteTalents.OwnedCount}/3 known]");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
                     args =>
@@ -125,12 +125,12 @@ namespace AshAndEmber
                             if (MageKnowledge._deferredInquiry == null)
                                 MageKnowledge._deferredInquiry = SacredSiteTalents.ShowCodex;
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                        try { GameMenu.SwitchToMenu("sacred_site_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                        try { GameMenu.SwitchToMenu("sacred_site_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Per-kind binding options ───────────────────────────────────────────
@@ -159,14 +159,14 @@ namespace AshAndEmber
                                         : $"  [{missing ?? "missing requirements"}]";
                                 MBTextManager.SetTextVariable(textId, $"Bind a {captured.Name}{note}");
                                 args.IsEnabled = canBind;
-                                try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             return true;
                         },
-                        args => { try { DoBindKindled(captured); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                        args => { try { DoBindKindled(captured); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -176,14 +176,14 @@ namespace AshAndEmber
             if (BlockedByOtherPath(out string reason))
             {
                 ShowDialog("The Old Ways Refuse You", reason,
-                    () => { try { GameMenu.SwitchToMenu("sacred_site_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("sacred_site_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
             if (!HasBindingMaterials(out string missing))
             {
                 ShowDialog("The Stones Are Silent",
                     $"You are missing what the working asks of you: {missing}",
-                    () => { try { GameMenu.SwitchToMenu("sacred_site_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("sacred_site_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
@@ -201,7 +201,7 @@ namespace AshAndEmber
                 ShowDialog("The Binding Fails",
                     "The stones stay stones a moment longer. Whatever answers here does not always choose to."
                   + failNote,
-                    () => { try { GameMenu.SwitchToMenu("sacred_site_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("sacred_site_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
@@ -210,7 +210,7 @@ namespace AshAndEmber
                 $"The old grove answers. Something rises where nothing stood, and it turns, waiting, to march at your word. "
               + $"A {def.Name} joins your company.\n\n"
               + def.Lore,
-                () => { try { GameMenu.SwitchToMenu("sacred_site_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("sacred_site_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 
         // ── Helpers ────────────────────────────────────────────────────────────
@@ -226,7 +226,7 @@ namespace AshAndEmber
             {
                 string brief = body.Length > 100 ? body.Substring(0, 100) + "…" : body;
                 MBInformationManager.AddQuickInformation(new TextObject(brief));
-                try { onClose?.Invoke(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { onClose?.Invoke(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
     }

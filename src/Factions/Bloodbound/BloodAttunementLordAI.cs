@@ -25,7 +25,7 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class BloodAttunementLordAI
     {
@@ -65,10 +65,10 @@ namespace AshAndEmber
                         for (int i = 0; i < count && i < pool.Count; i++)
                             BloodAttunement.LearnElement(lord, pool[i], _rng, out _);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Driven from MagicMissionBehavior.OnMissionTick, alongside
@@ -82,7 +82,7 @@ namespace AshAndEmber
                 if (!SpellEffects.IsBattleMission()) return;
 
                 float hour = 12f;
-                try { hour = (float)CampaignTime.Now.CurrentHourInDay; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { hour = (float)CampaignTime.Now.CurrentHourInDay; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (!BloodAttunementMath.IsUsableHour(hour)) return; // the blood sleeps in daylight, lords included
 
                 foreach (string key in _cooldowns.Keys.ToList())
@@ -104,7 +104,7 @@ namespace AshAndEmber
                     TryCast(agent, hero);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void TryCast(Agent agent, Hero hero)
@@ -123,7 +123,7 @@ namespace AshAndEmber
                 else
                     ElementSpellEffects.CastAttack(el, agent, 1f);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void Shuffle<T>(List<T> list)

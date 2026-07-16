@@ -24,7 +24,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public class SpellbookCampaignBehavior : CampaignBehaviorBase
     {
@@ -77,7 +77,7 @@ namespace AshAndEmber
 
             var hero = Hero.MainHero;
             int have = 0;
-            try { have = hero?.HeroDeveloper?.UnspentFocusPoints ?? 0; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { have = hero?.HeroDeveloper?.UnspentFocusPoints ?? 0; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (have < SpellbookMath.UnlockFocusCost)
             {
                 InformationManager.DisplayMessage(new InformationMessage(
@@ -85,7 +85,7 @@ namespace AshAndEmber
                     Dim));
                 return false;
             }
-            try { hero.HeroDeveloper.UnspentFocusPoints -= SpellbookMath.UnlockFocusCost; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { hero.HeroDeveloper.UnspentFocusPoints -= SpellbookMath.UnlockFocusCost; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _unlocked = true;
             InformationManager.DisplayMessage(new InformationMessage(
                 "The spellbook opens. Its formulas will answer a spoken gesture, now — hold Left Alt, tap the marks, and release.",
@@ -109,7 +109,7 @@ namespace AshAndEmber
                         sb.ToString(), true, true, "Open it", "Close",
                         () => TryUnlock(false), null), true, true);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 return;
             }
 
@@ -137,7 +137,7 @@ namespace AshAndEmber
                     body.ToString(), true, false, "Close", "",
                     () => { }, null), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Debug (Requirement 26) ───────────────────────────────────────────

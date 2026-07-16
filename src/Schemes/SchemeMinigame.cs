@@ -38,7 +38,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public enum SchemeOutcome
     {
@@ -256,7 +256,7 @@ namespace AshAndEmber
         private static int ComputeRoundsLimit()
         {
             int roguery = 0;
-            try { roguery = Hero.MainHero?.GetSkillValue(DefaultSkills.Roguery) ?? 0; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { roguery = Hero.MainHero?.GetSkillValue(DefaultSkills.Roguery) ?? 0; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return Math.Min(10, 5 + roguery / 100);
         }
 
@@ -275,22 +275,22 @@ namespace AshAndEmber
                 try { MBInformationManager.AddQuickInformation(new TextObject(
                     $"Instinct alone carries it through — quick, quiet, and done before doubt could catch up. "
                     + $"{def.Name} against {tName} succeeds.")); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // No potency bonus — trusting to instinct forgoes the Gambit's reward.
                 try { SchemeSystem.ApplyPlayerSchemeOutcome(def.Type, Hero.MainHero, targetHero, targetSett, SchemeOutcome.Success, 1f); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             else
             {
                 try { MBInformationManager.AddQuickInformation(new TextObject(
                     $"Instinct fails you. {def.Name} against {tName} collapses before it can begin — "
                     + "and the trail leads back to your door.")); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { SchemeSystem.ApplyBreakConsequence(def.Type, Hero.MainHero, targetHero, targetSett); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             try { SchemeSystem.SetPlayerCooldown(def.Type, targetHero, targetSett); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Draw next report and show the phase ───────────────────────────────
@@ -388,11 +388,11 @@ namespace AshAndEmber
                         body,
                         options, false, 1, 1,
                         "Confirm", "Abort Operation",
-                        chosen => { try { ProcessChoice(chosen?[0]?.Identifier as string ?? "extract"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
-                        _      => { try { OnAbort(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } }),
+                        chosen => { try { ProcessChoice(chosen?[0]?.Identifier as string ?? "extract"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
+                        _      => { try { OnAbort(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } }),
                     true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Skill-based ability chance ─────────────────────────────────────────
@@ -405,7 +405,7 @@ namespace AshAndEmber
                     ? (Hero.MainHero?.GetSkillValue(DefaultSkills.Charm)   ?? 0)
                     : (Hero.MainHero?.GetSkillValue(DefaultSkills.Roguery) ?? 0);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return Math.Max(0.20f, Math.Min(0.80f, 0.20f + (skill / 500f) * 0.60f));
         }
 
@@ -426,7 +426,7 @@ namespace AshAndEmber
                     if (_rng.NextDouble() < ComputeAbilityChance(isCharm: false))
                     {
                         try { MBInformationManager.AddQuickInformation(
-                            new TextObject("Sidestep — your operative slipped through cleanly. No exposure taken.")); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            new TextObject("Sidestep — your operative slipped through cleanly. No exposure taken.")); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         AdvanceRound();
                     }
                     else
@@ -441,14 +441,14 @@ namespace AshAndEmber
                     {
                         _exposure = Math.Max(0, _exposure - 5);
                         try { MBInformationManager.AddQuickInformation(
-                            new TextObject("Talk It Down — smooth words defused the situation. Exposure −5.")); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            new TextObject("Talk It Down — smooth words defused the situation. Exposure −5.")); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         ShowPhase(_currentReport);
                     }
                     else
                     {
                         _exposure += 5;
                         try { MBInformationManager.AddQuickInformation(
-                            new TextObject("Talk It Down failed — they grew suspicious. Exposure +5.")); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            new TextObject("Talk It Down failed — they grew suspicious. Exposure +5.")); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         if (_exposure > BlownThreshold) { OnBust(); return; }
                         ShowPhase(_currentReport);
                     }
@@ -458,7 +458,7 @@ namespace AshAndEmber
                 {
                     int roll = 4 + _rng.Next(7); // 4–10
                     try { MBInformationManager.AddQuickInformation(
-                        new TextObject($"Pushed hard — exposure +{roll}.")); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        new TextObject($"Pushed hard — exposure +{roll}.")); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     ApplyPressRoll(roll);
                     break;
                 }
@@ -468,7 +468,7 @@ namespace AshAndEmber
                     int roll = _rng.Next(7) - 3; // −3 to +3
                     string rollStr = roll >= 0 ? $"+{roll}" : $"{roll}";
                     try { MBInformationManager.AddQuickInformation(
-                        new TextObject($"Careful approach — exposure {rollStr}.")); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        new TextObject($"Careful approach — exposure {rollStr}.")); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     ApplyPressRoll(roll);
                     break;
                 }
@@ -477,7 +477,7 @@ namespace AshAndEmber
                 {
                     int roll = -(4 + _rng.Next(7)); // −4 to −10
                     try { MBInformationManager.AddQuickInformation(
-                        new TextObject($"Pulled back — exposure {roll}.")); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        new TextObject($"Pulled back — exposure {roll}.")); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     ApplyPressRoll(roll);
                     break;
                 }
@@ -509,7 +509,7 @@ namespace AshAndEmber
             string msg = delta > 0
                 ? $"{abilityName} failed — drew unwanted attention. Exposure +{delta}."
                 : $"{abilityName} failed — confusion bought cover. Exposure {delta}.";
-            try { MBInformationManager.AddQuickInformation(new TextObject(msg)); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { MBInformationManager.AddQuickInformation(new TextObject(msg)); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (_exposure > BlownThreshold) { OnBust(); return; }
             AdvanceRound();
@@ -521,16 +521,16 @@ namespace AshAndEmber
             if (_rng.NextDouble() < 0.50)
             {
                 try { MBInformationManager.AddQuickInformation(new TextObject(
-                    "Time ran out. Your operative overstayed — the network collapsed. Operation blown.")); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SchemeSystem.ApplyBreakConsequence(_def.Type, Hero.MainHero, _targetHero, _targetSett); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SchemeSystem.SetPlayerCooldown(_def.Type, _targetHero, _targetSett); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    "Time ran out. Your operative overstayed — the network collapsed. Operation blown.")); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SchemeSystem.ApplyBreakConsequence(_def.Type, Hero.MainHero, _targetHero, _targetSett); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SchemeSystem.SetPlayerCooldown(_def.Type, _targetHero, _targetSett); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             else
             {
                 try { MBInformationManager.AddQuickInformation(new TextObject(
-                    "Time ran out. Your operative withdrew before the net closed — the operation accomplished nothing.")); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SchemeSystem.ApplyPlayerSchemeOutcome(_def.Type, Hero.MainHero, _targetHero, _targetSett, SchemeOutcome.SmallLoss); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SchemeSystem.SetPlayerCooldown(_def.Type, _targetHero, _targetSett, days: 2); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    "Time ran out. Your operative withdrew before the net closed — the operation accomplished nothing.")); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SchemeSystem.ApplyPlayerSchemeOutcome(_def.Type, Hero.MainHero, _targetHero, _targetSett, SchemeOutcome.SmallLoss); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SchemeSystem.SetPlayerCooldown(_def.Type, _targetHero, _targetSett, days: 2); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -561,22 +561,22 @@ namespace AshAndEmber
             bool success = _exposure >= cfg.RiskSum;
             SchemeOutcome outcome = success ? SchemeOutcome.Success : SchemeOutcome.SmallLoss;
             float potency = success ? ComputePotency(cfg.RiskSum) : 1f;
-            try { SchemeSystem.ApplyPlayerSchemeOutcome(_def.Type, Hero.MainHero, _targetHero, _targetSett, outcome, potency); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SchemeSystem.ApplyPlayerSchemeOutcome(_def.Type, Hero.MainHero, _targetHero, _targetSett, outcome, potency); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (success && potency > 1.01f)
                 try { MBInformationManager.AddQuickInformation(new TextObject(
                     $"A clean, hard-won extraction — the operation lands harder for it. (×{potency:0.00})")); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // SmallLoss extract: same 2-day cooldown as Abort — deliberate quiet retreat
             // shouldn't be penalised more than panic-aborting immediately.
             int cooldownDays = outcome == SchemeOutcome.SmallLoss ? 2 : ComputeSuccessCooldownDays(potency);
-            try { SchemeSystem.SetPlayerCooldown(_def.Type, _targetHero, _targetSett, cooldownDays); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SchemeSystem.SetPlayerCooldown(_def.Type, _targetHero, _targetSett, cooldownDays); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Blown ─────────────────────────────────────────────────────────────
         private static void OnBust()
         {
-            try { SchemeSystem.ApplyBreakConsequence(_def.Type, Hero.MainHero, _targetHero, _targetSett); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SchemeSystem.SetPlayerCooldown(_def.Type, _targetHero, _targetSett); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SchemeSystem.ApplyBreakConsequence(_def.Type, Hero.MainHero, _targetHero, _targetSett); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SchemeSystem.SetPlayerCooldown(_def.Type, _targetHero, _targetSett); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Abort ─────────────────────────────────────────────────────────────
@@ -587,8 +587,8 @@ namespace AshAndEmber
                 MBInformationManager.AddQuickInformation(
                     new TextObject("Your agent stands down. The operation is abandoned — costs are spent."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SchemeSystem.SetPlayerCooldown(_def.Type, _targetHero, _targetSett, days: 2); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SchemeSystem.SetPlayerCooldown(_def.Type, _targetHero, _targetSett, days: 2); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

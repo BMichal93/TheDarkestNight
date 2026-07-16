@@ -7,9 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using AshAndEmber;
+using TheDarkestNight;
 
-namespace AshAndEmber.Tests
+namespace TheDarkestNight.Tests
 {
     [TestFixture]
     public class PureLogicTests
@@ -2637,7 +2637,7 @@ namespace AshAndEmber.Tests
             Assert.IsEmpty(missing,
                 "These QuestBase subclasses have no AddClassDefinition row in SaveDefiner.cs. "
                 + "The campaign CANNOT be saved once one of them starts. Add each to "
-                + "AshAndEmberSaveDefiner.ClassDefinitions with a fresh, unused id: "
+                + "TheDarkestNightSaveDefiner.ClassDefinitions with a fresh, unused id: "
                 + string.Join(", ", missing));
         }
 

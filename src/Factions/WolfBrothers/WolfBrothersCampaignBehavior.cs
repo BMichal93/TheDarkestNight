@@ -25,7 +25,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class WolfBrothersCampaignBehavior : CampaignBehaviorBase
     {
@@ -59,13 +59,13 @@ namespace AshAndEmber
         // and the lords' own cannibalism.
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterWolfBrothersMenus(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterWolfBrothersMenus(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnDailyTick()
         {
-            try { WolfBrothersSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TickLordCannibalism(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { WolfBrothersSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TickLordCannibalism(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── The join ritual — reputation loss + a hardened temperament ─────────
@@ -84,9 +84,9 @@ namespace AshAndEmber
                 if (oldKingdom != null && oldKingdom.StringId == WolfBrothersCulture.CultureId) return; // already one of the pack
 
                 foreach (Hero hero in clan.Heroes.Where(h => h != null && h.IsAlive).ToList())
-                    try { ApplyPackConsequence(hero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ApplyPackConsequence(hero); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void ApplyPackConsequence(Hero hero)
@@ -110,7 +110,7 @@ namespace AshAndEmber
                         new Color(0.55f, 0.15f, 0.12f)));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Lords render spare prisoners into meat too ──────────────────────────
@@ -146,7 +146,7 @@ namespace AshAndEmber
                         rendered++;
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
     }

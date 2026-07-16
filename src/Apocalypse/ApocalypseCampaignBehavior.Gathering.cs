@@ -21,7 +21,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class ApocalypseCampaignBehavior
     {
@@ -47,7 +47,7 @@ namespace AshAndEmber
         {
             if (string.IsNullOrEmpty(_gatheringPartyId)) return null;
             try { return MobileParty.All.FirstOrDefault(p => p != null && p.StringId == _gatheringPartyId); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
 
         private void GatheringWeeklyTick()
@@ -62,7 +62,7 @@ namespace AshAndEmber
                 // (AbsorbIntoLord below) so a fresh gathering never re-spawns
                 // after that (his own host has taken over the role).
                 if (_gatheringSpawnDay >= 0) return; // already absorbed once — never again
-                try { SpawnGatheringParty(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpawnGatheringParty(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 return;
             }
 
@@ -101,9 +101,9 @@ namespace AshAndEmber
             MobileParty party = BanditPartyComponent.CreateBanditParty(partyId, banditClan, hideout, false, pt, cvec);
             if (party == null) return;
 
-            try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             AddGatheringBodies(party, ApocalypseMath.GatheringInitialSize);
-            try { party.Party.SetCustomName(new TextObject("The Gathering")); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { party.Party.SetCustomName(new TextObject("The Gathering")); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             _gatheringPartyId = party.StringId;
             _gatheringSpawnDay = CurrentDay();
@@ -135,7 +135,7 @@ namespace AshAndEmber
                 float y = rng.Next(2) == 0 ? minY : maxY;
                 return new Vec2(x, y);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return default; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return default; }
         }
 
         private static void AddGatheringBodies(MobileParty party, int count)
@@ -148,7 +148,7 @@ namespace AshAndEmber
                     MBObjectManager.Instance.GetObject<CharacterObject>(DemonCatalog.TroopIdFor(tier))
                  ?? MBObjectManager.Instance.GetObject<CharacterObject>(DemonCatalog.FiendTroopId);
                 if (troop == null) continue;
-                try { party.MemberRoster.AddToCounts(troop, 1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { party.MemberRoster.AddToCounts(troop, 1); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -169,7 +169,7 @@ namespace AshAndEmber
                 }
                 TaleWorlds.CampaignSystem.Actions.DestroyPartyAction.Apply(gathering.Party, null);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _gatheringPartyId = null;
         }
     }

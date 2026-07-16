@@ -31,7 +31,7 @@ using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public class MarketScarcityCampaignBehavior : CampaignBehaviorBase
     {
@@ -60,10 +60,10 @@ namespace AshAndEmber
                         if ((s.IsTown || s.IsCastle) && s.Town != null) ThinTownMarket(s.Town);
                         else if (s.IsVillage && s.Village != null) BoostVillageFood(s.Village);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ThinTownMarket(Town town)
@@ -75,13 +75,13 @@ namespace AshAndEmber
                 if (town.Gold > EconomyMath.TownTraderGoldCap)
                     town.ChangeGold(EconomyMath.TownTraderGoldCap - town.Gold);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Half-starved food stores (Requirement 31). Militia has no public
             // setter (Fief.Militia is get-only) so its half is enforced instead
             // by slowing growth — see EconomyMilitiaModel in ScarcityModels.cs.
             try { town.FoodStocks = Math.Min(town.FoodStocks, EconomyMath.MaxFoodStocks(town.Prosperity)); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             AdjustRoster(town.Settlement, isVillage: false);
         }
@@ -134,7 +134,7 @@ namespace AshAndEmber
                     if (delta != 0) roster.AddToCounts(item, delta);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static int CurrentDay()

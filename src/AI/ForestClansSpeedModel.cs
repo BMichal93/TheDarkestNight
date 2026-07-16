@@ -14,7 +14,7 @@ using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     // Unsealed: BloodAttunementSpeedModel (Factions/Bloodbound/BloodAttunement.cs)
     // subclasses this rather than registering a second, independent
@@ -35,7 +35,7 @@ namespace AshAndEmber
                         new TextObject("{=ae_green_roads}The Green Roads"));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return result;
         }
     }

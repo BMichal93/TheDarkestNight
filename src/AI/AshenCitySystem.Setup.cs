@@ -16,7 +16,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class AshenCitySystem
     {
@@ -85,7 +85,7 @@ namespace AshAndEmber
                         foundAny = true;
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // Second pass: any target settlement whose clan failed the check above is still
@@ -110,27 +110,27 @@ namespace AshAndEmber
                             _settlementClanMap[settlement.StringId] = ashenClan.StringId;
                             if (ashenLord != null)
                             {
-                                try { ChangeOwnerOfSettlementAction.ApplyByDefault(ashenLord, settlement); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                                try { if (settlement.Town != null) { settlement.Town.Loyalty = 100f; settlement.Town.Security = 100f; } } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { ChangeOwnerOfSettlementAction.ApplyByDefault(ashenLord, settlement); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                                try { if (settlement.Town != null) { settlement.Town.Loyalty = 100f; settlement.Town.Security = 100f; } } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             }
-                            try { EnsureGarrison(settlement); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { EnsureGarrison(settlement); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             foundAny = true;
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
             }
 
             if (foundAny || _ashenKingdom != null)
             {
-                try { DeclareWarWithAllKingdoms(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ApplyAshenLookToSettlementHeroes(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { DeclareWarWithAllKingdoms(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ApplyAshenLookToSettlementHeroes(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Belt-and-suspenders: immediately hand back any non-target town the
                 // setup left in Ashen hands, so the player never opens the map to a
                 // Tribes city (Makeb, Chaikand, …) wrongly greyed. The daily tick also
                 // enforces this, but that first fires only after a day has passed —
                 // running it here fixes the day-1 view.
-                try { ReleaseNonTargetSettlements(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ReleaseNonTargetSettlements(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 _initialized = true;
             }
         }
@@ -208,7 +208,7 @@ namespace AshAndEmber
                     {
                         if (heirLord != null && !s.IsUnderSiege)
                         {
-                            try { ChangeOwnerOfSettlementAction.ApplyByDefault(heirLord, s); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { ChangeOwnerOfSettlementAction.ApplyByDefault(heirLord, s); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             _settlementClanMap[s.StringId] = ashenHeir.StringId;
                         }
                         else _settlementClanMap.Remove(s.StringId);
@@ -217,7 +217,7 @@ namespace AshAndEmber
                         _settlementClanMap.Remove(kvp.Key);
 
                     foreach (Hero h in clan.Heroes.Where(h => h.IsAlive).ToList())
-                        try { ElementLordRegistry.SetAshen(h, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { ElementLordRegistry.SetAshen(h, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                     // Return the clan to a living kingdom of its own culture so its towns fly a
                     // banner again instead of the grey of an independent clan trapped in the
@@ -228,7 +228,7 @@ namespace AshAndEmber
                         $"{clan.Name} — the cold's false hold breaks. They were never truly Ashen.",
                         new Color(0.6f, 0.7f, 0.85f)));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -248,7 +248,7 @@ namespace AshAndEmber
                 {
                     // No living home realm of its culture — at least free it from the cold.
                     if (old != null)
-                        try { ChangeKingdomAction.ApplyByLeaveKingdom(clan, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { ChangeKingdomAction.ApplyByLeaveKingdom(clan, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     return;
                 }
 
@@ -263,11 +263,11 @@ namespace AshAndEmber
                 }
                 catch
                 {
-                    try { if (clan.Kingdom != null) ChangeKingdomAction.ApplyByLeaveKingdom(clan, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { ChangeKingdomAction.ApplyByJoinToKingdom(clan, home, stay, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { if (clan.Kingdom != null) ChangeKingdomAction.ApplyByLeaveKingdom(clan, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { ChangeKingdomAction.ApplyByJoinToKingdom(clan, home, stay, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Kingdom creation ──────────────────────────────────────────────────
@@ -303,9 +303,9 @@ namespace AshAndEmber
         public static void ApplyAshenPersonality(Hero hero)
         {
             if (hero == null) return;
-            try { hero.SetTraitLevel(DefaultTraits.Mercy,      -2); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { hero.SetTraitLevel(DefaultTraits.Generosity, -2); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { hero.SetTraitLevel(DefaultTraits.Honor,      -2); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { hero.SetTraitLevel(DefaultTraits.Mercy,      -2); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { hero.SetTraitLevel(DefaultTraits.Generosity, -2); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { hero.SetTraitLevel(DefaultTraits.Honor,      -2); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Called by ElementLordRegistry.SetAshen for every hero turned Ashen ──
@@ -322,14 +322,14 @@ namespace AshAndEmber
             // convert a player-clan member relocate that hero individually (e.g. the
             // "child of the cold" encounter moves the child to an Ashen clan itself).
             if (clan == null || hero == Hero.MainHero || clan == Clan.PlayerClan) return;
-            try { ApplyAshenPersonality(hero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ApplyAshenPersonality(hero); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try
             {
                 if (_ashenKingdom == null)
                 {
                     // Kingdom not created yet — just eject; daily tick will re-add later
                     if (clan.Kingdom != null)
-                        try { ChangeKingdomAction.ApplyByLeaveKingdom(clan, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { ChangeKingdomAction.ApplyByLeaveKingdom(clan, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     return;
                 }
 
@@ -337,21 +337,21 @@ namespace AshAndEmber
 
                 // Eject from current kingdom first
                 if (clan.Kingdom != null)
-                    try { ChangeKingdomAction.ApplyByLeaveKingdom(clan, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ChangeKingdomAction.ApplyByLeaveKingdom(clan, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Use ApplyByCreateKingdom only if the Ashen kingdom has no ruling clan yet;
                 // this establishes the first clan as ruler so the kingdom is properly set up.
                 bool needsRuler = _ashenKingdom.RulingClan == null;
                 if (needsRuler)
-                    try { ChangeKingdomAction.ApplyByCreateKingdom(clan, _ashenKingdom, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ChangeKingdomAction.ApplyByCreateKingdom(clan, _ashenKingdom, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 else
                     try { ChangeKingdomAction.ApplyByJoinToKingdom(
                             clan, _ashenKingdom,
                             CampaignTime.Now + CampaignTime.Years(1000),
                             false); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Clan setup ────────────────────────────────────────────────────────
@@ -368,10 +368,10 @@ namespace AshAndEmber
                     // Ashen lords should hold their cold thrones, not start in chains —
                     // free any who were captive when the cold claimed them.
                     if (hero.IsPrisoner)
-                        try { EndCaptivityAction.ApplyByReleasedAfterBattle(hero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { ElementLordRegistry.SetAshen(hero, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { RenameAshenHero(hero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { ElementLordRegistry.SetMage(hero, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { EndCaptivityAction.ApplyByReleasedAfterBattle(hero); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { ElementLordRegistry.SetAshen(hero, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { RenameAshenHero(hero); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { ElementLordRegistry.SetMage(hero, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 // Re-assert settlement ownership (guards against fief-distribution firing in the gap)
@@ -381,19 +381,19 @@ namespace AshAndEmber
                              ?? clan.Heroes.FirstOrDefault(h => h.IsAlive && !h.IsDisabled);
                     if (lord != null)
                     {
-                        try { ChangeOwnerOfSettlementAction.ApplyByDefault(lord, settlement); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                        try { if (settlement.Town != null) { settlement.Town.Loyalty = 100f; settlement.Town.Security = 100f; } } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { ChangeOwnerOfSettlementAction.ApplyByDefault(lord, settlement); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                        try { if (settlement.Town != null) { settlement.Town.Loyalty = 100f; settlement.Town.Security = 100f; } } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
 
                 // Starting gold
                 foreach (Hero hero in clan.Heroes.Where(h => h.IsAlive).ToList())
-                    try { if (hero.Gold < MinHeroGold) hero.ChangeHeroGold(MinHeroGold - hero.Gold); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { if (hero.Gold < MinHeroGold) hero.ChangeHeroGold(MinHeroGold - hero.Gold); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Garrison boost
-                if (settlement != null) try { EnsureGarrison(settlement); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                if (settlement != null) try { EnsureGarrison(settlement); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void RenameAshenHero(Hero hero)
@@ -407,7 +407,7 @@ namespace AshAndEmber
             }
             catch
             {
-                try { hero.SetName(new TextObject(title), new TextObject(title)); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { hero.SetName(new TextObject(title), new TextObject(title)); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -423,7 +423,7 @@ namespace AshAndEmber
                     // level 34 immediately when starting as Ashen (one +100 per Ashen lord).
                     CharacterRelationManager.SetHeroRelation(Hero.MainHero, hero, 100);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

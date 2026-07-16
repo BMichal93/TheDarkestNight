@@ -16,7 +16,7 @@ using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class FireWorshippersSystem
     {
@@ -94,7 +94,7 @@ namespace AshAndEmber
                     InjectCustomTroops(party, "circle_druid",   1 + _rng.Next(2));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void InjectCustomTroops(MobileParty party, string troopId, int count)
@@ -109,13 +109,13 @@ namespace AshAndEmber
                 if (troop == null) return;
                 party.MemberRoster.AddToCounts(troop, count);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void TryRenameParty(MobileParty party, string name)
         {
             try { party.Party.SetCustomName(new TextObject(name)); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static bool ContainsTroop(MobileParty party, HashSet<string> troopIds)
@@ -126,7 +126,7 @@ namespace AshAndEmber
                     if (entry.Character != null && troopIds.Contains(entry.Character.StringId))
                         return true;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return false;
         }
 
@@ -160,7 +160,7 @@ namespace AshAndEmber
                 if (ashenClan != null)
                     party.ActualClan = ashenClan;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Drops ids of parties that no longer exist so the sets (and the save
@@ -177,7 +177,7 @@ namespace AshAndEmber
                 _ashenSpawnIds.RemoveWhere(id => !alive.Contains(id));
                 _wanderingCircleIds.RemoveWhere(id => !alive.Contains(id));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Save / Load ───────────────────────────────────────────────────────

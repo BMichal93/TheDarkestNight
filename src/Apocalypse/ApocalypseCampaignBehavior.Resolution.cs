@@ -23,7 +23,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class ApocalypseCampaignBehavior
     {
@@ -52,7 +52,7 @@ namespace AshAndEmber
             {
                 MobileParty lordParty = DemonLordSystem.CurrentParty();
                 if (lordParty != null)
-                    try { AbsorbGatheringIntoLord(lordParty); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { AbsorbGatheringIntoLord(lordParty); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -89,9 +89,9 @@ namespace AshAndEmber
                     () => { }
                 ), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-            try { DissolveDemonLordHost(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { DissolveDemonLordHost(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Defeat ───────────────────────────────────────────────────────────────
@@ -103,7 +103,7 @@ namespace AshAndEmber
             int held = DemonLordSystem.SettlementsHeldByLord();
             int total = 0;
             try { total = Settlement.All.Count(s => s != null && (s.IsTown || s.IsCastle)); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             int aliveCore = 0;
             try
@@ -111,7 +111,7 @@ namespace AshAndEmber
                 aliveCore = Kingdom.All.Count(k => k != null && !k.IsEliminated
                     && CoreFactionKingdomIds.Contains(k.StringId));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             bool defeat = ApocalypseMath.IsDefeatBySettlements(held, total)
                        || ApocalypseMath.IsDefeatByElimination(aliveCore);
@@ -141,7 +141,7 @@ namespace AshAndEmber
                     () => { }
                 ), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Shared: scatter the Demon Lord's host back to leaderless demons ─────
@@ -152,9 +152,9 @@ namespace AshAndEmber
                 MobileParty party = DemonLordSystem.CurrentParty();
                 if (party != null && party.IsActive)
                     try { TaleWorlds.CampaignSystem.Actions.DestroyPartyAction.Apply(party.Party, null); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // His kingdom is left to wither naturally (no lord, no heir clan of
             // its own culture to fall back on) — vanilla eventually eliminates a
             // kingdom with no living clans; we do not force it, matching the

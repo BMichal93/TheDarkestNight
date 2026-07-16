@@ -59,7 +59,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     // ─────────────────────────────────────────────────────────────────────────
     // Scheme catalogue

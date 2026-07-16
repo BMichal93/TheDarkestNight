@@ -17,7 +17,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class AshenCitySystem
     {
@@ -41,7 +41,7 @@ namespace AshAndEmber
                 var rulingClan = otherKingdom?.RulingClan;
                 if (rulingClan != null) rulingClan.Influence += 100f;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             _warThrottle = 0;
         }
@@ -56,7 +56,7 @@ namespace AshAndEmber
                 _ashenKingdom = Kingdom.All.FirstOrDefault(k => k.StringId == AshenKingdomId);
             if (_ashenKingdom == null) return;
             if (_ashenKingdom.IsEliminated)
-                try { _ashenKingdom.ReactivateKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { _ashenKingdom.ReactivateKingdom(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _declaringWar = true;
             try
             {
@@ -69,10 +69,10 @@ namespace AshAndEmber
                         && BurningLabQuestSystem.ArenicosEmpireId != null
                         && k.StringId == BurningLabQuestSystem.ArenicosEmpireId) continue;
                     if (!_ashenKingdom.IsAtWarWith(k))
-                        try { DeclareWarAction.ApplyByDefault(_ashenKingdom, k); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { DeclareWarAction.ApplyByDefault(_ashenKingdom, k); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             finally { _declaringWar = false; }
         }
 
@@ -111,7 +111,7 @@ namespace AshAndEmber
                     if (fallback != null) garrison.MemberRoster.AddToCounts(fallback, toAdd);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static CharacterObject GetSturgianFallbackTroop()
@@ -165,10 +165,10 @@ namespace AshAndEmber
                     _lordPartyRefillIndex = _lordPartyRefillIndex % parties.Count;
                     var party = parties[_lordPartyRefillIndex++];
                     try { RefillOneLordParty(party, warrior, warden, revenant); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void RefillOneLordParty(MobileParty party,
@@ -184,7 +184,7 @@ namespace AshAndEmber
                 .ToList();
             int sturgianCount = toRemove.Sum(e => e.Number);
             foreach (var e in toRemove)
-                try { roster.AddToCounts(e.Character, -e.Number); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { roster.AddToCounts(e.Character, -e.Number); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Enforce a minimum party size — top up if Sturgians were sparse or absent.
             int current  = roster.TotalManCount;
@@ -213,7 +213,7 @@ namespace AshAndEmber
                     if (!_ashenClanIds.Contains(s.OwnerClan?.StringId ?? "")) continue;
                     EnsureGarrison(s);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -244,16 +244,16 @@ namespace AshAndEmber
                         float cap = t.FoodStocksUpperLimit();
                         if (cap > 0f && t.FoodStocks < cap) t.FoodStocks = cap;
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                     // Loyalty + security — never rebel
-                    try { if (t.Security < 100f) t.Security = 100f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { if (t.Loyalty  < 100f) t.Loyalty  = 100f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { if (t.Security < 100f) t.Security = 100f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { if (t.Loyalty  < 100f) t.Loyalty  = 100f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                     // Prosperity — ensures full tax, recruitment, and militia growth
-                    try { if (t.Prosperity < 5000f) t.Prosperity = 5000f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { if (t.Prosperity < 5000f) t.Prosperity = 5000f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -268,9 +268,9 @@ namespace AshAndEmber
                     if (clan == null) continue;
                     foreach (Hero h in clan.Heroes.Where(h => h.IsAlive).ToList())
                         if (h.Gold < MinHeroGold)
-                            try { h.ChangeHeroGold(MinHeroGold - h.Gold); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { h.ChangeHeroGold(MinHeroGold - h.Gold); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -288,7 +288,7 @@ namespace AshAndEmber
                 // intentionally empty. Reactivating it would trigger war re-declarations
                 // against the empire and cause Bannerlord to expel the Ashen clans from it.
                 if (BurningLabQuestSystem.AshenMergedWithArenicos) return;
-                try { _ashenKingdom.ReactivateKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { _ashenKingdom.ReactivateKingdom(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -337,11 +337,11 @@ namespace AshAndEmber
                         MBInformationManager.AddQuickInformation(new TextObject(
                             $"{settlement.Name} — wrested from the Ashen. The cold retreats there, for now."));
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                     return; // one release per tick — remainder handled on subsequent days
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             CheckAshenExtinction();
@@ -385,10 +385,10 @@ namespace AshAndEmber
                             $"{s.Name} — the cold is driven back. The town returns to its own."));
                         released++;
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // A non-Ashen kingdom leader to receive a released town — preferring one of the
@@ -422,7 +422,7 @@ namespace AshAndEmber
                 ashenLord = Hero.AllAliveHeroes.FirstOrDefault(h =>
                     h.IsAlive && !h.IsDisabled && !h.IsPrisoner && IsAshenClanMember(h));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (ashenLord == null) return;
 
             // Reclaim only a settlement that BELONGS to the Ashen by design — one of
@@ -442,21 +442,21 @@ namespace AshAndEmber
                 if (candidates.Count > 0)
                     target = candidates[_rng.Next(candidates.Count)];
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (target == null) return;
             if (ashenLord.Clan == null) return; // detached hero — cannot anchor a settlement
 
             try
             {
                 ChangeOwnerOfSettlementAction.ApplyByDefault(ashenLord, target);
-                try { if (target.Town != null) { target.Town.Loyalty = 100f; target.Town.Security = 100f; } } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { if (target.Town != null) { target.Town.Loyalty = 100f; target.Town.Security = 100f; } } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 _settlementClanMap[target.StringId] = ashenLord.Clan.StringId;
-                try { EnsureGarrison(target); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { EnsureGarrison(target); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 MBInformationManager.AddQuickInformation(new TextObject(
                     $"The grey fire resurges — {target.Name} falls to the Ashen without warning. The cold claims new ground."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Criminal status ───────────────────────────────────────────────────
@@ -480,7 +480,7 @@ namespace AshAndEmber
                         ChangeCrimeRatingAction.Apply(_ashenKingdom, 100f - current, false);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

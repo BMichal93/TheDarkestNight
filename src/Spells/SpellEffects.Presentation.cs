@@ -23,7 +23,7 @@ using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 using TaleWorlds.CampaignSystem.MapEvents;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SpellEffects
     {
@@ -46,7 +46,7 @@ namespace AshAndEmber
                         return true;
                     }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return false;
         }
 
@@ -67,7 +67,7 @@ namespace AshAndEmber
                     Mission.Current.MakeSound(soundId, position, false, false, -1, -1);
                     return;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -98,10 +98,10 @@ namespace AshAndEmber
                     var a = _animClearTimers[i].agent;
                     if (a != null && a.IsActive() && a.Health > 0f)
                     {
-                        bool mounted    = false; try { mounted    = a.MountAgent != null;   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                        bool usingEquip = false; try { usingEquip = a.IsUsingGameObject;    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        bool mounted    = false; try { mounted    = a.MountAgent != null;   } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                        bool usingEquip = false; try { usingEquip = a.IsUsingGameObject;    } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         if (!mounted && !usingEquip)
-                            try { a.SetActionChannel(0, _castAnimClearCache, true, 0UL); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { a.SetActionChannel(0, _castAnimClearCache, true, 0UL); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                     _animClearTimers.RemoveAt(i);
                 }
@@ -118,10 +118,10 @@ namespace AshAndEmber
                 float newT = t - dt;
                 if (newT <= 0f)
                 {
-                    bool mounted    = false; try { mounted    = a.MountAgent != null;  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    bool usingEquip = false; try { usingEquip = a.IsUsingGameObject;   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    bool mounted    = false; try { mounted    = a.MountAgent != null;  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    bool usingEquip = false; try { usingEquip = a.IsUsingGameObject;   } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     if (!mounted && !usingEquip)
-                        try { a.SetActionChannel(0, _castAnimCache, true, 0UL); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { a.SetActionChannel(0, _castAnimCache, true, 0UL); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     _castLoops[i] = (a, CastLoopInterval);
                 }
                 else _castLoops[i] = (a, newT);
@@ -143,7 +143,7 @@ namespace AshAndEmber
                 if (newT <= 0f)
                 {
                     EndCastLoop(a);
-                    try { action(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { action(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     _pendingNpcCasts.RemoveAt(i);
                 }
                 else _pendingNpcCasts[i] = (a, newT, action);
@@ -153,14 +153,14 @@ namespace AshAndEmber
         public static void BeginCastLoop(Agent agent)
         {
             if (agent == null || !agent.IsActive() || agent.Health <= 0f) return;
-            try { if (agent.MountAgent != null) return; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { if (agent.IsUsingGameObject) return; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { if (agent.MountAgent != null) return; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { if (agent.IsUsingGameObject) return; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Cancel any pending clear and remove stale loop entry for this agent
             int ci = _animClearTimers.FindIndex(x => x.agent == agent);
             if (ci >= 0) _animClearTimers.RemoveAt(ci);
             int li = _castLoops.FindIndex(x => x.agent == agent);
             if (li >= 0) _castLoops.RemoveAt(li);
-            try { agent.SetActionChannel(0, _castAnimCache, true, 0UL); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { agent.SetActionChannel(0, _castAnimCache, true, 0UL); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _castLoops.Add((agent, CastLoopInterval));
         }
 
@@ -203,7 +203,7 @@ namespace AshAndEmber
                 if (h != null)
                     return ElementLordRegistry.IsAshenLord(h) ? ColorSchool.Ashen : ColorSchool.Purple;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return ColorSchool.Red;
         }
 
@@ -211,7 +211,7 @@ namespace AshAndEmber
         {
             foreach (var (agent, _) in _animClearTimers)
                 if (agent != null && agent.IsActive() && agent.Health > 0f)
-                    try { agent.SetActionChannel(0, _castAnimClearCache, true, 0UL); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { agent.SetActionChannel(0, _castAnimClearCache, true, 0UL); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _animClearTimers.Clear();
         }
 
@@ -224,8 +224,8 @@ namespace AshAndEmber
         public static void TryCastAnimation(Agent agent)
         {
             if (agent == null || !agent.IsActive() || agent.Health <= 0f) return;
-            try { if (agent.MountAgent != null) return; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { if (agent.IsUsingGameObject) return; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { if (agent.MountAgent != null) return; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { if (agent.IsUsingGameObject) return; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Stop any ongoing loop so the final cast pose plays cleanly
             EndCastLoop(agent);
             try
@@ -235,7 +235,7 @@ namespace AshAndEmber
                 if (idx >= 0) _animClearTimers.RemoveAt(idx);
                 _animClearTimers.Add((agent, 0.8f));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Militia helper ─────────────────────────────────────────────────────

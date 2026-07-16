@@ -12,7 +12,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SpellEffects
     {
@@ -134,11 +134,11 @@ namespace AshAndEmber
                 if (inWarningZone && isEnemy)
                 {
                     Vec3 outDir = toH.Length < 0.01f ? new Vec3(1f, 0f, 0f) : toH.NormalizedCopy();
-                    bool mounted = false; try { mounted = a.MountAgent != null; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    bool mounted = false; try { mounted = a.MountAgent != null; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     float pushDist = a.IsHero ? 1.5f : (mounted ? 4f : 2.5f);
                     Vec3 dest = a.Position + outDir * pushDist;
                     dest.z = a.Position.z;
-                    try { QueueMove(a, dest, 0.3f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { QueueMove(a, dest, 0.3f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                     // Cinder Shell: the hardening fire also warns — slows enemies near the barrier.
                     if (!a.IsHero && TalentSystem.Has(TalentId.CinderShell))
@@ -151,7 +151,7 @@ namespace AshAndEmber
                             a.SetMaximumSpeedLimit(_charredAgents[a].ReducedSpeed, false);
                             BeginAgentGlow(a, ColorSchool.Red, 1f);
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
 
@@ -170,7 +170,7 @@ namespace AshAndEmber
                         Vec3 outDir = toH.Length < 0.01f ? new Vec3(1f, 0f, 0f) : toH.NormalizedCopy();
                         Vec3 outPos = e.Position + outDir * (e.Radius + 1.5f);
                         outPos.z = a.Position.z;
-                        try { a.TeleportToPosition(outPos); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { a.TeleportToPosition(outPos); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                     if (dmg > 0 && isAlly)
                     {
@@ -186,7 +186,7 @@ namespace AshAndEmber
                         SpawnImpactBurst(a.Position, e.School, 3f);
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -234,7 +234,7 @@ namespace AshAndEmber
                     targets.Add(a);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             ColorSchool col = cast.VisualColor;
 
@@ -252,7 +252,7 @@ namespace AshAndEmber
                         HealAgent(caster, cast.RestoreCount * 15f);
                         ApplyRestoreEnchantments(caster, cast, caster);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     if (caster == Agent.Main)
                         SpawnHolyZone(caster.Position, cast.RestoreCount, radius, casterTeam);
                 }
@@ -309,7 +309,7 @@ namespace AshAndEmber
                     if (burstsLeft > 0) { SpawnImpactBurst(a.Position, col, 4f); burstsLeft--; }
                     affected++;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             if (wantDmg) ScatterEnemies(caster.Position, radius, casterTeam);
@@ -324,7 +324,7 @@ namespace AshAndEmber
                     SpawnImpactBurst(caster.Position, col, 4f);
                     affected++;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Consecrated zone lingers at the burst point for 5 seconds.
                 if (caster == Agent.Main)

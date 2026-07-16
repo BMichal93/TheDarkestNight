@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     /// <summary>
     /// A crash-proof error journal for the mod. Every otherwise-silent

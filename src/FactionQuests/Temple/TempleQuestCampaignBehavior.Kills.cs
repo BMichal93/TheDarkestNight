@@ -38,7 +38,7 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class TempleQuestCampaignBehavior
     {
@@ -47,7 +47,7 @@ namespace AshAndEmber
         private static void SyncKillData(IDataStore store)
         {
             try { store.SyncData("TPLQ_DemonsKilled", ref _demonsKilled); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ResetKillState()
@@ -68,9 +68,9 @@ namespace AshAndEmber
 
                 _demonsKilled++;
                 try { TempleQuestLog.Current?.LogKillProgress(TempleQuestMath.ClampedKillProgress(_demonsKilled)); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

@@ -23,7 +23,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class SacredSitesCampaignBehavior : CampaignBehaviorBase
     {
@@ -51,8 +51,8 @@ namespace AshAndEmber
         public override void SyncData(IDataStore store)
         {
             try { store.SyncData("SACRED_HasElementalBond", ref _hasElementalBond); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SacredSiteTalents.Save(store); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SacredSiteTalents.Save(store); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void ResetForNewGame()
@@ -62,7 +62,7 @@ namespace AshAndEmber
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterSacredSiteMenus(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterSacredSiteMenus(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Site gating ────────────────────────────────────────────────────────
@@ -129,7 +129,7 @@ namespace AshAndEmber
                 var charcoal = MBObjectManager.Instance?.GetObject<ItemObject>("charcoal");
                 if (charcoal != null) party.ItemRoster.AddToCounts(charcoal, -SacredSiteMath.CharcoalCost);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Sparing Rite: a failed binding returns the Iron Ore and Charcoal spent.
@@ -144,7 +144,7 @@ namespace AshAndEmber
                 var charcoal = MBObjectManager.Instance?.GetObject<ItemObject>("charcoal");
                 if (charcoal != null) party.ItemRoster.AddToCounts(charcoal, SacredSiteMath.CharcoalCost);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Smithing (via SacredSiteMath), the Forest Clans discount, and the
@@ -154,7 +154,7 @@ namespace AshAndEmber
         {
             int smithing = 0;
             try { smithing = Hero.MainHero?.GetSkillValue(DefaultSkills.Crafting) ?? 0; }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             float odds = ForestClansCulture.SiteOdds(SacredSiteMath.FormationOdds(smithing))
                        + SacredSiteTalents.BindingOddsBonus;
             return Math.Min(0.95f, odds);
@@ -174,7 +174,7 @@ namespace AshAndEmber
                     _hasElementalBond = true;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

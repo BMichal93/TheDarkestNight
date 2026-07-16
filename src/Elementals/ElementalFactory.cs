@@ -21,7 +21,7 @@ using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class ElementalFactory
     {
@@ -54,7 +54,7 @@ namespace AshAndEmber
                         BodyFlags.CommonCollisionExcludeFlagsForAgent, ref gz);
                     pos.z = gz;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 int seed = _rng.Next();
                 Equipment equipment = troop.FirstBattleEquipment ?? troop.Equipment;
@@ -82,7 +82,7 @@ namespace AshAndEmber
                     agent.HealthLimit = ElementalMath.Health(kind);
                     agent.Health      = ElementalMath.Health(kind);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 ElementalBeings.Register(agent, kind);
                 EmitSpawnBurst(kind, pos);
@@ -99,21 +99,21 @@ namespace AshAndEmber
         // with the line — safe there, since it is not the player's to command.
         internal static void SetAggressive(Agent agent, Team team)
         {
-            try { agent.SetWatchState(Agent.WatchState.Alarmed); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { agent.SetWatchState(Agent.WatchState.Alarmed); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             bool enemySide = false;
             try { enemySide = Mission.Current.PlayerTeam == null || team != Mission.Current.PlayerTeam; }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (!enemySide) return;
             try
             {
                 Formation form = team.GetFormation(FormationClass.Infantry);
                 if (form != null)
                 {
-                    try { agent.Formation = form; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { form.SetMovementOrder(MovementOrder.MovementOrderCharge); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { agent.Formation = form; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { form.SetMovementOrder(MovementOrder.MovementOrderCharge); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Per-kind dressing ────────────────────────────────────────────────────
@@ -153,7 +153,7 @@ namespace AshAndEmber
                         break;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Wisps up and down the whole body right from the first breath —
             // faceless and skinless from the moment it wakes, not just once the
             // following aura kicks in.
@@ -162,7 +162,7 @@ namespace AshAndEmber
                 foreach (float h in ElementalMath.AuraVeilHeightsMetres)
                     ElementalBeings.EmitKindWisp(kind, pos + new Vec3(0f, 0f, h), 1.0f);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

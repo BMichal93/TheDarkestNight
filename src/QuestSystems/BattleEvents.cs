@@ -53,7 +53,7 @@ using TaleWorlds.MountAndBlade;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class BattleEvents
     {
@@ -165,7 +165,7 @@ namespace AshAndEmber
                 evt.Timer -= dt;
                 if (evt.Timer > 0f) continue;
 
-                try { evt.OnFire(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { evt.OnFire(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (evt.Interval <= 0f)
                     evt.Done = true;        // one-shot: remove after firing
@@ -195,7 +195,7 @@ namespace AshAndEmber
                     if (pos.x != 0f || pos.y != 0f)
                         CampaignMapEvents.SetBattleEcho(pos.x, pos.y);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -234,7 +234,7 @@ namespace AshAndEmber
                     break;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Roll each event independently and register the active ones.
@@ -251,7 +251,7 @@ namespace AshAndEmber
             if (!DecisionsStillValid())
             {
                 _decisions.Clear();
-                try { _decisionStamp = CampaignTime.Now; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { _decisionStamp = CampaignTime.Now; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 _decisionsValid = true;
             }
 
@@ -344,7 +344,7 @@ namespace AshAndEmber
 
             if (names.Count > 0)
                 try { MBInformationManager.AddQuickInformation(new TextObject(
-                    "The field is cursed — " + string.Join(", ", names) + ".")); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    "The field is cursed — " + string.Join(", ", names) + ".")); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // True while the locked roll set is still fresh (same game day). Once it
@@ -357,7 +357,7 @@ namespace AshAndEmber
                 if (Campaign.Current == null) return false;
                 return (CampaignTime.Now - _decisionStamp).ToDays < RollLockDays;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return false; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return false; }
         }
 
         // Roll once per event key per lock window, then return the remembered

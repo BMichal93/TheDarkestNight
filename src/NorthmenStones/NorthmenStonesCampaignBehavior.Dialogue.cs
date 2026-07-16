@@ -8,7 +8,7 @@
 
 using TaleWorlds.CampaignSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class NorthmenStonesCampaignBehavior
     {
@@ -23,7 +23,7 @@ namespace AshAndEmber
                     "I hear the seers have found a way to shut the Ashen out for good. Tell me.",
                     CondCanAsk, null, DialoguePriority);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -38,7 +38,7 @@ namespace AshAndEmber
                     "peace. And Varcheg must be ours when the working closes, or it closes on nothing.",
                     CondCanAsk, null, DialoguePriority);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -47,7 +47,7 @@ namespace AshAndEmber
                     "Then let's begin.",
                     null, OnAskConsequence, DialoguePriority);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static bool CondCanAsk()
@@ -69,7 +69,7 @@ namespace AshAndEmber
                 _phase = PhaseActive;
                 NorthmenStonesQuestLog.Start();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

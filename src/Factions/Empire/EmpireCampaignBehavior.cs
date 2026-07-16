@@ -20,7 +20,7 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class EmpireCampaignBehavior : CampaignBehaviorBase
     {
@@ -36,8 +36,8 @@ namespace AshAndEmber
 
         public override void SyncData(IDataStore store)
         {
-            try { store.SyncData("EMP_GRAIN_IDS", ref _claimHeroIds); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("EMP_GRAIN_DAY",  ref _claimLastDay); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("EMP_GRAIN_IDS", ref _claimHeroIds); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("EMP_GRAIN_DAY",  ref _claimLastDay); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (_claimHeroIds == null) _claimHeroIds = new List<string>();
             if (_claimLastDay == null) _claimLastDay = new List<float>();
@@ -51,13 +51,13 @@ namespace AshAndEmber
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterEmpireMenus(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterEmpireMenus(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnDailyTick()
         {
-            try { EmpireSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TickLordGrainClaims(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { EmpireSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TickLordGrainClaims(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Empire bonuses apply to Empire lords too: every Empire lord party
@@ -76,7 +76,7 @@ namespace AshAndEmber
                     GrantGrain(hero.PartyBelongedTo);
                     MarkClaimed(hero);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -103,7 +103,7 @@ namespace AshAndEmber
                 if (idx >= 0) _claimLastDay[idx] = today;
                 else { _claimHeroIds.Add(hero.StringId); _claimLastDay.Add(today); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void GrantGrain(TaleWorlds.CampaignSystem.Party.MobileParty party)
@@ -115,7 +115,7 @@ namespace AshAndEmber
                 if (grain == null) return;
                 party.ItemRoster.AddToCounts(grain, EmpireMath.GrainClaimAmount);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

@@ -25,7 +25,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class RuinsExplorationSystem
     {
@@ -42,9 +42,9 @@ namespace AshAndEmber
             _waitDone         = false;
             _nightfallWarned  = false;
             try { _waitWasNight = DemonMath.IsNightHour((float)CampaignTime.Now.CurrentHourInDay); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); _waitWasNight = false; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); _waitWasNight = false; }
 
-            try { GameMenu.SwitchToMenu("ruins_wait_menu"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { GameMenu.SwitchToMenu("ruins_wait_menu"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void RegisterWaitMenu(CampaignGameStarter starter)
@@ -59,7 +59,7 @@ namespace AshAndEmber
                     GameMenu.MenuAndOptionType.WaitMenuShowOnlyProgressOption,
                     GameMenu.MenuOverlayType.None, 0f, GameMenu.MenuFlags.None, null);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void WaitOnInit(MenuCallbackArgs args)
@@ -71,7 +71,7 @@ namespace AshAndEmber
                 args.MenuContext.GameMenu.SetTargetedWaitingTimeAndInitialProgress(
                     Math.Max(1f, _waitHoursTotal), 0f);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static bool WaitOnCondition(MenuCallbackArgs args) => true;
@@ -87,7 +87,7 @@ namespace AshAndEmber
                 args.MenuContext.GameMenu.SetTargetedWaitingTimeAndInitialProgress(
                     Math.Max(1f, remaining), 0f);
             }
-            catch { try { FinishWait(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } }
+            catch { try { FinishWait(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } }
         }
 
         private static void WaitOnTick(MenuCallbackArgs args, CampaignTime dt)
@@ -107,7 +107,7 @@ namespace AshAndEmber
                     }
                     _waitWasNight = isNight;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 UpdateWaitText();
                 try
@@ -115,12 +115,12 @@ namespace AshAndEmber
                     args.MenuContext.GameMenu.SetProgressOfWaitingInMenu(
                         Math.Min(1f, _waitHoursElapsed / Math.Max(1f, _waitHoursTotal)));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (_waitHoursElapsed >= _waitHoursTotal)
                     FinishWait();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Nightfall risk (Requirement 12) ─────────────────────────────────
@@ -130,14 +130,14 @@ namespace AshAndEmber
             {
                 if (_activeRuin == null) return;
                 string biome = "";
-                try { biome = _activeRuin.Culture?.StringId ?? ""; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { biome = _activeRuin.Culture?.StringId ?? ""; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 DemonSpawnCampaignBehavior.SpawnAmbushNear(_activeRuin.GetPosition2D, biome);
 
                 InformationManager.DisplayMessage(new InformationMessage(
                     "Night has fallen outside. Something has risen near the gate — whatever you found in here, you will have to leave past it.",
                     new Color(0.65f, 0.15f, 0.12f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void UpdateWaitText()
@@ -149,7 +149,7 @@ namespace AshAndEmber
                 MBTextManager.SetTextVariable("RUINS_WAIT_TEXT",
                     $"You search deeper into {place}, room by room, hour by hour. About {left} hour(s) remain before the next chamber gives up its secrets.");
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void FinishWait()
@@ -157,7 +157,7 @@ namespace AshAndEmber
             if (_waitDone) return;
             _waitDone = true;
             try { AdvanceAfterWait(); }
-            finally { try { GameMenu.ExitToLast(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } }
+            finally { try { GameMenu.ExitToLast(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } }
         }
     }
 }

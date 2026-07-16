@@ -23,7 +23,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class MiracleEffects
     {
@@ -52,7 +52,7 @@ namespace AshAndEmber
         public static void PurgeHostileEffects(Agent a)
         {
             if (a == null) return;
-            try { a.SetMaximumSpeedLimit(1f, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { a.SetMaximumSpeedLimit(1f, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Trait gate ─────────────────────────────────────────────────────────
@@ -88,7 +88,7 @@ namespace AshAndEmber
                         + System.Math.Max(0, h.GetTraitLevel(DefaultTraits.Calculating));
                 return MiracleMath.ConvictionScale(sum);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return 1f; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return 1f; }
         }
 
         public static bool PlayerMeetsTrait(MiracleDef def)
@@ -173,7 +173,7 @@ namespace AshAndEmber
         public static void ApplyBattleMiracle(Agent a, MiracleType type, bool announce)
         {
             if (a == null || !a.IsActive()) return;
-            try { SpellEffects.FlashFocusAura(a, ColorSchool.Yellow); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.FlashFocusAura(a, ColorSchool.Yellow); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             switch (type)
             {
                 case MiracleType.MercyMend:     BattleRadiantMending(a, announce);  break;
@@ -229,7 +229,7 @@ namespace AshAndEmber
                 {
                     int rel = Math.Max(1, (int)(MiracleMath.OathRelationGain * power));
                     try { TaleWorlds.CampaignSystem.Actions.ChangeRelationAction.ApplyRelationChangeBetweenHeroes(
-                        hero, lord, rel, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        hero, lord, rel, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     return $"You swear an oath in the light, and word reaches {lord.Name}. They think the better of you (+{rel} relation).";
                 }
                 return "You speak the oath, but there is no one near to hold you to it.";
@@ -248,8 +248,8 @@ namespace AshAndEmber
                 float morale = MiracleMath.BountyMorale * power;
                 var grain = TaleWorlds.ObjectSystem.MBObjectManager.Instance?.GetObject<ItemObject>("grain");
                 if (grain != null)
-                    try { party.ItemRoster.AddToCounts(grain, food); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { party.RecentEventsMorale += morale; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { party.ItemRoster.AddToCounts(grain, food); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { party.RecentEventsMorale += morale; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 return $"The Open Hand opens. The stores are fuller by morning (+{food} grain), and the column eats well (+{(int)morale} morale).";
             }
             catch { return null; }
@@ -263,7 +263,7 @@ namespace AshAndEmber
                 if (party == null) return null;
                 float power = MiracleTalents.TraitPower(GraceTrait.Calculating);
                 float sightMorale = MiracleMath.SightMorale * power;
-                try { party.RecentEventsMorale += sightMorale; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { party.RecentEventsMorale += sightMorale; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 Vec2 here = party.GetPosition2D;
                 float sr = MiracleMath.SightRadius * power;   // Clearer Sight reaches further
                 float r2 = sr * sr;
@@ -324,12 +324,12 @@ namespace AshAndEmber
                         if (e.Character.IsHero) continue;
                         int n = Math.Min(e.Number - e.WoundedNumber, toBurn - burned);
                         if (n <= 0) continue;
-                        try { mp.MemberRoster.AddToCounts(e.Character, 0, false, n); burned += n; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { mp.MemberRoster.AddToCounts(e.Character, 0, false, n); burned += n; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         if (burned >= toBurn) break;
                     }
                     mp.RecentEventsMorale -= MiracleMath.ReckoningMoraleHit;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 totalBurned += burned;
             }
 
@@ -347,7 +347,7 @@ namespace AshAndEmber
             DecayAndExpire(_aegis,       dt, null);
             DecayAndExpire(_guidance,    dt, a =>
             {
-                try { a.SetMaximumSpeedLimit(1f, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { a.SetMaximumSpeedLimit(1f, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             });
         }
 
@@ -360,13 +360,13 @@ namespace AshAndEmber
             {
                 // Sacred Flame: attacker's weapon carries holy fire.
                 if (HasSacredFlame(affector) && !SpellEffects.IsWarded(affected))
-                    try { SpellEffects.DamageAgent(affected, MiracleMath.SacredFlameBonusDamage, ColorSchool.Yellow, affector); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpellEffects.DamageAgent(affected, MiracleMath.SacredFlameBonusDamage, ColorSchool.Yellow, affector); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // Aegis of Faith: reflects AegisResistFrac of all incoming damage as healing
             // while the aura is active. MissionTick handles expiry.
             if (HasAegis(affected))
-                try { SpellEffects.HealAgent(affected, inflicted * MiracleMath.AegisResistFrac); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.HealAgent(affected, inflicted * MiracleMath.AegisResistFrac); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Grace battle implementations ──────────────────────────────────────
@@ -387,12 +387,12 @@ namespace AshAndEmber
                     float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                     if (dx * dx + dy * dy > r2) continue;
                     if (SpellEffects.IsWarded(a)) continue;
-                    try { SpellEffects.DamageAgent(a, MiracleMath.RepelAshenDamage, ColorSchool.Yellow, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpellEffects.DamageAgent(a, MiracleMath.RepelAshenDamage, ColorSchool.Yellow, caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     hit++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.RecordMagicCast(pos); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.RecordMagicCast(pos); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (announce)
                 Log(caster, hit > 0
                     ? $"calls down the light — {hit} Ashen recoil from the golden flame."
@@ -403,8 +403,8 @@ namespace AshAndEmber
         {
             float power = MiracleTalents.TraitPower(GraceTrait.Mercy);
             float selfHeal = SafeLimit(caster) * MiracleMath.RadiantMendSelfFrac * power;
-            try { SpellEffects.HealAgent(caster, selfHeal); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Yellow, 3f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.HealAgent(caster, selfHeal); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Yellow, 3f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             Vec3 pos;
             try { pos = caster.Position; } catch { if (announce) Log(caster, "is mended by golden light."); return; }
@@ -418,11 +418,11 @@ namespace AshAndEmber
                     if (caster.Team == null || a.Team != caster.Team) continue;
                     float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                     if (dx * dx + dy * dy > r2) continue;
-                    try { SpellEffects.HealAgent(a, SafeLimit(a) * MiracleMath.RadiantMendAllyFrac * power); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpellEffects.HealAgent(a, SafeLimit(a) * MiracleMath.RadiantMendAllyFrac * power); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     mended++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (announce)
                 Log(caster, mended > 0
                     ? $"is touched by radiant light — wounds close nearby ({mended} allies mended)."
@@ -432,8 +432,8 @@ namespace AshAndEmber
         private static void BattleGuidance(Agent caster, bool announce)
         {
             float power = MiracleTalents.TraitPower(GraceTrait.Valor);
-            try { MobileParty.MainParty.RecentEventsMorale += MiracleMath.GuidanceBattleMorale * power; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Yellow, MiracleMath.GuidanceSpeedDurSec); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { MobileParty.MainParty.RecentEventsMorale += MiracleMath.GuidanceBattleMorale * power; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Yellow, MiracleMath.GuidanceSpeedDurSec); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Speed surge: caster + nearby allies move faster for the duration.
             int surged = 0;
@@ -441,7 +441,7 @@ namespace AshAndEmber
             try { pos = caster.Position; } catch { goto announce; }
             float r2 = MiracleMath.GuidanceSpeedRadius * MiracleMath.GuidanceSpeedRadius;
             _guidance[caster] = MiracleMath.GuidanceSpeedDurSec;
-            try { caster.SetMaximumSpeedLimit(MiracleMath.GuidanceSpeedMult, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { caster.SetMaximumSpeedLimit(MiracleMath.GuidanceSpeedMult, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try
             {
                 foreach (Agent a in Mission.Current.Agents.ToList())
@@ -451,11 +451,11 @@ namespace AshAndEmber
                     float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                     if (dx * dx + dy * dy > r2) continue;
                     _guidance[a] = MiracleMath.GuidanceSpeedDurSec;
-                    try { a.SetMaximumSpeedLimit(MiracleMath.GuidanceSpeedMult, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { a.SetMaximumSpeedLimit(MiracleMath.GuidanceSpeedMult, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     surged++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             announce:
             if (announce)
                 Log(caster, $"invokes the light — courage and speed surge through {surged} allies (+{(int)MiracleMath.GuidanceBattleMorale} morale, ×{MiracleMath.GuidanceSpeedMult} speed).");
@@ -464,7 +464,7 @@ namespace AshAndEmber
         private static void BattleSacredFlame(Agent caster, bool announce)
         {
             _sacredFlame[caster] = MiracleMath.SacredFlameDurationSec;
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Yellow, MiracleMath.SacredFlameDurationSec); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Yellow, MiracleMath.SacredFlameDurationSec); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (announce)
                 Log(caster, "breathes the sacred flame — their blade burns with consecrated fire.");
         }
@@ -474,7 +474,7 @@ namespace AshAndEmber
             // The Iron Oath (Honour) holds the ward longer.
             float dur = MiracleMath.AegisDurationSec * MiracleTalents.TraitPower(GraceTrait.Honor);
             _aegis[caster] = dur;
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Yellow, dur); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Yellow, dur); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (announce)
                 Log(caster, $"is wrapped in the Aegis of Faith — {(int)(MiracleMath.AegisResistFrac * 100f)}% of all damage returned as healing for {(int)dur} seconds.");
         }
@@ -502,14 +502,14 @@ namespace AshAndEmber
                     {
                         if (!SpellEffects.IsWarded(a))
                         {
-                            try { SpellEffects.DamageAgent(a, MiracleMath.CleansingRiteDamage, ColorSchool.Yellow, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { SpellEffects.DamageAgent(a, MiracleMath.CleansingRiteDamage, ColorSchool.Yellow, caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             scorched++;
                         }
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Yellow, 3f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Yellow, 3f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (announce)
             {
                 string ally  = cleansed > 0 ? $"{cleansed} {(cleansed == 1 ? "ally" : "allies")} cleansed" : "";
@@ -535,8 +535,8 @@ namespace AshAndEmber
                 pos.y + fwdH.y * MiracleMath.PyreJudgementReach,
                 pos.z);
 
-            try { SpellEffects.SpawnExplosionParticle(impact, 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.SpawnBigFireParticle(impact, 2.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnExplosionParticle(impact, 2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnBigFireParticle(impact, 2.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             float r2 = MiracleMath.PyreJudgementRadius * MiracleMath.PyreJudgementRadius;
             int hit = 0;
@@ -549,16 +549,16 @@ namespace AshAndEmber
                     float dx = a.Position.x - impact.x, dy = a.Position.y - impact.y;
                     if (dx * dx + dy * dy > r2) continue;
                     if (SpellEffects.IsWarded(a)) continue;
-                    try { SpellEffects.DamageAgent(a, MiracleMath.PyreJudgementDamage * MiracleTalents.TraitPower(GraceTrait.Calculating) * Conviction(caster), ColorSchool.Yellow, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { SpellEffects.SpawnImpactBurst(a.Position, ColorSchool.Yellow, 4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpellEffects.DamageAgent(a, MiracleMath.PyreJudgementDamage * MiracleTalents.TraitPower(GraceTrait.Calculating) * Conviction(caster), ColorSchool.Yellow, caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { SpellEffects.SpawnImpactBurst(a.Position, ColorSchool.Yellow, 4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     hit++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Survivors are hurled from the light.
-            try { SpellEffects.ScatterEnemies(impact, MiracleMath.PyreJudgementRadius, caster.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.RecordMagicCast(impact); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.ScatterEnemies(impact, MiracleMath.PyreJudgementRadius, caster.Team); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.RecordMagicCast(impact); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (announce)
                 Log(caster, hit > 0
@@ -571,9 +571,9 @@ namespace AshAndEmber
             // Ward the caster and nearby allies against all magic (reuses the shared
             // ward system that enemy spells and Dark Gifts check), then mend them.
             float power = MiracleTalents.TraitPower(GraceTrait.Generosity);
-            try { SpellEffects.ExecuteWardFromAgent(caster, MiracleMath.HallowedGroundRadius); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.HealAgent(caster, SafeLimit(caster) * MiracleMath.HallowedGroundHealFrac * power); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Yellow, 10f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.ExecuteWardFromAgent(caster, MiracleMath.HallowedGroundRadius); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.HealAgent(caster, SafeLimit(caster) * MiracleMath.HallowedGroundHealFrac * power); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Yellow, 10f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             Vec3 pos;
             try { pos = caster.Position; } catch { if (announce) Log(caster, "consecrates the ground — the light wards you."); return; }
@@ -587,11 +587,11 @@ namespace AshAndEmber
                     if (caster.Team == null || a.Team != caster.Team) continue;
                     float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                     if (dx * dx + dy * dy > r2) continue;
-                    try { SpellEffects.HealAgent(a, SafeLimit(a) * MiracleMath.HallowedGroundHealFrac * power); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpellEffects.HealAgent(a, SafeLimit(a) * MiracleMath.HallowedGroundHealFrac * power); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     warded++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (announce)
                 Log(caster, warded > 0
                     ? $"consecrates the ground — {warded} {(warded == 1 ? "ally stands" : "allies stand")} warded against all magic for 10 seconds."
@@ -608,10 +608,10 @@ namespace AshAndEmber
             Vec3 pos;
             try { pos = caster.Position; } catch { return; }
 
-            try { SpellEffects.SpawnExplosionParticle(pos, 3f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.SpawnBigFireParticle(pos, 4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Yellow, 4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.HealAgent(caster, SafeLimit(caster) * MiracleMath.UndividedFlameAllyHealFrac); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnExplosionParticle(pos, 3f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnBigFireParticle(pos, 4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.Yellow, 4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.HealAgent(caster, SafeLimit(caster) * MiracleMath.UndividedFlameAllyHealFrac); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             float r2 = MiracleMath.UndividedFlameRadius * MiracleMath.UndividedFlameRadius;
             int ashenBurned = 0, kindledBurned = 0, othersScorched = 0, alliesMended = 0;
@@ -625,7 +625,7 @@ namespace AshAndEmber
 
                     if (caster.Team != null && a.Team == caster.Team)
                     {
-                        try { SpellEffects.HealAgent(a, SafeLimit(a) * MiracleMath.UndividedFlameAllyHealFrac); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { SpellEffects.HealAgent(a, SafeLimit(a) * MiracleMath.UndividedFlameAllyHealFrac); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         alliesMended++;
                         continue;
                     }
@@ -637,14 +637,14 @@ namespace AshAndEmber
                     else if (ElementalBeings.IsElemental(a)) { dmg *= MiracleMath.UndividedFlameElementalMultiplier; kindledBurned++; }
                     else othersScorched++;
 
-                    try { SpellEffects.DamageAgent(a, dmg, ColorSchool.Yellow, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { SpellEffects.SpawnImpactBurst(a.Position, ColorSchool.Yellow, 4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpellEffects.DamageAgent(a, dmg, ColorSchool.Yellow, caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { SpellEffects.SpawnImpactBurst(a.Position, ColorSchool.Yellow, 4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-            try { SpellEffects.ScatterEnemies(pos, MiracleMath.UndividedFlameRadius, caster.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.RecordMagicCast(pos); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.ScatterEnemies(pos, MiracleMath.UndividedFlameRadius, caster.Team); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.RecordMagicCast(pos); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (announce)
                 Log(caster, $"calls the Undivided Flame — {ashenBurned} Ashen seared, {kindledBurned} Awakened unmade, " +
@@ -680,10 +680,10 @@ namespace AshAndEmber
                     if (e.Character.IsHero) continue;
                     int n = Math.Min(e.Number - e.WoundedNumber, toWound - w);
                     if (n <= 0) continue;
-                    try { mp.MemberRoster.AddToCounts(e.Character, 0, false, n); w += n; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { mp.MemberRoster.AddToCounts(e.Character, 0, false, n); w += n; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     if (w >= toWound) break;
                 }
-                try { mp.RecentEventsMorale -= 30f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { mp.RecentEventsMorale -= 30f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 totalWounded += w;
             }
             return $"The light of repulsion sweeps the horizon. {targets.Count} Ashen {(targets.Count > 1 ? "forces" : "force")} recoil. {totalWounded} grey soldiers burned.";
@@ -693,14 +693,14 @@ namespace AshAndEmber
         {
             float power = MiracleTalents.TraitPower(GraceTrait.Mercy);
             if (hero != null)
-                try { hero.HitPoints = hero.MaxHitPoints; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { hero.HitPoints = hero.MaxHitPoints; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             int healed = 0;
             if (party?.MemberRoster != null)
                 foreach (var e in party.MemberRoster.GetTroopRoster().ToList())
                 {
                     if (e.Character.IsHero || e.WoundedNumber <= 0) continue;
                     int heal = Math.Max(1, (int)(e.WoundedNumber / 4f * power));
-                    try { party.MemberRoster.AddToCounts(e.Character, 0, false, -heal); healed += heal; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { party.MemberRoster.AddToCounts(e.Character, 0, false, -heal); healed += heal; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             return healed > 0
                 ? $"The golden light passes through the camp. Wounds close. {healed} of your soldiers rise from their cots."
@@ -710,14 +710,14 @@ namespace AshAndEmber
         private static string CampaignGuidance(MobileParty party)
         {
             float morale = MiracleMath.GuidanceCampaignMorale * MiracleTalents.TraitPower(GraceTrait.Valor);
-            try { if (party != null) party.RecentEventsMorale += morale; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { if (party != null) party.RecentEventsMorale += morale; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return $"A pillar of calm settles over the column. The men walk straighter (+{(int)morale} morale).";
         }
 
         private static string CampaignCleansingRite(Hero hero, MobileParty party)
         {
             // Clear all morale debt — the flame burns away what the dark has written.
-            try { if (party != null && party.RecentEventsMorale < 0f) party.RecentEventsMorale = 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { if (party != null && party.RecentEventsMorale < 0f) party.RecentEventsMorale = 0f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Fully recover all wounded soldiers.
             int healed = 0;
@@ -725,7 +725,7 @@ namespace AshAndEmber
                 foreach (var e in party.MemberRoster.GetTroopRoster().ToList())
                 {
                     if (e.Character.IsHero || e.WoundedNumber <= 0) continue;
-                    try { party.MemberRoster.AddToCounts(e.Character, 0, false, -e.WoundedNumber); healed += e.WoundedNumber; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { party.MemberRoster.AddToCounts(e.Character, 0, false, -e.WoundedNumber); healed += e.WoundedNumber; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
             if (healed > 0)
@@ -763,7 +763,7 @@ namespace AshAndEmber
                 string who = a == Agent.Main ? "You" : (a?.Name ?? "Someone");
                 InformationManager.DisplayMessage(new InformationMessage($"{who} — {blurb}", GraceColor));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void DecayAndExpire(Dictionary<Agent, float> map, float dt, Action<Agent> onExpire)
@@ -774,7 +774,7 @@ namespace AshAndEmber
                 float t = map[a] - dt;
                 if (t <= 0f || a == null || !a.IsActive())
                 {
-                    if (a != null && onExpire != null) try { onExpire(a); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    if (a != null && onExpire != null) try { onExpire(a); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     map.Remove(a);
                 }
                 else map[a] = t;

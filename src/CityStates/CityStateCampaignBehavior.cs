@@ -9,7 +9,7 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public class CityStateCampaignBehavior : CampaignBehaviorBase
     {

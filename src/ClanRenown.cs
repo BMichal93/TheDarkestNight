@@ -19,7 +19,7 @@
 
 using TaleWorlds.CampaignSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class ClanRenown
     {
@@ -27,7 +27,7 @@ namespace AshAndEmber
         {
             if (clan == null || amount <= 0f) return;
             try { clan.AddRenown(amount); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void Lose(Clan clan, float amount)
@@ -39,7 +39,7 @@ namespace AshAndEmber
                 float target = clan.Renown - amount;
                 clan.Renown = target < floor ? floor : target;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Saves written before this class existed can hold renown below the tier
@@ -52,7 +52,7 @@ namespace AshAndEmber
                 float floor = TierFloor(clan);
                 if (clan.Renown < floor) clan.Renown = floor;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static float TierFloor(Clan clan)

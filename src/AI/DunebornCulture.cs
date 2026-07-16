@@ -11,7 +11,7 @@
 using System;
 using TaleWorlds.CampaignSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class DunebornCulture
     {

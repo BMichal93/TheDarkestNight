@@ -25,7 +25,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class SchemeCampaignBehavior : CampaignBehaviorBase
     {
@@ -41,7 +41,7 @@ namespace AshAndEmber
 
         public override void SyncData(IDataStore store)
         {
-            try { SchemeSystem.Save(store); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SchemeSystem.Save(store); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
     }

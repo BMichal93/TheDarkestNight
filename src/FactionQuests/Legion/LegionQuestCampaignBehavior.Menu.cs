@@ -17,7 +17,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class LegionQuestCampaignBehavior
     {
@@ -47,16 +47,16 @@ namespace AshAndEmber
                             int pct = (int)(LegionQuestMath.BlendedProgress(_hardwood, _iron) * 100f);
                             MBTextManager.SetTextVariable("LEGQ_STOCK_ENTER_TEXT",
                                 $"Stock the ark with hardwood and iron  [{pct}%]");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = true;
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { GameMenu.SwitchToMenu("legq_stock_menu"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { GameMenu.SwitchToMenu("legq_stock_menu"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -75,10 +75,10 @@ namespace AshAndEmber
                             $"Iron: {_iron:N0} / {LegionQuestMath.IronTarget:N0}\n\n" +
                             ownerNote);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             RegisterMaterialOption(starter, "hardwood", "Hardwood", () => _hardwood, v => _hardwood = v, LegionQuestMath.HardwoodTarget);
             RegisterMaterialOption(starter, "iron",     "Iron",     () => _iron,     v => _iron = v,     LegionQuestMath.IronTarget);
@@ -86,11 +86,11 @@ namespace AshAndEmber
             try
             {
                 starter.AddGameMenuOption("legq_stock_menu", "legq_stock_leave", "Step away",
-                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } return true; },
-                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } return true; },
+                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     true, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void RegisterMaterialOption(
@@ -110,7 +110,7 @@ namespace AshAndEmber
                             var item = GetItem(itemId);
                             int held = item != null ? (MobileParty.MainParty?.ItemRoster?.GetItemNumber(item) ?? 0) : 0;
                             MBTextManager.SetTextVariable(varId, $"Give {label} you carry ({held})");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Continue; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Continue; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = item != null && held > 0 && get() < target;
                             return true;
                         }
@@ -131,10 +131,10 @@ namespace AshAndEmber
                             set(get() + give);
                             NotifyStockChanged($"{give} {label} given to the ark.");
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

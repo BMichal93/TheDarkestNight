@@ -17,7 +17,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class MagicCampaignBehavior
     {
@@ -25,7 +25,7 @@ namespace AshAndEmber
         private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom,
             ChangeKingdomAction.ChangeKingdomActionDetail detail, bool showNotification)
         {
-            try { AshenCitySystem.OnClanChangedKingdom(clan, oldKingdom, newKingdom, detail, showNotification); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { AshenCitySystem.OnClanChangedKingdom(clan, oldKingdom, newKingdom, detail, showNotification); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // OnMakePeace resets the war throttle to 0 so the next daily tick
@@ -35,22 +35,22 @@ namespace AshAndEmber
         private void OnMakePeace(IFaction faction1, IFaction faction2,
             MakePeaceAction.MakePeaceDetail detail)
         {
-            try { AshenCitySystem.OnPeaceMade(faction1, faction2); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { AshenCitySystem.OnPeaceMade(faction1, faction2); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnMobilePartyCreated(MobileParty party)
         {
-            try { FireWorshippersSystem.OnPartyCreated(party); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { FireWorshippersSystem.OnPartyCreated(party); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnSettlementEntered(MobileParty party, Settlement settlement, Hero hero)
         {
-            try { SettlementEncounters.OnPartyEnteredSettlement(party, settlement); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SettlementEncounters.OnPartyEnteredSettlement(party, settlement); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (party == MobileParty.MainParty)
             {
-                try { AshenCitySystem.ApplyAshenAppearanceToSettlement(settlement); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { EmberConclaveSystem.OnSettlementEntered(settlement); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AshenMapTone.OnSettlementEntered(settlement); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { AshenCitySystem.ApplyAshenAppearanceToSettlement(settlement); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { EmberConclaveSystem.OnSettlementEntered(settlement); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { AshenMapTone.OnSettlementEntered(settlement); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try
                 {
                     if (MageKnowledge.IsKnownMage && _rng.Next(8) == 0)
@@ -67,7 +67,7 @@ namespace AshAndEmber
                             new Color(0.65f, 0.6f, 0.7f)));
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try
                 {
                     string scar = CampaignMapEvents.GetSettlementScar(settlement);
@@ -75,13 +75,13 @@ namespace AshAndEmber
                         InformationManager.DisplayMessage(new InformationMessage(
                             scar, new Color(0.55f, 0.55f, 0.70f)));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
         private void OnSettlementLeft(MobileParty party, Settlement settlement)
         {
-            try { SettlementEncounters.OnPartyLeftSettlement(party, settlement); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SettlementEncounters.OnPartyLeftSettlement(party, settlement); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Session launch ────────────────────────────────────────────────────
@@ -98,8 +98,8 @@ namespace AshAndEmber
         // moves to be undone — the Ashen cities snapped back to Sturgia at game start.
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { AshenCitySystem.EnsureSessionRenames(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SettlementEncounters.RegisterWaitMenu(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { AshenCitySystem.EnsureSessionRenames(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SettlementEncounters.RegisterWaitMenu(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── New game prompt ───────────────────────────────────────────────────
@@ -133,27 +133,27 @@ namespace AshAndEmber
                 // or a new game started in the same session inherits the old game's
                 // sanctuaries/altars and cooldowns (static-leak bug class).
                 SanctuaryCampaignBehavior.ResetForNewGame();
-                try { SanctuaryCampaignBehavior.EstablishForNewCampaign();   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SanctuaryCampaignBehavior.EstablishForNewCampaign();   } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 AshenAltarsCampaignBehavior.ResetForNewGame();
-                try { AshenAltarsCampaignBehavior.EstablishForNewCampaign(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { AshenAltarsCampaignBehavior.EstablishForNewCampaign(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 TribalKingdomBehavior.ResetForNewGame();
                 // Each establishment is individually guarded: a failure in one world
                 // system (e.g. crystal items missing from ModuleData) must never abort
                 // the rest of new-game setup — above all the Gift-prompt wiring below,
                 // without which the player can never choose their magic at all.
-                try { CrystallinesCampaignBehavior.EstablishForNewCampaign(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { CrystallinesCampaignBehavior.EstablishForNewCampaign(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 SacredSitesCampaignBehavior.ResetForNewGame();
-                try { ElementalLordRegistry.EstablishForNewCampaign(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementalLordRegistry.EstablishForNewCampaign(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Apply any character-creation backstory boon AFTER the resets above,
                 // so it is not wiped (the pick was recorded during creation).
-                try { CreationBackstoryRework.ApplyPendingBoons(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { CreationBackstoryRework.ApplyPendingBoons(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Every culture — Sturgian included — takes the ordinary path: the Gift
                 // prompt decides their magic. The Ashen are something you BECOME in play
                 // (the Last Ember at a century's age, captivity, the cold's darker turns),
                 // never a starting state.
                 MageKnowledge._deferredInquiry = ShowGiftPrompt;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void ShowGiftPrompt()
@@ -188,13 +188,13 @@ namespace AshAndEmber
                             new Color(0.6f, 0.6f, 0.6f)));
                     }
                     _selectionDone = true;
-                    try { ElementLordRegistry.SeedInitialLords(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ElementLordRegistry.SeedInitialLords(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     // Seed the attuned seers — now the mage's TEACHERS — for every new
                     // campaign (was previously tied to the removed Living-Ember choice).
-                    try { NatureCampaignBehavior.EstablishForNewCampaign(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { AshenCitySystem.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { ReassignImperialSettlements(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { NatureCampaignBehavior.EstablishForNewCampaign(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { AshenCitySystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { ReassignImperialSettlements(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     // Greet every new ruler with a brief pointer to the journal — the
                     // full controls manual now lives there ("Notes for the Adventurer"),
                     // so we no longer dump the whole codex on them at the start.
@@ -204,11 +204,11 @@ namespace AshAndEmber
                 {
                     MageKnowledge.SetMage(false);
                     _selectionDone = true;
-                    try { ElementLordRegistry.SeedInitialLords(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { NatureCampaignBehavior.EstablishForNewCampaign(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { AshenCitySystem.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { ReassignImperialSettlements(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ElementLordRegistry.SeedInitialLords(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { NatureCampaignBehavior.EstablishForNewCampaign(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { AshenCitySystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { ReassignImperialSettlements(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 },
                 "", false
             ), false, true);
@@ -256,7 +256,7 @@ namespace AshAndEmber
                 if (AshenCitySystem.IsAshenClanMember(westLeader)  || ElementLordRegistry.IsAshenLord(westLeader))  westLeader  = null;
                 if (AshenCitySystem.IsAshenClanMember(southLeader) || ElementLordRegistry.IsAshenLord(southLeader)) southLeader = null;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Original owners of the border settlements below, captured just before
             // their fief changes hands — feeds MigrateBorderLords further down, which
@@ -282,7 +282,7 @@ namespace AshAndEmber
                             ChangeOwnerOfSettlementAction.ApplyByDefault(northLeader, s); StabiliseSettlement(s);
                         }
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // ── Western Empire (explicit IDs) ─────────────────────────────────
@@ -298,47 +298,47 @@ namespace AshAndEmber
                             ChangeOwnerOfSettlementAction.ApplyByDefault(westLeader, s); StabiliseSettlement(s);
                         }
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // ── Northern Empire (by name) ─────────────────────────────────────
             if (northLeader != null)
             {
                 // Seonon: Battanian city near the Northern Empire border
-                try { AssignSettlementAndNearby("Seonon",      northLeader, 40f, battaniaToNorthern); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { AssignSettlementAndNearby("Seonon",      northLeader, 40f, battaniaToNorthern); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Ocs Hall, Rovalt: Vlandian castles at the Vlandia–North border
-                try { AssignSettlementAndNearby("Ocs Hall",    northLeader, 40f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AssignSettlementAndNearby("Rovalt",      northLeader, 40f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { AssignSettlementAndNearby("Ocs Hall",    northLeader, 40f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { AssignSettlementAndNearby("Rovalt",      northLeader, 40f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Car Banseth: Battanian city at the Battania–North border
-                try { AssignSettlementAndNearby("Car Banseth", northLeader, 40f, battaniaToNorthern); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { AssignSettlementAndNearby("Car Banseth", northLeader, 40f, battaniaToNorthern); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // ── Western Empire (by name) ──────────────────────────────────────
             if (westLeader != null)
             {
                 // Vlandian coastal cities reassigned to Western Empire
-                try { AssignSettlementAndNearby("Charas",  westLeader, 40f, vlandiaToWestern); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AssignSettlementAndNearby("Galend",  westLeader, 40f, vlandiaToWestern); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AssignSettlementAndNearby("Pravend", westLeader, 40f, vlandiaToWestern); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { AssignSettlementAndNearby("Charas",  westLeader, 40f, vlandiaToWestern); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { AssignSettlementAndNearby("Galend",  westLeader, 40f, vlandiaToWestern); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { AssignSettlementAndNearby("Pravend", westLeader, 40f, vlandiaToWestern); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Aserai border cities reassigned to Western Empire
-                try { AssignSettlementAndNearby("Quyaz",  westLeader, 40f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AssignSettlementAndNearby("Sanala", westLeader, 40f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { AssignSettlementAndNearby("Quyaz",  westLeader, 40f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { AssignSettlementAndNearby("Sanala", westLeader, 40f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // ── Southern Empire (by name) ─────────────────────────────────────
             if (southLeader != null)
             {
                 // Razih, Qasira: Aserai cities near the Southern Empire border
-                try { AssignSettlementAndNearby("Razih",   southLeader, 40f, aseraiToSouthern); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { AssignSettlementAndNearby("Qasira",  southLeader, 40f, aseraiToSouthern); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { AssignSettlementAndNearby("Razih",   southLeader, 40f, aseraiToSouthern); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { AssignSettlementAndNearby("Qasira",  southLeader, 40f, aseraiToSouthern); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // Akkalat: Khuzait city at the Khuzait–South border — the Tribes of the
                 // East keep their lord; only the city (not the clan) changes hands.
-                try { AssignSettlementAndNearby("Akkalat", southLeader, 40f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { AssignSettlementAndNearby("Akkalat", southLeader, 40f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // ── Ashen kingdom ─────────────────────────────────────────────────
             if (ashenLeader != null)
-                try { AssignSettlementAndNearby("Ostican", ashenLeader, 40f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { AssignSettlementAndNearby("Ostican", ashenLeader, 40f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // A few border lords swear to the Empire now holding their castle instead
             // of staying landless in their old kingdom. Deliberately a minority of the
@@ -349,7 +349,7 @@ namespace AshAndEmber
                 MigrateBorderLords(vlandiaToWestern,   westLeader?.Clan?.Kingdom,  2);
                 MigrateBorderLords(aseraiToSouthern,   southLeader?.Clan?.Kingdom, 2);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // ── The Holy Temple (Vlandia) — declare founding war with Ashen ───
             // Ashen seized Ostican from Vlandia above; this seeds the permanent war.
@@ -360,13 +360,13 @@ namespace AshAndEmber
                 if (vlandia != null && ashen != null && !vlandia.IsAtWarWith(ashen))
                     DeclareWarAction.ApplyByDefault(vlandia, ashen);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Present Vlandia as The Holy Temple — the Templars — from the very start.
             // The daily tick re-applies this on every reload (names revert to XML on
             // load), but new players should see the Templars immediately at character
             // creation, not only after the first in-game day passes.
-            try { AshenCitySystem.RenameHolyTempleKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { AshenCitySystem.RenameHolyTempleKingdom(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Finds a settlement by exact display name, transfers it and all non-town
@@ -379,7 +379,7 @@ namespace AshAndEmber
         {
             Settlement anchor = null;
             try { anchor = Settlement.All.FirstOrDefault(s => s.Name?.ToString() == settlementName); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (anchor == null) return;
             // Never strip an Ashen holding for an Empire — the cold realm keeps its
             // own. (Matched by StringId, so it holds after the display rename too.)
@@ -391,7 +391,7 @@ namespace AshAndEmber
                 if (capturedClans != null && anchor.OwnerClan != null) capturedClans.Add(anchor.OwnerClan);
                 ChangeOwnerOfSettlementAction.ApplyByDefault(newOwner, anchor); StabiliseSettlement(anchor);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Transfer nearby castles within radius (skip villages — they belong to their
             // bound town; skip Ashen castles so the radius sweep cannot bleed the cold realm,
@@ -410,10 +410,10 @@ namespace AshAndEmber
                         if (capturedClans != null && nearby.OwnerClan != null) capturedClans.Add(nearby.OwnerClan);
                         ChangeOwnerOfSettlementAction.ApplyByDefault(newOwner, nearby); StabiliseSettlement(nearby);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── A few border lords follow their castle into its new Empire ─────────
@@ -449,7 +449,7 @@ namespace AshAndEmber
                         ChangeKingdomAction.ApplyByJoinToKingdom(
                             clan, target, CampaignTime.Now + CampaignTime.Years(1000), false);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -458,8 +458,8 @@ namespace AshAndEmber
         private static void StabiliseSettlement(Settlement s)
         {
             if (s?.Town == null) return;
-            try { s.Town.Loyalty  = 100f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { s.Town.Security = 100f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { s.Town.Loyalty  = 100f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { s.Town.Security = 100f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
     }

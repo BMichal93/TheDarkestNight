@@ -22,7 +22,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class TowerRiteQuestCampaignBehavior : CampaignBehaviorBase
     {
@@ -50,7 +50,7 @@ namespace AshAndEmber
             // by Id) and runs at construction time — every OnGameStart, new
             // game or load, well before any CampaignEvents fire.
             try { FactionQuestTrigger.Register(BuildDef()); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static FactionQuestDef BuildDef() => new FactionQuestDef
@@ -92,7 +92,7 @@ namespace AshAndEmber
                 InformationManager.DisplayMessage(new InformationMessage(
                     "Quest added: The Unbinding Rite.", new Color(0.55f, 0.35f, 0.65f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Wiring ────────────────────────────────────────────────────────────────
@@ -104,8 +104,8 @@ namespace AshAndEmber
 
         public override void SyncData(IDataStore store)
         {
-            try { store.SyncData("TWRRITE_Phase",     ref _phase); }           catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("TWRRITE_StartDay",  ref _rampageStartDay); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("TWRRITE_Phase",     ref _phase); }           catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("TWRRITE_StartDay",  ref _rampageStartDay); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             TowerRiteHostParty.SyncData(store);
         }
 
@@ -118,13 +118,13 @@ namespace AshAndEmber
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterRiteMenu(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterRiteMenu(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnDailyTick()
         {
-            try { TickRampageState(); }           catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { CheckFactionGoneDailyTick(); }   catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TickRampageState(); }           catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { CheckFactionGoneDailyTick(); }   catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Balance-pass reliability fix: the Tower holds only ONE seat (Iyakis,
@@ -141,11 +141,11 @@ namespace AshAndEmber
 
             Kingdom k = null;
             try { k = Kingdom.All.FirstOrDefault(x => x != null && x.StringId == TowerCulture.CultureId && !x.IsEliminated); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (k != null) return; // still exists — nothing to do
 
             _phase = PhaseEndedFactionGone;
-            try { TowerRiteQuestLog.Current?.LogFactionGone(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TowerRiteQuestLog.Current?.LogFactionGone(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static int CurrentDay()
@@ -218,7 +218,7 @@ namespace AshAndEmber
                             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(
                                 player, hero, TowerRiteMath.AftermathRelationPenalty, false);
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
 
@@ -227,7 +227,7 @@ namespace AshAndEmber
                     $"{TowerRiteMath.AftermathRelationPenalty})",
                     new Color(0.55f, 0.35f, 0.65f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

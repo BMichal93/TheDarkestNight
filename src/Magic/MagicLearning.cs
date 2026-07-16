@@ -20,7 +20,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     // Everything a mage can learn beyond the innate Fire.
     public enum MagePower { Wind, Earth, Water, Spirit, Steel, Blood, Nature }
@@ -90,13 +90,13 @@ namespace AshAndEmber
             int cost = NextCost(fromTeacher);
             var hero = Hero.MainHero;
             int have = 0;
-            try { have = hero?.HeroDeveloper?.UnspentFocusPoints ?? 0; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { have = hero?.HeroDeveloper?.UnspentFocusPoints ?? 0; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (have < cost)
             {
                 message = $"Learning {Name(p)} costs {cost} focus point{(cost != 1 ? "s" : "")}; you have {have}.";
                 return false;
             }
-            try { hero.HeroDeveloper.UnspentFocusPoints -= cost; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { hero.HeroDeveloper.UnspentFocusPoints -= cost; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             Grant(p);
             message = fromTeacher
                 ? $"You learn {Name(p)} at the teacher's hand. ({cost} focus point{(cost != 1 ? "s" : "")})"
@@ -108,7 +108,7 @@ namespace AshAndEmber
         public static void ShowCodex()
         {
             int have = 0;
-            try { have = Hero.MainHero?.HeroDeveloper?.UnspentFocusPoints ?? 0; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { have = Hero.MainHero?.HeroDeveloper?.UnspentFocusPoints ?? 0; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             int cost = NextCost(false);
 
             var elements = new List<InquiryElement>();
@@ -137,7 +137,7 @@ namespace AshAndEmber
                     },
                     null, "", false), false, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Labels ──────────────────────────────────────────────────────────────

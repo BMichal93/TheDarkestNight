@@ -28,7 +28,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class LegionQuestCampaignBehavior : CampaignBehaviorBase
     {
@@ -53,7 +53,7 @@ namespace AshAndEmber
             // by Id) and runs at construction time — every OnGameStart, new
             // game or load, well before any CampaignEvents fire.
             try { FactionQuestTrigger.Register(BuildDef()); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static FactionQuestDef BuildDef() => new FactionQuestDef
@@ -113,7 +113,7 @@ namespace AshAndEmber
                 InformationManager.DisplayMessage(new InformationMessage(
                     "Quest added: The Far Shore.", new Color(0.75f, 0.62f, 0.20f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Wiring ────────────────────────────────────────────────────────────────
@@ -126,9 +126,9 @@ namespace AshAndEmber
 
         public override void SyncData(IDataStore store)
         {
-            try { store.SyncData("LEGQ_Phase",    ref _phase); }    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("LEGQ_Hardwood", ref _hardwood); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("LEGQ_Iron",     ref _iron); }     catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("LEGQ_Phase",    ref _phase); }    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("LEGQ_Hardwood", ref _hardwood); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("LEGQ_Iron",     ref _iron); }     catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             SyncEndingData(store);
         }
 
@@ -142,14 +142,14 @@ namespace AshAndEmber
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterMenus(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterMenus(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnWeeklyTick()
         {
-            try { NpcContributionWeeklyTick(); }  catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ApplyDecayWeeklyTick(); }       catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { CheckFactionGoneWeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { NpcContributionWeeklyTick(); }  catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ApplyDecayWeeklyTick(); }       catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { CheckFactionGoneWeeklyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Balance-pass reliability fix: Legion is scoped to only two seats
@@ -168,12 +168,12 @@ namespace AshAndEmber
             if (GetLegionKingdom() != null) return; // still exists — nothing to do
 
             _phase = PhaseEndedFactionGone;
-            try { LegionQuestLog.Current?.LogFactionGone(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { LegionQuestLog.Current?.LogFactionGone(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnDailyTick()
         {
-            try { EndingDailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { EndingDailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void NotifyStockChanged(string text)
@@ -185,7 +185,7 @@ namespace AshAndEmber
                 InformationManager.DisplayMessage(new InformationMessage(
                     $"{text} The ark's stock stands at {pct}%.", new Color(0.75f, 0.62f, 0.20f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

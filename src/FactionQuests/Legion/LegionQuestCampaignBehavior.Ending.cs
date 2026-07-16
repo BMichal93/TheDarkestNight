@@ -38,7 +38,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class LegionQuestCampaignBehavior
     {
@@ -81,7 +81,7 @@ namespace AshAndEmber
                             "to launch her from. The Warlord will not sail from a quay that answers to someone " +
                             "else's banner."));
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
                 return;
             }
@@ -110,11 +110,11 @@ namespace AshAndEmber
                     true, true,
                     "Sail with you, beyond the sea.",
                     "Stay. Legion needs a Warlord more than a ship.",
-                    () => { try { ResolveSail(); }  catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
-                    () => { try { ResolveStay(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } }
+                    () => { try { ResolveSail(); }  catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
+                    () => { try { ResolveStay(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } }
                 ), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Ending (a) — sail beyond the sea ─────────────────────────────────────
@@ -125,20 +125,20 @@ namespace AshAndEmber
                 Kingdom legion = GetLegionKingdom();
                 if (legion != null && Clan.PlayerClan != null && Clan.PlayerClan.Kingdom == legion)
                     try { ChangeKingdomAction.ApplyByLeaveKingdom(Clan.PlayerClan, false); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             _phase = PhaseEndedSail;
 
-            try { LegionQuestLog.Current?.LogSailed(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { LegionQuestLog.Current?.LogSailed(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
                     "Ortysia's harbour falls away behind the ark's wake. Whatever the Long Night still means to " +
                     "do to Calradia, it will have to do it without you."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Ending (b) — stay as the new Warlord ─────────────────────────────────
@@ -155,19 +155,19 @@ namespace AshAndEmber
                     {
                         ChangeKingdomAction.ApplyByJoinToKingdom(Clan.PlayerClan, legion, CampaignTime.Never, false);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 try { ChangeRulingClanAction.Apply(legion, Clan.PlayerClan); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             List<string> departedNames = ApplyDepartingClans(legion);
 
             _phase = PhaseEndedStay;
 
-            try { LegionQuestLog.Current?.LogStayed(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { LegionQuestLog.Current?.LogStayed(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             string departedText = departedNames.Count > 0
                 ? " " + string.Join(", ", departedNames) + " will not follow a Warlord who stayed behind, and " +
@@ -180,7 +180,7 @@ namespace AshAndEmber
                     "You take the Warlord's place at Ortysia. The ark stays at the quay, ready and unused." +
                     departedText));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // 2-3 random OTHER Legion clans (never the player's own, now-ruling clan)
@@ -206,10 +206,10 @@ namespace AshAndEmber
                         ChangeKingdomAction.ApplyByLeaveKingdom(c, false);
                         departedNames.Add(c.Name?.ToString() ?? "A Legion clan");
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return departedNames;
         }
     }

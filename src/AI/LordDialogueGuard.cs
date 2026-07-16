@@ -12,7 +12,7 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Encounters;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class LordDialogueGuard
     {
@@ -46,7 +46,7 @@ namespace AshAndEmber
 
                 return false;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return true; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return true; }
         }
     }
 }

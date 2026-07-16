@@ -35,7 +35,7 @@ using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class ElementalBeings
     {
@@ -88,7 +88,7 @@ namespace AshAndEmber
 
         public static void ClearBattleState()
         {
-            try { ElementalVisuals.ClearAll(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ElementalVisuals.ClearAll(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _beings.Clear();
             _kindOf.Clear();
             PendingBattleKind = null;
@@ -124,7 +124,7 @@ namespace AshAndEmber
                 if (_sacredKindledIds.TryGetValue(id, out ElementalKind kind))
                     Register(agent, kind);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── The Great Other (called from OnAgentBuild) ───────────────────────────
@@ -142,7 +142,7 @@ namespace AshAndEmber
                 agent.HealthLimit = ElementalMath.Health(ElementalKind.Void);
                 agent.Health      = agent.HealthLimit;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Wild-band conversion (called from OnAgentBuild) ──────────────────────
@@ -156,7 +156,7 @@ namespace AshAndEmber
             if (PendingBattleKind == null || agent == null || !agent.IsActive()) return;
             if (_convertedThisBattle >= ElementalMath.MaxConvertedPerBattle) return;
             if (agent.IsMount || agent.IsPlayerControlled) return;
-            try { if (agent.IsHero) return; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { if (agent.IsHero) return; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Only the side that ISN'T the player's becomes elemental.
             try
             {
@@ -164,12 +164,12 @@ namespace AshAndEmber
                 if (pt != null && agent.Team != null && agent.Team.IsValid &&
                     (agent.Team == pt || agent.Team.IsPlayerAlly)) return;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _convertedThisBattle++;
             Register(agent, PendingBattleKind.Value);
-            try { ElementalFactory.SetAggressive(agent, agent.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { agent.HealthLimit = Math.Max(agent.HealthLimit, ElementalMath.Health(PendingBattleKind.Value)); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { agent.Health = agent.HealthLimit; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ElementalFactory.SetAggressive(agent, agent.Team); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { agent.HealthLimit = Math.Max(agent.HealthLimit, ElementalMath.Health(PendingBattleKind.Value)); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { agent.Health = agent.HealthLimit; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Aura tick (driven by MagicMissionBehavior.OnMissionTick) ─────────────
@@ -191,13 +191,13 @@ namespace AshAndEmber
             {
                 Being b = _beings[i];
                 bool alive = false;
-                try { alive = b.Agent != null && b.Agent.IsActive() && b.Agent.Health > 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { alive = b.Agent != null && b.Agent.IsActive() && b.Agent.Health > 0f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (!alive)
                 {
                     if (b.Agent != null)
                     {
                         _kindOf.Remove(b.Agent);
-                        try { ElementalVisuals.Detach(b.Agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { ElementalVisuals.Detach(b.Agent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                     _beings.RemoveAt(i);
                     continue;
@@ -209,12 +209,12 @@ namespace AshAndEmber
                 // that remains each tick is dragging its one light to the body.
                 if (!b.Shrouded)
                 {
-                    try { ElementalVisuals.Attach(b.Agent, b.Kind); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ElementalVisuals.Attach(b.Agent, b.Kind); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     b.Shrouded = ElementalVisuals.IsShrouded(b.Agent);
                 }
                 else
                 {
-                    try { ElementalVisuals.Follow(b.Agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ElementalVisuals.Follow(b.Agent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 if (reAggro) ReRouse(b.Agent);
@@ -238,12 +238,12 @@ namespace AshAndEmber
             {
                 if (agent.Team == null) return;
                 if (Mission.Current != null && agent.Team == Mission.Current.PlayerTeam) return; // never the player's line
-                try { agent.SetWatchState(Agent.WatchState.Alarmed); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { agent.SetWatchState(Agent.WatchState.Alarmed); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 Formation form = agent.Formation;
                 if (form != null)
-                    try { form.SetMovementOrder(MovementOrder.MovementOrderCharge); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { form.SetMovementOrder(MovementOrder.MovementOrderCharge); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Loose a small cone of the being's own element, but only when a living
@@ -304,7 +304,7 @@ namespace AshAndEmber
                 float power = ElementalMath.AttackPower;
                 ElementSpellEffects.CastAttack(el, agent, power);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // The cheap, single-particle wisp for a given kind at a given point — used
@@ -369,12 +369,12 @@ namespace AshAndEmber
             if (mult > 1f)
             {
                 float bonus = inflicted * (mult - 1f);
-                try { SpellEffects.DamageAgent(affected, bonus, GlowSchool(kind), affector); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.DamageAgent(affected, bonus, GlowSchool(kind), affector); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             else
             {
                 float healBack = inflicted * (1f - mult);
-                try { SpellEffects.HealAgent(affected, healBack); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpellEffects.HealAgent(affected, healBack); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 

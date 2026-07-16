@@ -29,7 +29,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class TowerRiteHostParty
     {
@@ -40,8 +40,8 @@ namespace AshAndEmber
 
         internal static void SyncData(IDataStore store)
         {
-            try { store.SyncData("TWRRITE_HostIds",     ref _hostPartyIds); }  catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("TWRRITE_RemnantId",   ref _remnantPartyId); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("TWRRITE_HostIds",     ref _hostPartyIds); }  catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("TWRRITE_RemnantId",   ref _remnantPartyId); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (_hostPartyIds == null) _hostPartyIds = new List<string>();
         }
 
@@ -57,7 +57,7 @@ namespace AshAndEmber
             {
                 MobileParty p = null;
                 try { p = MobileParty.All.FirstOrDefault(x => x != null && x.StringId == id); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (p == null || !p.IsActive) { _hostPartyIds.Remove(id); continue; }
                 yield return p;
             }
@@ -75,7 +75,7 @@ namespace AshAndEmber
             Vec2 anchor = IyakisPosition();
 
             for (int i = 0; i < TowerRiteMath.HostPartyCount; i++)
-                try { SpawnOneBand(anchor, i); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpawnOneBand(anchor, i); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static Vec2 IyakisPosition()
@@ -85,7 +85,7 @@ namespace AshAndEmber
                 var iyakis = Settlement.All.FirstOrDefault(s => s != null && TowerMath.IsStartingTownId(s.StringId));
                 if (iyakis != null) return iyakis.GetPosition2D;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return MobileParty.MainParty?.GetPosition2D ?? default;
         }
 
@@ -107,7 +107,7 @@ namespace AshAndEmber
             MobileParty party = BanditPartyComponent.CreateBanditParty(partyId, banditClan, hideout, false, pt, cvec);
             if (party == null) return;
 
-            try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             for (int i = 0; i < TowerRiteMath.HostPartySizeEach; i++)
             {
                 DemonMath.DemonTier tier = TowerRiteMath.HostTier(_rng);
@@ -115,11 +115,11 @@ namespace AshAndEmber
                     MBObjectManager.Instance.GetObject<CharacterObject>(DemonCatalog.TroopIdFor(tier))
                  ?? MBObjectManager.Instance.GetObject<CharacterObject>(DemonCatalog.FiendTroopId);
                 if (troop == null) continue;
-                try { party.MemberRoster.AddToCounts(troop, 1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { party.MemberRoster.AddToCounts(troop, 1); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             try { party.Party.SetCustomName(new TextObject("The Rite-Torn Host")); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             _hostPartyIds.Add(party.StringId);
         }
@@ -141,12 +141,12 @@ namespace AshAndEmber
                     if (target == null) continue;
 
                     try { party.SetMoveRaidSettlement(target, MobileParty.NavigationType.Default, false); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                     InformationManager.DisplayMessage(new InformationMessage(
                         $"The Rite-Torn Host surges against {target.Name}.", new Color(0.60f, 0.05f, 0.05f)));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -162,7 +162,7 @@ namespace AshAndEmber
                     if (party == keep) continue;
                     DestroyPartyAction.Apply(party.Party, null);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             _hostPartyIds.Clear();
@@ -185,10 +185,10 @@ namespace AshAndEmber
                     }
                 }
                 try { keep.Party.SetCustomName(new TextObject("The Rite's Remnant")); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 _remnantPartyId = keep.StringId;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); _remnantPartyId = null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); _remnantPartyId = null; }
         }
 
         // If every host band is killed before the rampage clock runs out, there
@@ -200,7 +200,7 @@ namespace AshAndEmber
             foreach (var party in LiveHostParties().ToList())
             {
                 try { DestroyPartyAction.Apply(party.Party, null); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             _hostPartyIds.Clear();
         }

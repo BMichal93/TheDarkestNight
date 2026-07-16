@@ -31,7 +31,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class TowerCulture
     {
@@ -81,7 +81,7 @@ namespace AshAndEmber
                 if (culture != null)
                     _cultureNameField?.SetValue(culture, new TextObject("Tower"));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Kingdom rename — call once per session's first daily tick ──────────
@@ -104,7 +104,7 @@ namespace AshAndEmber
 
                 RenameTowerCulture();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void SetKingdomField(Kingdom kingdom, string[] candidates, TextObject value)
@@ -116,7 +116,7 @@ namespace AshAndEmber
                     var f = typeof(Kingdom).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
                     if (f != null) { f.SetValue(kingdom, value); return; }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -170,7 +170,7 @@ namespace AshAndEmber
                 if (gt == null) return;
                 gt.SetVariationWithId(variation, new TextObject(value), null);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

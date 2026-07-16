@@ -28,7 +28,7 @@ using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class SpellbookInputHandler
     {
@@ -58,7 +58,7 @@ namespace AshAndEmber
                 if (!_wasHolding)
                 {
                     _wasHolding = true;
-                    try { if (Agent.Main != null) SpellEffects.BeginFocusVisual(Agent.Main, ColorSchool.Purple); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { if (Agent.Main != null) SpellEffects.BeginFocusVisual(Agent.Main, ColorSchool.Purple); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 bool bookKey = altHeld ? Input.IsKeyPressed(InputKey.X) : Input.IsKeyPressed(InputKey.ControllerLThumb);
@@ -92,7 +92,7 @@ namespace AshAndEmber
             {
                 _wasHolding = false;
                 _lastDisplay = "";
-                try { if (Agent.Main != null) SpellEffects.EndFocusVisual(Agent.Main); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { if (Agent.Main != null) SpellEffects.EndFocusVisual(Agent.Main); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 TryResolve();
                 _buffer = "";
             }
@@ -144,7 +144,7 @@ namespace AshAndEmber
             Fizzle("The formula does not answer — it dies unspoken.");
             int intellect = 0;
             try { intellect = Hero.MainHero?.GetAttributeValue(DefaultCharacterAttributes.Intelligence) ?? 0; }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             float chance = SpellbookMath.SpellburnChance(intellect);
             // Talisman of the Unburnt Tongue (mod-author-directed addition):
             // shaves flat percentage points off the roll, still respecting
@@ -154,7 +154,7 @@ namespace AshAndEmber
                 if (TalismanEffects.CarriesTalisman(caster, TalismanId.UnburntTongue))
                     chance = TalismansMath.ReducedSpellburnChance(chance);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (_rng.NextDouble() < chance)
                 SpellburnEffects.Trigger(caster);
         }

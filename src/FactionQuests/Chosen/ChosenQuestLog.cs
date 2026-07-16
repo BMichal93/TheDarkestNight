@@ -9,7 +9,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed class ChosenQuestLog : QuestBase
     {
@@ -41,7 +41,7 @@ namespace AshAndEmber
                 if (_objConquest == null && JournalEntries != null && JournalEntries.Count >= 2)
                     _objConquest = JournalEntries[1];
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void Start()
@@ -62,7 +62,7 @@ namespace AshAndEmber
                     new TextObject("Grow the Chosen's holdings toward the PriestKing's promised threshold."),
                     new TextObject("Calradia Reclaimed"), 0, ChosenQuestMath.ConquestFiefThreshold, null, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogProgress(int currentFiefs)
@@ -72,7 +72,7 @@ namespace AshAndEmber
                 RebindObjective();
                 _objConquest?.UpdateCurrentProgress(ChosenQuestMath.ClampedProgress(currentFiefs));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogPromiseIsHollow()
@@ -84,7 +84,7 @@ namespace AshAndEmber
                     "answers. No angel descends. No demon falls silent. The PriestKing prays over ground his own " +
                     "armies bled for and hears only the wind that was always there."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogSplit(string splitSummary)
@@ -96,7 +96,7 @@ namespace AshAndEmber
                     (splitSummary ?? "The kingdom has broken apart.")));
                 CompleteQuestWithFail();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Reliability closure — the Chosen were wiped out before the promise
@@ -112,7 +112,7 @@ namespace AshAndEmber
                     "was ever finished — the PriestKing's vision dies with the last of his court, still unproven."));
                 CompleteQuestWithFail();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

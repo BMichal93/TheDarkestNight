@@ -20,7 +20,7 @@
 using System;
 using System.Text;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class ForeignMusterMath
     {

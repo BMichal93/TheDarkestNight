@@ -13,7 +13,7 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class KeybindReferenceSystem
     {
@@ -50,7 +50,7 @@ namespace AshAndEmber
                 // the reference text — rewrite it so the controls are always current.
                 _log.RefreshEntriesIfStale();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void EnsureLog()
@@ -99,7 +99,7 @@ namespace AshAndEmber
         {
             if (_refreshedThisSession) return;
             _refreshedThisSession = true;
-            try { WriteEntries(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { WriteEntries(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Each AddLog is one line in the Journal. Clears any prior entries first so
@@ -113,7 +113,7 @@ namespace AshAndEmber
                     foreach (var e in JournalEntries.ToList())
                         RemoveLog(e);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             AddLog(new TextObject(
                 "THE LONG NIGHT — Calradia had a thousand years of history, and then it had one night. The sky " +

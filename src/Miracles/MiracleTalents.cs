@@ -20,7 +20,7 @@ using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public enum MiracleTalentId
     {
@@ -117,13 +117,13 @@ namespace AshAndEmber
             int cost = NextCost();
             var hero = Hero.MainHero;
             int have = 0;
-            try { have = hero?.HeroDeveloper?.UnspentFocusPoints ?? 0; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { have = hero?.HeroDeveloper?.UnspentFocusPoints ?? 0; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (have < cost)
             {
                 message = $"{Name(id)} asks {cost} focus point{(cost != 1 ? "s" : "")}; you have {have}.";
                 return false;
             }
-            try { hero.HeroDeveloper.UnspentFocusPoints -= cost; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { hero.HeroDeveloper.UnspentFocusPoints -= cost; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _owned.Add(id);
             message = $"You take {Name(id)} into your devotions. ({cost} focus point{(cost != 1 ? "s" : "")})";
             return true;
@@ -133,7 +133,7 @@ namespace AshAndEmber
         public static void ShowCodex()
         {
             int have = 0;
-            try { have = Hero.MainHero?.HeroDeveloper?.UnspentFocusPoints ?? 0; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { have = Hero.MainHero?.HeroDeveloper?.UnspentFocusPoints ?? 0; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             int cost = NextCost();
 
             var elements = new List<InquiryElement>();
@@ -164,7 +164,7 @@ namespace AshAndEmber
                     },
                     null, "", false), false, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Labels ────────────────────────────────────────────────────────────────
@@ -223,7 +223,7 @@ namespace AshAndEmber
                     foreach (int i in owned) _owned.Add((MiracleTalentId)i);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static readonly Color Gold = new Color(1.0f, 0.9f, 0.5f);

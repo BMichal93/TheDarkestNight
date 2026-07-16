@@ -16,7 +16,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class MiracleBattleAI
     {
@@ -85,7 +85,7 @@ namespace AshAndEmber
                     AnnounceEnemy(a, hero, type);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Read the moment: the caster's own blood, the wounded line around him, the
@@ -95,7 +95,7 @@ namespace AshAndEmber
             out int alliesHurtNear, out int enemiesPressing, out bool ashenNear)
         {
             selfHurt = false;
-            try { selfHurt = a.Health < a.HealthLimit * 0.40f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { selfHurt = a.Health < a.HealthLimit * 0.40f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             alliesHurtNear = 0; enemiesPressing = 0;
             try
@@ -114,7 +114,7 @@ namespace AshAndEmber
                     if (dx * dx + dy * dy <= 6f * 6f) enemiesPressing++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             ashenNear = AshenNearby(a);
         }
@@ -131,7 +131,7 @@ namespace AshAndEmber
                     $"{name} invokes {miracle}!",
                     new Color(0.80f, 0.65f, 0.30f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Classification helpers ─────────────────────────────────────────────
@@ -187,7 +187,7 @@ namespace AshAndEmber
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return false;
         }
 

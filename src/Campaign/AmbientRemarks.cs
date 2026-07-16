@@ -44,7 +44,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class AmbientRemarks
     {
@@ -95,7 +95,7 @@ namespace AshAndEmber
         {
             if (_companionCooldown > 0) return;
             if (_rng.Next(100) >= CompanionRemarkChancePct) return;
-            try { FireCompanionRemark(s); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { FireCompanionRemark(s); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Relation tier ─────────────────────────────────────────────────────
@@ -103,7 +103,7 @@ namespace AshAndEmber
         private static RelationTier GetRelationTier(Hero companion)
         {
             int rel = 0;
-            try { rel = (int)companion.GetRelationWithPlayer(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { rel = (int)companion.GetRelationWithPlayer(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (rel <= -50) return RelationTier.VeryNegative;
             if (rel <= -10) return RelationTier.Negative;
             if (rel <=   9) return RelationTier.Neutral;
@@ -151,7 +151,7 @@ namespace AshAndEmber
 
                 ShowQuick(line);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Situational campfire lines ───────────────────────────────────────
@@ -162,7 +162,7 @@ namespace AshAndEmber
             {
                 int wounded = 0;
                 try { wounded = MobileParty.MainParty?.MemberRoster?.GetTroopRoster().Sum(e => e.WoundedNumber) ?? 0; }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (wounded >= 5 && _rng.Next(2) == 0) return Pick(_woundedVignettes);
 
                 bool atWar = false;
@@ -171,12 +171,12 @@ namespace AshAndEmber
                     var faction = Hero.MainHero?.MapFaction;
                     atWar = faction != null && Kingdom.All.Any(k => !k.IsEliminated && k != faction && faction.IsAtWarWith(k));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (atWar && _rng.Next(2) == 0) return Pick(_warVignettes);
 
                 CampaignTime.Seasons season = CampaignTime.Seasons.Spring;
                 try { season = CampaignTime.Now.GetSeasonOfYear; }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 string[] seasonPool = season switch
                 {
                     CampaignTime.Seasons.Winter => _winterVignettes,
@@ -190,7 +190,7 @@ namespace AshAndEmber
                 if (partySize <= 1  && _rng.Next(2) == 0) return Pick(_soloVignettes);
                 if (partySize >= 40 && _rng.Next(2) == 0) return Pick(_largeHostVignettes);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return null;
         }
 
@@ -421,7 +421,7 @@ namespace AshAndEmber
                 bool ashenActive = false;
                 try { ashenActive = Campaign.Current != null &&
                                     Settlement.All.Any(st => st.IsTown && st.MapFaction?.StringId == "ashen_kingdom"); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 bool nearWar = false;
                 try
@@ -429,7 +429,7 @@ namespace AshAndEmber
                     if (s?.MapFaction is Kingdom pk)
                         nearWar = Kingdom.All.Any(k => !k.IsEliminated && k != pk && pk.IsAtWarWith(k));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 var candidates = new List<Func<string>>();
                 if (valor       >= 1) candidates.Add(() => PickValor(s, ashenActive, nearWar, agingPlayer, rel));
@@ -935,7 +935,7 @@ namespace AshAndEmber
                 if (bestKey == null) return null;
                 return SkillLine(bestKey, GetTone(rel));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
 
         private static string SkillLine(string key, ToneBucket tone)
@@ -1069,7 +1069,7 @@ namespace AshAndEmber
                 if (bestKey == null) return null;
                 return AttributeLine(bestKey, GetTone(rel));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
 
         private static string AttributeLine(string key, ToneBucket tone)
@@ -1140,7 +1140,7 @@ namespace AshAndEmber
         private static void ShowQuick(string text)
         {
             try { MBInformationManager.AddQuickInformation(new TextObject(text)); }
-            catch { try { InformationManager.DisplayMessage(new InformationMessage(text, _dim)); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } }
+            catch { try { InformationManager.DisplayMessage(new InformationMessage(text, _dim)); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } }
         }
     }
 }

@@ -18,7 +18,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal sealed class UnitsRecruitModel : DefaultPrisonerRecruitmentCalculationModel
     {
@@ -31,7 +31,7 @@ namespace AshAndEmber
                 if (character != null && UnitsMath.IsTier5Recruit(character.Tier))
                     return PromotionToll.HasRecruitToll(party);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return baseResult;
         }
     }

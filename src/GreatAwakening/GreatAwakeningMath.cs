@@ -7,7 +7,7 @@
 // in GreatAwakeningCampaignBehavior.* / GreatOtherParty.cs / GreatOtherBattle.cs.
 // =============================================================================
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class GreatAwakeningMath
     {

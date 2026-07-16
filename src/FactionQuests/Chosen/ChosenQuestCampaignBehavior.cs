@@ -44,7 +44,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class ChosenQuestCampaignBehavior : CampaignBehaviorBase
     {
@@ -64,7 +64,7 @@ namespace AshAndEmber
             // by Id) and runs at construction time — every OnGameStart, new
             // game or load, well before any CampaignEvents fire.
             try { FactionQuestTrigger.Register(BuildDef()); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static FactionQuestDef BuildDef() => new FactionQuestDef
@@ -102,7 +102,7 @@ namespace AshAndEmber
                 InformationManager.DisplayMessage(new InformationMessage(
                     "Quest added: The Promise.", new Color(0.85f, 0.72f, 0.25f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Wiring ────────────────────────────────────────────────────────────────
@@ -113,7 +113,7 @@ namespace AshAndEmber
 
         public override void SyncData(IDataStore store)
         {
-            try { store.SyncData("CHOQ_Phase", ref _phase); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("CHOQ_Phase", ref _phase); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void ResetForNewGame()
@@ -123,7 +123,7 @@ namespace AshAndEmber
 
         private void OnWeeklyTick()
         {
-            try { TickConquestProgress(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TickConquestProgress(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Conquest tracking ────────────────────────────────────────────────────
@@ -143,12 +143,12 @@ namespace AshAndEmber
                 // instead, resolve to a documented failure the moment the kingdom
                 // is confirmed gone.
                 _phase = PhaseEndedFactionGone;
-                try { ChosenQuestLog.Current?.LogFactionGone(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ChosenQuestLog.Current?.LogFactionGone(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 return;
             }
 
             int currentFiefs = 0;
-            try { currentFiefs = chosen.Fiefs?.Count ?? 0; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { currentFiefs = chosen.Fiefs?.Count ?? 0; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             ChosenQuestLog.Current?.LogProgress(currentFiefs);
 
@@ -177,11 +177,11 @@ namespace AshAndEmber
                     "are one faith at all.",
 
                     true, false, "Heaven is silent.", "",
-                    () => { try { PerformSplit(chosen); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    () => { try { PerformSplit(chosen); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     null
                 ), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

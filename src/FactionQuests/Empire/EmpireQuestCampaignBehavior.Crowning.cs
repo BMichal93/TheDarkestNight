@@ -42,7 +42,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class EmpireQuestCampaignBehavior
     {
@@ -55,7 +55,7 @@ namespace AshAndEmber
         private static void SyncWarData(IDataStore store)
         {
             try { store.SyncData("EMPQ_WarDeclared", ref _hasDeclaredWarOnDemons); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ResetWarState()
@@ -75,7 +75,7 @@ namespace AshAndEmber
                 GrantCoronationSupplies(empire);
                 ReassertWarOnDemonLord(empire);
 
-                try { EmpireQuestLog.Current?.LogCrowned(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { EmpireQuestLog.Current?.LogCrowned(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 InformationManager.ShowInquiry(new InquiryData(
                     "The Reunification",
@@ -92,7 +92,7 @@ namespace AshAndEmber
 
                     true, false, "Long live the Emperor.", "", null, null), true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void GrantCoronationSupplies(Kingdom empire)
@@ -114,11 +114,11 @@ namespace AshAndEmber
                             if (grain == null) continue;
                             hero.PartyBelongedTo.ItemRoster.AddToCounts(grain, EmpireQuestMath.CoronationGrainAmount);
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Belt-and-suspenders: catches the Demon Lord's Kingdom up on the
@@ -140,7 +140,7 @@ namespace AshAndEmber
                 if (empire.IsAtWarWith(demonLordKingdom)) return;
                 DeclareWarAction.ApplyByDefault(empire, demonLordKingdom);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

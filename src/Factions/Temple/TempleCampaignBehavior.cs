@@ -34,7 +34,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class TempleCampaignBehavior : CampaignBehaviorBase
     {
@@ -53,8 +53,8 @@ namespace AshAndEmber
 
         public override void SyncData(IDataStore store)
         {
-            try { store.SyncData("TPL_PRAYER_IDS", ref _prayerHeroIds); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("TPL_PRAYER_DAY",  ref _prayerLastDay); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("TPL_PRAYER_IDS", ref _prayerHeroIds); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("TPL_PRAYER_DAY",  ref _prayerLastDay); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (_prayerHeroIds == null) _prayerHeroIds = new List<string>();
             if (_prayerLastDay == null) _prayerLastDay = new List<float>();
@@ -68,13 +68,13 @@ namespace AshAndEmber
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterTempleMenus(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterTempleMenus(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnDailyTick()
         {
-            try { TempleSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TickLordPrayers(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TempleSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TickLordPrayers(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Temple bonuses apply to Temple lords too: a small daily chance a
@@ -95,7 +95,7 @@ namespace AshAndEmber
 
                     ApplyPrayer(hero);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -120,7 +120,7 @@ namespace AshAndEmber
                 if (leader != null && !Qualifies(leader))
                 {
                     try { ChangeKingdomAction.ApplyByLeaveKingdom(clan, isPlayerClan); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                     if (isPlayerClan)
                     {
@@ -133,9 +133,9 @@ namespace AshAndEmber
                 }
 
                 if (isPlayerClan)
-                    try { GrantHolySigil(Hero.MainHero, announce: true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { GrantHolySigil(Hero.MainHero, announce: true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static bool Qualifies(Hero hero)
@@ -169,7 +169,7 @@ namespace AshAndEmber
                         new Color(0.90f, 0.82f, 0.42f)));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── The pray menu ────────────────────────────────────────────────────
@@ -196,7 +196,7 @@ namespace AshAndEmber
                 if (idx >= 0) _prayerLastDay[idx] = today;
                 else { _prayerHeroIds.Add(hero.StringId); _prayerLastDay.Add(today); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Applies the prayer's beneficial party effects: heals every member of
@@ -231,13 +231,13 @@ namespace AshAndEmber
                         int healed = (int)Math.Ceiling(wounded * healFrac);
                         if (healed <= 0) continue;
                         try { party.MemberRoster.AddToCounts(member.Character, 0, false, -Math.Min(healed, wounded)); }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
 
                 MarkPrayed(hero);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

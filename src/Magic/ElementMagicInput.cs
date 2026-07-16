@@ -35,7 +35,7 @@ using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class ElementMagicInput
     {
@@ -130,7 +130,7 @@ namespace AshAndEmber
                 if (m != null && !ReferenceEquals(m, _countedMission.Target))
                 { _ashenBattleCasts = 0; _countedMission.Target = m; }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (!MageKnowledge.IsMage) { InputSuppressed = false; return; }
 
             // Advance the gathering-break clock. It runs whether or not Focus is held
@@ -159,7 +159,7 @@ namespace AshAndEmber
                     _overAnnounced = false;
                     _visualTimer = 0f;
                     _lastVisualElement = null;   // force an immediate first pulse
-                    try { if (Agent.Main != null) SpellEffects.BeginCastLoop(Agent.Main); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { if (Agent.Main != null) SpellEffects.BeginCastLoop(Agent.Main); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     _wasFocusing = true;
                 }
 
@@ -279,9 +279,9 @@ namespace AshAndEmber
             _fullAnnounced = false;
             _overAnnounced = false;
             _lastVisualElement = null;
-            try { if (Agent.Main != null) SpellEffects.EndCastLoop(Agent.Main); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { if (Agent.Main != null) SpellEffects.EndCastLoop(Agent.Main); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Clears the body contour glow left by the charge visual.
-            try { if (Agent.Main != null) SpellEffects.EndFocusVisual(Agent.Main); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { if (Agent.Main != null) SpellEffects.EndFocusVisual(Agent.Main); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Emit the element's charging visual on a short interval, and immediately
@@ -312,7 +312,7 @@ namespace AshAndEmber
         private static void EmitChargeVisual(Agent caster, MagicElement el)
         {
             Vec3 pos; try { pos = caster.Position; } catch { return; }
-            bool ashen = false; try { ashen = MageKnowledge.IsAshen; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            bool ashen = false; try { ashen = MageKnowledge.IsAshen; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             Vec3 up = new Vec3(0f, 0f, 0.8f);
 
             // Element-corresponding particles engulf the caster while charging.
@@ -374,12 +374,12 @@ namespace AshAndEmber
                         break;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Element-coloured light and a body contour glow, tinted to the element
             // (the Ashen cold mask is applied by ElementLightRgb).
-            try { SpellEffects.SpawnTempLightRgb(pos + up, ElementSpellEffects.ElementLightRgb(el, ashen), 8f, VisualDuration + 0.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.BeginAgentGlow(caster, FocusSchool(), VisualInterval + 0.3f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempLightRgb(pos + up, ElementSpellEffects.ElementLightRgb(el, ashen), 8f, VisualDuration + 0.2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.BeginAgentGlow(caster, FocusSchool(), VisualInterval + 0.3f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // W/S/A/D (or left-stick flicks) load a learned element; X (gamepad: R3)
@@ -497,7 +497,7 @@ namespace AshAndEmber
                 if (form == CastForm.Attack) ElementSpellEffects.CastAttack(el, caster, power);
                 else                         ElementSpellEffects.CastWall(el, caster, power);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // The toll is flat — the draw bought power, not a cheaper cast.
             int days = ElementMagicMath.CastAgingDays(form, MageElementKnowledge.HasNature);
@@ -534,7 +534,7 @@ namespace AshAndEmber
             }
 
             bool cast = false;
-            try { cast = ElementUltimates.CastPlayerUltimate(el, caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { cast = ElementUltimates.CastPlayerUltimate(el, caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (!cast) return;
 
             // The Unbinding's toll is flat and steep, like every other cast —
@@ -567,7 +567,7 @@ namespace AshAndEmber
                     AgingSystem.SpendLifeExpectancy(Hero.MainHero, days);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Null when drawing is allowed, else a short reason the player can act on.
@@ -575,7 +575,7 @@ namespace AshAndEmber
         {
             Agent c = Agent.Main;
             if (c == null || !c.IsActive()) return "There is no hand here to shape the fire.";
-            try { if (c.GetCurrentVelocity().Length >= StillSpeed) return "Stand still to draw."; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { if (c.GetCurrentVelocity().Length >= StillSpeed) return "Stand still to draw."; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             bool steel = MageElementKnowledge.HasSteel;
             if (!steel && !SpellEffects.HasFreeHand(c))   return "Sheathe your weapon (X) to draw — or learn Steel.";
             if (!steel && NatureEffects.ArmourTooHeavy(c)) return "Armour too heavy — shed it, or learn Steel.";
@@ -586,7 +586,7 @@ namespace AshAndEmber
         {
             // The Ashen draw on the cold, whatever the element; otherwise Fire is red
             // and the other elements borrow the nature glow.
-            try { if (MageKnowledge.IsAshen) return ColorSchool.Ashen; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { if (MageKnowledge.IsAshen) return ColorSchool.Ashen; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return MageElementKnowledge.Loaded == MagicElement.Fire ? ColorSchool.Red : ColorSchool.Nature;
         }
 

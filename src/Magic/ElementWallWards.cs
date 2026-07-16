@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class ElementWallWards
     {
@@ -106,7 +106,7 @@ namespace AshAndEmber
                     if (_recent[i].Team != null && _recent[i].Team.IsEnemyOf(myTeam))
                         return _recent[i].El;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             return null;
         }
@@ -267,13 +267,13 @@ namespace AshAndEmber
                         SpellEffects.SpawnNatureBurst(mpos,
                             wardEl == MagicElement.Wind ? NatureElement.Wind : NatureElement.Earth, 0.4f);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
                 if (stopped != null)
                     foreach (int idx in stopped)
-                        try { mission.RemoveMissileAsClient(idx); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { mission.RemoveMissileAsClient(idx); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Feedback + elemental byproducts ──────────────────────────────────────
@@ -311,7 +311,7 @@ namespace AshAndEmber
                         break;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             string line;
             if (wall == MagicElement.Water && incoming == MagicElement.Fire)      line = "The mist drinks the fire — steam, and nothing more.";
@@ -329,7 +329,7 @@ namespace AshAndEmber
                 TaleWorlds.Library.InformationManager.DisplayMessage(
                     new InformationMessage(line, new Color(0.6f, 0.75f, 0.85f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

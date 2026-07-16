@@ -16,7 +16,7 @@ using TaleWorlds.MountAndBlade;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class BattleEvents
     {
@@ -51,7 +51,7 @@ namespace AshAndEmber
                 scene.GetHeightAtPoint(pos.AsVec2, BodyFlags.CommonCollisionExcludeFlagsForAgent, ref gz);
                 pos.z = gz;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Average position of all active non-mount agents across the whole field.
@@ -69,7 +69,7 @@ namespace AshAndEmber
                     n++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return n == 0 ? Vec3.Zero : new Vec3(x / n, y / n, z / n);
         }
 
@@ -88,7 +88,7 @@ namespace AshAndEmber
                     n++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return n == 0 ? Vec3.Zero : new Vec3(x / n, y / n, z / n);
         }
 
@@ -100,7 +100,7 @@ namespace AshAndEmber
         {
             if (_skySet) return;
             _skySet = true;
-            try { Mission.Current?.Scene.TimeOfDay = timeOfDay; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { Mission.Current?.Scene.TimeOfDay = timeOfDay; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Applies scene fog via reflection (same pattern as AshenSceneTone).
@@ -121,7 +121,7 @@ namespace AshAndEmber
                 if (_setFogMethod.GetParameters().Length == 3)
                     _setFogMethod.Invoke(scene, new object[] { falloff, rgb, density });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Scatters fire particles and coloured point lights across the field.
@@ -138,10 +138,10 @@ namespace AshAndEmber
                     Vec3   pos   = centre + new Vec3((float)Math.Cos(angle) * dist,
                                                      (float)Math.Sin(angle) * dist, 0f);
                     if (school != ColorSchool.Ashen)
-                        try { SpellEffects.SpawnTempFireParticle(pos, duration); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { SpellEffects.SpawnTempFireParticle(pos, duration); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     SpellEffects.SpawnTempLight(pos, school, 10f, duration * 0.7f);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -162,7 +162,7 @@ namespace AshAndEmber
                                             centre.z + h);
                     SpellEffects.SpawnTempLight(pos, school, 28f, duration);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -182,10 +182,10 @@ namespace AshAndEmber
                     foreach (float h in heights)
                     {
                         Vec3 pos = new Vec3(bx, by, centre.z + h);
-                        try { SpellEffects.SpawnTempFireParticle(pos, CinderRainInterval * 0.45f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { SpellEffects.SpawnTempFireParticle(pos, CinderRainInterval * 0.45f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 

@@ -17,7 +17,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class SeaCampaignBehavior
     {
@@ -33,7 +33,7 @@ namespace AshAndEmber
             // Harbor towns skim a living off the traffic.
             foreach (var p in _ports)
             {
-                try { if (p?.Town != null) p.Town.Prosperity += SeaMath.PortProsperityPerDay; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { if (p?.Town != null) p.Town.Prosperity += SeaMath.PortProsperityPerDay; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -61,10 +61,10 @@ namespace AshAndEmber
                             float s = FleetStrengthOf(party, false);
                             if (s > bestStr) { bestStr = s; best = party.MapFaction; }
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (best != null)
                 {
                     string key = port.StringId ?? port.Name?.ToString() ?? "";
@@ -109,7 +109,7 @@ namespace AshAndEmber
                 {
                     // Primary path: lord's AI already wants a settlement reachable from another port.
                     Settlement target = null;
-                    try { target = party.TargetSettlement; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { target = party.TargetSettlement; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     if (target != null && target != settlement)
                     {
                         var portNear = PortNear(target, exclude: settlement);
@@ -188,7 +188,7 @@ namespace AshAndEmber
                 }
 
                 try { party.Position = dest.GatePosition; } catch { return; }
-                try { party.SetMoveGoToSettlement(dest, MobileParty.NavigationType.Default, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { party.SetMoveGoToSettlement(dest, MobileParty.NavigationType.Default, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Word travels when it's your kingdom's banner or your own coin.
                 try
@@ -203,9 +203,9 @@ namespace AshAndEmber
                             $"Your caravan takes the sea route from {settlement.Name} to {dest.Name}.",
                             new Color(0.65f, 0.75f, 0.9f)));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Nearest port to a settlement, if any lies within reach of it.

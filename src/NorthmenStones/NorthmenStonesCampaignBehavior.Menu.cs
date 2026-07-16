@@ -19,7 +19,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class NorthmenStonesCampaignBehavior
     {
@@ -50,16 +50,16 @@ namespace AshAndEmber
                                 _iron, _hardwood, _tools, _silver, _denars, KindledTotal()) * 100f);
                             MBTextManager.SetTextVariable("NSTONES_DONATE_ENTER_TEXT",
                                 $"Donate materials for the standing stones  [{pct}%]");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = true;
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { GameMenu.SwitchToMenu("nstones_donate_menu"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { GameMenu.SwitchToMenu("nstones_donate_menu"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -81,10 +81,10 @@ namespace AshAndEmber
                             $"Bound Awakened given: {KindledTotal()} / {NorthmenStonesMath.KindledTotalTarget}\n\n" +
                             ownerNote);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             RegisterMaterialOption(starter, "iron",     "Iron",     () => _iron,     v => _iron = v,     NorthmenStonesMath.IronTarget);
             RegisterMaterialOption(starter, "hardwood", "Hardwood", () => _hardwood, v => _hardwood = v, NorthmenStonesMath.HardwoodTarget);
@@ -96,11 +96,11 @@ namespace AshAndEmber
             try
             {
                 starter.AddGameMenuOption("nstones_donate_menu", "nstones_donate_leave", "Step away",
-                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } return true; },
-                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } return true; },
+                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     true, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // The stones themselves, once raised — always visible at Varcheg,
             // no consequence beyond a line of flavor text.
@@ -114,7 +114,7 @@ namespace AshAndEmber
                             if (!_stoneBuilt) return false;
                             if (!AtVarcheg()) return false;
                             args.IsEnabled = true;
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Continue; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Continue; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             return true;
                         }
                         catch { return false; }
@@ -128,11 +128,11 @@ namespace AshAndEmber
                                 "at the edge of hearing, something in them seems to be still burning.",
                                 new Color(0.85f, 0.45f, 0.15f)));
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void RegisterMaterialOption(
@@ -152,7 +152,7 @@ namespace AshAndEmber
                             var item = GetItem(itemId);
                             int held = item != null ? (MobileParty.MainParty?.ItemRoster?.GetItemNumber(item) ?? 0) : 0;
                             MBTextManager.SetTextVariable(varId, $"Donate {label} you carry ({held})");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Continue; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Continue; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = item != null && held > 0 && get() < target;
                             return true;
                         }
@@ -173,10 +173,10 @@ namespace AshAndEmber
                             set(get() + give);
                             NotifyDonation($"{give} {label} given to the working.");
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void RegisterDenarsOption(CampaignGameStarter starter)
@@ -191,7 +191,7 @@ namespace AshAndEmber
                             if (_phase != PhaseActive) return false;
                             int gold = Hero.MainHero?.Gold ?? 0;
                             MBTextManager.SetTextVariable("NSTONES_DONATE_DENARS_TEXT", $"Donate denars for the masons ({gold:N0})");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Continue; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Continue; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = gold > 0 && _denars < NorthmenStonesMath.DenarsTarget;
                             return true;
                         }
@@ -210,10 +210,10 @@ namespace AshAndEmber
                             _denars += give;
                             NotifyDonation($"{give:N0} denars given to the masons.");
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void RegisterKindledOptions(CampaignGameStarter starter)
@@ -237,7 +237,7 @@ namespace AshAndEmber
                                 int given = KindledGivenForKind(kind);
                                 MBTextManager.SetTextVariable(optId.ToUpperInvariant() + "_TEXT",
                                     $"Give a bound {name} to the working ({given}/{NorthmenStonesMath.KindledTargetPerKind}, {held} bound and with you)");
-                                try { args.optionLeaveType = GameMenuOption.LeaveType.Continue; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { args.optionLeaveType = GameMenuOption.LeaveType.Continue; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 args.IsEnabled = held > 0 && given < NorthmenStonesMath.KindledTargetPerKind;
                                 return true;
                             }
@@ -245,7 +245,7 @@ namespace AshAndEmber
                         },
                         args => DonateKindled(troopId, kind, name));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -302,7 +302,7 @@ namespace AshAndEmber
                 AddKindledGiven(kind, 1);
                 NotifyDonation($"The bound {name} is led to Varcheg's ring of stones and does not come back.");
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void NotifyDonation(string text)
@@ -315,7 +315,7 @@ namespace AshAndEmber
                 InformationManager.DisplayMessage(new InformationMessage(
                     $"{text} The working stands at {pct}%.", new Color(0.85f, 0.45f, 0.15f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

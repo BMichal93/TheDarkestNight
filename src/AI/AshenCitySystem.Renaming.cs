@@ -18,7 +18,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class AshenCitySystem
     {
@@ -121,7 +121,7 @@ namespace AshAndEmber
                     if (s != null)
                         SetSettlementName(s, kvp.Value);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -146,7 +146,7 @@ namespace AshAndEmber
                         : $"The Wastes {i - _villageNames.Length + 1}";
                     SetSettlementName(villages[i], name);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -187,7 +187,7 @@ namespace AshAndEmber
                 // everywhere it is shown (character sheet, encyclopedia, troop culture).
                 RenameTempleCulture();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Culture-only rename (no Campaign required) ──────────────────────────
@@ -203,7 +203,7 @@ namespace AshAndEmber
                 if (vlandiaCulture != null)
                     (_cultureNameField ?? _nameField)?.SetValue(vlandiaCulture, new TextObject("Templar"));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Character-creation culture card text override ───────────────────────
@@ -251,7 +251,7 @@ namespace AshAndEmber
                 if (gt == null) return;
                 gt.SetVariationWithId(variation, new TextObject(value), null);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Tribes of the East kingdom rename ──────────────────────────────────
@@ -278,7 +278,7 @@ namespace AshAndEmber
 
                 RenameTribalCulture();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Renames the khuzait culture object to "Tribal" so character backgrounds
@@ -292,7 +292,7 @@ namespace AshAndEmber
                 if (khuzaitCulture != null)
                     (_cultureNameField ?? _nameField)?.SetValue(khuzaitCulture, new TextObject("Tribal"));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Character-creation culture card text override for Tribes ───────────
@@ -438,7 +438,7 @@ namespace AshAndEmber
                 }
                 if (any) done = true;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Sturgia → the Northmen (culture rename) ───────────────────────────
@@ -454,7 +454,7 @@ namespace AshAndEmber
                 if (sturgiaCulture != null)
                     (_cultureNameField ?? _nameField)?.SetValue(sturgiaCulture, new TextObject("Northmen"));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Northmen kingdom rename ────────────────────────────────────────────
@@ -482,7 +482,7 @@ namespace AshAndEmber
 
                 RenameNorthmenCulture();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Duneborn kingdom rename ────────────────────────────────────────────
@@ -506,7 +506,7 @@ namespace AshAndEmber
 
                 RenameDunebornCulture();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Character-creation culture card text override for the Northmen ─────
@@ -549,7 +549,7 @@ namespace AshAndEmber
                 if (aseraiCulture != null)
                     (_cultureNameField ?? _nameField)?.SetValue(aseraiCulture, new TextObject("Duneborn"));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Character-creation culture card text override for the Duneborn ─────
@@ -595,7 +595,7 @@ namespace AshAndEmber
                 if (battaniaCulture != null)
                     (_cultureNameField ?? _nameField)?.SetValue(battaniaCulture, new TextObject("Forest Clan"));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Forest Clans kingdom rename ─────────────────────────────────────────
@@ -620,7 +620,7 @@ namespace AshAndEmber
 
                 RenameForestClansCulture();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Character-creation culture card text override for the Forest Clans ─
@@ -715,7 +715,7 @@ namespace AshAndEmber
                         BindingFlags.NonPublic | BindingFlags.Instance);
                     if (f != null) { f.SetValue(kingdom, value); return; }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -818,10 +818,10 @@ namespace AshAndEmber
 
                         nameField.SetValue(ch, new TextObject(newName));
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

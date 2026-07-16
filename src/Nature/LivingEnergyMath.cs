@@ -20,7 +20,7 @@
 
 using System;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     // Which warning a draw newly crossed, if any. Ordered by severity.
     public enum EnergyOmen { None = 0, Half = 1, Quarter = 2, Empty = 3 }

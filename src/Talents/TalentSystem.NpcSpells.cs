@@ -18,7 +18,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class TalentSystem
     {
@@ -49,7 +49,7 @@ namespace AshAndEmber
                     case MagicElement.Ice:       NpcLongStillness(caster);   blurb = isAshen ? "casts the Endless Winter — an enemy host's nerve is gone."    : "casts the Long Stillness — an enemy host's nerve is gone."; break;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (blurb != null)
             {
@@ -73,7 +73,7 @@ namespace AshAndEmber
                     if (troops.Count > 0)
                     {
                         var entry = troops[_rng.Next(troops.Count)];
-                        try { party.MemberRoster.AddToCounts(entry.Character, 0, false, 1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { party.MemberRoster.AddToCounts(entry.Character, 0, false, 1); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return;
                     }
                 }
@@ -85,7 +85,7 @@ namespace AshAndEmber
                 if (village != null)
                     village.Village.Hearth = Math.Max(10f, village.Village.Hearth * 0.97f);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Wind — Scattering Gale: an enemy host near the caster is thrown into disorder.
@@ -105,7 +105,7 @@ namespace AshAndEmber
             var targetHero = target.LeaderHero;
             if (targetHero != null && ElementLordRegistry.IsElementLord(targetHero))
             {
-                try { ElementLordRegistry.SpendLordLifeExpectancy(targetHero, 1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementLordRegistry.SpendLordLifeExpectancy(targetHero, 1); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 string casterName = caster.Name?.ToString() ?? "A mage";
                 string targetName = targetHero.Name?.ToString() ?? "another mage";
                 InformationManager.DisplayMessage(new InformationMessage(
@@ -127,10 +127,10 @@ namespace AshAndEmber
                 foreach (var entry in wounded)
                 {
                     int heal = Math.Min(entry.WoundedNumber, 6);
-                    try { roster.AddToCounts(entry.Character, 0, false, -heal); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { roster.AddToCounts(entry.Character, 0, false, -heal); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Earth — Deeproot Blight: an enemy village's hearth withers.
@@ -156,13 +156,13 @@ namespace AshAndEmber
             var troops = target.MemberRoster.GetTroopRoster()
                 .Where(e => !e.Character.IsHero && e.Number > e.WoundedNumber).ToList();
             if (troops.Count == 0) return;
-            try { target.MemberRoster.AddToCounts(troops[_rng.Next(troops.Count)].Character, 0, false, 1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { target.MemberRoster.AddToCounts(troops[_rng.Next(troops.Count)].Character, 0, false, 1); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Mage-to-mage interference: crossing a fellow mage lord's fire costs both.
             var targetHero = target.LeaderHero;
             if (targetHero != null && ElementLordRegistry.IsElementLord(targetHero))
             {
-                try { ElementLordRegistry.SpendLordLifeExpectancy(targetHero, 1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ElementLordRegistry.SpendLordLifeExpectancy(targetHero, 1); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 string casterName = caster.Name?.ToString() ?? "A mage";
                 string targetName = targetHero.Name?.ToString() ?? "another mage";
                 InformationManager.DisplayMessage(new InformationMessage(
@@ -194,8 +194,8 @@ namespace AshAndEmber
             var troops = target.MemberRoster.GetTroopRoster()
                 .Where(e => !e.Character.IsHero && e.Number > e.WoundedNumber).ToList();
             if (troops.Count == 0) return;
-            try { target.MemberRoster.AddToCounts(troops[_rng.Next(troops.Count)].Character, 0, false, 1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { target.RecentEventsMorale -= 25f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { target.MemberRoster.AddToCounts(troops[_rng.Next(troops.Count)].Character, 0, false, 1); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { target.RecentEventsMorale -= 25f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Magma — Scorched Earth: the nearest hostile host's wagons and stores burn.
@@ -203,11 +203,11 @@ namespace AshAndEmber
         {
             var target = NearestHostileToCaster(caster, 60f);
             if (target == null) return;
-            try { NatureEffects.RemoveFoodFromRoster(target, 25); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { NatureEffects.RemoveFoodFromRoster(target, 25); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             var troops = target.MemberRoster.GetTroopRoster()
                 .Where(e => !e.Character.IsHero && e.Number > e.WoundedNumber).ToList();
             if (troops.Count > 0)
-                try { target.MemberRoster.AddToCounts(troops[_rng.Next(troops.Count)].Character, 0, false, 1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { target.MemberRoster.AddToCounts(troops[_rng.Next(troops.Count)].Character, 0, false, 1); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Fog — The Hidden Road: the caster's OWN column slips away from its nearest threat.
@@ -226,7 +226,7 @@ namespace AshAndEmber
                 if (len < 0.5f) away = new Vec2(1f, 0f); else away *= 1f / len;
                 party.Position = new CampaignVec2(pos + away * 4f, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Sandstorm — Shifting Dunes: the nearest hostile host is turned back on itself.
@@ -243,8 +243,8 @@ namespace AshAndEmber
                 if (len < 0.5f) back = new Vec2(1f, 0f); else back *= 1f / len;
                 target.Position = new CampaignVec2(tPos + back * 5f, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { target.RecentEventsMorale -= 20f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { target.RecentEventsMorale -= 20f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Mire — The Sinking Road: the nearest hostile host loses stores AND ground.
@@ -252,7 +252,7 @@ namespace AshAndEmber
         {
             var target = NearestHostileToCaster(caster, 55f);
             if (target == null) return;
-            try { NatureEffects.RemoveFoodFromRoster(target, 18); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { NatureEffects.RemoveFoodFromRoster(target, 18); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try
             {
                 var party = caster.PartyBelongedTo;
@@ -262,7 +262,7 @@ namespace AshAndEmber
                 if (len < 0.5f) back = new Vec2(1f, 0f); else back *= 1f / len;
                 target.Position = new CampaignVec2(tPos + back * 3f, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Ice — The Long Stillness: pure morale and standing, no blade drawn.
@@ -270,10 +270,10 @@ namespace AshAndEmber
         {
             var target = NearestHostileToCaster(caster, 60f);
             if (target == null) return;
-            try { target.RecentEventsMorale -= 40f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { target.RecentEventsMorale -= 40f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             var tClan = target.LeaderHero?.Clan;
             if (tClan != null)
-                try { tClan.Influence = Math.Max(0f, tClan.Influence - 12f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { tClan.Influence = Math.Max(0f, tClan.Influence - 12f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Spirit — Farsight: the caster reads the currents of power; renown and influence flow to him.
@@ -289,7 +289,7 @@ namespace AshAndEmber
                 if (caster.PartyBelongedTo != null)
                     caster.PartyBelongedTo.RecentEventsMorale += 10f;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void Msg(string text) =>
@@ -313,7 +313,7 @@ namespace AshAndEmber
             // Explicitly clear IgnoreByOtherParties so a save/load while faded
             // does not leave the party permanently invisible.
             _fadeDaysRemaining = 0;
-            try { if (MobileParty.MainParty != null) TrySetPartyConcealed(MobileParty.MainParty, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { if (MobileParty.MainParty != null) TrySetPartyConcealed(MobileParty.MainParty, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

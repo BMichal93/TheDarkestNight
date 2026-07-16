@@ -23,7 +23,7 @@ using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 using TaleWorlds.CampaignSystem.MapEvents;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SpellEffects
     {
@@ -70,7 +70,7 @@ namespace AshAndEmber
                     if (isEnemy) result.Add(a);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return result;
         }
 
@@ -108,7 +108,7 @@ namespace AshAndEmber
                     if (d2 < bestDist2) { bestDist2 = d2; nearest = a; }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
             if (nearest == null) return null;
             Vec3 d3 = nearest.Position - pos; d3.z = 0f;
             if (d3.Length < 0.01f) return null;
@@ -123,8 +123,8 @@ namespace AshAndEmber
         {
             if (target == null || target.IsHero) return;
             bool usingEquip = false;
-            try { usingEquip = target.IsUsingGameObject; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            if (usingEquip) { try { target.Health = 1f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } return; }
+            try { usingEquip = target.IsUsingGameObject; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            if (usingEquip) { try { target.Health = 1f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } return; }
             if (target.IsActive() && !_pendingDeaths.Exists(e => e.Target == target))
                 _pendingDeaths.Add((target, owner));
         }
@@ -153,19 +153,19 @@ namespace AshAndEmber
         {
             if (target == null || !target.IsActive()) return;
             if (target.IsHero)
-            { try { target.Health = Math.Max(1f, target.Health - 2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } return; }
+            { try { target.Health = Math.Max(1f, target.Health - 2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } return; }
             bool usingEquip = false;
-            try { usingEquip = target.IsUsingGameObject; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            if (usingEquip) { try { target.Health = 1f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } return; }
+            try { usingEquip = target.IsUsingGameObject; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            if (usingEquip) { try { target.Health = 1f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } return; }
             try
             {
                 Blow blow = BuildBlow(target, DamageTypes.Cut, 2000f, owner);
                 target.Die(blow, (Agent.KillInfo)0);
                 return;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (!target.IsActive()) return;
-            try { target.MakeDead(true, ActionIndexCache.Create("act_strike_walk_right_stance"), 0); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { target.MakeDead(true, ActionIndexCache.Create("act_strike_walk_right_stance"), 0); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void DamageAgent(Agent target, float damage, ColorSchool? school = null, Agent owner = null,
@@ -179,7 +179,7 @@ namespace AshAndEmber
             // with no element passes through unchanged.
             if (attackElement.HasValue)
             {
-                try { damage *= ElementalBeings.IncomingElementMultiplier(target, attackElement.Value); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { damage *= ElementalBeings.IncomingElementMultiplier(target, attackElement.Value); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // Requirement 20 — demons fear the flame. DamageAgent is the single
@@ -196,7 +196,7 @@ namespace AshAndEmber
                 if (DemonBattleBehavior.IsBoss(target)) damage *= ApocalypseMath.DemonLordBaneMultiplier;
                 else if (DemonBattleBehavior.IsDemon(target)) damage *= RelicMath.DemonBaneMultiplier;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Cinder Shell enchantment: reduce incoming damage
             if (_stoneskinAgents.TryGetValue(target, out var skin) && skin.Remaining > 0f)
@@ -216,9 +216,9 @@ namespace AshAndEmber
             if (newHealth <= 0f)
             {
                 if (!target.IsHero) QueueKill(target, owner);
-                else try { target.Health = 1f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                else try { target.Health = 1f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            else try { target.Health = newHealth; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            else try { target.Health = newHealth; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // As DamageAgent, but delivers the hurt as a REAL engine blow so the mark
@@ -235,7 +235,7 @@ namespace AshAndEmber
             if (target == null || !target.IsActive() || damage <= 0f) return;
 
             if (attackElement.HasValue)
-                try { damage *= ElementalBeings.IncomingElementMultiplier(target, attackElement.Value); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { damage *= ElementalBeings.IncomingElementMultiplier(target, attackElement.Value); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Requirement 20 — demons fear the flame (see DamageAgent's matching
             // comment; this is the visible-blow twin of the same choke point).
             // Phase 11 — the Demon Lord specifically resists this bonus rather
@@ -247,7 +247,7 @@ namespace AshAndEmber
                 if (DemonBattleBehavior.IsBoss(target)) damage *= ApocalypseMath.DemonLordBaneMultiplier;
                 else if (DemonBattleBehavior.IsDemon(target)) damage *= RelicMath.DemonBaneMultiplier;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (_stoneskinAgents.TryGetValue(target, out var skin) && skin.Remaining > 0f)
                 damage *= (1f - Math.Min(0.5f, skin.BonusArmor / 100f));
             if (_sunderedAgents.TryGetValue(target, out var sunder) && sunder.Remaining > 0f)
@@ -256,7 +256,7 @@ namespace AshAndEmber
 
             // Heroes never fall to a spell — cap the blow so at least 1 HP remains.
             if (target.IsHero)
-                try { damage = Math.Min(damage, Math.Max(0f, target.Health - 1f)); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { damage = Math.Min(damage, Math.Max(0f, target.Health - 1f)); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (damage <= 0f) return;
 
             try
@@ -289,18 +289,18 @@ namespace AshAndEmber
             }
             catch (System.Exception logEx)
             {
-                AshAndEmber.ModLog.Error(logEx);
+                TheDarkestNight.ModLog.Error(logEx);
                 // Fallback: if the blow could not be registered, fail safe to the
                 // silent health drain so the strike is never simply lost. Multipliers
                 // are already baked into `damage`, so pass no element (no re-scaling).
-                try { DamageAgent(target, damage, ColorSchool.Red, owner, null); } catch (System.Exception logEx2) { AshAndEmber.ModLog.Error(logEx2); }
+                try { DamageAgent(target, damage, ColorSchool.Red, owner, null); } catch (System.Exception logEx2) { TheDarkestNight.ModLog.Error(logEx2); }
             }
         }
 
         public static void HealAgent(Agent target, float amount)
         {
             if (target == null || !target.IsActive()) return;
-            try { target.Health = Math.Min(target.HealthLimit, target.Health + amount); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { target.Health = Math.Min(target.HealthLimit, target.Health + amount); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static Blow BuildBlow(Agent target, DamageTypes type, float magnitude, Agent owner = null)
@@ -338,7 +338,7 @@ namespace AshAndEmber
                     result.Add(a);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return result;
         }
 
@@ -365,7 +365,7 @@ namespace AshAndEmber
                     result.Add(a);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return result;
         }
 
@@ -394,7 +394,7 @@ namespace AshAndEmber
                     count++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return count;
         }
 
@@ -412,7 +412,7 @@ namespace AshAndEmber
                     count++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return count;
         }
 

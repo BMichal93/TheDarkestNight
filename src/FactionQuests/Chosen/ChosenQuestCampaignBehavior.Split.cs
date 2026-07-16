@@ -28,7 +28,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class ChosenQuestCampaignBehavior
     {
@@ -46,7 +46,7 @@ namespace AshAndEmber
                     if (Clan.PlayerClan != null && Clan.PlayerClan.Kingdom == chosen)
                         ChangeKingdomAction.ApplyByLeaveKingdom(Clan.PlayerClan, false);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 var clans = chosen.Clans
                     .Where(c => c != null && !c.IsEliminated && c != Clan.PlayerClan)
@@ -94,7 +94,7 @@ namespace AshAndEmber
                 for (int i = 0; i < newKingdoms.Count; i++)
                     for (int j = i + 1; j < newKingdoms.Count; j++)
                         try { DeclareWarAction.ApplyByDefault(newKingdoms[i], newKingdoms[j]); }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 string names = string.Join(", ",
                     newKingdoms.Select(k => k.Name?.ToString()).Where(n => !string.IsNullOrEmpty(n)));
@@ -110,7 +110,7 @@ namespace AshAndEmber
 
                 _phase = PhaseEnded;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static Kingdom FoundSplinterKingdom(int splinterIndex, List<Clan> groupClans)
@@ -148,7 +148,7 @@ namespace AshAndEmber
                     new TextObject(ChosenCulture.RulerTitle));
 
                 try { ChangeKingdomAction.ApplyByCreateKingdom(anchor, kingdom, false); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 for (int i = 1; i < groupClans.Count; i++)
                 {
@@ -157,12 +157,12 @@ namespace AshAndEmber
                         ChangeKingdomAction.ApplyByJoinToKingdom(
                             groupClans[i], kingdom, CampaignTime.Now + CampaignTime.Years(1000), false);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 return kingdom;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
 
         private static string SplinterLore(int splinterIndex)

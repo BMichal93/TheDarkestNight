@@ -23,7 +23,7 @@ using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 using TaleWorlds.CampaignSystem.MapEvents;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SpellEffects
     {
@@ -51,7 +51,7 @@ namespace AshAndEmber
                 fireWarded = caster != null && cast.DamageCount > 0
                     && ElementWallWards.BlocksPath(MagicElement.Fire, caster.Position, target.Position, out _);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (cast.DamageCount > 0 && !fireWarded)
             {
                 if (cast.HasSplitDamage)
@@ -89,7 +89,7 @@ namespace AshAndEmber
             if (cast.SearCount > 0 && !CasterHasEnchantment(caster, TalentId.Immolate))
             {
                 bool isMounted = false;
-                try { isMounted = target.MountAgent != null; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { isMounted = target.MountAgent != null; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (!isMounted && !target.IsHero)
                 {
                     try
@@ -103,7 +103,7 @@ namespace AshAndEmber
                         dest.z = target.Position.z;
                         QueueMove(target, dest, 0.3f);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
 
@@ -119,7 +119,7 @@ namespace AshAndEmber
                     else
                         _sunderedAgents[target] = (Math.Max(existing.BonusVuln, vuln), Math.Max(existing.Remaining, duration));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // Shred: morale drain + chance to bewilder — suppressed when Sunder is active (armour shred supersedes).
@@ -131,7 +131,7 @@ namespace AshAndEmber
                     float cur   = target.GetMorale();
                     target.SetMorale(Math.Max(cur - delta, 0f));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (!target.IsHero && _rng.NextDouble() < 0.40)
                 {
                     try
@@ -139,7 +139,7 @@ namespace AshAndEmber
                         target.SetMorale(0f);
                         BeginAgentGlow(target, ColorSchool.Red, 1f);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
         }
@@ -153,7 +153,7 @@ namespace AshAndEmber
                 float cur = target.GetMorale();
                 target.SetMorale(Math.Min(cur + cast.RestoreCount * 6f, 100f));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Enchantment application ────────────────────────────────────────────
@@ -165,7 +165,7 @@ namespace AshAndEmber
             if (cast.EffForce > 0 && CasterHasEnchantment(caster, TalentId.Scatter))
             {
                 bool isMounted = false;
-                try { isMounted = target.MountAgent != null; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { isMounted = target.MountAgent != null; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (!isMounted)
                 {
                     float dist = cast.EffForce * 5f;  // 5m per input (was 4m)
@@ -175,7 +175,7 @@ namespace AshAndEmber
                     dir = new Vec3(dir.x, dir.y, 0f).NormalizedCopy();
                     Vec3 dest = target.Position + dir * dist;
                     dest.z = target.Position.z;
-                    try { QueueMove(target, dest, 0.4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { QueueMove(target, dest, 0.4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
                 if (!target.IsHero)
                 {
@@ -190,7 +190,7 @@ namespace AshAndEmber
                         target.SetMaximumSpeedLimit(_charredAgents[target].ReducedSpeed, false);
                         BeginAgentGlow(target, ColorSchool.Red, 2f);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
 
@@ -206,7 +206,7 @@ namespace AshAndEmber
                         _scorchAgents[target] = (Math.Max(cur.Dps, dps), 3f);
                     BeginAgentGlow(target, ColorSchool.Red, 1.5f);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // Smoulder: Sear inputs seal the morale brand — enemies cannot recover morale for 30 seconds.
@@ -221,7 +221,7 @@ namespace AshAndEmber
                         _ashmarkedAgents[target] = (Math.Min(cur.LockedMorale, morale), 30f);
                     BeginAgentGlow(target, ColorSchool.Red, 2f);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // Smoulder: morale penalty + bewildering random effect (merged Bewilder)
@@ -233,7 +233,7 @@ namespace AshAndEmber
                     float cur   = target.GetMorale();
                     target.SetMorale(Math.Max(cur - delta, 0f));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (!target.IsHero)
                 {
                     try
@@ -241,7 +241,7 @@ namespace AshAndEmber
                         switch (_rng.Next(4))
                         {
                             case 0:
-                                try { target.SetMorale(0f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { target.SetMorale(0f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 break;
                             case 1:
                                 try
@@ -253,20 +253,20 @@ namespace AshAndEmber
                                         _charredAgents[target] = (0f, Math.Max(curPanic.Remaining, 2f));
                                     target.SetMaximumSpeedLimit(0f, false);
                                 }
-                                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 break;
                             case 2:
                                 bool mounted = false;
-                                try { mounted = target.MountAgent != null; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { mounted = target.MountAgent != null; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 if (mounted) ForceDismount(target, caster);
-                                else try { target.SetMorale(0f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                else try { target.SetMorale(0f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 break;
                             case 3:
-                                try { target.SetMorale(target.GetMorale() * 0.25f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { target.SetMorale(target.GetMorale() * 0.25f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 break;
                         }
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
 
@@ -289,7 +289,7 @@ namespace AshAndEmber
                         _attackWeakenedAgents[target] = (Math.Max(existingWeak.ReductionPct, attackWeaken), Math.Max(existingWeak.Remaining, duration));
                     BeginAgentGlow(target, ColorSchool.Red, 2f);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // Immolate: burn damage per input; kills scale with inputs.
@@ -351,7 +351,7 @@ namespace AshAndEmber
                                     anyChain = true;
                                 }
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             if (anyChain)
                                 InformationManager.DisplayMessage(new InformationMessage(
                                     "Chain Ignite — the fire spreads.", new Color(1f, 0.55f, 0.1f)));
@@ -363,7 +363,7 @@ namespace AshAndEmber
                         BeginAgentGlow(target, ColorSchool.Red, 1.5f);
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -400,7 +400,7 @@ namespace AshAndEmber
                         AddStoneskin(target, overBonus, 5f);
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // Hearthlight: morale boost
@@ -412,7 +412,7 @@ namespace AshAndEmber
                     float cur   = target.GetMorale();
                     target.SetMorale(Math.Min(cur + delta, 100f));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // Reflect: melee damage reflection — any hit on the warded ally bounces back.
@@ -428,7 +428,7 @@ namespace AshAndEmber
                         _reflectAgents[target] = (Math.Max(cur.ReflectPct, pct), Math.Max(cur.Remaining, duration));
                     BeginAgentGlow(target, ColorSchool.Orange, 2f);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -443,7 +443,7 @@ namespace AshAndEmber
                 if (hero != null && ElementLordRegistry.IsElementLord(hero))
                     return ElementLordRegistry.HasTalent(hero, enchantment);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return false;
         }
 

@@ -78,7 +78,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SettlementEncounters
     {
@@ -448,7 +448,7 @@ namespace AshAndEmber
             try
             {
                 _lastSettlementId = settlement.StringId;
-                try { AmbientRemarks.CheckCompanionRemark(settlement); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { AmbientRemarks.CheckCompanionRemark(settlement); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Apprentice discovery: independent 1% roll, not gated by shared cooldown
                 if (settlement.IsVillage && MageKnowledge.IsMage && ApprenticeSystem.CanSearch
@@ -457,7 +457,7 @@ namespace AshAndEmber
                 {
                     MageKnowledge._deferredInquiry = () =>
                     {
-                        try { ApprenticeSystem.ShowDiscovery(settlement); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { ApprenticeSystem.ShowDiscovery(settlement); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     };
                     return; // skip normal encounter this entry
                 }
@@ -466,7 +466,7 @@ namespace AshAndEmber
                 if (_rng.NextDouble() < EncounterChance)
                     TryFireEnter(settlement);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         /// Called from CampaignEvents.OnSettlementLeftEvent — fires immediately when the
@@ -481,7 +481,7 @@ namespace AshAndEmber
                 if (_rng.NextDouble() < EncounterChance)
                     TryFireLeave(settlement);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         /// Called from MagicCampaignBehavior.OnDailyTick — decrements cooldowns and fires deferred events.
@@ -817,7 +817,7 @@ namespace AshAndEmber
                         break;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

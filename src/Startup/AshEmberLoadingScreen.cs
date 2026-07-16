@@ -23,7 +23,7 @@ using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.ScreenSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class AshEmberLoadingScreen
     {
@@ -67,7 +67,7 @@ namespace AshAndEmber
             }
             catch
             {
-                try { Hide(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { Hide(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -83,13 +83,13 @@ namespace AshAndEmber
                 var state = GameStateManager.Current?.ActiveState;
                 if (state is InitialState) return false;
 
-                try { if (LoadingWindow.IsLoadingWindowActive) return true; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { if (LoadingWindow.IsLoadingWindowActive) return true; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (state != null &&
                     state.GetType().Name.IndexOf("Loading", StringComparison.OrdinalIgnoreCase) >= 0)
                     return true;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return false;
         }
 
@@ -113,15 +113,15 @@ namespace AshAndEmber
             {
                 // Remove from the screen we added to, and from the current top screen
                 // in case the stack changed mid-load — whichever still holds it.
-                try { if (_hostScreen != null && _hostScreen.HasLayer(_layer)) _hostScreen.RemoveLayer(_layer); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { if (_hostScreen != null && _hostScreen.HasLayer(_layer)) _hostScreen.RemoveLayer(_layer); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try
                 {
                     var top = ScreenManager.TopScreen;
                     if (top != null && top != _hostScreen && top.HasLayer(_layer)) top.RemoveLayer(_layer);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            try { _layer?.ReleaseMovie(_movie); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { _layer?.ReleaseMovie(_movie); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _layer      = null;
             _hostScreen = null;
             _vm         = null;

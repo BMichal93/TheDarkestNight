@@ -11,7 +11,7 @@
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed class FactionQuestTriggerCampaignBehavior : CampaignBehaviorBase
     {
@@ -25,7 +25,7 @@ namespace AshAndEmber
         {
             List<string> notified = FactionQuestTrigger.NotifiedSnapshot();
             try { store.SyncData("FACQ_Notified", ref notified); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (store.IsLoading) FactionQuestTrigger.RestoreNotified(notified);
         }
 
@@ -37,13 +37,13 @@ namespace AshAndEmber
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
             try { FactionQuestTrigger.RegisterDialogue(starter); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnWeeklyTick()
         {
             try { FactionQuestTrigger.WeeklyTick(); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

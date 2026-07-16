@@ -20,7 +20,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class TowerRiteQuestCampaignBehavior
     {
@@ -36,16 +36,16 @@ namespace AshAndEmber
                             if (_phase != PhaseGathering) return false;
                             if (!TowerSettlements.IsTowerSettlement(Settlement.CurrentSettlement)) return false;
                             MBTextManager.SetTextVariable("TOWERRITE_ENTER_TEXT", "Bring the grave-goods to the Great Rite");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = true;
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { ShowRiteMenu(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { ShowRiteMenu(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ShowRiteMenu()
@@ -73,10 +73,10 @@ namespace AshAndEmber
                     "Speak the working.",
                     "Leave",
                     ready ? (Action)PerformRite : null,
-                    () => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } }
+                    () => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } }
                 ), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void PerformRite()
@@ -87,7 +87,7 @@ namespace AshAndEmber
                 SpendItem(BloodboundCatalog.DemonBloodItemId, TowerRiteMath.GatherDemonBloodRequired);
                 SpendItem(TempleSigilCatalog.HolySigilItemId, TowerRiteMath.GatherHolySigilsRequired);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -97,13 +97,13 @@ namespace AshAndEmber
                     "air folds shut around Iyakis — then folds the wrong way. The seal does not close. It tears. " +
                     "Something vast, and hungry, and not remotely bound, comes through where the door used to be.",
                     true, false, "So be it.", "",
-                    () => { try { StartRampage(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    () => { try { StartRampage(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     null
                 ), true, true);
             }
             catch (System.Exception logEx)
             {
-                AshAndEmber.ModLog.Error(logEx);
+                TheDarkestNight.ModLog.Error(logEx);
                 StartRampage();
             }
         }
@@ -137,7 +137,7 @@ namespace AshAndEmber
                 if (item == null || roster == null || amount <= 0) return;
                 roster.AddToCounts(item, -amount);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Spends `amount` total units across however many of `itemIds` the
@@ -162,7 +162,7 @@ namespace AshAndEmber
                     remaining -= take;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

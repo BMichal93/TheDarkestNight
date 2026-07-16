@@ -24,7 +24,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public enum RelicEffectSource { Crystal = 0, DarkGift = 1 }
 

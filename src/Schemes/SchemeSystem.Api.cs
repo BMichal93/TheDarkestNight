@@ -18,7 +18,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static partial class SchemeSystem
     {
@@ -173,8 +173,8 @@ namespace AshAndEmber
             {
                 if (instigator.Gold < effectiveGold) return false;
                 if ((instigator.Clan?.Influence ?? 0) < effectiveInf) return false;
-                try { instigator.Gold -= effectiveGold; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { if (instigator.Clan != null) instigator.Clan.Influence -= effectiveInf; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { instigator.Gold -= effectiveGold; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { if (instigator.Clan != null) instigator.Clan.Influence -= effectiveInf; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             _pending.Add(new PendingScheme
@@ -224,7 +224,7 @@ namespace AshAndEmber
                 {
                     _targetCooldowns.Remove(key);
                     if (_playerCooldownKeys.Remove(key))
-                        try { NotifyCooldownExpired(key); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { NotifyCooldownExpired(key); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
 
@@ -245,7 +245,7 @@ namespace AshAndEmber
                 {
                     var s = _pending[i];
                     _pending.RemoveAt(i);
-                    try { ExecuteScheme(s); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ExecuteScheme(s); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
         }
@@ -304,7 +304,7 @@ namespace AshAndEmber
                             schemeLaunchedToday = true;
                         }
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 // If a scheme was just queued against the player or their fiefs, give a
@@ -317,7 +317,7 @@ namespace AshAndEmber
                             && p.DaysRemaining >= 1
                             && TargetsPlayerInterests(p));
                         int hintChance = 30;
-                        try { hintChance = Math.Min(75, 30 + (Hero.MainHero?.GetSkillValue(DefaultSkills.Roguery) ?? 0) / 10); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { hintChance = Math.Min(75, 30 + (Hero.MainHero?.GetSkillValue(DefaultSkills.Roguery) ?? 0) / 10); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         if (targetsPlayer && _rng.Next(100) < hintChance)
                         {
                             string[] whispers =
@@ -333,10 +333,10 @@ namespace AshAndEmber
                                 new Color(0.55f, 0.45f, 0.6f)));
                         }
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         /// True when this target (hero or settlement) was hit by an NPC scheme

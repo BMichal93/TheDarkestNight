@@ -13,7 +13,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class BanditMageAI
     {
@@ -186,7 +186,7 @@ namespace AshAndEmber
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return false;
         }
 
@@ -207,7 +207,7 @@ namespace AshAndEmber
                 string id = (a.Character as TaleWorlds.CampaignSystem.CharacterObject)?.StringId;
                 if (id != null && _titles.TryGetValue(id, out string title)) return title;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return "Rogue Mage";
         }
 
@@ -327,7 +327,7 @@ namespace AshAndEmber
                     }
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

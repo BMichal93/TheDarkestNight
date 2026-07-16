@@ -9,7 +9,7 @@
 
 using System.Collections.Generic;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class DemonCatalog
     {

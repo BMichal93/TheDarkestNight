@@ -45,7 +45,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class CityStateSystem
     {
@@ -89,17 +89,17 @@ namespace AshAndEmber
             // diplomacy (or anything else) tried to move into a different
             // kingdom. Runs every tick regardless of the settle delay — a
             // city-state that already exists must never be allowed to drift.
-            try { ReassertCityStateMembership(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ReassertCityStateMembership(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Every sanctuary kingdom's peace (The Camp, the Children of the
             // Forest) stays enforced every tick, same as the membership
             // reassert above — a cheap, always-safe backstop regardless of
             // what triggered a war against/from one.
-            try { ReassertSanctuaryPeace(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ReassertSanctuaryPeace(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (!CityStateMath.ShouldBeginConversion(_daysSinceStart)) return;
 
-            try { ConvertOwnerlessTowns(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ConvertOwnerlessTowns(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Session launch: rebrand a pre-existing sanctuary city-state ────────
@@ -111,7 +111,7 @@ namespace AshAndEmber
         // live state — no new mandatory save keys.
         public static void OnSessionLaunched()
         {
-            try { RebrandSanctuaryKingdomsIfPresent(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RebrandSanctuaryKingdomsIfPresent(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void RebrandSanctuaryKingdomsIfPresent()
@@ -140,7 +140,7 @@ namespace AshAndEmber
                         if (kingdom.RulingClan != null) ApplyForestLordAges(kingdom.RulingClan);
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -208,7 +208,7 @@ namespace AshAndEmber
                 foreach (IFaction enemy in sanctuary.FactionsAtWarWith.ToList())
                 {
                     try { MakePeaceAction.Apply(sanctuary, enemy); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
         }
@@ -244,23 +244,23 @@ namespace AshAndEmber
                     if (clan.Kingdom == cityKingdom) continue; // already home
 
                     if (cityKingdom.IsEliminated)
-                        try { cityKingdom.ReactivateKingdom(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { cityKingdom.ReactivateKingdom(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                     if (clan.Kingdom != null)
-                        try { ChangeKingdomAction.ApplyByLeaveKingdom(clan, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { ChangeKingdomAction.ApplyByLeaveKingdom(clan, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                     bool needsRuler = cityKingdom.RulingClan == null;
                     if (needsRuler)
-                        try { ChangeKingdomAction.ApplyByCreateKingdom(clan, cityKingdom, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { ChangeKingdomAction.ApplyByCreateKingdom(clan, cityKingdom, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     else
                         try
                         {
                             ChangeKingdomAction.ApplyByJoinToKingdom(
                                 clan, cityKingdom, CampaignTime.Now + CampaignTime.Years(1000), false);
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -290,7 +290,7 @@ namespace AshAndEmber
 
                     CreateCityState(clan, settlement, kingdomId);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -358,7 +358,7 @@ namespace AshAndEmber
                         clan.Color = color1;
                         clan.Color2 = color2;
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 // Requirement 24's bandit-culture reassignment (and its
@@ -373,7 +373,7 @@ namespace AshAndEmber
                 // note on why that path is deliberately not attempted.
                 if (!isSanctuary) ApplyBanditCulture(homeSettlement);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Black field, white device — verified against TaleWorlds.Core.Banner:
@@ -419,7 +419,7 @@ namespace AshAndEmber
                 var nameText = new TextObject(kingdomName);
 
                 try { kingdom.ChangeKingdomName(nameText, nameText); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 SetKingdomField(kingdom,
                     new[] { "<EncyclopediaText>k__BackingField" },
@@ -440,7 +440,7 @@ namespace AshAndEmber
                     ruler.Color2 = color2;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void SetKingdomField(Kingdom kingdom, string[] backingFieldCandidates, TextObject value)
@@ -453,7 +453,7 @@ namespace AshAndEmber
                         System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
                     if (f != null) { f.SetValue(kingdom, value); return; }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -465,7 +465,7 @@ namespace AshAndEmber
                     System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
                 f?.SetValue(kingdom, value);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // The wood keeps its own — ages every hero of the given clan into the
@@ -481,10 +481,10 @@ namespace AshAndEmber
                 foreach (Hero hero in clan.Heroes.ToList())
                 {
                     try { ReanchorForestLordAge(hero); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void ReanchorForestLordAge(Hero hero)
@@ -521,11 +521,11 @@ namespace AshAndEmber
                             if (villageSettlement != null)
                                 villageSettlement.Culture = banditCulture;
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

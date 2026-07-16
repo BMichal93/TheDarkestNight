@@ -20,7 +20,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class ApocalypseCampaignBehavior : CampaignBehaviorBase
     {
@@ -46,13 +46,13 @@ namespace AshAndEmber
 
         public override void SyncData(IDataStore dataStore)
         {
-            try { dataStore.SyncData("APOC_NextHuntDay",      ref _nextHuntDay); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { dataStore.SyncData("APOC_HuntPortentShown", ref _huntPortentShown); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { dataStore.SyncData("APOC_RumourPortentShown", ref _rumourPortentShown); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { dataStore.SyncData("APOC_RumoursActive", ref _rumoursActiveField); RumoursActive = _rumoursActiveField; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SyncGatheringData(dataStore); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SyncResolutionData(dataStore); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { DemonLordSystem.SyncData(dataStore); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { dataStore.SyncData("APOC_NextHuntDay",      ref _nextHuntDay); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { dataStore.SyncData("APOC_HuntPortentShown", ref _huntPortentShown); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { dataStore.SyncData("APOC_RumourPortentShown", ref _rumourPortentShown); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { dataStore.SyncData("APOC_RumoursActive", ref _rumoursActiveField); RumoursActive = _rumoursActiveField; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SyncGatheringData(dataStore); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SyncResolutionData(dataStore); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { DemonLordSystem.SyncData(dataStore); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Backing field synced alongside the public RumoursActive property (auto
@@ -73,21 +73,21 @@ namespace AshAndEmber
 
         private static int CurrentDay()
         {
-            try { return (int)CampaignTime.Now.ToDays; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return 0; }
+            try { return (int)CampaignTime.Now.ToDays; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return 0; }
         }
 
         private void OnDailyTick()
         {
-            try { TickNightOfTheHunt(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TickRumourStage(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TickNightOfTheHunt(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TickRumourStage(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnWeeklyTick()
         {
-            try { GatheringWeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { DemonLordSystem.WeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TryRollDemonLordAppearance(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TickVictoryDefeatChecks(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { GatheringWeeklyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { DemonLordSystem.WeeklyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TryRollDemonLordAppearance(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TickVictoryDefeatChecks(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Requirement 32 — Night of the Hunt ──────────────────────────────────
@@ -115,7 +115,7 @@ namespace AshAndEmber
 
             _huntPortentShown = false;
             _nextHuntDay = day + ApocalypseMath.RollNextHuntIntervalDays(_rng);
-            try { FireNightOfTheHunt(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { FireNightOfTheHunt(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void FireNightOfTheHunt()
@@ -132,10 +132,10 @@ namespace AshAndEmber
                     Vec2 anchor = DemonHuntAnchor();
                     DemonSpawnCampaignBehavior.SpawnAmbushNear(anchor);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
-            try { RaidVillagesForHunt(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RaidVillagesForHunt(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static Vec2 DemonHuntAnchor()
@@ -148,7 +148,7 @@ namespace AshAndEmber
                 if (list.Count == 0) return default;
                 return list[_rng.Next(list.Count)].GetPosition2D;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return default; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return default; }
         }
 
         private static void RaidVillagesForHunt()
@@ -168,7 +168,7 @@ namespace AshAndEmber
                         $"{v.Name} bore the worst of the Hunt. Hearth: {before:F0} -> {v.Village.Hearth:F0}.",
                         new Color(0.55f, 0.15f, 0.15f)));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -195,7 +195,7 @@ namespace AshAndEmber
         private void OnHeroKilled(Hero victim, Hero killer,
             KillCharacterAction.KillCharacterActionDetail detail, bool showNotification)
         {
-            try { TryResolveVictory(victim); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TryResolveVictory(victim); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

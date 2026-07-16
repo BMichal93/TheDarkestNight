@@ -29,7 +29,7 @@ using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class GreatOtherParty
     {
@@ -54,11 +54,11 @@ namespace AshAndEmber
 
         internal static void SyncData(IDataStore store)
         {
-            try { store.SyncData("GRAWK_GOPartyId",       ref _partyId); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("GRAWK_GOControlled",    ref _controlled); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("GRAWK_GOSummonDay",     ref _summonDay); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("GRAWK_GOLastTopUpDay",  ref _lastTopUpDay); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("GRAWK_GOLastHungerDay", ref _lastHungerDay); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("GRAWK_GOPartyId",       ref _partyId); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("GRAWK_GOControlled",    ref _controlled); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("GRAWK_GOSummonDay",     ref _summonDay); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("GRAWK_GOLastTopUpDay",  ref _lastTopUpDay); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("GRAWK_GOLastHungerDay", ref _lastHungerDay); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void ResetForNewGame()
@@ -86,7 +86,7 @@ namespace AshAndEmber
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Query ────────────────────────────────────────────────────────────────
@@ -125,7 +125,7 @@ namespace AshAndEmber
                             .OrderBy(s => (s.GetPosition2D - anchor).LengthSquared).FirstOrDefault();
                     hideout = hs?.Hideout;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (hideout == null) return;
 
                 var cvec = new CampaignVec2(anchor, true);
@@ -133,7 +133,7 @@ namespace AshAndEmber
                 MobileParty party = BanditPartyComponent.CreateBanditParty(partyId, banditClan, hideout, false, pt, cvec);
                 if (party == null) return;
 
-                try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 CharacterObject champion = MBObjectManager.Instance.GetObject<CharacterObject>(ChampionTroopId)
                     ?? MBObjectManager.Instance.GetObject<CharacterObject>("mountain_bandit");
@@ -142,7 +142,7 @@ namespace AshAndEmber
                 CharacterObject revenant = MBObjectManager.Instance.GetObject<CharacterObject>(RevenantTroopId);
                 if (revenant != null) party.MemberRoster.AddToCounts(revenant, GreatAwakeningMath.RevenantCap);
 
-                try { party.Party.SetCustomName(new TextObject("The Great Other")); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { party.Party.SetCustomName(new TextObject("The Great Other")); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 _partyId = party.StringId;
                 _controlled = controlled;
@@ -151,7 +151,7 @@ namespace AshAndEmber
 
                 if (controlled) EscortDunebornLeader(party);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Daily: keep pace with the Duneborn leader's army (scenario A) ────────
@@ -160,7 +160,7 @@ namespace AshAndEmber
             if (!_controlled) return;
             var party = CurrentParty();
             if (party == null) return;
-            try { EscortDunebornLeader(party); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { EscortDunebornLeader(party); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void EscortDunebornLeader(MobileParty party)
@@ -170,14 +170,14 @@ namespace AshAndEmber
             if (leaderParty != null && leaderParty != party)
             {
                 try { party.SetMoveEscortParty(leaderParty, MobileParty.NavigationType.Default, false); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             else
             {
                 Settlement leaderSettlement = leader?.CurrentSettlement;
                 if (leaderSettlement != null)
                     try { party.SetMoveGoToSettlement(leaderSettlement, MobileParty.NavigationType.Default, false); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -193,13 +193,13 @@ namespace AshAndEmber
             if (day - _lastTopUpDay >= GreatAwakeningMath.RevenantTopUpIntervalDays)
             {
                 _lastTopUpDay = day;
-                try { TopUpRevenants(party); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { TopUpRevenants(party); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             if (day - _lastHungerDay >= GreatAwakeningMath.HungerIntervalDays)
             {
                 _lastHungerDay = day;
-                try { Hunger(party); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { Hunger(party); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             // Scenario B roams — nudge it toward a random city it can still prey
@@ -208,7 +208,7 @@ namespace AshAndEmber
             // an unverified MobileParty.TargetSettlement read in this environment.)
             if (!_controlled && _rng.NextDouble() < 0.35)
             {
-                try { RoamToward(party); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { RoamToward(party); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -252,10 +252,10 @@ namespace AshAndEmber
                 .FirstOrDefault();
             if (target == null) return;
 
-            try { target.Town.Prosperity = 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { target.Town.Security   = 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { target.Town.FoodStocks = 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { target.Militia         = 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { target.Town.Prosperity = 0f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { target.Town.Security   = 0f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { target.Town.FoodStocks = 0f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { target.Militia         = 0f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             int killed = 0;
             try
@@ -271,7 +271,7 @@ namespace AshAndEmber
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -279,7 +279,7 @@ namespace AshAndEmber
                     $"The Hunger — The Great Other has fed on {target.Name}. Its stores are empty, its walls " +
                     $"unguarded, and {killed} of its soldiers do not answer muster."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Battle: promote the champion troop to Void the first time it is
@@ -293,7 +293,7 @@ namespace AshAndEmber
                 _championClaimedThisMission = true;
                 ElementalBeings.RegisterGreatOther(agent);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

@@ -48,7 +48,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed class FactionQuestDef
     {
@@ -125,7 +125,7 @@ namespace AshAndEmber
         {
             int day;
             try { day = (int)CampaignMapEvents.ElapsedCampaignDays(); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return; }
             if (!FactionQuestMath.IsTriggerEligible(day)) return;
 
             foreach (var def in _defs)
@@ -141,7 +141,7 @@ namespace AshAndEmber
                     if (!string.IsNullOrEmpty(def.NotificationText))
                         MBInformationManager.AddQuickInformation(new TextObject(def.NotificationText));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -158,7 +158,7 @@ namespace AshAndEmber
                         def.Id + "_ask", "hero_main_options", def.Id + "_reveal",
                         def.PlayerAskLine, () => CanAsk(def), null, priority);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 try
                 {
@@ -166,7 +166,7 @@ namespace AshAndEmber
                         def.Id + "_reveal_npc", def.Id + "_reveal", def.Id + "_reveal_player",
                         def.LeaderRevealLine, () => CanAsk(def), null, priority);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 try
                 {
@@ -174,7 +174,7 @@ namespace AshAndEmber
                         def.Id + "_accept", def.Id + "_reveal_player", "close_window",
                         def.PlayerAcceptLine, null, () => OnAccept(def), priority);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -195,7 +195,7 @@ namespace AshAndEmber
         private static void OnAccept(FactionQuestDef def)
         {
             try { def?.OnAccepted?.Invoke(); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

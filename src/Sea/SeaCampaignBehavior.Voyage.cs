@@ -17,7 +17,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class SeaCampaignBehavior
     {
@@ -96,11 +96,11 @@ namespace AshAndEmber
                         }
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 GameMenu.SwitchToMenu("sea_voyage");
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ResetVoyageState()
@@ -132,7 +132,7 @@ namespace AshAndEmber
                 args.MenuContext.GameMenu.SetTargetedWaitingTimeAndInitialProgress(
                     Math.Max(1f, _voyageHoursTotal), 0f);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static bool VoyageOnCondition(MenuCallbackArgs args) => true;
@@ -151,7 +151,7 @@ namespace AshAndEmber
                 args.MenuContext.GameMenu.SetTargetedWaitingTimeAndInitialProgress(
                     Math.Max(1f, remaining), 0f);
             }
-            catch { try { Arrive(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } }
+            catch { try { Arrive(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } }
         }
 
         private static void VoyageOnTick(MenuCallbackArgs args, CampaignTime dt)
@@ -203,12 +203,12 @@ namespace AshAndEmber
                     args.MenuContext.GameMenu.SetProgressOfWaitingInMenu(
                         Math.Min(1f, _voyageHoursElapsed / Math.Max(1f, _voyageHoursTotal)));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (_voyageHoursElapsed >= _voyageHoursTotal)
                     Arrive();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void UpdateVoyageText()
@@ -222,7 +222,7 @@ namespace AshAndEmber
                 MBTextManager.SetTextVariable("SEA_VOYAGE_TEXT",
                     $"At sea, bound for {_voyageDest?.Name}.{wind} The coast is a smudge behind you. About {left} hour(s) of water remain.");
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void Arrive()
@@ -241,13 +241,13 @@ namespace AshAndEmber
                     if (TaleWorlds.CampaignSystem.Encounters.PlayerEncounter.Current != null)
                         TaleWorlds.CampaignSystem.Encounters.PlayerEncounter.Finish(true);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (dest != null)
                 {
                     var main = MobileParty.MainParty;
-                    try { main.Position = dest.GatePosition; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { main.SetMoveGoToSettlement(dest, MobileParty.NavigationType.Default, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { main.Position = dest.GatePosition; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { main.SetMoveGoToSettlement(dest, MobileParty.NavigationType.Default, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                     InformationManager.DisplayMessage(new InformationMessage(
                         $"The ship noses into {dest.Name}. Land legs come back slowly.",
@@ -259,9 +259,9 @@ namespace AshAndEmber
                 // player-facing exit option, so it must be closed explicitly here —
                 // otherwise it's left open with the save button disabled for the
                 // rest of the session. Mirrors FinishWait()/FinishInnStay().
-                try { GameMenu.ExitToLast(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { GameMenu.ExitToLast(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Storm ──────────────────────────────────────────────────────────────
@@ -282,7 +282,7 @@ namespace AshAndEmber
                 InformationManager.ShowInquiry(new InquiryData(
                     "⛈  Storm", body, true, false, "Ride it out.", "", null, null), true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Sea Fog ────────────────────────────────────────────────────────────
@@ -327,13 +327,13 @@ namespace AshAndEmber
                         switch (pick)
                         {
                             case "burn":
-                                try { AgingSystem.AgeHero(Hero.MainHero, SeaMath.FogBurnAgingDays); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { AgingSystem.AgeHero(Hero.MainHero, SeaMath.FogBurnAgingDays); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 MBInformationManager.AddQuickInformation(new TextObject(
                                     "A breath of the Inner Fire and the fog tears apart like cloth. " +
                                     "The crew stares. The crossing continues."));
                                 break;
                             case "part":
-                                try { Hero.MainHero.HitPoints = Math.Max(1, Hero.MainHero.HitPoints - SeaMath.FogPartHpCost); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { Hero.MainHero.HitPoints = Math.Max(1, Hero.MainHero.HitPoints - SeaMath.FogPartHpCost); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 MBInformationManager.AddQuickInformation(new TextObject(
                                     "You reach into the air and call. The wind stirs, warm and deliberate, " +
                                     "and the fog peels back on both sides. The crew does not ask how. " +
@@ -367,7 +367,7 @@ namespace AshAndEmber
                     },
                     null, "", false), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Flotsam ────────────────────────────────────────────────────────────
@@ -414,7 +414,7 @@ namespace AshAndEmber
                                 _voyageHoursTotal += 2f;
                                 int gold = SeaMath.FloatsamGold(_rng.NextDouble());
                                 if (gold > 0)
-                                    try { GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, gold, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                    try { GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, gold, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 InformationManager.ShowInquiry(new InquiryData(
                                     "⚓  Flotsam — Salvaged",
                                     "Your men go over the side with ropes. The hold has been ransacked — corsairs, most likely — " +
@@ -424,11 +424,11 @@ namespace AshAndEmber
                             }
                             case "sense":
                             {
-                                try { AgingSystem.AgeHero(Hero.MainHero, SeaMath.SenseWreckAgingDays); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { AgingSystem.AgeHero(Hero.MainHero, SeaMath.SenseWreckAgingDays); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 _voyageHoursTotal += 1f;
                                 int gold = SeaMath.FloatsamGold(_rng.NextDouble()) * 2;
                                 if (gold > 0)
-                                    try { GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, gold, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                    try { GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, gold, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 InformationManager.ShowInquiry(new InquiryData(
                                     "⚓  Flotsam — Sensed",
                                     "The Inner Fire finds the warm spots — where hands last gripped, where coin lay heaviest. " +
@@ -438,11 +438,11 @@ namespace AshAndEmber
                             }
                             case "feel":
                             {
-                                try { Hero.MainHero.HitPoints = Math.Max(1, Hero.MainHero.HitPoints - SeaMath.SenseWreckHpCost); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { Hero.MainHero.HitPoints = Math.Max(1, Hero.MainHero.HitPoints - SeaMath.SenseWreckHpCost); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 _voyageHoursTotal += 1f;
                                 int gold = SeaMath.FloatsamGold(_rng.NextDouble()) * 2;
                                 if (gold > 0)
-                                    try { GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, gold, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                    try { GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, gold, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 InformationManager.ShowInquiry(new InquiryData(
                                     "⚓  Flotsam — Felt",
                                     "You reach into the timbers and feel the memory of the wood. Life passed here, and coin changed hands. " +
@@ -458,7 +458,7 @@ namespace AshAndEmber
                     },
                     null, "", false), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Corsairs ───────────────────────────────────────────────────────────
@@ -514,15 +514,15 @@ namespace AshAndEmber
                         switch (pick)
                         {
                             case "sear":
-                                try { AgingSystem.AgeHero(Hero.MainHero, SeaMath.SearTheTideAgingDays); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { AgingSystem.AgeHero(Hero.MainHero, SeaMath.SearTheTideAgingDays); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 ResolveBoardingFight(FleetStrengthOf(MobileParty.MainParty, searTheTide: true), corsairStr);
                                 break;
                             case "current":
-                                try { Hero.MainHero.HitPoints = Math.Max(1, Hero.MainHero.HitPoints - SeaMath.CallCurrentHpCost); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { Hero.MainHero.HitPoints = Math.Max(1, Hero.MainHero.HitPoints - SeaMath.CallCurrentHpCost); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 ResolveBoardingFight(FleetStrengthOf(MobileParty.MainParty, searTheTide: true), corsairStr);
                                 break;
                             case "tribute":
-                                try { GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, null, tribute, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, null, tribute, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 MBInformationManager.AddQuickInformation(new TextObject(
                                     $"The corsairs take {tribute} denars and sheer away, already hunting the next sail."));
                                 break;
@@ -547,7 +547,7 @@ namespace AshAndEmber
                     },
                     null, "", false), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ResolveBoardingFight(float playerStr, float corsairStr)
@@ -560,8 +560,8 @@ namespace AshAndEmber
                 if (outcome.Victory)
                 {
                     if (outcome.LootGold > 0)
-                        try { GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, outcome.LootGold, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { GainRenownAction.Apply(Hero.MainHero, 3f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, outcome.LootGold, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { GainRenownAction.Apply(Hero.MainHero, 3f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     InformationManager.ShowInquiry(new InquiryData(
                         "☠  Corsairs — Repelled",
                         "It is ugly, close work between the rails, and then it is over. The corsairs that can still " +
@@ -573,7 +573,7 @@ namespace AshAndEmber
                 {
                     int stolen = Math.Min(Hero.MainHero.Gold, Math.Max(100, Hero.MainHero.Gold * 15 / 100));
                     if (stolen > 0)
-                        try { GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, null, stolen, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, null, stolen, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     InformationManager.ShowInquiry(new InquiryData(
                         "☠  Corsairs — Overrun",
                         "They take the deck and hold it long enough to take everything else. " +
@@ -582,7 +582,7 @@ namespace AshAndEmber
                         true, false, "Endure it.", "", null, null), true);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Blockade encounter ─────────────────────────────────────────────────
@@ -631,12 +631,12 @@ namespace AshAndEmber
                         float effectiveStr = playerStr;
                         if (pick == "sear")
                         {
-                            try { AgingSystem.AgeHero(Hero.MainHero, SeaMath.SearTheTideAgingDays); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { AgingSystem.AgeHero(Hero.MainHero, SeaMath.SearTheTideAgingDays); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             effectiveStr = FleetStrengthOf(MobileParty.MainParty, searTheTide: true);
                         }
                         else if (pick == "current_blk")
                         {
-                            try { Hero.MainHero.HitPoints = Math.Max(1, Hero.MainHero.HitPoints - SeaMath.CallCurrentHpCost); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { Hero.MainHero.HitPoints = Math.Max(1, Hero.MainHero.HitPoints - SeaMath.CallCurrentHpCost); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             effectiveStr = FleetStrengthOf(MobileParty.MainParty, searTheTide: true);
                         }
                         if (pick == "turn")
@@ -646,7 +646,7 @@ namespace AshAndEmber
                     },
                     null, "", false), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ResolveBlockadeBattle(float playerStr, float blkStr)
@@ -659,8 +659,8 @@ namespace AshAndEmber
                 if (outcome.Victory)
                 {
                     if (outcome.LootGold > 0)
-                        try { GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, outcome.LootGold, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { GainRenownAction.Apply(Hero.MainHero, 5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, outcome.LootGold, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { GainRenownAction.Apply(Hero.MainHero, 5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     InformationManager.ShowInquiry(new InquiryData(
                         "⚓  Blockade Broken",
                         "You force the line at bloody cost. Burning hulks drift aside and the harbor mouth opens." +
@@ -678,7 +678,7 @@ namespace AshAndEmber
                         true, false, "Withdraw.", "", () => TurnBackFromBlockade(), null), true);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void TurnBackFromBlockade()
@@ -698,12 +698,12 @@ namespace AshAndEmber
                 if (origin != null)
                 {
                     var main = MobileParty.MainParty;
-                    try { main.Position = origin.GatePosition; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { main.SetMoveGoToSettlement(origin, MobileParty.NavigationType.Default, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { main.Position = origin.GatePosition; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { main.SetMoveGoToSettlement(origin, MobileParty.NavigationType.Default, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
-                try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Survivors ─────────────────────────────────────────────────────────
@@ -753,7 +753,7 @@ namespace AshAndEmber
                                 if (lord != null)
                                 {
                                     string lName = lord.Name?.ToString() ?? "a lord";
-                                    try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, lord, 1, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                    try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, lord, 1, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                     InformationManager.ShowInquiry(new InquiryData(
                                         "🚣  Survivors — Rescued",
                                         $"You pull them in — a half-dozen men, one of whom claims service to {lName}. " +
@@ -773,7 +773,7 @@ namespace AshAndEmber
                             }
                             case "feel_life":
                             {
-                                try { Hero.MainHero.HitPoints = Math.Max(1, Hero.MainHero.HitPoints - SeaMath.FeelLifeHpCost); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { Hero.MainHero.HitPoints = Math.Max(1, Hero.MainHero.HitPoints - SeaMath.FeelLifeHpCost); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 if (_rng.NextDouble() < 0.60)
                                 {
                                     var lord = FindRandomLord();
@@ -781,7 +781,7 @@ namespace AshAndEmber
                                     if (lord != null)
                                     {
                                         string lName = lord.Name?.ToString() ?? "a lord";
-                                        try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, lord, 2, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                        try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, lord, 2, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                         InformationManager.ShowInquiry(new InquiryData(
                                             "🚣  Survivors — Felt",
                                             $"The living world tastes the boat: men sworn to {lName}, worth saving. " +
@@ -808,7 +808,7 @@ namespace AshAndEmber
                             }
                             case "read":
                             {
-                                try { AgingSystem.AgeHero(Hero.MainHero, SeaMath.SenseWreckAgingDays); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { AgingSystem.AgeHero(Hero.MainHero, SeaMath.SenseWreckAgingDays); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 if (_rng.NextDouble() < 0.60)
                                 {
                                     var lord = FindRandomLord();
@@ -816,7 +816,7 @@ namespace AshAndEmber
                                     if (lord != null)
                                     {
                                         string lName = lord.Name?.ToString() ?? "a lord";
-                                        try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, lord, 2, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                        try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, lord, 2, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                         InformationManager.ShowInquiry(new InquiryData(
                                             "🚣  Survivors — Sensed",
                                             $"The Inner Fire tastes the boat: men sworn to {lName}, worth saving. " +
@@ -852,7 +852,7 @@ namespace AshAndEmber
                     },
                     null, "", false), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Sea Serpent ───────────────────────────────────────────────────────
@@ -909,7 +909,7 @@ namespace AshAndEmber
                             }
                             case "speak":
                             {
-                                try { AgingSystem.AgeHero(Hero.MainHero, SeaMath.SerpentAgingDays); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { AgingSystem.AgeHero(Hero.MainHero, SeaMath.SerpentAgingDays); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 AddSeaMorale(2f);
                                 InformationManager.ShowInquiry(new InquiryData(
                                     "🐉  The Deep Listens",
@@ -922,7 +922,7 @@ namespace AshAndEmber
                             }
                             case "commune":
                             {
-                                try { Hero.MainHero.HitPoints = Math.Max(1, Hero.MainHero.HitPoints - SeaMath.SerpentCommuneHpCost); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { Hero.MainHero.HitPoints = Math.Max(1, Hero.MainHero.HitPoints - SeaMath.SerpentCommuneHpCost); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 AddSeaMorale(2f);
                                 InformationManager.ShowInquiry(new InquiryData(
                                     "🐉  The Deep Receives",
@@ -961,7 +961,7 @@ namespace AshAndEmber
                     },
                     null, "", false), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static Hero FindRandomLord()
@@ -978,7 +978,7 @@ namespace AshAndEmber
 
         private static void AddSeaMorale(float delta)
         {
-            try { if (MobileParty.MainParty != null) MobileParty.MainParty.RecentEventsMorale += delta; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { if (MobileParty.MainParty != null) MobileParty.MainParty.RecentEventsMorale += delta; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

@@ -51,7 +51,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class ForestWidowsQuestCampaignBehavior
     {
@@ -65,7 +65,7 @@ namespace AshAndEmber
         private static void SyncResolutionData(IDataStore store)
         {
             try { store.SyncData("FWQ_DarkPactApplied", ref _darkPactApplied); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ResetResolutionState() { _darkPactApplied = false; }
@@ -88,8 +88,8 @@ namespace AshAndEmber
                 true, true,
                 "Go. Whatever this is, it isn't for me.",
                 "Stay. I bought this peace too.",
-                () => { try { ResolveCastOut(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
-                () => { try { ResolveStayed(); }  catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } }
+                () => { try { ResolveCastOut(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
+                () => { try { ResolveStayed(); }  catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } }
             ), true, true);
         }
 
@@ -101,21 +101,21 @@ namespace AshAndEmber
                 Kingdom widows = GetForestWidowsKingdom();
                 if (widows != null && Clan.PlayerClan != null && Clan.PlayerClan.Kingdom == widows)
                     try { ChangeKingdomAction.ApplyByLeaveKingdom(Clan.PlayerClan, false); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             ApplyDarkPact();
             _phase = PhaseEndedCastOut;
 
-            try { ForestWidowsQuestLog.Current?.LogEndingCastOut(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ForestWidowsQuestLog.Current?.LogEndingCastOut(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
                     "You are outside the gate before the last of the Widows stop being anyone you knew. Marunath " +
                     "and Car Banseth belong to the dark now, completely — and you do not."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Ending B — stay ──────────────────────────────────────────────────────
@@ -124,7 +124,7 @@ namespace AshAndEmber
             ApplyDarkPact();
             _phase = PhaseEndedStayed;
 
-            try { ForestWidowsQuestLog.Current?.LogEndingStayed(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ForestWidowsQuestLog.Current?.LogEndingStayed(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -146,7 +146,7 @@ namespace AshAndEmber
                     () => { }
                 ), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── The pact itself — permanent hostility, garrisons, demon-lockout ──────
@@ -175,16 +175,16 @@ namespace AshAndEmber
                 {
                     if (other == null || other == widows || other.IsEliminated) continue;
                     if (widows.IsAtWarWith(other)) continue;
-                    try { DeclareWarAction.ApplyByDefault(widows, other); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { DeclareWarAction.ApplyByDefault(widows, other); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 if (Clan.PlayerClan != null && Clan.PlayerClan.Kingdom == null && Clan.PlayerClan != widows.RulingClan
                     && !widows.IsAtWarWith(Clan.PlayerClan))
                 {
-                    try { DeclareWarAction.ApplyByDefault(widows, Clan.PlayerClan); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { DeclareWarAction.ApplyByDefault(widows, Clan.PlayerClan); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Every settlement the Forest Widows still hold gets its garrison
@@ -209,15 +209,15 @@ namespace AshAndEmber
                         if (garrison == null) continue;
 
                         foreach (var entry in garrison.GetTroopRoster().ToList())
-                            try { garrison.AddToCounts(entry.Character, -entry.Number); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { garrison.AddToCounts(entry.Character, -entry.Number); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                         if (fiend != null)   garrison.AddToCounts(fiend, ForestWidowsQuestMath.GarrisonFiends);
                         if (stalker != null) garrison.AddToCounts(stalker, ForestWidowsQuestMath.GarrisonStalkers);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

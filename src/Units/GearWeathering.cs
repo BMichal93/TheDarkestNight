@@ -26,7 +26,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class GearWeathering
     {
@@ -49,7 +49,7 @@ namespace AshAndEmber
                 BuildCheapestCatalogue(MBObjectManager.Instance);
                 return _cheapestByType.TryGetValue(type, out var item) ? item : null;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
 
         internal static void ApplyShabbyGearToTroopTrees()
@@ -74,10 +74,10 @@ namespace AshAndEmber
                             ShabbyEquipSet(equipment);
                         }
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ShabbyEquipSet(Equipment equipment)
@@ -131,7 +131,7 @@ namespace AshAndEmber
                     if (cheapest != null) _cheapestByType[type] = cheapest;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

@@ -26,7 +26,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class WolfHuntQuestCampaignBehavior
     {
@@ -42,16 +42,16 @@ namespace AshAndEmber
                             if (_phase != PhaseAwaitingFinalChoice) return false;
                             if (!WolfBrothersSettlements.IsWolfBrothersSettlement(Settlement.CurrentSettlement)) return false;
                             MBTextManager.SetTextVariable("WOLFHUNT_JUDGMENT_TEXT", "Bring the last kill before the pack");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = true;
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { ShowFinalChoice(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { ShowFinalChoice(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ShowFinalChoice()
@@ -76,7 +76,7 @@ namespace AshAndEmber
                     OnChooseBurning
                 ), true, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void OnChooseTransformation()
@@ -109,7 +109,7 @@ namespace AshAndEmber
                     "fit any other way. (Permanent: the pack's hunger is yours now.)",
                     new Color(0.55f, 0.15f, 0.12f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void OnChooseBurning()
@@ -132,7 +132,7 @@ namespace AshAndEmber
                     "of the restraint travels further than the kill itself did.",
                     new Color(0.65f, 0.55f, 0.45f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

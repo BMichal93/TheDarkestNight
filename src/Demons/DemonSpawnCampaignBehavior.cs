@@ -52,7 +52,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public class DemonSpawnCampaignBehavior : CampaignBehaviorBase
     {
@@ -124,33 +124,33 @@ namespace AshAndEmber
                 if (night && _lastNightfallDay != day)
                 {
                     _lastNightfallDay = day;
-                    try { ReplenishSurvivors(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { SpawnNightTide();     } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { RollSettlementAssaults(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ReplenishSurvivors(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { SpawnNightTide();     } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { RollSettlementAssaults(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
                 else if (!night && _lastDawnDay != day)
                 {
                     _lastDawnDay = day;
-                    try { DespawnNightTide(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { DespawnNightTide(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
-                if (night) try { DirectDemonParties(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                if (night) try { DirectDemonParties(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Requirement 7f/7g: no negotiation, no release, no survivors of
                 // captivity — checked every hour so it is genuinely "on the spot."
-                try { ResolveCaptives(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ResolveCaptives(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static float CurrentHourOfDay()
         {
-            try { return (float)CampaignTime.Now.CurrentHourInDay; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return 12f; }
+            try { return (float)CampaignTime.Now.CurrentHourInDay; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return 12f; }
         }
 
         private static int CurrentDay()
         {
-            try { return (int)CampaignTime.Now.ToDays; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return 0; }
+            try { return (int)CampaignTime.Now.ToDays; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return 0; }
         }
 
         // ── Nightfall: the tide rises ────────────────────────────────────────────
@@ -182,7 +182,7 @@ namespace AshAndEmber
                             .OrderBy(s => (s.GetPosition2D - anchor).LengthSquared).FirstOrDefault();
                     hideout = hs?.Hideout;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (hideout == null) return null;
 
                 const float scatter = 2.5f;
@@ -195,20 +195,20 @@ namespace AshAndEmber
                 MobileParty party = BanditPartyComponent.CreateBanditParty(partyId, banditClan, hideout, false, pt, cvec);
                 if (party == null) return null;
 
-                try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 int bodies = DemonMath.PartyBodyCount(_rng);
                 AddDemonBodies(party, bodies);
 
                 DemonMath.EnvironmentVariant variant = DemonMath.VariantForCulture(biomeHint);
-                try { party.Party.SetCustomName(new TextObject(NightTideName())); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { party.Party.SetCustomName(new TextObject(NightTideName())); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 _partyOriginalSize[party.StringId] = bodies;
                 _partyVariant[party.StringId]      = (int)variant;
 
                 return party;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
 
         // Adds `count` bodies to `party`'s roster, each an independently-rolled
@@ -224,7 +224,7 @@ namespace AshAndEmber
                  ?? MBObjectManager.Instance.GetObject<CharacterObject>(DemonCatalog.FiendTroopId)
                  ?? MBObjectManager.Instance.GetObject<CharacterObject>("mountain_bandit");
                 if (troop == null) continue;
-                try { party.MemberRoster.AddToCounts(troop, 1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { party.MemberRoster.AddToCounts(troop, 1); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -261,12 +261,12 @@ namespace AshAndEmber
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return false; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return false; }
         }
 
         private static string CultureHint(Settlement s)
         {
-            try { return s?.Culture?.StringId ?? ""; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return ""; }
+            try { return s?.Culture?.StringId ?? ""; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return ""; }
         }
 
         private static string NightTideName()
@@ -306,7 +306,7 @@ namespace AshAndEmber
                             .OrderBy(s => (s.GetPosition2D - anchor).LengthSquared).FirstOrDefault();
                     hideout = hs?.Hideout;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (hideout == null) return null;
 
                 const float scatter = 1.0f;
@@ -319,20 +319,20 @@ namespace AshAndEmber
                 MobileParty party = BanditPartyComponent.CreateBanditParty(partyId, banditClan, hideout, false, pt, cvec);
                 if (party == null) return null;
 
-                try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 int bodies = DemonMath.PartyBodyCount(_rng);
                 AddDemonBodies(party, bodies);
 
                 DemonMath.EnvironmentVariant variant = DemonMath.VariantForCulture(biomeHint);
-                try { party.Party.SetCustomName(new TextObject(NightTideName())); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { party.Party.SetCustomName(new TextObject(NightTideName())); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 _partyOriginalSize[party.StringId] = bodies;
                 _partyVariant[party.StringId]      = (int)variant;
 
                 return party;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
 
         // ── Nightfall: surviving parties regain some of their numbers ───────────
@@ -349,7 +349,7 @@ namespace AshAndEmber
                     int amount   = DemonMath.ReplenishAmount(current, original);
                     if (amount > 0) AddDemonBodies(party, amount);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -371,11 +371,11 @@ namespace AshAndEmber
                     if (target == null) continue;
 
                     try { party.SetMoveRaidSettlement(target, MobileParty.NavigationType.Default, false); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                     Announce($"The dark surges against {target.Name} tonight.", new Color(0.65f, 0.15f, 0.12f));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -424,9 +424,9 @@ namespace AshAndEmber
 
                     if (prey != null)
                         try { party.SetMoveEngageParty(prey, MobileParty.NavigationType.Default); }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -439,9 +439,9 @@ namespace AshAndEmber
                 {
                     MobileParty party = MobileParty.All.FirstOrDefault(p => p != null && p.StringId == id);
                     if (party != null && party.IsActive)
-                        try { DestroyPartyAction.Apply(party.Party, null); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { DestroyPartyAction.Apply(party.Party, null); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 _partyOriginalSize.Remove(id);
                 _partyVariant.Remove(id);
             }
@@ -471,7 +471,7 @@ namespace AshAndEmber
                     bool escapes = DemonMath.RollCaptiveEscapes(_rng.NextDouble(), true);
                     if (escapes)
                     {
-                        try { EndCaptivityAction.ApplyByReleasedAfterBattle(hero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { EndCaptivityAction.ApplyByReleasedAfterBattle(hero); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         Announce($"{hero.Name} tore free of the dark before it could finish what it started.", new Color(0.55f, 0.55f, 0.55f));
                     }
                     else
@@ -479,12 +479,12 @@ namespace AshAndEmber
                         // No demon hero exists to name as the executor — the same
                         // null-executor form AshenCitySystem's own capture prompt
                         // uses for an unnamed death (ApplyByMurder(hero, null, true)).
-                        try { KillCharacterAction.ApplyByMurder(hero, null, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { KillCharacterAction.ApplyByMurder(hero, null, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         Announce($"{hero.Name} did not come back from the dark.", new Color(0.55f, 0.20f, 0.18f));
                     }
                     actions++;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             foreach (var id in _partyOriginalSize.Keys.ToList())
@@ -503,11 +503,11 @@ namespace AshAndEmber
                         // executed, those who escape simply vanish from the demons'
                         // count (freed; nothing further tracks them in Phase 1).
                         try { party.PrisonRoster.AddToCounts(entry.Character, -entry.Number); }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                     actions++;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -535,14 +535,14 @@ namespace AshAndEmber
                 }
                 DemonBattleBehavior.PendingVariant = variant;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnMapEventEnded(MapEvent mapEvent)
         {
-            try { DemonBattleBehavior.PendingVariant = null; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { RollRelicDrop(mapEvent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { RollDemonBloodDrop(mapEvent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { DemonBattleBehavior.PendingVariant = null; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { RollRelicDrop(mapEvent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { RollDemonBloodDrop(mapEvent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Faction D (the Bloodbound) — demon blood from a hunt ────────────────
@@ -577,10 +577,10 @@ namespace AshAndEmber
                             if (p?.Party == null) continue;
                             BloodboundCampaignBehavior.GrantDemonBlood(p.Party);
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -626,13 +626,13 @@ namespace AshAndEmber
                         new Color(0.75f, 0.65f, 0.35f));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void Announce(string text, Color color)
         {
             try { InformationManager.DisplayMessage(new InformationMessage(text, color)); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void PruneDead()
@@ -643,7 +643,7 @@ namespace AshAndEmber
                 var dead = _partyOriginalSize.Keys.Where(id => !alive.Contains(id)).ToList();
                 foreach (var id in dead) { _partyOriginalSize.Remove(id); _partyVariant.Remove(id); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

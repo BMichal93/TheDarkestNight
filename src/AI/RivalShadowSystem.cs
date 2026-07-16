@@ -15,7 +15,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class RivalShadowSystem
     {
@@ -76,7 +76,7 @@ namespace AshAndEmber
                     new Color(0.38f, 0.50f, 0.75f)));
                 MageKnowledge._deferredInquiry = () => ShowDesignationEvent(shadow.Name?.ToString() ?? "an Ashen lord");
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ShowDesignationEvent(string shadowName)
@@ -172,7 +172,7 @@ namespace AshAndEmber
                         InformationManager.DisplayMessage(new InformationMessage(
                             $"{shadowName}'s blade found your outriders instead of you. One dead. A message left in the wound. {progress}",
                             new Color(0.38f, 0.50f, 0.75f)));
-                        try { AgingSystem.AgeHero(Hero.MainHero, 1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { AgingSystem.AgeHero(Hero.MainHero, 1); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         string sName = shadowName;
                         MageKnowledge._deferredInquiry = () =>
                         {
@@ -186,7 +186,7 @@ namespace AshAndEmber
                                     true, false, "I expected worse.", null,
                                     () => { }, null));
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         };
                         break;
 
@@ -195,7 +195,7 @@ namespace AshAndEmber
                         int goldLost = Math.Min(500, (Hero.MainHero?.Gold ?? 0) / 5);
                         if (goldLost > 50)
                         {
-                            try { Hero.MainHero?.ChangeHeroGold(-goldLost); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { Hero.MainHero?.ChangeHeroGold(-goldLost); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             InformationManager.DisplayMessage(new InformationMessage(
                                 $"A supply cart never arrived. {shadowName}'s hand was on every thief you found. (-{goldLost} gold) {progress}",
                                 new Color(0.38f, 0.50f, 0.75f)));
@@ -224,7 +224,7 @@ namespace AshAndEmber
                     MageKnowledge._deferredInquiry = () => ShowShadowLetter(capturedName, capturedCount);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ShowShadowLetter(string shadowName, int letterNum)
@@ -263,7 +263,7 @@ namespace AshAndEmber
                 InformationManager.ShowInquiry(new InquiryData(
                     title, body, true, false, "Set it aside.", null, () => { }, null), true, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Duel event ────────────────────────────────────────────────────────
@@ -271,7 +271,7 @@ namespace AshAndEmber
         {
             Hero shadow = null;
             try { shadow = Hero.AllAliveHeroes.FirstOrDefault(h => h.StringId == _shadowLordId && h.IsAlive); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (shadow == null)
             {
@@ -283,8 +283,8 @@ namespace AshAndEmber
 
             string shadowName = shadow.Name?.ToString() ?? "the Shadow";
             int lSkill = 0, aSkill = 0;
-            try { lSkill = Hero.MainHero?.GetSkillValue(DefaultSkills.Leadership) ?? 0; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { aSkill = Hero.MainHero?.GetSkillValue(DefaultSkills.Athletics)  ?? 0; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { lSkill = Hero.MainHero?.GetSkillValue(DefaultSkills.Leadership) ?? 0; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { aSkill = Hero.MainHero?.GetSkillValue(DefaultSkills.Athletics)  ?? 0; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             int lPct = Math.Min(85, (int)(lSkill * 0.4f));
             int aPct = Math.Min(85, (int)(aSkill * 0.4f));
 
@@ -325,7 +325,7 @@ namespace AshAndEmber
                         _duelPending = false;
                         _schemeTimer = 14 + _rng.Next(7);
                         try { ClanRenown.Lose(Hero.MainHero?.Clan, 30f); }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         InformationManager.DisplayMessage(new InformationMessage(
                             $"You ride away. {shadowName} watches from the road. −30 renown.",
                             new Color(0.5f, 0.4f, 0.5f)));
@@ -346,10 +346,10 @@ namespace AshAndEmber
                 if (Hero.MainHero?.HeroDeveloper != null)
                     Hero.MainHero.HeroDeveloper.UnspentFocusPoints += 5;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try { ClanRenown.Gain(Hero.MainHero?.Clan, 200f); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Nearest Ashen lord converts to regular mage
             try
@@ -371,7 +371,7 @@ namespace AshAndEmber
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             InformationManager.DisplayMessage(new InformationMessage(
                 $"{shadowName} falls back — spent, not destroyed. The cold recedes. +5 focus, +200 renown.",
@@ -384,7 +384,7 @@ namespace AshAndEmber
             _shadowHealPending = true;
             _schemeCount       = 0;
             _schemeTimer       = 21 + _rng.Next(7);
-            try { AgingSystem.AgeHero(Hero.MainHero, 5); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { AgingSystem.AgeHero(Hero.MainHero, 5); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             InformationManager.DisplayMessage(new InformationMessage(
                 $"{reason} {shadowName} departs — satisfied, for now. −5 days.",
                 new Color(0.38f, 0.50f, 0.75f)));

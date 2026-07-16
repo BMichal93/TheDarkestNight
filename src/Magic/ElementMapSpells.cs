@@ -24,7 +24,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class ElementMapSpells
     {
@@ -83,7 +83,7 @@ namespace AshAndEmber
                 case MagicElement.Ice:       CastLongStillness(mult);   break;
                 default:                     CastEmberfall(mult);       break;
             }
-            try { MageKnowledge.RewardCastSkill(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { MageKnowledge.RewardCastSkill(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Shared: nearest hostile party within reach ──────────────────────────
@@ -113,14 +113,14 @@ namespace AshAndEmber
                 for (int i = 0; i < toKill && troops.Count > 0; i++)
                 {
                     int idx = _rng.Next(troops.Count);
-                    try { target.MemberRoster.AddToCounts(troops[idx].Character, -1); killed++; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { target.MemberRoster.AddToCounts(troops[idx].Character, -1); killed++; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
-                try { target.RecentEventsMorale -= 25f * mult; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { target.RecentEventsMorale -= 25f * mult; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 Msg(killed > 0
                     ? $"Storm's Reckoning — the sky strikes {target.Name}. {killed} soldier{(killed != 1 ? "s" : "")} fall where they stood."
                     : $"Storm's Reckoning — the sky strikes {target.Name}, but finds little to take.");
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Magma: Scorched Earth — burn food + kill a few troops ───────────────
@@ -139,12 +139,12 @@ namespace AshAndEmber
                 for (int i = 0; i < toKill && troops.Count > 0; i++)
                 {
                     int idx = _rng.Next(troops.Count);
-                    try { target.MemberRoster.AddToCounts(troops[idx].Character, -1); killed++; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { target.MemberRoster.AddToCounts(troops[idx].Character, -1); killed++; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
                 Msg($"Scorched Earth — {target.Name}'s wagons catch fire. {foodBurned} food lost" +
                     (killed > 0 ? $", {killed} soldier{(killed != 1 ? "s" : "")} caught in the blaze." : "."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Fog: The Hidden Road — slip the player's own column away, unseen ────
@@ -174,7 +174,7 @@ namespace AshAndEmber
                 party.Position = new CampaignVec2(pos + away * push, true);
                 Msg($"The Hidden Road — a bank of fog swallows the column. {threat.Name} loses your trail. (+10 morale)");
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Sandstorm: Shifting Dunes — push a hostile host off its road ────────
@@ -191,11 +191,11 @@ namespace AshAndEmber
                 if (len < 0.5f) back = new Vec2(1f, 0f); else back *= 1f / len;
                 float push = Math.Min(10f, 5f * mult);
                 target.Position = new CampaignVec2(tPos + back * push, true);
-                try { target.RecentEventsMorale -= 20f * mult; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { target.SetDisorganized(true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { target.RecentEventsMorale -= 20f * mult; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { target.SetDisorganized(true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 Msg($"Shifting Dunes — the ground itself turns beneath {target.Name}. Days of the march undone.");
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Mire: The Sinking Road — burn food and swallow their ground ─────────
@@ -213,10 +213,10 @@ namespace AshAndEmber
                 if (len < 0.5f) back = new Vec2(1f, 0f); else back *= 1f / len;
                 float push = Math.Min(6f, 3f * mult);
                 target.Position = new CampaignVec2(tPos + back * push, true);
-                try { target.SetDisorganized(true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { target.SetDisorganized(true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 Msg($"The Sinking Road — the road beneath {target.Name} gives way. {foodLost} food lost to the mud, days undone.");
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Ice: The Long Stillness — pure morale/standing, no blade drawn ──────
@@ -227,10 +227,10 @@ namespace AshAndEmber
                 if (MobileParty.MainParty == null) return;
                 var target = NearestHostileParty(MobileParty.MainParty.GetPosition2D, MobileParty.MainParty.MapFaction, 60f);
                 if (target == null) { Msg("The Long Stillness — no hostile host within reach."); return; }
-                try { target.RecentEventsMorale -= 45f * mult; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { target.RecentEventsMorale -= 45f * mult; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // "Freezes where it stands" — the disorganized state slows the host
                 // for hours; the morale/influence drain alone never showed on the map.
-                try { target.SetDisorganized(true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { target.SetDisorganized(true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 var tClan = target.LeaderHero?.Clan;
                 int influenceLost = 0;
                 if (tClan != null)
@@ -241,7 +241,7 @@ namespace AshAndEmber
                 Msg($"The Long Stillness — {target.Name} freezes where it stands. Not a blade drawn, and their nerve is gone." +
                     (influenceLost > 0 ? $" -{influenceLost} influence." : ""));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Fire: Emberfall (mirror of the old Ashstorm) ───────────────────────────
@@ -271,17 +271,17 @@ namespace AshAndEmber
                     for (int i = 0; i < toKill && troops.Count > 0; i++)
                     {
                         int idx = _rng.Next(troops.Count);
-                        try { garrison.AddToCounts(troops[idx].Character, -1); killed++; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { garrison.AddToCounts(troops[idx].Character, -1); killed++; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
-                try { target.Town.FoodStocks -= (int)(150f * mult); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { target.Town.Prosperity = Math.Max(100f, target.Town.Prosperity - (int)(250f * mult)); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { target.Town.Security   = Math.Max(0f,   target.Town.Security   - (int)(25f  * mult)); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { target.Town.FoodStocks -= (int)(150f * mult); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { target.Town.Prosperity = Math.Max(100f, target.Town.Prosperity - (int)(250f * mult)); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { target.Town.Security   = Math.Max(0f,   target.Town.Security   - (int)(25f  * mult)); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 string killLine = killed > 0 ? $" {killed} garrison soldier{(killed != 1 ? "s" : "")} consumed." : "";
                 Msg($"Emberfall — fire rains over {target.Name}.{killLine} Food burns. The walls remember it.");
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Wind: Scattering Gale (disorder nearby hostile parties) ────────────────
@@ -298,16 +298,16 @@ namespace AshAndEmber
                     if (!p.IsActive || p == MobileParty.MainParty) continue;
                     try { if (!FactionManager.IsAtWarAgainstFaction(p.MapFaction, MobileParty.MainParty.MapFaction)) continue; } catch { continue; }
                     if ((p.GetPosition2D - playerPos).Length > 65f) continue;
-                    try { p.RecentEventsMorale -= morale; scattered++; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { p.RecentEventsMorale -= morale; scattered++; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     // "Thrown into disorder" literally: the vanilla disorganized state
                     // (-40% map speed for hours) — a morale number alone was invisible.
-                    try { p.SetDisorganized(true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { p.SetDisorganized(true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
                 Msg(scattered > 0
                     ? $"Scattering Gale — the high wind comes down. {scattered} enemy {(scattered == 1 ? "host is" : "hosts are")} thrown into disorder and slowed. -{morale} morale."
                     : "Scattering Gale — the wind rises, but finds no enemy host nearby.");
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Earth: Deeproot Blight (mirror of the old Plague/Wither) ───────────────
@@ -330,7 +330,7 @@ namespace AshAndEmber
                 target.Village.Hearth = Math.Max(10f, before * (1f - reduction));
                 Msg($"Deeproot Blight — the root-rot reaches {target.Name}. Hearth reduced by {(int)(reduction * 100f)}%.");
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Water: Tidewash (mirror of the old Inspire/Kindle) ─────────────────────
@@ -349,13 +349,13 @@ namespace AshAndEmber
                 foreach (var entry in wounded)
                 {
                     int heal = Math.Min(entry.WoundedNumber, healPerTroop);
-                    try { roster.AddToCounts(entry.Character, 0, false, -heal); roused += heal; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { roster.AddToCounts(entry.Character, 0, false, -heal); roused += heal; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
                 Msg(roused > 0
                     ? $"Tidewash — still water runs through your column. +{morale} morale, {roused} soldier{(roused != 1 ? "s" : "")} rise from their wounds."
                     : $"Tidewash — still water runs through your column. +{morale} morale.");
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Spirit: Farsight (mirror of the old Clairvoyance) ──────────────────────
@@ -410,11 +410,11 @@ namespace AshAndEmber
                                 },
                                 () => { Msg("You know it is coming. That is something."); }));
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     };
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void Msg(string text)

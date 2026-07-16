@@ -19,7 +19,7 @@
 // another name and ward identically.
 // =============================================================================
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class WallWardMath
     {

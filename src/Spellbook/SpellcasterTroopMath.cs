@@ -6,7 +6,7 @@
 // caller.
 // =============================================================================
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class SpellcasterTroopMath
     {

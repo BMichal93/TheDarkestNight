@@ -32,7 +32,7 @@
 
 using System;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     // What the land answers with when Spirit calls (chosen from the scene), and
     // — from v0.36 — what raw magic condenses into where it pools too thick.

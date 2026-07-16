@@ -9,7 +9,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed class BloodboundQuestLog : QuestBase
     {
@@ -41,7 +41,7 @@ namespace AshAndEmber
                 if (_objDonation == null && JournalEntries != null && JournalEntries.Count >= 2)
                     _objDonation = JournalEntries[1];
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void Start()
@@ -62,7 +62,7 @@ namespace AshAndEmber
                     new TextObject("Pour Demon Blood into the shrine at Akkalat toward the Surpassing Rite."),
                     new TextObject("Vials Poured Into The Draught"), 0, BloodboundQuestMath.DonationTarget, null, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogProgress(int bloodDonated)
@@ -72,7 +72,7 @@ namespace AshAndEmber
                 RebindObjective();
                 _objDonation?.UpdateCurrentProgress(BloodboundQuestMath.ClampedProgress(bloodDonated));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogEndingParticipated()
@@ -86,7 +86,7 @@ namespace AshAndEmber
                     "dark already circling what's left."));
                 CompleteQuestWithFail();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogEndingRan()
@@ -100,7 +100,7 @@ namespace AshAndEmber
                     "already circling what's left."));
                 CompleteQuestWithSuccess();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Reliability closure — the Bloodbound were wiped out before the
@@ -117,7 +117,7 @@ namespace AshAndEmber
                     "Rite dies with the last Bloodhunter who might have drunk it."));
                 CompleteQuestWithFail();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

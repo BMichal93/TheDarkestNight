@@ -25,7 +25,7 @@
 
 using System.Collections.Generic;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public enum TalismanId
     {

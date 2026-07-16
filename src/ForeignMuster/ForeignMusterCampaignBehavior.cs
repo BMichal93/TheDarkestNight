@@ -23,7 +23,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class ForeignMusterCampaignBehavior : CampaignBehaviorBase
     {
@@ -66,12 +66,12 @@ namespace AshAndEmber
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterForeignMusterMenus(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterForeignMusterMenus(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Gating ────────────────────────────────────────────────────────────
@@ -98,7 +98,7 @@ namespace AshAndEmber
                 string cultureId = ForeignMusterMath.PickCulture(CurrentWeekNumber(), settlement.StringId);
                 return MBObjectManager.Instance?.GetObject<CultureObject>(cultureId);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
 
         // ── Weekly cap tracking ───────────────────────────────────────────────
@@ -144,7 +144,7 @@ namespace AshAndEmber
                 if (model == null) return 0;
                 return model.GetTroopRecruitmentCost(ownRecruit, Hero.MainHero, false).RoundedResultNumber;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return 0; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return 0; }
         }
     }
 }

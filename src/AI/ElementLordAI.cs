@@ -21,7 +21,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class ElementLordAI
     {
@@ -117,7 +117,7 @@ namespace AshAndEmber
                         if (jitter > 0f) _cooldowns[h.StringId] = jitter;
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             List<Agent> agents;
@@ -187,7 +187,7 @@ namespace AshAndEmber
                     return;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // -1. Pyre Lord: fortify with a wall once before attacking.
             if (IsPyreLord(hero) && !_pyreBarriersPlaced.Contains(hero.StringId) && nearEnemies >= 1)
@@ -384,7 +384,7 @@ namespace AshAndEmber
                     fwdProbe = agent.Position + fwd * 8f;
                     probeOk = true;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 MagicElement? pick = null;
                 foreach (var el in Preference(sit))
@@ -447,7 +447,7 @@ namespace AshAndEmber
                     PlayCastFx(agent, chosen, isAshen);
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Pyre Lord opener — a wall. A lord who has SEEN what the enemy throws
@@ -468,7 +468,7 @@ namespace AshAndEmber
                     var seen = ElementWallWards.LastHostileElement(agent.Team);
                     if (seen != null) counter = WallWardMath.CounterWallFor(seen.Value);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (counter != null && known.Contains(counter.Value))
                     chosen = counter.Value;
                 else
@@ -488,7 +488,7 @@ namespace AshAndEmber
                     PlayCastFx(agent, chosen, isAshen);
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Self / ally heal. Only called once the caller has confirmed the lord
@@ -510,7 +510,7 @@ namespace AshAndEmber
                     PlayCastFx(agent, MagicElement.Spirit, isAshen);
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Cast sound + gesture for a unified element working. The element effects
@@ -519,9 +519,9 @@ namespace AshAndEmber
         {
             ColorSchool sfx = isAshen ? ColorSchool.Ashen
                             : el == MagicElement.Fire ? ColorSchool.Red : ColorSchool.Nature;
-            try { SpellEffects.TryCastSound(agent.Position, sfx); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.TryCastAnimation(agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SpellEffects.RecordMagicCast(agent.Position); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpellEffects.TryCastSound(agent.Position, sfx); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.TryCastAnimation(agent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.RecordMagicCast(agent.Position); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void SetCooldown(Hero hero)
@@ -545,7 +545,7 @@ namespace AshAndEmber
                 cd *= NpcCastPlanner.CooldownMult(lifeFrac, temper);
                 _cooldowns[hero.StringId] = cd;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Accumulates the life-expectancy COST of a cast so NPC lords pay the same
@@ -583,7 +583,7 @@ namespace AshAndEmber
                 InformationManager.DisplayMessage(new InformationMessage(
                     $"{hero.Name} — {blurb}", c));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

@@ -26,7 +26,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class MortalLawCampaignBehavior
     {
@@ -59,9 +59,9 @@ namespace AshAndEmber
                     if (target == null) continue;
 
                     try { party.SetMoveRaidSettlement(target, MobileParty.NavigationType.Default, false); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 

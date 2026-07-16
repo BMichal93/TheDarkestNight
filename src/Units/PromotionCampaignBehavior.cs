@@ -12,7 +12,7 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public class PromotionCampaignBehavior : CampaignBehaviorBase
     {
@@ -40,7 +40,7 @@ namespace AshAndEmber
                     "The muster toll is paid — a horse, an armour piece, a good blade, spent so the line can hold a little longer.",
                     new TaleWorlds.Library.Color(0.75f, 0.65f, 0.4f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Requirement 30b: recruiting a tier-5 troop (e.g. converting a tier-5
@@ -61,7 +61,7 @@ namespace AshAndEmber
                 if (party == null) return;
                 PromotionToll.ConsumeRecruitToll(party, count);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

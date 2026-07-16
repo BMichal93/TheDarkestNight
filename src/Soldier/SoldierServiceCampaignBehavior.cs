@@ -30,7 +30,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class SoldierServiceCampaignBehavior : CampaignBehaviorBase
     {
@@ -104,11 +104,11 @@ namespace AshAndEmber
 
         public override void SyncData(IDataStore store)
         {
-            try { store.SyncData("SOLDIER_LORD_ID",   ref _lordId);    } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("SOLDIER_KINGDOM_ID", ref _kingdomId); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("SOLDIER_END_DAYS",   ref _endDays);   } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("SOLDIER_TERM_DAYS",  ref _termDays);  } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("SOLDIER_PENDING_LEAVE", ref _pendingLeaveKingdomId); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("SOLDIER_LORD_ID",   ref _lordId);    } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("SOLDIER_KINGDOM_ID", ref _kingdomId); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("SOLDIER_END_DAYS",   ref _endDays);   } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("SOLDIER_TERM_DAYS",  ref _termDays);  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("SOLDIER_PENDING_LEAVE", ref _pendingLeaveKingdomId); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Clears stale service state when a new campaign starts in the same
@@ -227,7 +227,7 @@ namespace AshAndEmber
                 // Dissolve the meeting when the conversation closes instead of
                 // presenting its encounter menu (Attack/Leave/Surrender).
                 try { if (PlayerEncounter.Current != null) PlayerEncounter.LeaveEncounter = true; }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 _finalizePending = true;
 
@@ -236,9 +236,9 @@ namespace AshAndEmber
                     MBInformationManager.AddQuickInformation(new TextObject(
                         $"You take {lord.Name}'s coin. Your party marches under the banner of {kingdom.Name} for {termDays} days."));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Finish the join once we are safely back on the map (no live encounter, no
@@ -268,13 +268,13 @@ namespace AshAndEmber
                         ChangeKingdomAction.ApplyByJoinFactionAsMercenary(
                             clan, kingdom, CampaignTime.DaysFromNow(rem), award, false);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 // (3) Fall in and march in the commander's host.
                 ReassertArmy(lord);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Pick a valid settlement for a raised host to nominally target. Every step
@@ -317,7 +317,7 @@ namespace AshAndEmber
                         if (set != null) return set;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return null;
         }
 
@@ -368,10 +368,10 @@ namespace AshAndEmber
                                 // Give it a target so the AI and the overlay UI have
                                 // something non-null to work with.
                                 try { raised.AiBehaviorObject = objective; }
-                                catch (System.Exception ex) { AshAndEmber.ModLog.Error(ex); }
+                                catch (System.Exception ex) { TheDarkestNight.ModLog.Error(ex); }
                             }
                         }
-                        catch (System.Exception ex) { _armyCreateFailed = true; AshAndEmber.ModLog.Error(ex); }
+                        catch (System.Exception ex) { _armyCreateFailed = true; TheDarkestNight.ModLog.Error(ex); }
                         finally { _internalArmyChange = false; }
 
                         army = lordParty.Army;
@@ -383,7 +383,7 @@ namespace AshAndEmber
                             _ourArmyHoldUntil = CampaignTime.Now.ToDays + SoldierServiceMath.HostHoldDays;
                             // Belt-and-braces: never leave the objective null.
                             try { if (army.AiBehaviorObject == null) army.AiBehaviorObject = objective; }
-                            catch (System.Exception ex) { AshAndEmber.ModLog.Error(ex); }
+                            catch (System.Exception ex) { TheDarkestNight.ModLog.Error(ex); }
                         }
                     }
                 }
@@ -405,7 +405,7 @@ namespace AshAndEmber
                             main.Army = army;
                             army.AddPartyToMergedParties(main);
                         }
-                        catch (System.Exception ex) { AshAndEmber.ModLog.Error(ex); }
+                        catch (System.Exception ex) { TheDarkestNight.ModLog.Error(ex); }
                         finally { _internalArmyChange = false; }
                     }
                     return;
@@ -414,9 +414,9 @@ namespace AshAndEmber
                 // No host to join (couldn't raise one) — ride escort so we still
                 // travel together; the tick will keep trying to form a host.
                 try { main.SetMoveEscortParty(lordParty, MobileParty.NavigationType.Default, false); }
-                catch (System.Exception ex) { AshAndEmber.ModLog.Error(ex); }
+                catch (System.Exception ex) { TheDarkestNight.ModLog.Error(ex); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Keep the host we raised from dispersing under the player (a lone-commander
@@ -448,7 +448,7 @@ namespace AshAndEmber
 
                 if (army.Cohesion < 90f) army.Cohesion = 100f;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Pull the player's party out of the host and, if the host was one we raised
@@ -469,12 +469,12 @@ namespace AshAndEmber
                     if (_armyIsOurs && army != null)
                     {
                         try { DisbandArmyAction.ApplyByObjectiveFinished(army); }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
                 finally { _internalArmyChange = false; }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _armyIsOurs = false;
         }
 
@@ -493,7 +493,7 @@ namespace AshAndEmber
                 if (clan != null && clan.Kingdom != null && clan.Kingdom.StringId == _kingdomId)
                 {
                     try { ChangeKingdomAction.ApplyByLeaveKingdomAsMercenary(clan, false); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     // A release that throws mid-teardown (host dissolving, party inside
                     // a settlement) used to strand the clan as a mercenary forever —
                     // flag it and keep retrying on clean ticks until it lands.
@@ -501,14 +501,14 @@ namespace AshAndEmber
                         _pendingLeaveKingdomId = _kingdomId;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // If the host dissolved while we sat inside a settlement we were only
             // visiting as an army member, the engine leaves the party "in" it with
             // no menu and no way to move — step out onto the map.
             UnstickFromSettlement();
 
-            try { MobileParty.MainParty?.SetMoveModeHold(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { MobileParty.MainParty?.SetMoveModeHold(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             _lordId = ""; _kingdomId = ""; _endDays = 0.0; _termDays = 0.0;
             _leavePromptOpen = false;
@@ -531,13 +531,13 @@ namespace AshAndEmber
                     int pay   = SoldierServiceMath.WeeklyPay(MobileParty.MainParty?.TotalWage ?? 0, ClanTier());
                     int bonus = SoldierServiceMath.CompletionBonus(pay);
                     PayPlayer(lord, bonus);
-                    try { ChangeRelationAction.ApplyPlayerRelation(lord, 3, false, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ChangeRelationAction.ApplyPlayerRelation(lord, 3, false, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     try
                     {
                         MBInformationManager.AddQuickInformation(new TextObject(
                             $"Your term with {lord.Name} is served. You are released with {bonus}{{GOLD_ICON}} and their thanks."));
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
                 else
                 {
@@ -546,10 +546,10 @@ namespace AshAndEmber
                         MBInformationManager.AddQuickInformation(new TextObject(
                             "Your service ends. Your party is your own again."));
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             EndServiceCommon();
         }
@@ -566,9 +566,9 @@ namespace AshAndEmber
                 int rel   = SoldierServiceMath.DesertionRelationLoss(rem, _termDays);
 
                 if (kingdom != null)
-                    try { ChangeCrimeRatingAction.Apply(kingdom, crime, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ChangeCrimeRatingAction.Apply(kingdom, crime, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (lord != null)
-                    try { ChangeRelationAction.ApplyPlayerRelation(lord, -rel, true, true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ChangeRelationAction.ApplyPlayerRelation(lord, -rel, true, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 try
                 {
@@ -576,9 +576,9 @@ namespace AshAndEmber
                     MBInformationManager.AddQuickInformation(new TextObject(
                         $"You desert {(lord != null ? lord.Name.ToString() : "your commander")}. {realm} brands you an oathbreaker."));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             EndServiceCommon();
         }
@@ -609,7 +609,7 @@ namespace AshAndEmber
                 // A null giver mints the coin from the realm's coffers so the wage always lands.
                 GiveGoldAction.ApplyBetweenCharacters(payer, Hero.MainHero, amount, true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Event handlers ────────────────────────────────────────────────────
@@ -624,7 +624,7 @@ namespace AshAndEmber
                 var lord = ServingLord();
                 if (InService && lord?.PartyBelongedTo != null) ReassertArmy(lord);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail, bool showNotification)
@@ -638,7 +638,7 @@ namespace AshAndEmber
                     EndServiceCommon();
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnWeeklyTick()
@@ -653,7 +653,7 @@ namespace AshAndEmber
                 MBInformationManager.AddQuickInformation(new TextObject(
                     $"{lord.Name} pays your week's soldiering: {pay}{{GOLD_ICON}}."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Slow tick: validate the commander is still someone we can serve, keep the
@@ -691,7 +691,7 @@ namespace AshAndEmber
                     SustainArmy(lordParty);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // The player's party is sitting inside a settlement with no live encounter
@@ -707,7 +707,7 @@ namespace AshAndEmber
                 if (PlayerEncounter.Current != null) return;
                 LeaveSettlementAction.ApplyForParty(main);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Retries a mercenary release that failed at service end (see EndServiceCommon),
@@ -744,7 +744,7 @@ namespace AshAndEmber
                         "Your soldiering contract is formally dissolved. Your party is your own again."));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // True if the player is inside a map encounter or battle right now. We must
@@ -756,7 +756,7 @@ namespace AshAndEmber
                 if (PlayerEncounter.Current != null) return true;
                 if (MapEvent.PlayerMapEvent != null) return true;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return false;
         }
 
@@ -780,7 +780,7 @@ namespace AshAndEmber
                     {
                         // Meeting still resolving — keep asking it to dissolve, wait.
                         try { PlayerEncounter.LeaveEncounter = true; }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return;
                     }
                     _finalizePending = false;
@@ -817,7 +817,7 @@ namespace AshAndEmber
                 // gathered/joined a new one, or we're riding escort as a fallback).
                 ReassertArmy(lord);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // The player pulled their party out of a host (the vanilla "Abandon Army"
@@ -848,7 +848,7 @@ namespace AshAndEmber
                 // is gone, it broke up and the player may leave freely.
                 _leftHostPendingCheck = true;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Runs one clean tick after the player's party left a host. Decides between
@@ -884,7 +884,7 @@ namespace AshAndEmber
                     && lordParty.Army.LeaderParty == lordParty
                     && lordParty.Army.Kingdom != null;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (commanderStillLeadsHost)
                 // A living host the player chose to step out of — that is desertion.
@@ -913,7 +913,7 @@ namespace AshAndEmber
                     () =>
                     {
                         _leavePromptOpen = false;
-                        try { ReassertArmy(ServingLord()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { ReassertArmy(ServingLord()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     },
                     () =>
                     {
@@ -925,7 +925,7 @@ namespace AshAndEmber
             catch (System.Exception logEx)
             {
                 _leavePromptOpen = false;
-                AshAndEmber.ModLog.Error(logEx);
+                TheDarkestNight.ModLog.Error(logEx);
             }
         }
 
@@ -958,14 +958,14 @@ namespace AshAndEmber
                     {
                         // Stay: fall back into the column.
                         _leavePromptOpen = false;
-                        try { ReassertArmy(ServingLord()); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { ReassertArmy(ServingLord()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }),
                     true);
             }
             catch (System.Exception logEx)
             {
                 _leavePromptOpen = false;
-                AshAndEmber.ModLog.Error(logEx);
+                TheDarkestNight.ModLog.Error(logEx);
             }
         }
     }

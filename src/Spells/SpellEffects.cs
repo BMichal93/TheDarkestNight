@@ -25,7 +25,7 @@ using TaleWorlds.CampaignSystem.MapEvents;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("AshAndEmber.Tests")]
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SpellEffects
     {
@@ -66,10 +66,10 @@ namespace AshAndEmber
                 foreach (Agent a in Mission.Current.Agents)
                 {
                     if (!a.IsActive()) continue;
-                    try { if (a.IsUsingGameObject) return true; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { if (a.IsUsingGameObject) return true; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return false;
         }
 
@@ -87,7 +87,7 @@ namespace AshAndEmber
                     if (isEnemy) return true;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return false;
         }
 
@@ -123,7 +123,7 @@ namespace AshAndEmber
                     agent.TryToSheathWeaponInHand(Agent.HandIndex.MainHand, Agent.WeaponWieldActionType.WithAnimation);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static readonly Dictionary<string, string> _toggleComboToId
@@ -182,8 +182,8 @@ namespace AshAndEmber
                 Vec3 pos = caster.Position + fwd * 3f + right * offset;
                 AddBarrierNode(pos, cast, casterTeam);
             }
-            try { TryCastSound(caster.Position, cast.VisualColor); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TryCastAnimation(caster); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { TryCastSound(caster.Position, cast.VisualColor); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TryCastAnimation(caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Returns ColorSchool.Ashen for anything that belongs to the cold — Ashen
@@ -197,7 +197,7 @@ namespace AshAndEmber
             {
                 if (AshenVisuals.ShouldLookAshen(caster)) return ColorSchool.Ashen;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return null;
         }
 
@@ -223,7 +223,7 @@ namespace AshAndEmber
                 foreach (Agent a in Mission.Current.Agents)
                     if (a.IsActive() && a.Health > 0f) _haltAgentMap[a.Index] = a;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             _haltKeySnap.Clear();
             _haltKeySnap.AddRange(_haltedAgents.Keys);
@@ -236,17 +236,17 @@ namespace AshAndEmber
                 { _expiredHaltKeys.Add(idx); continue; }
                 if (a != srcAgent) { _expiredHaltKeys.Add(idx); continue; }
                 bool usingEquip = false;
-                try { usingEquip = a.IsUsingGameObject; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { usingEquip = a.IsUsingGameObject; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (remaining <= 0f || usingEquip)
                 {
                     _expiredHaltKeys.Add(idx);
-                    if (!usingEquip) try { a.SetMaximumSpeedLimit(10f, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    if (!usingEquip) try { a.SetMaximumSpeedLimit(10f, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
                 else
                 {
                     _haltedAgents[idx] = (remaining, frozenPos, srcAgent);
-                    if (a.MountAgent == null) try { a.SetMaximumSpeedLimit(0f, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    if (doTeleport && a.MountAgent == null) try { a.TeleportToPosition(frozenPos); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    if (a.MountAgent == null) try { a.SetMaximumSpeedLimit(0f, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    if (doTeleport && a.MountAgent == null) try { a.TeleportToPosition(frozenPos); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
             foreach (int idx in _expiredHaltKeys) _haltedAgents.Remove(idx);

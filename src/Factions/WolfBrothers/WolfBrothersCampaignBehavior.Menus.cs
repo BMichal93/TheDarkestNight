@@ -23,7 +23,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class WolfBrothersCampaignBehavior
     {
@@ -45,16 +45,16 @@ namespace AshAndEmber
                         {
                             if (!WolfBrothersSettlements.IsWolfBrothersSettlement(Settlement.CurrentSettlement)) return false;
                             MBTextManager.SetTextVariable("WOLFBROTHERS_LARDER_ENTER_TEXT", "Render flesh for the pack");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = true;
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { GameMenu.SwitchToMenu("wolfbrothers_larder_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { GameMenu.SwitchToMenu("wolfbrothers_larder_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Main menu ──────────────────────────────────────────────────────────
@@ -71,10 +71,10 @@ namespace AshAndEmber
                           + "captive too much trouble to keep both feed the pack the same way, and the pack does "
                           + "not ask which.");
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             RegisterTroopOption(starter);
             RegisterPrisonerOption(starter);
@@ -82,11 +82,11 @@ namespace AshAndEmber
             try
             {
                 starter.AddGameMenuOption("wolfbrothers_larder_main", "wolfbrothers_larder_leave", "Leave the larder",
-                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } return true; },
-                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } return true; },
+                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     true, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Render a soldier from your own ranks ────────────────────────────────
@@ -105,14 +105,14 @@ namespace AshAndEmber
                                 : "  [no soldiers to spare]";
                             MBTextManager.SetTextVariable("WOLFBROTHERS_LARDER_TROOP_TEXT", "Render one of your own soldiers" + note);
                             args.IsEnabled = has;
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
-                    args => { try { DoRenderTroop(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    args => { try { DoRenderTroop(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Render a prisoner ────────────────────────────────────────────────────
@@ -131,14 +131,14 @@ namespace AshAndEmber
                                 : "  [no prisoners to spare]";
                             MBTextManager.SetTextVariable("WOLFBROTHERS_LARDER_PRISONER_TEXT", "Render a prisoner" + note);
                             args.IsEnabled = has;
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
-                    args => { try { DoRenderPrisoner(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    args => { try { DoRenderPrisoner(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Actions ──────────────────────────────────────────────────────────────
@@ -147,7 +147,7 @@ namespace AshAndEmber
             if (!TryGetWeakestTroop(out var character, out int tier))
             {
                 ShowDialog("The Larder Has Nothing To Take", "You have no soldiers you can spare.",
-                    () => { try { GameMenu.SwitchToMenu("wolfbrothers_larder_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("wolfbrothers_larder_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
@@ -157,7 +157,7 @@ namespace AshAndEmber
             GrantMeat(meat);
 
             ShowDialog("Rendered", $"{character.Name} is given to the larder. The pack eats tonight. (+{meat} meat)",
-                () => { try { GameMenu.SwitchToMenu("wolfbrothers_larder_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("wolfbrothers_larder_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 
         private static void DoRenderPrisoner()
@@ -165,7 +165,7 @@ namespace AshAndEmber
             if (!TryGetWeakestPrisoner(out var character, out int tier))
             {
                 ShowDialog("The Larder Has Nothing To Take", "You hold no prisoners you can spare.",
-                    () => { try { GameMenu.SwitchToMenu("wolfbrothers_larder_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("wolfbrothers_larder_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
@@ -175,7 +175,7 @@ namespace AshAndEmber
             GrantMeat(meat);
 
             ShowDialog("Rendered", $"The captive does not leave the larder standing. (+{meat} meat)",
-                () => { try { GameMenu.SwitchToMenu("wolfbrothers_larder_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("wolfbrothers_larder_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 
         // ── Helpers ────────────────────────────────────────────────────────────
@@ -226,7 +226,7 @@ namespace AshAndEmber
                 if (meat != null && party?.ItemRoster != null)
                     party.ItemRoster.AddToCounts(meat, amount);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ShowDialog(string title, string body, Action onClose)
@@ -241,7 +241,7 @@ namespace AshAndEmber
             {
                 string brief = body.Length > 100 ? body.Substring(0, 100) + "…" : body;
                 MBInformationManager.AddQuickInformation(new TextObject(brief));
-                try { onClose?.Invoke(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { onClose?.Invoke(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
     }

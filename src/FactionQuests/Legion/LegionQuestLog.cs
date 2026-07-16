@@ -10,7 +10,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed class LegionQuestLog : QuestBase
     {
@@ -42,7 +42,7 @@ namespace AshAndEmber
                 if (JournalEntries == null) return;
                 if (_objStock == null && JournalEntries.Count >= 2) _objStock = JournalEntries[1];
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void Start()
@@ -64,7 +64,7 @@ namespace AshAndEmber
                     new TextObject("Stock the ark at Ortysia with hardwood and iron."),
                     new TextObject("The Ark's Stock (blended %)"), 0, 100, null, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogStockProgress(int hardwood, int iron)
@@ -75,7 +75,7 @@ namespace AshAndEmber
                 int pct = (int)(LegionQuestMath.BlendedProgress(hardwood, iron) * 100f);
                 _objStock?.UpdateCurrentProgress(pct);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogSailed()
@@ -88,7 +88,7 @@ namespace AshAndEmber
                     "Whatever lies beyond the sea, it is no longer the Long Night's to claim."));
                 CompleteQuestWithSuccess();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogStayed()
@@ -102,7 +102,7 @@ namespace AshAndEmber
                     "march out from Ortysia and do not come back to it."));
                 CompleteQuestWithSuccess();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Reliability closure — Legion was wiped out before the ark was ever
@@ -118,7 +118,7 @@ namespace AshAndEmber
                     "the Warlord's far shore stays exactly that: far, and now unreachable."));
                 CompleteQuestWithFail();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

@@ -23,7 +23,7 @@ using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 using TaleWorlds.CampaignSystem.MapEvents;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SpellEffects
     {
@@ -401,9 +401,9 @@ namespace AshAndEmber
                     e.Remaining -= dt;
                     if (e.Remaining <= 0f)
                     {
-                        try { e.LightEntity?.Remove(0); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                        try { e.LightEntity2?.Remove(0); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                        try { e.LightEntity3?.Remove(0); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { e.LightEntity?.Remove(0); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                        try { e.LightEntity2?.Remove(0); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                        try { e.LightEntity3?.Remove(0); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         _areaEffects.RemoveAt(i);
                         continue;
                     }
@@ -430,7 +430,7 @@ namespace AshAndEmber
                         var lf = new MatrixFrame(Mat3.Identity, e.Position + new Vec3(0f, 0f, 0.5f));
                         e.LightEntity.SetGlobalFrame(in lf, true);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 e.TickTimer -= dt;
@@ -467,7 +467,7 @@ namespace AshAndEmber
                                 a.TeleportToPosition(dest);
                                 BeginAgentGlow(a, e.School, 1.5f);
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
                         break;
                     }
@@ -484,7 +484,7 @@ namespace AshAndEmber
                                 float h = Math.Min(heal, a.HealthLimit - a.Health);
                                 if (h > 0f) { a.Health += h; BeginAgentGlow(a, e.School, 1.5f); }
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
                         break;
                     }
@@ -500,7 +500,7 @@ namespace AshAndEmber
                                 a.SetMorale(Math.Max(0f, a.GetMorale() - 5f));
                                 BeginAgentGlow(a, e.School, 1.5f);
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
                         break;
                     }
@@ -518,10 +518,10 @@ namespace AshAndEmber
                                 // Canonical damage path: heroes are floored (never
                                 // cloud-killed outright), wards/brands apply.
                                 DamageAgent(a, cloudDmg);
-                                try { a.SetMorale(Math.Max(0f, a.GetMorale() - 10f)); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { a.SetMorale(Math.Max(0f, a.GetMorale() - 10f)); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 BeginAgentGlow(a, e.School, 1.5f);
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
                         break;
                     }
@@ -534,11 +534,11 @@ namespace AshAndEmber
                         // smoulders): on snow-bound ground the drifts steam and
                         // slump around the flame — fire melts snow, visibly.
                         if (SceneIsSnowy())
-                            try { SpawnTempSmokeWisp(e.Position + new Vec3(0f, 0f, 0.4f), 1.4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { SpawnTempSmokeWisp(e.Position + new Vec3(0f, 0f, 0.4f), 1.4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         // Dry grass and brush carry the flame a stride outward.
-                        try { TryFireCreep(e); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { TryFireCreep(e); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         // A standing burn gnaws at wooden machines and gates in it.
-                        try { DamageBurnableStructures(e.Position, e.Radius + 1.5f, e.Power * 3f, null); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { DamageBurnableStructures(e.Position, e.Radius + 1.5f, e.Power * 3f, null); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         foreach (Agent a in Mission.Current.Agents.ToList())
                         {
                             if (!a.IsActive() || a.IsMount) continue;
@@ -554,7 +554,7 @@ namespace AshAndEmber
                                 DamageAgent(a, e.Power);
                                 BeginAgentGlow(a, ColorSchool.Red, 1.5f);
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
                         break;
                     }
@@ -572,7 +572,7 @@ namespace AshAndEmber
                                 float h = Math.Min(e.Power, a.HealthLimit - a.Health);
                                 if (h > 0f) { a.Health += h; BeginAgentGlow(a, ColorSchool.White, 1.5f); }
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
                         break;
                     }
@@ -593,7 +593,7 @@ namespace AshAndEmber
                         // Churned ground: everything crossing it wades — the mount
                         // too, so cavalry bogs down hardest. Impartial (team null).
                         if (_rng.Next(3) == 0)
-                            try { SpawnNatureBurst(e.Position, NatureElement.Earth, 0.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { SpawnNatureBurst(e.Position, NatureElement.Earth, 0.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         foreach (Agent a in Mission.Current.Agents.ToList())
                         {
                             if (!a.IsActive() || a.IsMount) continue;
@@ -604,7 +604,7 @@ namespace AshAndEmber
                                 if (a.MountAgent != null && a.MountAgent.IsActive())
                                     NatureEffects.ApplySpeedToken(a.MountAgent, 0.45f, 0.8f);
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
                         break;
                     }
@@ -617,16 +617,16 @@ namespace AshAndEmber
                         // and every so often scrambles the orders of a formation
                         // that cannot see its own banners through the murk.
                         if (_rng.Next(2) == 0)
-                            try { SpawnTempSmokeParticle(e.Position + new Vec3(0f, 0f, 0.6f), e.Radius * 0.4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { SpawnTempSmokeParticle(e.Position + new Vec3(0f, 0f, 0.6f), e.Radius * 0.4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         Formation blindedFormation = null;
                         foreach (Agent a in Mission.Current.Agents.ToList())
                         {
                             if (!a.IsActive() || a.IsMount) continue;
                             if (e.CasterTeam != null && a.Team == e.CasterTeam) continue;
                             if (a.Position.Distance(e.Position) > e.Radius) continue;
-                            try { NatureEffects.ApplySpeedToken(a, 0.65f, 1.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { NatureEffects.ApplySpeedToken(a, 0.65f, 1.2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             if (blindedFormation == null)
-                                try { blindedFormation = a.Formation; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { blindedFormation = a.Formation; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
                         // ~1 tick in 4 with someone caught inside — frequent enough
                         // to matter, not so often the formation never recovers its feet.
@@ -641,7 +641,7 @@ namespace AshAndEmber
                                     default: blindedFormation.SetMovementOrder(MovementOrder.MovementOrderAdvance); break;
                                 }
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
                         break;
                     }
@@ -650,7 +650,7 @@ namespace AshAndEmber
                     {
                         SpawnTempFireParticle(e.Position, 1.4f);
                         SpawnTempLight(e.Position, ColorSchool.Red, 6f, 1.4f);
-                        try { DamageBurnableStructures(e.Position, e.Radius + 1.5f, e.Power * 2f, null); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { DamageBurnableStructures(e.Position, e.Radius + 1.5f, e.Power * 2f, null); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         foreach (Agent a in Mission.Current.Agents.ToList())
                         {
                             if (!a.IsActive() || a.IsMount) continue;
@@ -665,7 +665,7 @@ namespace AshAndEmber
                                 NatureEffects.ApplySpeedToken(a, 0.5f, 1.2f);   // the molten ground bogs every stride
                                 BeginAgentGlow(a, ColorSchool.Red, 1.5f);
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
                         break;
                     }
@@ -678,7 +678,7 @@ namespace AshAndEmber
                         if (e.Radius < 8f) e.Radius += 0.35f;
                         // Alternates earth and water so the patch reads as wet
                         // mud, not dry ground — Mire is Earth+Water together.
-                        try { SpawnNatureBurst(e.Position, _rng.Next(2) == 0 ? NatureElement.Earth : NatureElement.Water, 0.6f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { SpawnNatureBurst(e.Position, _rng.Next(2) == 0 ? NatureElement.Earth : NatureElement.Water, 0.6f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         foreach (Agent a in Mission.Current.Agents.ToList())
                         {
                             if (!a.IsActive() || a.IsMount) continue;
@@ -694,7 +694,7 @@ namespace AshAndEmber
                                 if (a.MountAgent != null && a.MountAgent.IsActive())
                                     NatureEffects.ApplySpeedToken(a.MountAgent, 0.3f, 1.3f);
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
                         break;
                     }
@@ -714,12 +714,12 @@ namespace AshAndEmber
                                 DamageAgent(a, e.Power);
                                 BeginAgentGlow(a, ColorSchool.Red, 1.5f);
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
                         break;
                     }
                 }
-                } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } // guard: Mission.Agents modified during switch case
+                } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } // guard: Mission.Agents modified during switch case
             }
         }
 
@@ -748,13 +748,13 @@ namespace AshAndEmber
                     (steamAt = steamAt ?? new List<Vec3>()).Add(fx.Position);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (steamAt != null)
                 foreach (var p in steamAt)
-                    try { SpawnTempSmokeParticle(p + new Vec3(0f, 0f, 0.5f), 3.5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { if (ElementWallWards.QuenchFireNodesNear(pos, radius) > 0) any = true; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpawnTempSmokeParticle(p + new Vec3(0f, 0f, 0.5f), 3.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { if (ElementWallWards.QuenchFireNodesNear(pos, radius) > 0) any = true; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (any)
-                try { SpawnTempSmokeParticle(pos + new Vec3(0f, 0f, 0.6f), 3f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpawnTempSmokeParticle(pos + new Vec3(0f, 0f, 0.6f), 3f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Scene feel — terrain-aware elemental flavour ─────────────────────────
@@ -778,7 +778,7 @@ namespace AshAndEmber
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Winter elsewhere reads as snow-bound ground (Seasons: 0 Spring … 3 Winter).
             try
             {
@@ -827,7 +827,7 @@ namespace AshAndEmber
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return SceneIsSnowy() ? 0.02f : 0.06f;
         }
 
@@ -836,7 +836,7 @@ namespace AshAndEmber
             if (e.Generation >= 2) return;
             if (_rng.NextDouble() >= FireCreepChance()) return;
             int patches = 0;
-            try { foreach (var fx in _areaEffects) if (fx.Id == "spell_firepatch") patches++; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { foreach (var fx in _areaEffects) if (fx.Id == "spell_firepatch") patches++; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (patches >= MaxFirePatches) return;
 
             double ang = _rng.NextDouble() * Math.PI * 2;
@@ -857,7 +857,7 @@ namespace AshAndEmber
             };
             child.LightEntity = SpawnAreaLight(p, ColorSchool.Red, 5f);
             _areaEffects.Add(child);   // appended above the reverse loop's cursor — safe
-            try { SpawnTempFireParticle(p, 5f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SpawnTempFireParticle(p, 5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Horses fear open flame: a mounted agent beside a burning patch has its
@@ -871,9 +871,9 @@ namespace AshAndEmber
                 Vec3 away = rider.Position - firePos; away.z = 0f;
                 if (away.Length > 0.1f) away.Normalize(); else away = new Vec3(1f, 0f, 0f);
                 rider.MountAgent.TeleportToPosition(rider.MountAgent.Position + away * 2.5f);
-                try { rider.MountAgent.MakeVoice(SkinVoiceManager.VoiceType.Fear, SkinVoiceManager.CombatVoiceNetworkPredictionType.NoPrediction); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { rider.MountAgent.MakeVoice(SkinVoiceManager.VoiceType.Fear, SkinVoiceManager.CombatVoiceNetworkPredictionType.NoPrediction); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Spawns a wall of BarrierNodeCount nodes perpendicular to the caster's
@@ -903,7 +903,7 @@ namespace AshAndEmber
 
             RemoveAreaEffect(id);
             // The replaced wall's warding falls with it (same replacement scope).
-            try { ElementWallWards.ClearBySourceKey(id); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ElementWallWards.ClearBySourceKey(id); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             for (int row = 0; row < rows; row++)
             {
@@ -959,7 +959,7 @@ namespace AshAndEmber
                                             :                             MagicElement.Wind;
                         ElementWallWards.RegisterNode(wardEl, nodePos, nodeR, dur, casterTeam, id);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
         }
@@ -979,14 +979,14 @@ namespace AshAndEmber
             if (!e.InteriorNode)
             {
                 string[] pulseNames = NatureParticleNames(el);
-                try { SpawnSingleParticle(e.Position + new Vec3(0f, 0f, 0.3f), 0.5f, pulseNames); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { SpawnSingleParticle(e.Position + new Vec3(0f, 0f, 1.0f), 0.4f, pulseNames); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SpawnSingleParticle(e.Position + new Vec3(0f, 0f, 0.3f), 0.5f, pulseNames); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { SpawnSingleParticle(e.Position + new Vec3(0f, 0f, 1.0f), 0.4f, pulseNames); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // A wall of wind over desert sand stands inside its own dust-devil —
                 // kicked SAND, not flung stone (and never a scene-wide env emitter).
                 if (el == NatureElement.Wind && _rng.Next(2) == 0 && SceneIsDesert())
-                    try { SpawnSingleParticle(e.Position + new Vec3(0f, 0f, 0.2f), 0.5f, _sandDustNames); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpawnSingleParticle(e.Position + new Vec3(0f, 0f, 0.2f), 0.5f, _sandDustNames); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (el == NatureElement.Storm)
-                    try { SpawnTempLightWhite(e.Position + new Vec3(0f, 0f, 1.2f), 4f, 0.25f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SpawnTempLightWhite(e.Position + new Vec3(0f, 0f, 1.2f), 4f, 0.25f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             if (Mission.Current == null) return;
@@ -1023,7 +1023,7 @@ namespace AshAndEmber
                     {
                         case NatureElement.Wind:
                             // Pure repulsion — powerful, instantaneous gust.
-                            try { SpawnNatureBurst(a.Position, NatureElement.Wind, 0.4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { SpawnNatureBurst(a.Position, NatureElement.Wind, 0.4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             break;
 
                         case NatureElement.Earth:
@@ -1031,28 +1031,28 @@ namespace AshAndEmber
                             // through DamageAgent so heroes are floored, never
                             // wall-killed outright, and armour brands apply.
                             NatureEffects.ApplySpeedToken(a, 0f, NatureMath.ThornwallRootSec);
-                            try { DamageAgent(a, NatureMath.ThornwallDamage); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                            try { SpawnNatureBurst(a.Position, NatureElement.Earth, 0.4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { DamageAgent(a, NatureMath.ThornwallDamage); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                            try { SpawnNatureBurst(a.Position, NatureElement.Earth, 0.4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             break;
 
                         case NatureElement.Water:
                             // Churning bounce + lingering slow + a cold bite. The
                             // mist also douses a burning man to a puff of steam.
-                            try { ElementSpellEffects.QuenchIgnition(a); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { ElementSpellEffects.QuenchIgnition(a); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             NatureEffects.ApplySpeedToken(a, NatureMath.MistwallSlowMult, NatureMath.MistwallSlowSec);
-                            try { DamageAgent(a, NatureMath.MistwallDamage); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                            try { SpawnNatureBurst(a.Position, NatureElement.Water, 0.4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { DamageAgent(a, NatureMath.MistwallDamage); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                            try { SpawnNatureBurst(a.Position, NatureElement.Water, 0.4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             break;
 
                         case NatureElement.Storm:
                             // Lightning discharge — arc damage.
-                            try { DamageAgent(a, NatureMath.StormwallDamage); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                            try { SpawnTempLightWhite(a.Position + new Vec3(0f, 0f, 0.6f), 4f, 0.2f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                            try { SpawnNatureBurst(a.Position, NatureElement.Storm, 0.4f); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { DamageAgent(a, NatureMath.StormwallDamage); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                            try { SpawnTempLightWhite(a.Position + new Vec3(0f, 0f, 0.6f), 4f, 0.2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                            try { SpawnNatureBurst(a.Position, NatureElement.Storm, 0.4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             break;
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 

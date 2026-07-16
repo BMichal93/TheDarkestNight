@@ -28,7 +28,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class WolfHuntBeastParty
     {
@@ -39,8 +39,8 @@ namespace AshAndEmber
 
         internal static void SyncData(IDataStore store)
         {
-            try { store.SyncData("WLFHUNT_BeastPartyId", ref _partyId); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("WLFHUNT_BeastStage",   ref _stage); }   catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("WLFHUNT_BeastPartyId", ref _partyId); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("WLFHUNT_BeastStage",   ref _stage); }   catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void ResetForNewGame()
@@ -86,7 +86,7 @@ namespace AshAndEmber
                 MobileParty party = BanditPartyComponent.CreateBanditParty(partyId, banditClan, hideout, false, pt, cvec);
                 if (party == null) return false;
 
-                try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 DemonMath.DemonTier tier = WolfHuntMath.BeastTier(stage);
                 CharacterObject troop =
@@ -96,13 +96,13 @@ namespace AshAndEmber
                     party.MemberRoster.AddToCounts(troop, WolfHuntMath.PackSize(stage));
 
                 try { party.Party.SetCustomName(new TextObject(WolfHuntCatalog.PackTitle(stage))); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 _partyId = party.StringId;
                 _stage = stage;
                 return true;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return false; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return false; }
         }
 
         // ── Weekly: roam near Wolf Brothers ground so the pack can be found ─────
@@ -122,7 +122,7 @@ namespace AshAndEmber
                 Settlement target = towns[_rng.Next(towns.Count)];
                 party.SetMoveGoToSettlement(target, MobileParty.NavigationType.Default, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Mission hookup — mirrors DemonSpawnCampaignBehavior's
@@ -144,7 +144,7 @@ namespace AshAndEmber
             }
             catch (System.Exception logEx)
             {
-                AshAndEmber.ModLog.Error(logEx);
+                TheDarkestNight.ModLog.Error(logEx);
                 DemonBattleBehavior.PendingBossMultiplier = 1f;
             }
         }
@@ -152,7 +152,7 @@ namespace AshAndEmber
         internal static void OnMapEventEnded()
         {
             try { DemonBattleBehavior.PendingBossMultiplier = 1f; }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

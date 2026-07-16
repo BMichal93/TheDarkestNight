@@ -26,7 +26,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class ChosenCampaignBehavior
     {
@@ -40,9 +40,9 @@ namespace AshAndEmber
                 if (oldKingdom != null && oldKingdom.StringId == ChosenCulture.KingdomId) return; // already Chosen
 
                 if (clan == Clan.PlayerClan)
-                    try { GrantRodOfApostle(Hero.MainHero, announce: true); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { GrantRodOfApostle(Hero.MainHero, announce: true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static bool HasRodOfApostle(Hero hero)
@@ -75,7 +75,7 @@ namespace AshAndEmber
                         new Color(0.85f, 0.72f, 0.25f)));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Weekly sweep (plus once at session launch): every living Chosen lord
@@ -97,10 +97,10 @@ namespace AshAndEmber
                         if (HasRodOfApostle(hero)) continue;
                         GrantRodOfApostle(hero, announce: hero == Hero.MainHero);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

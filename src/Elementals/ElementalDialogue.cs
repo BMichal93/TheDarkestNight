@@ -14,7 +14,7 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class ElementalDialogue
     {
@@ -22,16 +22,16 @@ namespace AshAndEmber
         {
             const int P = 200; // higher than vanilla (100) so our lines fire first
 
-            try { starter.AddDialogLine("elem_start",    "start",                  "elem_done", "...", IsElementalBand, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { starter.AddDialogLine("elem_pretalk",  "lord_pretalk",           "elem_done", "...", IsElementalBand, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { starter.AddPlayerLine("elem_close",    "elem_done",              "close_window", "...", null, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("elem_start",    "start",                  "elem_done", "...", IsElementalBand, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("elem_pretalk",  "lord_pretalk",           "elem_done", "...", IsElementalBand, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { starter.AddPlayerLine("elem_close",    "elem_done",              "close_window", "...", null, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Barter / tribute / surrender / prisoner states — all closed silently.
-            try { starter.AddDialogLine("elem_barter",   "lord_barter_question",   "close_window", "...", IsElementalBand, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { starter.AddDialogLine("elem_defeat_1", "defeated_lord_start_1",  "close_window", "...", IsElementalBand, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { starter.AddDialogLine("elem_defeat_2", "defeated_lord_start_2",  "close_window", "...", IsElementalBand, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { starter.AddDialogLine("elem_special",  "lord_special_request",   "close_window", "...", IsElementalBand, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { starter.AddDialogLine("elem_prisoner", "prisoner_chat",          "close_window", "...", IsElementalBand, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("elem_barter",   "lord_barter_question",   "close_window", "...", IsElementalBand, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("elem_defeat_1", "defeated_lord_start_1",  "close_window", "...", IsElementalBand, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("elem_defeat_2", "defeated_lord_start_2",  "close_window", "...", IsElementalBand, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("elem_special",  "lord_special_request",   "close_window", "...", IsElementalBand, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("elem_prisoner", "prisoner_chat",          "close_window", "...", IsElementalBand, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // True while the player is in conversation with a wild elemental band —
@@ -46,7 +46,7 @@ namespace AshAndEmber
                 var h = Hero.OneToOneConversationHero;
                 if (h?.PartyBelongedTo != null && ElementalWildsBehavior.IsWildBand(h.PartyBelongedTo)) return true;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return false;
         }
     }

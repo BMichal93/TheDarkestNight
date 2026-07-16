@@ -11,7 +11,7 @@
 
 using System.Collections.Generic;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public struct TempleArtifactDef
     {

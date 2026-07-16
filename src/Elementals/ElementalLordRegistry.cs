@@ -17,7 +17,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class ElementalLordRegistry
     {
@@ -44,10 +44,10 @@ namespace AshAndEmber
                 foreach (var hero in lords)
                 {
                     if (_rng.NextDouble() >= ForestClansLordChance) continue;
-                    try { SeedElementalsOnHero(hero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { SeedElementalsOnHero(hero); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void OnHeroCreated(Hero hero, bool isBornNaturally)
@@ -56,7 +56,7 @@ namespace AshAndEmber
             if (!hero.IsLord && !hero.IsMinorFactionHero) return;
             if ((hero.Culture?.StringId ?? "") != "battania") return;
             if (_rng.NextDouble() >= ForestClansLordChance) return;
-            try { SeedElementalsOnHero(hero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SeedElementalsOnHero(hero); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void SeedElementalsOnHero(Hero hero)
@@ -73,7 +73,7 @@ namespace AshAndEmber
                 var troop = MBObjectManager.Instance?.GetObject<CharacterObject>(def.TroopId);
                 if (troop == null) continue;
                 try { party.MemberRoster.AddToCounts(troop, 1); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
     }

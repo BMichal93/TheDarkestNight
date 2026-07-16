@@ -11,7 +11,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed class TempleQuestLog : QuestBase
     {
@@ -45,7 +45,7 @@ namespace AshAndEmber
                 if (_objVigils == null && JournalEntries.Count >= 2) _objVigils = JournalEntries[1];
                 if (_objKills == null && JournalEntries.Count >= 3) _objKills = JournalEntries[2];
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void Start()
@@ -67,7 +67,7 @@ namespace AshAndEmber
                     new TextObject("Find the Five Vigils, hidden in the ruins of the old world, and carry them to a Temple town."),
                     new TextObject("Vigils Found"), 0, required > 0 ? required : TempleQuestMath.ArtifactCount, null, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogArtifactFound(int found, int required)
@@ -77,7 +77,7 @@ namespace AshAndEmber
                 RebindObjectives();
                 _objVigils?.UpdateCurrentProgress(found);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogAllFound()
@@ -88,7 +88,7 @@ namespace AshAndEmber
                     "Every Vigil the trail promised is in your saddlebags. Bring them to Ocs Hall or Pravend, and " +
                     "the Grand-Master will perform the Rite of Union."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogDelivered()
@@ -98,7 +98,7 @@ namespace AshAndEmber
                 AddLog(new TextObject(
                     "The Five Vigils are laid before the Grand-Master. The Rite of Union is spoken."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogBound()
@@ -116,7 +116,7 @@ namespace AshAndEmber
                     new TextObject("March with — or simply witness — the Unbroken Vow's war of attrition against the Night Tide."),
                     new TextObject("Demons Fallen Before the Host"), 0, TempleQuestMath.KillTarget, null, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogKillProgress(int demonsKilled)
@@ -126,7 +126,7 @@ namespace AshAndEmber
                 RebindObjectives();
                 _objKills?.UpdateCurrentProgress(demonsKilled);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogDisbanded()
@@ -140,7 +140,7 @@ namespace AshAndEmber
                     "disbands, hall by hall, and the Temple's name outlives the Temple itself."));
                 CompleteQuestWithSuccess();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Reliability closure — the Temple/Vlandia was wiped out before the
@@ -156,7 +156,7 @@ namespace AshAndEmber
                     "and whatever the Five Vigils might have bound together goes unbound, and unfinished."));
                 CompleteQuestWithFail();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

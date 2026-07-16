@@ -8,7 +8,7 @@
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class NorthmenStonesCampaignBehavior
     {
@@ -30,7 +30,7 @@ namespace AshAndEmber
                         "A rider from the Ruler's hall finds you: the seers wish word with you, and word " +
                         "travels fastest to one of their own."));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 return;
             }
 
@@ -43,7 +43,7 @@ namespace AshAndEmber
                     "You have heard a rumor that something interesting is happening in the North. " +
                     "You should investigate."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

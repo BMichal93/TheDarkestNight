@@ -9,7 +9,7 @@
 // zealotry — see ChosenRodEffects.cs for the on-hit/on-block battle wiring.
 // =============================================================================
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class ChosenRodCatalog
     {

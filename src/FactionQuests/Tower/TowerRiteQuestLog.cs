@@ -9,7 +9,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed class TowerRiteQuestLog : QuestBase
     {
@@ -41,7 +41,7 @@ namespace AshAndEmber
                 if (_objGather == null && JournalEntries != null && JournalEntries.Count >= 2)
                     _objGather = JournalEntries[1];
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void Start()
@@ -63,7 +63,7 @@ namespace AshAndEmber
                     new TextObject("Gather the relics, the Demon Blood, and the Holy Sigils, then bring them to Iyakis."),
                     new TextObject("Grave-Goods Gathered"), 0, 3, null, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogTrackComplete(int tracksNowComplete)
@@ -73,7 +73,7 @@ namespace AshAndEmber
                 RebindObjective();
                 _objGather?.UpdateCurrentProgress(tracksNowComplete);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogRiteFails()
@@ -85,7 +85,7 @@ namespace AshAndEmber
                     "out. What was meant to close a door has torn one open instead, and something vast is " +
                     "pouring through it."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogAftermath()
@@ -98,7 +98,7 @@ namespace AshAndEmber
                     "something of what came through still lingers near their ground."));
                 CompleteQuestWithFail();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Reliability closure — Iyakis, the Tower's only seat, falls before
@@ -114,7 +114,7 @@ namespace AshAndEmber
                     "of the working, goes with it — the Great Rite is a question nobody is left alive to finish asking."));
                 CompleteQuestWithFail();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

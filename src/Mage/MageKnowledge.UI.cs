@@ -15,7 +15,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class MageKnowledge
     {
@@ -37,7 +37,7 @@ namespace AshAndEmber
                 var newBp = AshenVisuals.MakeAshenBodyProperties(hero.BodyProperties);
                 AshenVisuals.SetHeroBodyProperties(hero, newBp);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Spellbook / Grimoire ──────────────────────────────────────────────
@@ -378,7 +378,7 @@ namespace AshAndEmber
                         lines.Add($"  The grey hold {ashenTowns} settlement{(ashenTowns != 1 ? "s" : "")}.{anchor}");
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 try
                 {
@@ -393,14 +393,14 @@ namespace AshAndEmber
                             lines.Add($"  {thin.Name} grows thin — {n} town{(n != 1 ? "s" : "")} left. Their hall burns fewer torches each season.");
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 try
                 {
                     if (CampaignMapEvents.IsLongNight())
                         lines.Add("  The darkness has not lifted. What the Night called has not all gone back.");
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (lines.Count == 0) return "";
                 return "\n── MURMURS  (the cold speaks plainly now) ──────────\n" +

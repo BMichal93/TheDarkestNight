@@ -18,7 +18,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class CampaignMapEvents
     {
@@ -60,7 +60,7 @@ namespace AshAndEmber
                         garrison.MemberRoster.AddToCounts(entry.Character, 0, false, healthy);
                         totalWounded += healthy;
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 // Spawn demons parties near the afflicted settlement
@@ -78,7 +78,7 @@ namespace AshAndEmber
                         (spawned > 0 ? $" {spawned} demons close on the afflicted settlement." : "")));
                 RecordScar(target.StringId, 1);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Event 2: Great Withering ──────────────────────────────────────────
@@ -125,7 +125,7 @@ namespace AshAndEmber
                     RecordScar(target.StringId, 0);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Event 3: cult March ──────────────────────────────────────────────
@@ -171,7 +171,7 @@ namespace AshAndEmber
                         ? $"cult March — {spawned} demons descend upon {kingdom.Name}. The grey tide does not rest."
                         : $"cult March — the grey tide stirs near {kingdom.Name}, but finds no foothold today."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Event 4: Long Night ───────────────────────────────────────────────
@@ -208,7 +208,7 @@ namespace AshAndEmber
                     if (party != null) spawned++;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             MBInformationManager.AddQuickInformation(new TextObject(
                 $"Long Night — the sun does not rise. {LongNightDuration} days of unbroken darkness fall over Calradia. " +
@@ -257,7 +257,7 @@ namespace AshAndEmber
                     $"cult Tide — {castle.Name} bends to the cold fire. " +
                     $"{lord.Name} claims it without a blade drawn."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Event 6: Fire Fades ───────────────────────────────────────────────
@@ -307,13 +307,13 @@ namespace AshAndEmber
                             else if (home?.IsTown == true && home.Town != null)
                                 home.Town.Prosperity = Math.Max(10f, home.Town.Prosperity * 0.85f);
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                         KillCharacterAction.ApplyByMurder(hero, null, false);
                         names.Add(hero.Name.ToString());
                         killed++;
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 if (killed > 0)
@@ -327,7 +327,7 @@ namespace AshAndEmber
                         $"[{killed} lord{(killed != 1 ? "s" : "")} killed; home settlements lost hearth and prosperity.]"));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Event 7: Darkened Roads ───────────────────────────────────────────
@@ -360,7 +360,7 @@ namespace AshAndEmber
                 foreach (var caravan in caravans)
                 {
                     try { DestroyPartyAction.Apply(caravan.Party, null); destroyed++; }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 // Trade collapse — every town in the kingdom loses 15% prosperity
@@ -372,7 +372,7 @@ namespace AshAndEmber
                         s.Town.Prosperity = Math.Max(10f, s.Town.Prosperity * 0.85f);
                     }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // cult spawn move in to fill the vacuum
                 var anchors = Settlement.All
@@ -394,7 +394,7 @@ namespace AshAndEmber
                     : $"Darkened Roads — {destroyed} caravan{(destroyed != 1 ? "s" : "")} vanish on the roads of {kingdom.Name}. Trade dies. Prosperity crumbles. " + (spawned > 0 ? "cult shapes move where merchants once walked." : "The roads fall silent and cold.");
                 MBInformationManager.AddQuickInformation(new TextObject(darkenedMsg));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Event 8: Seeds of Betrayal ────────────────────────────────────────
@@ -478,9 +478,9 @@ namespace AshAndEmber
                         {
                             try
                             {
-                                try { KillCharacterAction.ApplyByMurder(leader, null, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { KillCharacterAction.ApplyByMurder(leader, null, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 if (expelled != null && expelled.Kingdom == kingdom)
-                                    try { ChangeKingdomAction.ApplyByLeaveKingdom(expelled, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                    try { ChangeKingdomAction.ApplyByLeaveKingdom(expelled, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 PlayerRelationWithClan(expelled, +50);
                                 PlayerRelationWithClan(oldRulingClan, -100);
                                 string msg = IsTempleFaction(kingdom)
@@ -490,7 +490,7 @@ namespace AshAndEmber
                                     : $"Seeds of Betrayal — {leaderName} of {kingdomName} did not survive the feast. You were part of it. {expelledName} fled before dawn — grateful, and gone. {oldRulerName} will know who held the blade.";
                                 MBInformationManager.AddQuickInformation(new TextObject(msg));
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         },
                         () =>
                         {
@@ -509,9 +509,9 @@ namespace AshAndEmber
                                 }
                                 else
                                 {
-                                    try { KillCharacterAction.ApplyByMurder(leader, null, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                    try { KillCharacterAction.ApplyByMurder(leader, null, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                     if (expelled != null && expelled.Kingdom == kingdom)
-                                        try { ChangeKingdomAction.ApplyByLeaveKingdom(expelled, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                        try { ChangeKingdomAction.ApplyByLeaveKingdom(expelled, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                     PlayerRelationWithClan(oldRulingClan, +20);
                                     string msg = IsTempleFaction(kingdom)
                                         ? $"Seeds of Betrayal — {leaderName} of {kingdomName} did not survive despite your warning. {expelledName} moved before your word could reach the altar. {oldRulerName} remembers who tried. {expelledName} remembers too."
@@ -521,15 +521,15 @@ namespace AshAndEmber
                                     MBInformationManager.AddQuickInformation(new TextObject(msg));
                                 }
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
                     ), true);
                 }
                 else
                 {
-                    try { KillCharacterAction.ApplyByMurder(leader, null, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { KillCharacterAction.ApplyByMurder(leader, null, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     if (expelled != null && expelled.Kingdom == kingdom)
-                        try { ChangeKingdomAction.ApplyByLeaveKingdom(expelled, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { ChangeKingdomAction.ApplyByLeaveKingdom(expelled, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     string worldMsg = IsTempleFaction(kingdom)
                         ? $"Seeds of Betrayal — {leaderName} of {kingdomName} was found cold before morning prayer. The chalice had been prepared in secret. {expelledName} vanished before the bells, their insignia stripped from the chapel wall. The covenant endures — but something under it has shifted."
                         : IsTribes(kingdom)
@@ -538,7 +538,7 @@ namespace AshAndEmber
                     MBInformationManager.AddQuickInformation(new TextObject(worldMsg));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Event 9: Broken Will ─────────────────────────────────────────────

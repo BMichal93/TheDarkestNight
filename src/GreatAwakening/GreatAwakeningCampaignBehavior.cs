@@ -28,7 +28,7 @@ using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class GreatAwakeningCampaignBehavior : CampaignBehaviorBase
     {
@@ -64,10 +64,10 @@ namespace AshAndEmber
 
         public override void SyncData(IDataStore store)
         {
-            try { store.SyncData("GRAWK_Phase",       ref _phase); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("GRAWK_Prisoners",   ref _prisonersSacrificed); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("GRAWK_AltarId",     ref _altarSettlementId); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("GRAWK_Roused",      ref _oppositionRoused); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("GRAWK_Phase",       ref _phase); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("GRAWK_Prisoners",   ref _prisonersSacrificed); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("GRAWK_AltarId",     ref _altarSettlementId); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("GRAWK_Roused",      ref _oppositionRoused); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             SyncResolutionData(store);
             GreatOtherParty.SyncData(store);
         }
@@ -84,7 +84,7 @@ namespace AshAndEmber
 
         private void OnDailyTick()
         {
-            try { GreatOtherParty.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { GreatOtherParty.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Re-raise the journal entry on saves where the engine's cancel-on-load
             // sweep already finalized it (before SpecialQuestType shipped).
             try
@@ -92,12 +92,12 @@ namespace AshAndEmber
                 if (_phase == PhaseActive)
                     GreatAwakeningQuestLog.EnsureAlive(_prisonersSacrificed, GreatAwakeningMath.PrisonerTarget);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnMapEventStarted(MapEvent mapEvent, TaleWorlds.CampaignSystem.Party.PartyBase attackerParty, TaleWorlds.CampaignSystem.Party.PartyBase defenderParty)
         {
-            try { GreatOtherParty.OnMapEventStarted(mapEvent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { GreatOtherParty.OnMapEventStarted(mapEvent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
@@ -109,12 +109,12 @@ namespace AshAndEmber
 
         private void OnWeeklyTick()
         {
-            try { EnsureAltarChosen(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { TriggerWeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { NpcContributionWeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { OppositionWeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { ResolutionWeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { GreatOtherParty.WeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { EnsureAltarChosen(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { TriggerWeeklyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { NpcContributionWeeklyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { OppositionWeeklyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ResolutionWeeklyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { GreatOtherParty.WeeklyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Shared queries ───────────────────────────────────────────────────────
@@ -167,7 +167,7 @@ namespace AshAndEmber
                     .FirstOrDefault();
                 if (southmost != null) _altarSettlementId = southmost.StringId;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static int CurrentCampaignDay()

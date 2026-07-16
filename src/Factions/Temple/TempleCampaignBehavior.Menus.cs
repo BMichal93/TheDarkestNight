@@ -25,7 +25,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class TempleCampaignBehavior
     {
@@ -47,16 +47,16 @@ namespace AshAndEmber
                         {
                             if (!TempleSettlements.IsTempleSettlement(Settlement.CurrentSettlement)) return false;
                             MBTextManager.SetTextVariable("TEMPLE_ORDER_ENTER_TEXT", "Seek the Order");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = true;
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { GameMenu.SwitchToMenu("temple_order_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { GameMenu.SwitchToMenu("temple_order_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Main menu ──────────────────────────────────────────────────────────
@@ -73,10 +73,10 @@ namespace AshAndEmber
                           + "Templar tends the altar without turning. \"Stone can be shaped into a vow, if you have "
                           + "the coin for the shaping. Or you may simply kneel and ask the Light to hear you.\"");
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             RegisterBuySigilOption(starter);
             RegisterPrayOption(starter);
@@ -84,11 +84,11 @@ namespace AshAndEmber
             try
             {
                 starter.AddGameMenuOption("temple_order_main", "temple_order_leave", "Leave",
-                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } return true; },
-                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } return true; },
+                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     true, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Option 1: buy a Holy Sigil ────────────────────────────────────────
@@ -104,14 +104,14 @@ namespace AshAndEmber
                             MBTextManager.SetTextVariable("TEMPLE_ORDER_SIGIL_TEXT",
                                 $"Buy a Holy Sigil  [{TempleMath.SigilPurchaseCostGold} denars]");
                             args.IsEnabled = (Hero.MainHero?.Gold ?? 0) >= TempleMath.SigilPurchaseCostGold;
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
-                    args => { try { DoBuySigil(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    args => { try { DoBuySigil(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void DoBuySigil()
@@ -120,15 +120,15 @@ namespace AshAndEmber
             if (hero == null || hero.Gold < TempleMath.SigilPurchaseCostGold)
             {
                 ShowDialog("Not Enough Coin", $"You need {TempleMath.SigilPurchaseCostGold} denars for the shaping.",
-                    () => { try { GameMenu.SwitchToMenu("temple_order_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("temple_order_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
-            try { hero.ChangeHeroGold(-TempleMath.SigilPurchaseCostGold); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { hero.ChangeHeroGold(-TempleMath.SigilPurchaseCostGold); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             GrantHolySigil(hero, announce: false);
 
             ShowDialog("Shaped", "The stone is warm before it even leaves the mason's hand. \"Carry it well.\"",
-                () => { try { GameMenu.SwitchToMenu("temple_order_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("temple_order_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 
         // ── Option 2: pray — gated by personality traits ─────────────────────
@@ -144,7 +144,7 @@ namespace AshAndEmber
                             Hero hero = Hero.MainHero;
                             int honor = 0, mercy = 0;
                             try { honor = hero.GetTraitLevel(DefaultTraits.Honor); mercy = hero.GetTraitLevel(DefaultTraits.Mercy); }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                             bool qualifies = TempleMath.QualifiesToPray(honor, mercy);
                             bool ready = CanPrayToday(hero);
@@ -154,14 +154,14 @@ namespace AshAndEmber
                                 : !ready   ? "Pray (already prayed today)"
                                            : "Pray at the altar");
                             args.IsEnabled = qualifies && ready;
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
-                    args => { try { DoPray(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    args => { try { DoPray(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void DoPray()
@@ -179,7 +179,7 @@ namespace AshAndEmber
             {
                 ShowDialog("No Answer", "You kneel. The stone stays cold. Whatever you carry tonight, it is not "
                     + "the shape of a prayer the Order would recognise.",
-                    () => { try { GameMenu.SwitchToMenu("temple_order_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("temple_order_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
@@ -187,7 +187,7 @@ namespace AshAndEmber
 
             ShowDialog("Answered", "The words leave you and something in your own chest answers back — steadier, "
                 + "warmer. Your column feels it too. (Party morale and wounded soldiers restored.)",
-                () => { try { GameMenu.SwitchToMenu("temple_order_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("temple_order_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 
         // ── Helpers ────────────────────────────────────────────────────────────
@@ -203,7 +203,7 @@ namespace AshAndEmber
             {
                 string brief = body.Length > 100 ? body.Substring(0, 100) + "…" : body;
                 MBInformationManager.AddQuickInformation(new TextObject(brief));
-                try { onClose?.Invoke(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { onClose?.Invoke(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
     }

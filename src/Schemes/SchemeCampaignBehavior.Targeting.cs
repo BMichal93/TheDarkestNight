@@ -15,7 +15,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class SchemeCampaignBehavior
     {
@@ -84,11 +84,11 @@ namespace AshAndEmber
                                 if (needsLord) OpenLordTargetUI();
                                 else           OpenSettlementTargetUI();
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }, null),
                     true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Target selection: lords ───────────────────────────────────────────
@@ -155,7 +155,7 @@ namespace AshAndEmber
                         OnLordTargetChosen, null),
                     true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void OnLordTargetChosen(List<InquiryElement> selected)
@@ -168,7 +168,7 @@ namespace AshAndEmber
                 if (target == null) return;
                 ShowConfirmation(target, null);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Target selection: settlements ─────────────────────────────────────
@@ -213,7 +213,7 @@ namespace AshAndEmber
                         OnSettlementTargetChosen, null),
                     true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void OnSettlementTargetChosen(List<InquiryElement> selected)
@@ -226,7 +226,7 @@ namespace AshAndEmber
                 if (target == null) return;
                 ShowConfirmation(null, target);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Confirmation ──────────────────────────────────────────────────────
@@ -296,12 +296,12 @@ namespace AshAndEmber
                                 bool playMinigame = (chosen?[0]?.Identifier as string ?? "play") == "play";
                                 CommitScheme(targetHero, targetSett, playMinigame);
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         },
                         null),
                     true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void CommitScheme(Hero targetHero, Settlement targetSett, bool playMinigame)
@@ -315,7 +315,7 @@ namespace AshAndEmber
                     MBInformationManager.AddQuickInformation(
                         new TextObject("That target is currently blocked — the path is not yet clear."));
                     _selectedDef = null;
-                    try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     return;
                 }
 
@@ -335,16 +335,16 @@ namespace AshAndEmber
                         MBInformationManager.AddQuickInformation(
                             new TextObject("Insufficient influence — the scheme cannot be arranged."));
                         _selectedDef = null;
-                        try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return;
                     }
-                    try { if (Hero.MainHero.Clan != null) Hero.MainHero.Clan.Influence -= infCost; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { if (Hero.MainHero.Clan != null) Hero.MainHero.Clan.Influence -= infCost; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
-                try { ShiftPlayerTrait(DefaultTraits.Honor,       -1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { ShiftPlayerTrait(DefaultTraits.Calculating,  -1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ShiftPlayerTrait(DefaultTraits.Honor,       -1); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { ShiftPlayerTrait(DefaultTraits.Calculating,  -1); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (_selectedDef.Type == SchemeType.Assassinate)
-                    try { ShiftPlayerTrait(DefaultTraits.Mercy, -1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { ShiftPlayerTrait(DefaultTraits.Mercy, -1); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 var capturedDef  = _selectedDef;
                 var capturedHero = targetHero;
@@ -354,14 +354,14 @@ namespace AshAndEmber
                 // Stamp per-target cooldown NOW so a save-reload before the first phase
                 // cannot bypass the cost and retry the same target for free. The minigame
                 // will overwrite this with the outcome-correct value on resolution.
-                try { SchemeSystem.PreStampTargetCooldown(capturedDef.Type, capturedHero, capturedSett); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SchemeSystem.PreStampTargetCooldown(capturedDef.Type, capturedHero, capturedSett); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Record the committed operation. If the player reloads before the
                 // Gambit (or the deferred skip resolution) resolves, OnSessionLaunched
                 // re-launches the right path so the costs already paid are not silently lost.
-                try { SchemeSystem.SetPendingPlayerOperation(capturedDef.Type, capturedHero, capturedSett, skip: !playMinigame); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { SchemeSystem.SetPendingPlayerOperation(capturedDef.Type, capturedHero, capturedSett, skip: !playMinigame); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-                try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Defer so menu transition completes before the first inquiry opens.
                 MageKnowledge._deferredInquiry = () =>
@@ -371,10 +371,10 @@ namespace AshAndEmber
                         if (playMinigame) SchemeMinigame.Begin(capturedDef, capturedHero, capturedSett);
                         else              SchemeMinigame.ResolveSkip(capturedDef, capturedHero, capturedSett);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 };
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ShiftPlayerTrait(TraitObject trait, int delta)

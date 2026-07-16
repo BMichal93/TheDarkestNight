@@ -10,7 +10,7 @@
 
 using System;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public struct SeaBattleOutcome
     {

@@ -42,7 +42,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class DemonLordSystem
     {
@@ -76,11 +76,11 @@ namespace AshAndEmber
 
         public static void SyncData(IDataStore store)
         {
-            try { store.SyncData("APOC_LordHeroId",    ref _heroId); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("APOC_LordPartyId",   ref _partyId); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("APOC_LordAppearedDay", ref _appearedDay); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("APOC_LordVictory",   ref _victoryResolved); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("APOC_LordDefeat",    ref _defeatResolved); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("APOC_LordHeroId",    ref _heroId); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("APOC_LordPartyId",   ref _partyId); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("APOC_LordAppearedDay", ref _appearedDay); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("APOC_LordVictory",   ref _victoryResolved); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("APOC_LordDefeat",    ref _defeatResolved); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Query ────────────────────────────────────────────────────────────────
@@ -94,7 +94,7 @@ namespace AshAndEmber
             if (string.IsNullOrEmpty(_heroId)) return null;
             try { return Hero.AllAliveHeroes.FirstOrDefault(h => h.StringId == _heroId)
                        ?? Hero.DeadOrDisabledHeroes.FirstOrDefault(h => h.StringId == _heroId); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
 
         public static bool IsTrackedHero(Hero hero) => hero != null && hero.StringId == _heroId;
@@ -103,13 +103,13 @@ namespace AshAndEmber
         {
             if (string.IsNullOrEmpty(_partyId)) return null;
             try { return MobileParty.All.FirstOrDefault(p => p != null && p.StringId == _partyId); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
 
         public static Kingdom CurrentKingdom()
         {
             try { return Kingdom.All.FirstOrDefault(k => k != null && k.StringId == KingdomId && !k.IsEliminated); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
 
         public static bool IsAliveAndUnresolved()
@@ -144,7 +144,7 @@ namespace AshAndEmber
 
                 string name = Names[_rng.Next(Names.Length)];
                 try { lord.SetName(new TextObject(name), new TextObject(name)); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // CreateSettlementRebelClan is the same vanilla path a settlement
                 // rebellion uses — it mints the clan AROUND the hero taking the
@@ -154,16 +154,16 @@ namespace AshAndEmber
                 // clan yet to assign the settlement to).
                 Clan clan;
                 try { clan = Clan.CreateSettlementRebelClan(target, lord, 0); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return false; }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return false; }
                 if (clan == null) return false;
-                try { clan.SetLeader(lord); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { clan.SetLeader(lord); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 // Defensive re-assert now that the hero has a clan — a no-op if
                 // CreateSettlementRebelClan already transferred ownership.
                 try { ChangeOwnerOfSettlementAction.ApplyByDefault(lord, target); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { if (target.Town != null) { target.Town.Loyalty = 100f; target.Town.Security = 100f; } }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 Kingdom kingdom = Kingdom.CreateKingdom(KingdomId);
                 if (kingdom == null) return false;
@@ -181,10 +181,10 @@ namespace AshAndEmber
                         new TextObject("The Devouring Host"),
                         new TextObject("The Demon Lord"));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return false; }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return false; }
 
                 try { ChangeKingdomAction.ApplyByCreateKingdom(clan, kingdom, false); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 MobileParty party = null;
                 try
@@ -193,12 +193,12 @@ namespace AshAndEmber
                         "demon_lord_host_" + _rng.Next(999999).ToString("D6"),
                         lord, new CampaignVec2(target.GetPosition2D, true), 1f, target, lord);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (party != null)
                 {
-                    try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     AddHostBodies(party, ApocalypseMath.DemonLordHostInitialSize);
-                    try { party.Party.SetCustomName(new TextObject($"{name}'s Host")); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { party.Party.SetCustomName(new TextObject($"{name}'s Host")); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 _heroId = lord.StringId;
@@ -212,7 +212,7 @@ namespace AshAndEmber
 
                 return true;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return false; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return false; }
         }
 
         // Bulk-adds `count` demon bodies to the host's roster, weighted toward
@@ -227,7 +227,7 @@ namespace AshAndEmber
                     MBObjectManager.Instance.GetObject<CharacterObject>(DemonCatalog.TroopIdFor(tier))
                  ?? MBObjectManager.Instance.GetObject<CharacterObject>(DemonCatalog.FiendTroopId);
                 if (troop == null) continue;
-                try { party.MemberRoster.AddToCounts(troop, 1); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { party.MemberRoster.AddToCounts(troop, 1); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -245,7 +245,7 @@ namespace AshAndEmber
                 int have = party.MemberRoster?.TotalManCount ?? 0;
                 if (have < wanted) AddHostBodies(party, wanted - have);
 
-                try { ReassertPermanentWar(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { ReassertPermanentWar(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (party.MapEvent == null && party.BesiegedSettlement == null)
                 {
@@ -257,11 +257,11 @@ namespace AshAndEmber
                     if (objective != null)
                     {
                         try { party.SetMoveBesiegeSettlement(objective, MobileParty.NavigationType.Default); }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ReassertPermanentWar()
@@ -272,7 +272,7 @@ namespace AshAndEmber
             {
                 if (other == null || other == kingdom || other.IsEliminated) continue;
                 if (kingdom.IsAtWarWith(other)) continue;
-                try { DeclareWarAction.ApplyByDefault(kingdom, other); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { DeclareWarAction.ApplyByDefault(kingdom, other); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -283,13 +283,13 @@ namespace AshAndEmber
         public static int SettlementsHeldByLord()
         {
             try { return Settlement.All.Count(s => s != null && s.MapFaction?.StringId == KingdomId); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return 0; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return 0; }
         }
 
         private static void Announce(string text, Color color)
         {
             try { InformationManager.DisplayMessage(new InformationMessage(text, color)); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

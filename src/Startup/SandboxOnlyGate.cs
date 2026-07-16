@@ -19,7 +19,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class SandboxOnlyGate
     {
@@ -48,7 +48,7 @@ namespace AshAndEmber
                 _warned = true;
                 WarnAndReturnToMenu();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static bool IsStoryModeCampaign(Campaign campaign)
@@ -63,7 +63,7 @@ namespace AshAndEmber
                         return true;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return false;
         }
 
@@ -79,7 +79,7 @@ namespace AshAndEmber
                     "Return to the main menu", null,
                     ReturnToMainMenu, null));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ReturnToMainMenu()
@@ -91,7 +91,7 @@ namespace AshAndEmber
                 var initial = gsm.CreateState<InitialState>();
                 gsm.CleanAndPushState(initial, 0);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

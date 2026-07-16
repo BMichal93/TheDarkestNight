@@ -17,14 +17,14 @@ using TaleWorlds.CampaignSystem.GameMenus;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class RuinsMenus
     {
         public static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RuinsExplorationSystem.RegisterWaitMenu(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { RegisterEntryOption(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RuinsExplorationSystem.RegisterWaitMenu(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { RegisterEntryOption(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void RegisterEntryOption(CampaignGameStarter starter)
@@ -58,7 +58,7 @@ namespace AshAndEmber
                         if (s == null || !RuinsCastleSystem.IsRuin(s)) return;
                         RuinsExplorationSystem.BeginExploration(s);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 },
                 false, -1, false);
         }

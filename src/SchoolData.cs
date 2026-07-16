@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     // Visual colour identifiers used by glow / light systems.
     // Red = Damage, White = Restore, Orange = both.

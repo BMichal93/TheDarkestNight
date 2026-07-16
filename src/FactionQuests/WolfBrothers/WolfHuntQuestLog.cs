@@ -9,7 +9,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed class WolfHuntQuestLog : QuestBase
     {
@@ -41,7 +41,7 @@ namespace AshAndEmber
                 if (_objBeasts == null && JournalEntries != null && JournalEntries.Count >= 2)
                     _objBeasts = JournalEntries[1];
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void Start()
@@ -61,7 +61,7 @@ namespace AshAndEmber
                     new TextObject("Hunt the named beasts, one after another."),
                     new TextObject("Beasts Hunted"), 0, WolfHuntMath.StageCount, null, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogBeastSlain(int stageIndexJustFinished)
@@ -74,7 +74,7 @@ namespace AshAndEmber
                     $"[{stageIndexJustFinished + 1}/{WolfHuntMath.StageCount}]"));
                 _objBeasts?.UpdateCurrentProgress(stageIndexJustFinished + 1);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogAllBeastsSlain()
@@ -85,7 +85,7 @@ namespace AshAndEmber
                     "All three are dead. Return to the Packmaster — the pack is waiting on what you do " +
                     "with the last of the flesh."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogTransformation()
@@ -96,7 +96,7 @@ namespace AshAndEmber
                     "You ate what you killed. The pack has no more questions about what you are."));
                 CompleteQuestWithSuccess();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal void LogBurning()
@@ -108,7 +108,7 @@ namespace AshAndEmber
                     "entirely sure what that means either."));
                 CompleteQuestWithSuccess();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

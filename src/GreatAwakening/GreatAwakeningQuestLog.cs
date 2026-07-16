@@ -9,7 +9,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed class GreatAwakeningQuestLog : QuestBase
     {
@@ -42,7 +42,7 @@ namespace AshAndEmber
                 if (_objProgress == null && JournalEntries != null && JournalEntries.Count >= 2)
                     _objProgress = JournalEntries[1];
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private JournalLog _objProgress;
@@ -67,7 +67,7 @@ namespace AshAndEmber
                 Start();
                 UpdateProgress(sacrificed, target);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void Start()
@@ -93,7 +93,7 @@ namespace AshAndEmber
                         : "Destroy the Tower's kingdom before the Great Summoning completes."),
                     new TextObject("Prisoners Sacrificed"), 0, GreatAwakeningMath.PrisonerTarget, null, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void UpdateProgress(int sacrificed, int target)
@@ -103,7 +103,7 @@ namespace AshAndEmber
                 _questLog?.RebindObjective();
                 _questLog?._objProgress?.UpdateCurrentProgress(System.Math.Min(sacrificed, target));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void CompleteSummoningControlled()
@@ -115,7 +115,7 @@ namespace AshAndEmber
                     "space behind the stone — The Great Other has come, and it stands at the Tower's side."));
                 _questLog?.CompleteQuestWithSuccess();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void CompleteSummoningUncontrolled()
@@ -127,7 +127,7 @@ namespace AshAndEmber
                     "has come, and it belongs to nothing and no one, least of all the Tower."));
                 _questLog?.CompleteQuestWithFail();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static void CompleteOppositionWon()
@@ -139,7 +139,7 @@ namespace AshAndEmber
                     "count was never paid, and never will be."));
                 _questLog?.CompleteQuestWithSuccess();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

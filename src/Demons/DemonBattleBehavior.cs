@@ -28,7 +28,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class DemonBattleBehavior
     {
@@ -94,7 +94,7 @@ namespace AshAndEmber
             {
                 Agent a = _beings[i]?.Agent;
                 bool alive = false;
-                try { alive = a != null && a.IsActive() && a.Health > 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { alive = a != null && a.IsActive() && a.Health > 0f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (alive) result.Add(a);
             }
             return result;
@@ -109,7 +109,7 @@ namespace AshAndEmber
 
         public static void ClearBattleState()
         {
-            try { DemonVisuals.ClearAll(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { DemonVisuals.ClearAll(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _beings.Clear();
             _tierOf.Clear();
             PendingVariant = null;
@@ -124,7 +124,7 @@ namespace AshAndEmber
             {
                 if (agent == null || agent.IsMount) return;
                 string id = null;
-                try { id = agent.Character?.StringId; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { id = agent.Character?.StringId; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 bool matched = DemonCatalog.TryGetTier(id, out DemonMath.DemonTier tier);
 
                 // Phase 11 — the Demon Lord is a real Hero (see DemonLordSystem),
@@ -144,7 +144,7 @@ namespace AshAndEmber
                             tier = DemonMath.DemonTier.Lord;
                         }
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
                 if (!matched) return;
 
@@ -161,15 +161,15 @@ namespace AshAndEmber
                     agent.HealthLimit = Math.Max(agent.HealthLimit, hp);
                     agent.Health = agent.HealthLimit;
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 // The beast shape (visual scale + never-resting stance) for the
                 // roster-spawned tide — DemonFactory.SpawnDemon applies the same
                 // helper on its own path. (The bigger demon_hulking Monster
                 // capsule is build-time only and thus factory-path only.)
-                try { DemonFactory.ApplyBeastShape(agent, tier); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                try { DemonFactory.SetAggressive(agent, agent.Team); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { DemonFactory.ApplyBeastShape(agent, tier); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { DemonFactory.SetAggressive(agent, agent.Team); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Tick (driven by MagicMissionBehavior.OnMissionTick) ─────────────────
@@ -187,17 +187,17 @@ namespace AshAndEmber
             {
                 Being b = _beings[i];
                 bool alive = false;
-                try { alive = b.Agent != null && b.Agent.IsActive() && b.Agent.Health > 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { alive = b.Agent != null && b.Agent.IsActive() && b.Agent.Health > 0f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (!alive)
                 {
                     if (b.Agent != null)
                     {
                         _tierOf.Remove(b.Agent);
-                        try { DemonVisuals.Detach(b.Agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { DemonVisuals.Detach(b.Agent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                     if (b.Mount != null)
                     {
-                        try { DemonVisuals.Detach(b.Mount); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { DemonVisuals.Detach(b.Mount); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         b.Mount = null;
                     }
                     _beings.RemoveAt(i);
@@ -206,17 +206,17 @@ namespace AshAndEmber
 
                 if (!b.Shrouded)
                 {
-                    try { DemonVisuals.Attach(b.Agent, b.Tier); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { DemonVisuals.Attach(b.Agent, b.Tier); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     b.Shrouded = DemonVisuals.IsShrouded(b.Agent);
                     // The warp (per-bone disfigurement + the permanent snarl)
                     // rides the same lazy first-tick timing as the shroud —
                     // the skeleton is guaranteed built once Attach succeeds.
                     if (b.Shrouded)
-                        try { DemonFactory.ApplyBeastWarp(b.Agent, b.Tier); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { DemonFactory.ApplyBeastWarp(b.Agent, b.Tier); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
                 else
                 {
-                    try { DemonVisuals.Follow(b.Agent); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { DemonVisuals.Follow(b.Agent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 // The Hellsteed's horse is a demon too — dressed lazily the
@@ -240,7 +240,7 @@ namespace AshAndEmber
                         float speed = DemonMath.SpeedMultiplier(b.Tier);
                         if (speed != 1f) b.Agent.SetMaximumSpeedLimit(speed, true);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
                 if (DemonMath.CastsMagic(b.Tier))
@@ -271,22 +271,22 @@ namespace AshAndEmber
                     if (mount == null) return;
                     b.Mount = mount;
                     b.MountDressed = true;
-                    try { DemonFactory.SetAgentScale(mount, DemonMath.HellsteedMountScale); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                    try { DemonVisuals.Attach(mount, b.Tier); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { DemonFactory.SetAgentScale(mount, DemonMath.HellsteedMountScale); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { DemonVisuals.Attach(mount, b.Tier); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     return;
                 }
                 if (b.Mount == null) return;
                 bool mountAlive = false;
-                try { mountAlive = b.Mount.IsActive() && b.Mount.Health > 0f; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { mountAlive = b.Mount.IsActive() && b.Mount.Health > 0f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (!mountAlive)
                 {
-                    try { DemonVisuals.Detach(b.Mount); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { DemonVisuals.Detach(b.Mount); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     b.Mount = null;
                     return;
                 }
-                try { DemonVisuals.Follow(b.Mount); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { DemonVisuals.Follow(b.Mount); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ReRouse(Agent agent)
@@ -295,12 +295,12 @@ namespace AshAndEmber
             {
                 if (agent.Team == null) return;
                 if (Mission.Current != null && agent.Team == Mission.Current.PlayerTeam) return;
-                try { agent.SetWatchState(Agent.WatchState.Alarmed); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { agent.SetWatchState(Agent.WatchState.Alarmed); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 Formation form = agent.Formation;
                 if (form != null)
-                    try { form.SetMovementOrder(MovementOrder.MovementOrderCharge); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { form.SetMovementOrder(MovementOrder.MovementOrderCharge); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // A Ravager looses a cone of hellfire at the nearest foe within reach —
@@ -355,7 +355,7 @@ namespace AshAndEmber
 
                 ElementSpellEffects.CastAttack(element, agent, power);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

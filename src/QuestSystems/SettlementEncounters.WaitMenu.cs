@@ -28,7 +28,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SettlementEncounters
     {
@@ -51,7 +51,7 @@ namespace AshAndEmber
             _seWaitDone         = false;
             _seWaitLine         = line;
             _seWaitOnComplete   = onComplete;
-            try { GameMenu.ActivateGameMenu("se_wait_menu"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { GameMenu.ActivateGameMenu("se_wait_menu"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void RegisterWaitMenu(CampaignGameStarter starter)
@@ -66,7 +66,7 @@ namespace AshAndEmber
                     GameMenu.MenuAndOptionType.WaitMenuShowOnlyProgressOption,
                     GameMenu.MenuOverlayType.None, 0f, GameMenu.MenuFlags.None, null);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void WaitOnInit(MenuCallbackArgs args)
@@ -78,7 +78,7 @@ namespace AshAndEmber
                 args.MenuContext.GameMenu.SetTargetedWaitingTimeAndInitialProgress(
                     Math.Max(1f, _seWaitHoursTotal), 0f);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static bool WaitOnCondition(MenuCallbackArgs args) => true;
@@ -94,7 +94,7 @@ namespace AshAndEmber
                 args.MenuContext.GameMenu.SetTargetedWaitingTimeAndInitialProgress(
                     Math.Max(1f, remaining), 0f);
             }
-            catch { try { FinishWait(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } }
+            catch { try { FinishWait(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } }
         }
 
         private static void WaitOnTick(MenuCallbackArgs args, CampaignTime dt)
@@ -109,11 +109,11 @@ namespace AshAndEmber
                     args.MenuContext.GameMenu.SetProgressOfWaitingInMenu(
                         Math.Min(1f, _seWaitHoursElapsed / Math.Max(1f, _seWaitHoursTotal)));
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (_seWaitHoursElapsed >= _seWaitHoursTotal)
                     FinishWait();
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void UpdateWaitText()
@@ -127,7 +127,7 @@ namespace AshAndEmber
                     : $"About {left} day(s) remain at {place}.";
                 MBTextManager.SetTextVariable("SE_WAIT_TEXT", $"{_seWaitLine}\n\n{remain}");
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void FinishWait()
@@ -137,7 +137,7 @@ namespace AshAndEmber
             Action callback = _seWaitOnComplete;
             _seWaitOnComplete = null;
             try { callback?.Invoke(); }
-            finally { try { GameMenu.ExitToLast(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } }
+            finally { try { GameMenu.ExitToLast(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } }
         }
     }
 }

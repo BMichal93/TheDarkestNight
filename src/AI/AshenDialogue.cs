@@ -6,7 +6,7 @@
 
 using TaleWorlds.CampaignSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal static class AshenDialogue
     {
@@ -17,22 +17,22 @@ namespace AshAndEmber
             // ── Opening and any standard lord sub-state ─────────────────────────
             // Guarded so the vanilla defeated-lord conversation (take prisoner /
             // let go) and prisoner flows, which also begin at "start", still run.
-            try { starter.AddDialogLine("ashen_start",    "start",        "ashen_done", "...", IsAshenFlavourContext, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { starter.AddDialogLine("ashen_pretalk",  "lord_pretalk", "ashen_done", "...", IsAshenFlavourContext, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("ashen_start",    "start",        "ashen_done", "...", IsAshenFlavourContext, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("ashen_pretalk",  "lord_pretalk", "ashen_done", "...", IsAshenFlavourContext, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Player's only available response — also "..."
-            try { starter.AddPlayerLine("ashen_close",    "ashen_done", "close_window", "...", null, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { starter.AddPlayerLine("ashen_close",    "ashen_done", "close_window", "...", null, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // ── Barter / tribute / negotiation ─────────────────────────────────
-            try { starter.AddDialogLine("ashen_barter",   "lord_barter_question", "close_window", "...", IsAshenInterlocutor, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("ashen_barter",   "lord_barter_question", "close_window", "...", IsAshenInterlocutor, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // ── Defeat / surrender offers ───────────────────────────────────────
-            try { starter.AddDialogLine("ashen_defeat_1", "defeated_lord_start_1", "close_window", "...", IsAshenInterlocutor, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { starter.AddDialogLine("ashen_defeat_2", "defeated_lord_start_2", "close_window", "...", IsAshenInterlocutor, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { starter.AddDialogLine("ashen_special",  "lord_special_request",  "close_window", "...", IsAshenInterlocutor, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("ashen_defeat_1", "defeated_lord_start_1", "close_window", "...", IsAshenInterlocutor, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("ashen_defeat_2", "defeated_lord_start_2", "close_window", "...", IsAshenInterlocutor, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("ashen_special",  "lord_special_request",  "close_window", "...", IsAshenInterlocutor, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // ── Prisoner conversation ───────────────────────────────────────────
-            try { starter.AddDialogLine("ashen_prisoner", "prisoner_chat",         "close_window", "...", IsAshenInterlocutor, null, P); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { starter.AddDialogLine("ashen_prisoner", "prisoner_chat",         "close_window", "...", IsAshenInterlocutor, null, P); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static bool IsAshenFlavourContext()

@@ -28,7 +28,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class TalismanEffects
     {
@@ -52,14 +52,14 @@ namespace AshAndEmber
         {
             if (agent == null) return false;
             Equipment eq;
-            try { eq = agent.SpawnEquipment; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return false; }
+            try { eq = agent.SpawnEquipment; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return false; }
             if (eq == null) return false;
 
             foreach (var slot in WeaponSlots)
             {
                 string itemId;
                 try { itemId = eq.GetEquipmentFromSlot(slot).Item?.StringId; }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); continue; }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); continue; }
                 if (TalismansCatalog.TryGetByItemId(itemId, out var def) && def.Id == id) return true;
             }
             return false;
@@ -79,7 +79,7 @@ namespace AshAndEmber
                 if (CarriesTalisman(main, TalismanId.EmberVigil))
                 {
                     try { SpellEffects.HealAgent(main, TalismansMath.VigilHealPerTick); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
 
@@ -94,7 +94,7 @@ namespace AshAndEmber
                         float m = main.GetMorale();
                         main.SetMorale(Math.Min(m + TalismansMath.SteadfastMoraleGainPerTick, 100f));
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
         }
@@ -116,7 +116,7 @@ namespace AshAndEmber
                     SpellEffects.DamageAgent(affectedAgent, TalismansMath.CleansingBrandBonusDamage, ColorSchool.Yellow, affectorAgent);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // ── Last Ward: defender carries it, the blow was blocked/parried ───
             // A real block/parry drives InflictedDamage to (near) zero, so the
@@ -133,18 +133,18 @@ namespace AshAndEmber
                                || attackCollisionData.CollisionResult == CombatCollisionResult.Blocked
                                || attackCollisionData.CollisionResult == CombatCollisionResult.Parried;
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                     if (blocked && CarriesTalisman(affectedAgent, TalismanId.LastWard))
                     {
                         float healBack = blow.BaseMagnitude * TalismansMath.LastWardBlockHealFrac;
                         if (healBack >= 1f)
                             try { SpellEffects.HealAgent(affectedAgent, healBack); }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

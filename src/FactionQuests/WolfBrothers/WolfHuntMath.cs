@@ -36,7 +36,7 @@
 // disconnected difficulty curve.
 // =============================================================================
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class WolfHuntMath
     {

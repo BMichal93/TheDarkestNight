@@ -25,7 +25,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class SpellcasterLords
     {
@@ -76,7 +76,7 @@ namespace AshAndEmber
                 foreach (var s in spells)
                     if (!list.Contains(s)) list.Add(s);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void SeedIfNeeded()
@@ -102,7 +102,7 @@ namespace AshAndEmber
                     _knownSpells[h.StringId] = allSpellIds.Take(count).ToList();
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Driven from MagicMissionBehavior.OnMissionTick, alongside ElementLordAI's
@@ -135,7 +135,7 @@ namespace AshAndEmber
                     TryCast(agent, hero);
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void TryCast(Agent agent, Hero hero)
@@ -150,7 +150,7 @@ namespace AshAndEmber
                 _cooldowns[hero.StringId] = SpellcasterLordMath.CastCooldownSeconds;
                 SpellbookEffects.Cast(pick, agent);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void Shuffle<T>(List<T> list)

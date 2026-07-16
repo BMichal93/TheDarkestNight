@@ -27,7 +27,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     // The five Bannerlord personality traits that grant Grace miracles.
     public enum GraceTrait { Mercy, Valor, Honor, Generosity, Calculating }

@@ -59,7 +59,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class RuinsCastleSystem
     {
@@ -160,7 +160,7 @@ namespace AshAndEmber
 
         public static void OnSessionLaunched()
         {
-            try { ConvertCastles(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ConvertCastles(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void ConvertCastles()
@@ -187,7 +187,7 @@ namespace AshAndEmber
 
                     ApplyRuinAppearance(s);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -206,7 +206,7 @@ namespace AshAndEmber
                 }
                 return false;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return true; } // fail exempt, never fail-convert
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return true; } // fail exempt, never fail-convert
         }
 
         // Reflection handle mirrors AshenCitySystem.Renaming.cs exactly:
@@ -224,14 +224,14 @@ namespace AshAndEmber
                 string ruinName = RuinsMath.RuinNameFor(s.StringId, original);
                 _settlementNameField?.SetValue(s, new TextObject(ruinName));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
                 var garrison = s.Town?.GarrisonParty;
                 if (garrison != null) DestroyPartyAction.Apply(garrison.Party, null);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -241,7 +241,7 @@ namespace AshAndEmber
                     s.Town.Security   = 0f;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

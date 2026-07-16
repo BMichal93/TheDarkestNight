@@ -14,7 +14,7 @@
 // which grew too steep too fast.
 // =============================================================================
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class TalentCostCurve
     {

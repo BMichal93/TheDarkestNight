@@ -23,7 +23,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class BloodboundQuestCampaignBehavior
     {
@@ -45,7 +45,7 @@ namespace AshAndEmber
                     if (s != null) { _shrineSettlementId = s.StringId; return; }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         internal static Settlement ShrineSettlement()
@@ -76,16 +76,16 @@ namespace AshAndEmber
                                 || Settlement.CurrentSettlement.StringId != _shrineSettlementId) return false;
                             MBTextManager.SetTextVariable("BLDQ_SHRINE_ENTER_TEXT",
                                 $"Pour your Demon Blood into the Surpassing Rite  [{_bloodDonated:N0} / {BloodboundQuestMath.DonationTarget:N0}]");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = true;
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { GameMenu.SwitchToMenu("bldq_shrine_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { GameMenu.SwitchToMenu("bldq_shrine_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -103,10 +103,10 @@ namespace AshAndEmber
                             $"Poured toward the Surpassing Rite: {_bloodDonated:N0} / {BloodboundQuestMath.DonationTarget:N0}\n\n" +
                             status);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -124,23 +124,23 @@ namespace AshAndEmber
                             MBTextManager.SetTextVariable("BLDQ_SHRINE_CONTRIBUTE_TEXT",
                                 $"Give every vial you carry to the draught ({held}){note}");
                             args.IsEnabled = canGive;
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Continue; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Continue; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             return true;
                         }
                         catch { return false; }
                     },
                     args => DoContribute());
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
                 starter.AddGameMenuOption("bldq_shrine_main", "bldq_shrine_leave", "Step away",
-                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } return true; },
-                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } return true; },
+                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     true, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static ItemObject DemonBloodItem()
@@ -179,7 +179,7 @@ namespace AshAndEmber
                     $"{given} vial(s) go into the shrine's basin and do not come back out. The Surpassing Rite " +
                     $"stands at {_bloodDonated:N0} / {BloodboundQuestMath.DonationTarget:N0}."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── NPC contribution — background trickle ────────────────────────────────
@@ -213,7 +213,7 @@ namespace AshAndEmber
                     total += give;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (total > 0) AddDonation(total);
         }
@@ -225,7 +225,7 @@ namespace AshAndEmber
             if (!BloodboundQuestMath.HasReachedThreshold(_bloodDonated)) return;
 
             _phase = PhaseAwaitingChoice;
-            try { ShowResolutionChoice(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ShowResolutionChoice(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

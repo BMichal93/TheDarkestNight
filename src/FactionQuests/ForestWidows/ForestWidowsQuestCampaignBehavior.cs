@@ -36,7 +36,7 @@ using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class ForestWidowsQuestCampaignBehavior : CampaignBehaviorBase
     {
@@ -61,7 +61,7 @@ namespace AshAndEmber
             // by Id) and runs at construction time — every OnGameStart, new
             // game or load, well before any CampaignEvents fire.
             try { FactionQuestTrigger.Register(BuildDef()); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static FactionQuestDef BuildDef() => new FactionQuestDef
@@ -106,7 +106,7 @@ namespace AshAndEmber
                 InformationManager.DisplayMessage(new InformationMessage(
                     "Quest added: The Final Peace.", new Color(0.20f, 0.45f, 0.25f)));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Wiring ────────────────────────────────────────────────────────────────
@@ -118,8 +118,8 @@ namespace AshAndEmber
 
         public override void SyncData(IDataStore store)
         {
-            try { store.SyncData("FWQ_Phase",         ref _phase); }         catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { store.SyncData("FWQ_MenSacrificed",  ref _menSacrificed); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { store.SyncData("FWQ_Phase",         ref _phase); }         catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { store.SyncData("FWQ_MenSacrificed",  ref _menSacrificed); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             SyncResolutionData(store);
         }
 
@@ -132,14 +132,14 @@ namespace AshAndEmber
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterQuestAltarMenu(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterQuestAltarMenu(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnWeeklyTick()
         {
-            try { NpcContributionWeeklyTick(); }  catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { CheckThresholdWeeklyTick(); }   catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { CheckFactionGoneWeeklyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { NpcContributionWeeklyTick(); }  catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { CheckThresholdWeeklyTick(); }   catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { CheckFactionGoneWeeklyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Balance-pass reliability fix: the Forest Widows are scoped to only
@@ -158,7 +158,7 @@ namespace AshAndEmber
             if (GetForestWidowsKingdom() != null) return; // still exists — nothing to do
 
             _phase = PhaseEndedFactionGone;
-            try { ForestWidowsQuestLog.Current?.LogFactionGone(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { ForestWidowsQuestLog.Current?.LogFactionGone(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Shared: record a contribution toward the count ──────────────────────
@@ -167,7 +167,7 @@ namespace AshAndEmber
             if (amount <= 0 || _phase != PhaseAccumulating) return;
             _menSacrificed += amount;
             try { ForestWidowsQuestLog.Current?.LogProgress(_menSacrificed); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Consulted by DemonSpawnCampaignBehavior.DirectDemonParties: once the

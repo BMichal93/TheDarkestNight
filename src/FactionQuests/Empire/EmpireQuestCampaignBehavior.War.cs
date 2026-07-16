@@ -25,7 +25,7 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public sealed partial class EmpireQuestCampaignBehavior
     {
@@ -55,9 +55,9 @@ namespace AshAndEmber
                     if (prey == null) continue;
 
                     try { party.SetMoveEngageParty(prey, MobileParty.NavigationType.Default); }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -73,7 +73,7 @@ namespace AshAndEmber
                     .FirstOrDefault(p => (p.GetPosition2D - huntingParty.GetPosition2D).Length
                                           <= EmpireQuestMath.AggressionSearchRadius);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return null; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
     }
 }

@@ -10,7 +10,7 @@
 
 using TaleWorlds.CampaignSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public class RuinsCampaignBehavior : CampaignBehaviorBase
     {
@@ -22,18 +22,18 @@ namespace AshAndEmber
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RuinsCastleSystem.OnSessionLaunched(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { RuinsMenus.OnSessionLaunched(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RuinsCastleSystem.OnSessionLaunched(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { RuinsMenus.OnSessionLaunched(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private void OnDailyTick()
         {
-            try { RuinsCastleSystem.DailyTick(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RuinsCastleSystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public override void SyncData(IDataStore dataStore)
         {
-            try { RuinsCastleSystem.SyncData(dataStore); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RuinsCastleSystem.SyncData(dataStore); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

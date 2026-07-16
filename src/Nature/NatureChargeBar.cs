@@ -14,7 +14,7 @@ using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.ScreenSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     // Bound data for the bar prefab.
     public class NatureChargeBarVM : ViewModel
@@ -68,7 +68,7 @@ namespace AshAndEmber
             }
             catch
             {
-                try { Hide(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { Hide(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -103,8 +103,8 @@ namespace AshAndEmber
                 if (_host != null && _layer != null && _host.HasLayer(_layer))
                     _host.RemoveLayer(_layer);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { _layer?.ReleaseMovie(_movie); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { _layer?.ReleaseMovie(_movie); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             _layer = null;
             _host  = null;
             _vm    = null;

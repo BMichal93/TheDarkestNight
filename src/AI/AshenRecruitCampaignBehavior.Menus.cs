@@ -19,7 +19,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class AshenRecruitCampaignBehavior
     {
@@ -42,16 +42,16 @@ namespace AshAndEmber
                         {
                             if (!HasAshenRecruiter(Settlement.CurrentSettlement)) return false;
                             MBTextManager.SetTextVariable("ASHEN_RECRUIT_ENTER_TEXT", "Muster the Ashen Dead");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = true;
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { GameMenu.SwitchToMenu("ashen_recruit_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { GameMenu.SwitchToMenu("ashen_recruit_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Main menu ──────────────────────────────────────────────────────────
@@ -69,19 +69,19 @@ namespace AshAndEmber
                           + "The higher the rank you would raise, the more that captive must already have been worth "
                           + "something before you brought them here.");
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
                 starter.AddGameMenuOption("ashen_recruit_main", "ashen_recruit_leave", "Leave the muster yard",
-                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } return true; },
-                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } return true; },
+                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     true, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Per-rank binding options ───────────────────────────────────────────
@@ -106,14 +106,14 @@ namespace AshAndEmber
                                     : $"  [{missing ?? "missing requirements"}]";
                                 MBTextManager.SetTextVariable(textId, $"Raise an {captured.Name}{note}");
                                 args.IsEnabled = canBind;
-                                try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             return true;
                         },
-                        args => { try { DoBindAshenTroop(captured); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                        args => { try { DoBindAshenTroop(captured); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -124,7 +124,7 @@ namespace AshAndEmber
             {
                 ShowDialog("The Muster Yard Turns You Away",
                     $"You are missing what the raising asks of you: {missing}",
-                    () => { try { GameMenu.SwitchToMenu("ashen_recruit_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                    () => { try { GameMenu.SwitchToMenu("ashen_recruit_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
                 return;
             }
 
@@ -138,13 +138,13 @@ namespace AshAndEmber
                     var kingdom = Hero.MainHero?.MapFaction as Kingdom;
                     if (kingdom != null) ChangeCrimeRatingAction.Apply(kingdom, 1f, true);
                 }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
             ShowDialog($"{def.Name} raised",
                 $"The prisoners are led away and do not come back the same. When the yard is quiet again, "
               + $"an {def.Name} stands where a living captive stood, and waits for its next order.",
-                () => { try { GameMenu.SwitchToMenu("ashen_recruit_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } });
+                () => { try { GameMenu.SwitchToMenu("ashen_recruit_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 
         // ── Helpers ────────────────────────────────────────────────────────────
@@ -160,7 +160,7 @@ namespace AshAndEmber
             {
                 string brief = body.Length > 100 ? body.Substring(0, 100) + "…" : body;
                 MBInformationManager.AddQuickInformation(new TextObject(brief));
-                try { onClose?.Invoke(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { onClose?.Invoke(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
     }

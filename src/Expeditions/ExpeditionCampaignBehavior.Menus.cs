@@ -29,7 +29,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class ExpeditionCampaignBehavior
     {
@@ -51,16 +51,16 @@ namespace AshAndEmber
 
                             string note = _active ? "  [charter already under way]" : "";
                             MBTextManager.SetTextVariable("EXP_CHARTER_ENTER", $"Charter an Expedition{note}");
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = true;
                             return true;
                         }
                         catch { return false; }
                     },
-                    args => { try { GameMenu.SwitchToMenu("exp_charter_main"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { GameMenu.SwitchToMenu("exp_charter_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -76,10 +76,10 @@ namespace AshAndEmber
                             + "comes back — if anything does. Business is business.";
                         MBTextManager.SetTextVariable("EXP_CHARTER_HDR", hdr);
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 });
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
@@ -89,7 +89,7 @@ namespace AshAndEmber
                         try
                         {
                             args.IsEnabled = !_active;
-                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             return true;
                         }
                         catch { return false; }
@@ -97,24 +97,24 @@ namespace AshAndEmber
                     args =>
                     {
                         try { GameMenu.SwitchToMenu("town"); ShowLeaderSelection(); }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     },
                     false, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
                 starter.AddGameMenuOption("exp_charter_main", "exp_charter_leave", "Leave",
                     args =>
                     {
-                        try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { args.optionLeaveType = GameMenuOption.LeaveType.Leave; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         return true;
                     },
-                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); } },
+                    args => { try { GameMenu.SwitchToMenu("town"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } },
                     true, -1, false);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Step A: leader ────────────────────────────────────────────────────
@@ -143,10 +143,10 @@ namespace AshAndEmber
                             if (leaderId == null) return;
                             ShowTeamSelection(leaderId);
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }, null), true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static List<LeaderRecord> PickRandomLeaders(int count)
@@ -184,10 +184,10 @@ namespace AshAndEmber
                             var team = (ExpeditionTeamType)(int)chosen[0].Identifier;
                             ShowDestinationSelection(leaderId, team);
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }, null), true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Step C: destination ───────────────────────────────────────────────
@@ -236,10 +236,10 @@ namespace AshAndEmber
                             if (village == null) return;
                             ShowConfirmation(leaderId, team, village);
                         }
-                        catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }, null), true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Step D: confirm and pay ───────────────────────────────────────────
@@ -256,7 +256,7 @@ namespace AshAndEmber
                 int cost   = ExpeditionMath.GoldCost(def.Tier, team);
 
                 int gold = 0;
-                try { gold = Hero.MainHero?.Gold ?? 0; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { gold = Hero.MainHero?.Gold ?? 0; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 string body = $"{leader.Name} will lead {TeamName(team)} to {def.RuinName}  [{TierRiskLabel(def.Tier)}].\n\n"
                             + $"Success chance: {chance}%\nDuration: {days} day(s)\nCost: {cost} denars "
@@ -268,7 +268,7 @@ namespace AshAndEmber
                     () => LaunchExpedition(leaderId, team, village, cost, days),
                     () => { }), true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void LaunchExpedition(string leaderId, ExpeditionTeamType team, string village, int cost, int days)
@@ -291,7 +291,7 @@ namespace AshAndEmber
                     MBInformationManager.AddQuickInformation(new TextObject("Insufficient denars — the charter cannot be sealed."));
                     return;
                 }
-                try { Hero.MainHero.ChangeHeroGold(-cost); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { Hero.MainHero.ChangeHeroGold(-cost); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 _active         = true;
                 _activeLeaderId = leaderId;
@@ -301,7 +301,7 @@ namespace AshAndEmber
 
                 MBInformationManager.AddQuickInformation(new TextObject($"The charter is sealed. Word will come in {days} day(s)."));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Flavour text helpers ──────────────────────────────────────────────

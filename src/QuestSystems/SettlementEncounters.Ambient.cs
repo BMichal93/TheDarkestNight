@@ -13,7 +13,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.CampaignSystem.Settlements;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SettlementEncounters
     {
@@ -33,7 +33,7 @@ namespace AshAndEmber
                 _agingCommentCooldown = 50;
                 ShowAgingComment(age);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static readonly string[][] _agingCommentsByBracket =

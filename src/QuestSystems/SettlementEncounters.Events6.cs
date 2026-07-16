@@ -28,7 +28,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SettlementEncounters
     {
@@ -290,7 +290,7 @@ namespace AshAndEmber
                 .FirstOrDefault();
             string vName = village?.Name?.ToString() ?? "a village in your territory";
 
-            try { if (village != null) ChangeRelWithOwner(village, -6); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { if (village != null) ChangeRelWithOwner(village, -6); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             MageKnowledge._deferredInquiry = () =>
                 Msg($"Word reaches you from {vName}: a grey column swept through two nights ago. They came from the north " +
@@ -545,9 +545,9 @@ namespace AshAndEmber
                             {
                                 // Mark the child as a mage — she is already in the party as a follower (narrative)
                                 // Represent as a small future-investment talent grant
-                                try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints += 1; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints += 1; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             }
-                            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
                         else
                         {
@@ -1015,7 +1015,7 @@ namespace AshAndEmber
                                     "It does not burn — it draws. The fever lifts off your men like morning mist off a river, and settles somewhere beyond you, dispersed into the land.",
                                     () =>
                                     {
-                                        try { Hero.MainHero.HitPoints = Math.Max(1, Hero.MainHero.HitPoints - 25); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                        try { Hero.MainHero.HitPoints = Math.Max(1, Hero.MainHero.HitPoints - 25); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                         ShiftTrait(DefaultTraits.Mercy, 1);
                                         AddMorale(8f);
                                         Msg("By dawn the column is clear. What it cost is in you now — not years, but blood. You will feel it for a day or two.",
@@ -1147,7 +1147,7 @@ namespace AshAndEmber
                                 ShiftTrait(DefaultTraits.Honor, 1);
                                 ChangeRelWithOwner(s, -12);
                                 var kingdom = s.MapFaction as Kingdom;
-                                if (kingdom != null) try { ChangeCrimeRatingAction.Apply(kingdom, 15f, false); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                                if (kingdom != null) try { ChangeCrimeRatingAction.Apply(kingdom, 15f, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 Msg("The mob does not read your authority the way mobs should. Someone throws something " +
                                     "and then someone else throws something and what follows is a brawl in a village street " +
                                     "with a lord in the middle of it. The family gets out in the confusion. You are left " +

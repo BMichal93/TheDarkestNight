@@ -37,7 +37,7 @@ using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class WandEffects
     {
@@ -105,7 +105,7 @@ namespace AshAndEmber
                     else _cooldowns[key] = remaining;
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void OnAgentHit(Agent affectedAgent, Agent affectorAgent,
@@ -117,7 +117,7 @@ namespace AshAndEmber
             try
             {
                 string itemId = null;
-                try { itemId = affectorWeapon.Item?.StringId; } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { itemId = affectorWeapon.Item?.StringId; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (!WandsCatalog.TryGetByItemId(itemId, out var def)) return;
 
                 int agentIndex = affectorAgent.Index;
@@ -147,7 +147,7 @@ namespace AshAndEmber
                 _cooldowns[agentIndex] = WandsMath.CastCooldownSeconds;
                 SpellbookEffects.Cast(def.Spell, affectorAgent);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static bool TryConsumePlayerCharge(string wandItemId)
@@ -169,13 +169,13 @@ namespace AshAndEmber
                 if (item == null) return;
                 roster.AddToCounts(item, -1);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void Announce(Agent caster, string msg)
         {
             try { if (caster == Agent.Main) InformationManager.DisplayMessage(new InformationMessage(msg, new Color(0.6f, 0.45f, 0.85f))); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

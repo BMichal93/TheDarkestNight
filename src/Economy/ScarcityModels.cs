@@ -28,7 +28,7 @@ using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     internal sealed class EconomyWageModel : DefaultPartyWageModel
     {
@@ -40,7 +40,7 @@ namespace AshAndEmber
                 result.AddFactor(EconomyMath.GoldReductionFactor,
                     new TextObject("{=dn_barter_economy}The Barter Economy"));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return result;
         }
 
@@ -52,7 +52,7 @@ namespace AshAndEmber
                 result.AddFactor(EconomyMath.GoldReductionFactor,
                     new TextObject("{=dn_barter_economy}The Barter Economy"));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return result;
         }
     }
@@ -72,7 +72,7 @@ namespace AshAndEmber
                 result.AddFactor(EconomyMath.GoldReductionFactor,
                     new TextObject("{=dn_barter_economy}The Barter Economy"));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return result;
         }
 
@@ -89,7 +89,7 @@ namespace AshAndEmber
                 if (PromotionToll.AnyUpgradeTargetNeedsToll(characterObject))
                     return PromotionToll.HasPromotionToll(party);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return baseResult;
         }
     }
@@ -100,7 +100,7 @@ namespace AshAndEmber
         {
             int baseCost = base.GetBoostCost(town);
             try { return EconomyMath.ScaleGold(baseCost, EconomyMath.GoldScarcityFactor); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return baseCost; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return baseCost; }
         }
     }
 
@@ -110,7 +110,7 @@ namespace AshAndEmber
         {
             int baseAmount = base.CalculatePlunderedGoldAmountFromDefeatedParty(defeatedParty);
             try { return EconomyMath.ScaledPlunderGold(baseAmount); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return baseAmount; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return baseAmount; }
         }
     }
 
@@ -120,7 +120,7 @@ namespace AshAndEmber
         {
             int baseValue = base.PrisonerRansomValue(prisoner, sellerHero);
             try { return EconomyMath.ScaledRansom(baseValue); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return baseValue; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return baseValue; }
         }
     }
 
@@ -134,7 +134,7 @@ namespace AshAndEmber
                 result.AddFactor(EconomyMath.GarrisonGrowthScale - 1f,
                     new TextObject("{=dn_thin_garrisons}Thin Garrisons"));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return result;
         }
 
@@ -142,7 +142,7 @@ namespace AshAndEmber
         {
             int baseCount = base.GetMaximumDailyAutoRecruitmentCount(town);
             try { return EconomyMath.ScaledAutoRecruitmentCount(baseCount); }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); return baseCount; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return baseCount; }
         }
     }
 
@@ -156,7 +156,7 @@ namespace AshAndEmber
                 result.AddFactor(EconomyMath.GarrisonGrowthScale - 1f,
                     new TextObject("{=dn_thin_garrisons}Thin Garrisons"));
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             return result;
         }
     }

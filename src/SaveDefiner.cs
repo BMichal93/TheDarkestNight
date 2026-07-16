@@ -36,13 +36,13 @@ using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.SaveSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
-    public sealed class AshAndEmberSaveDefiner : SaveableTypeDefiner
+    public sealed class TheDarkestNightSaveDefiner : SaveableTypeDefiner
     {
         // Unique mod-wide base id. Chosen to be well clear of the base game and of
         // other mods' ranges. Do not change once released.
-        public AshAndEmberSaveDefiner() : base(9_271_400) { }
+        public TheDarkestNightSaveDefiner() : base(9_271_400) { }
 
         // Single source of truth: DefineClassTypes registers these, SelfCheck audits
         // against these. Keeping one table means the two can never drift apart.
@@ -104,7 +104,7 @@ namespace AshAndEmber
             foreach (var def in ClassDefinitions)
             {
                 try { AddClassDefinition(def.Key, def.Value); }
-                catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
         }
 
@@ -128,12 +128,12 @@ namespace AshAndEmber
                     if (registered.Contains(t)) continue;
 
                     ModLog.Error(new InvalidOperationException(
-                        $"Quest type '{t.FullName}' has no AddClassDefinition row in AshAndEmberSaveDefiner. " +
+                        $"Quest type '{t.FullName}' has no AddClassDefinition row in TheDarkestNightSaveDefiner. " +
                         "The campaign CANNOT be saved once this quest starts. Add it to " +
-                        "AshAndEmberSaveDefiner.ClassDefinitions with a fresh, unused id."));
+                        "TheDarkestNightSaveDefiner.ClassDefinitions with a fresh, unused id."));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

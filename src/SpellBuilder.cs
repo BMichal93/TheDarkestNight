@@ -25,7 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public enum SpellForm { None, Blast, Missile, Barrier, Burst }
 
@@ -318,7 +318,7 @@ namespace AshAndEmber
                 if (party == null) return;
                 LivingEnergy.DrawFire(party.GetPosition2D, totalInputs, announce: true);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

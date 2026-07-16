@@ -22,7 +22,7 @@ using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 using TaleWorlds.CampaignSystem.MapEvents;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     // =========================================================================
     // 5. ACTIVE EFFECT MANAGER  — timed buffs & debuffs (unchanged from v1)
@@ -65,9 +65,9 @@ namespace AshAndEmber
                 var e = _effects[i];
                 if (e.IsMissionEffect != inMission) continue;
                 e.Elapsed += dt;
-                try { e.OnTick?.Invoke(dt); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { e.OnTick?.Invoke(dt); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (!e.IsExpired) continue;
-                try { e.OnExpire?.Invoke(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                try { e.OnExpire?.Invoke(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 _effects.RemoveAt(i);
             }
         }

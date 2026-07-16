@@ -40,7 +40,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public partial class WandsCampaignBehavior : CampaignBehaviorBase
     {
@@ -117,7 +117,7 @@ namespace AshAndEmber
                 store.SyncData("WND_ChargeVals", ref chargeVals);
                 if (store.IsLoading) WandEffects.ImportCharges(chargeKeys, chargeVals);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         public static void ResetForNewGame()
@@ -189,15 +189,15 @@ namespace AshAndEmber
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
         {
-            try { RegisterWandMenus(starter); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SelectShopTowns(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SweepGrantWandsToLords(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { RegisterWandMenus(starter); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SelectShopTowns(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SweepGrantWandsToLords(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void OnWeeklyTick()
         {
-            try { SelectShopTowns(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-            try { SweepGrantWandsToLords(); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            try { SelectShopTowns(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SweepGrantWandsToLords(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Shop town selection — stable-but-random, re-picked only if lost ────
@@ -208,14 +208,14 @@ namespace AshAndEmber
                 if (string.IsNullOrEmpty(_towerShopTownId) || !IsHeldBy(_towerShopTownId, TowerCulture.CultureId))
                     _towerShopTownId = PickRandomHeldTown(TowerCulture.CultureId);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             try
             {
                 if (string.IsNullOrEmpty(_chosenShopTownId) || !IsHeldBy(_chosenShopTownId, ChosenCulture.KingdomId))
                     _chosenShopTownId = PickRandomHeldTown(ChosenCulture.KingdomId);
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             // Pen Cannoc — always re-derived, never randomly re-picked: the
             // Children of the Forest are a one-city kingdom, so whichever
@@ -226,7 +226,7 @@ namespace AshAndEmber
                     .FirstOrDefault(s => s != null && s.IsTown && CityStateSystem.IsForestSettlement(s))
                     ?.StringId;
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static bool IsHeldBy(string settlementId, string kingdomId)
@@ -277,7 +277,7 @@ namespace AshAndEmber
 
                         if (isForest)
                         {
-                            try { CityStateSystem.ReanchorForestLordAge(hero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                            try { CityStateSystem.ReanchorForestLordAge(hero); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
 
                         // Self-heal: any lord (Tower/Chosen/Forest alike)
@@ -290,7 +290,7 @@ namespace AshAndEmber
                         // ordering between the two systems (LordGearWeathering
                         // also now exempts wand items directly — see its
                         // IsOrnateLordGear check).
-                        try { EnsureLordWandEquipped(hero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { EnsureLordWandEquipped(hero); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                         if (_rolledLordIds.Contains(hero.StringId)) continue;
                         if (!isTower && !isChosen && !isForest) continue;
@@ -304,12 +304,12 @@ namespace AshAndEmber
 
                         var def = WandsCatalog.All[_rng.Next(WandsCatalog.All.Count)];
                         GrantWandToHero(hero, def);
-                        try { EnsureLordWandEquipped(hero); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { EnsureLordWandEquipped(hero); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
-                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Writes a wand the hero's roster already carries into their
@@ -362,7 +362,7 @@ namespace AshAndEmber
                         $"{def.Name} is pressed into your hand.", new Color(0.6f, 0.45f, 0.85f)));
                 }
             }
-            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }
 }

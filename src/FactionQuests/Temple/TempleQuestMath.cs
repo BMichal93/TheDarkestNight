@@ -47,7 +47,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static class TempleQuestMath
     {

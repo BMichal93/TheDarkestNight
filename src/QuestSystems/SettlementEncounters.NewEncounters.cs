@@ -21,7 +21,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace AshAndEmber
+namespace TheDarkestNight
 {
     public static partial class SettlementEncounters
     {
@@ -292,7 +292,7 @@ namespace AshAndEmber
                 MageKnowledge._deferredInquiry = () =>
                 {
                     var s2 = Settlement.All.Where(se => se.IsVillage || se.IsTown).OrderBy(_ => _rng.Next()).FirstOrDefault();
-                    try { DemonSpawnCampaignBehavior.SpawnAmbushNear(MobileParty.MainParty.GetPosition2D, ""); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    try { DemonSpawnCampaignBehavior.SpawnAmbushNear(MobileParty.MainParty.GetPosition2D, ""); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     Msg("The vials you sold fed a rite that slipped whatever circle was meant to hold it. Something carrying your scent finds your column at dusk — the broker's rite went wrong, or right in a way nobody warned you about, and either way the blood remembered where it came from.", BadColor);
                 };
             }
@@ -373,7 +373,7 @@ namespace AshAndEmber
                 {
                     MageKnowledge._deferredInquiry = () =>
                     {
-                        try { DemonSpawnCampaignBehavior.SpawnAmbushNear(MobileParty.MainParty.GetPosition2D, ""); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                        try { DemonSpawnCampaignBehavior.SpawnAmbushNear(MobileParty.MainParty.GetPosition2D, ""); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         Msg("The village's fear was not entirely wrong after all. Whatever the child drew toward it at the moment of its birth has finally come looking — years late, patient the way the Night is patient. You deal with it, but you understand now why they wanted it given back.", BadColor);
                     };
                 }
