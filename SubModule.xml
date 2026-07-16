@@ -2,7 +2,7 @@
 <Module>
     <Name value="The Darkest Night"/>
     <Id value="TheDarkestNight"/>
-    <Version value="v0.7.1.0"/>
+    <Version value="v0.8.0.0"/>
     <SingleplayerModule value="true"/>
     <MultiplayerModule value="false"/>
     <DependedModules>
@@ -13,8 +13,8 @@
     </DependedModules>
     <SubModules>
         <SubModule>
-            <Name value="AshAndEmber"/>
-            <DLLName value="AshAndEmber.dll"/>
+            <Name value="The Darkest Night"/>
+            <DLLName value="TheDarkestNight.dll"/>
             <SubModuleClassType value="TheDarkestNight.MainSubModule"/>
             <Tags>
                 <Tag key="DedicatedServerType" value="none"/>

@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
-    <AssemblyName>AshAndEmber</AssemblyName>
+    <AssemblyName>TheDarkestNight</AssemblyName>
     <RootNamespace>TheDarkestNight</RootNamespace>
-    <Version>0.7.1.0</Version>
-    <AssemblyVersion>0.7.1.0</AssemblyVersion>
-    <FileVersion>0.7.1.0</FileVersion>
+    <Version>0.8.0.0</Version>
+    <AssemblyVersion>0.8.0.0</AssemblyVersion>
+    <FileVersion>0.8.0.0</FileVersion>
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
     <Optimize>true</Optimize>
@@ -197,6 +197,7 @@
     <Compile Include="CityStates\CityStateMath.cs"/>
     <Compile Include="CityStates\CityStateSystem.cs"/>
     <Compile Include="CityStates\CityStateCampaignBehavior.cs"/>
+    <Compile Include="CityStates\FactionScoping.cs"/>
     <Compile Include="Ruins\RuinsCatalog.cs"/>
     <Compile Include="Ruins\RuinsMath.cs"/>
     <Compile Include="Ruins\RuinsCastleSystem.cs"/>
@@ -293,6 +294,7 @@
     <Compile Include="Startup\AshEmberLoreIntro.cs"/>
     <Compile Include="Startup\AshEmberLoadingScreen.cs"/>
     <Compile Include="Startup\SandboxOnlyGate.cs"/>
+    <Compile Include="Startup\LegacyContent.cs"/>
     <Compile Include="QuestSystems\DragonQuestSystem.cs"/>
     <Compile Include="QuestSystems\DragonQuestSystem.Quest.cs"/>
     <Compile Include="QuestSystems\DragonQuestSystem.Ending.cs"/>
@@ -530,7 +532,7 @@
        locks the deployed DLL, which would otherwise fail the build). -->
   <Target Name="DeployToGame" AfterTargets="Build" Condition="'$(SkipDeploy)' != 'true'">
     <PropertyGroup>
-      <_ModuleBinDir>$(BannerlordPath)\Modules\AshAndEmber\bin\$(BannerlordBin)</_ModuleBinDir>
+      <_ModuleBinDir>$(BannerlordPath)\Modules\TheDarkestNight\bin\$(BannerlordBin)</_ModuleBinDir>
     </PropertyGroup>
     <MakeDir Directories="$(_ModuleBinDir)" Condition="!Exists('$(_ModuleBinDir)')"/>
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll"

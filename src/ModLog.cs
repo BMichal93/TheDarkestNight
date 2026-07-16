@@ -142,7 +142,7 @@ namespace TheDarkestNight
                 string dir = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                     "Mount and Blade II Bannerlord",
-                    "AshAndEmber");
+                    "TheDarkestNight");
                 Directory.CreateDirectory(dir);
                 string path = Path.Combine(dir, "errors.log");
 

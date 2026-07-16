@@ -35,7 +35,7 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-$ModName    = "AshAndEmber"
+$ModName    = "TheDarkestNight"
 $ModVer     = "v0.11"
 $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 # Module files live in the AshAndEmber\ subfolder next to this script.

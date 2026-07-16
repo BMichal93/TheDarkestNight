@@ -4,7 +4,7 @@
 
 This file documents the older Ash and Ember player-facing casting paths, which The Darkest Night **retired for the player** (`PlayerCastingEnabled = false` on each input handler). They are kept for two reasons, and both matter:
 
-1. **The code is still alive and still runs.** Retiring these paths gated off the *player's input*, not the effects underneath. NPC lords (`ElementLordAI`), nature seers, Temple priests, the rare spellcaster troop tree, the Awakened, and demons all still cast through this same `ElementSpellEffects` / `NatureEffects` machinery. If you are changing how a spell *behaves*, this is the shape you are changing — for everyone on the field.
+1. **The code is still alive and still runs — for old saves.** Retiring these paths gated off the *player's input*, not the effects underneath, and `ElementSpellEffects`/`NatureEffects` themselves are still very much alive: nature seers, Temple priests, the rare spellcaster troop tree, the Awakened, and demons all cast through this same machinery. **As of v0.8.0, the legacy unified-element NPC LORD casters (`ElementLordAI`) are additionally retired for new campaigns** (`LegacyContent.LegacyNpcCastersEnabled = false`) — a fresh game never seeds a lord into that system, so NPC lord magic in a new campaign comes from the Spellbook's own rare casters (`SpellcasterLords`/`SpellcasterTroops`, raised to ~15% of named lords) instead. An existing save that already has element lords keeps them fully functional; nothing about that flag touches a save that was seeded before it existed.
 2. **Saves from earlier builds still carry this state.** Talents, aging ledgers, and path choices persist.
 
 Read this as internals and NPC behaviour, not as instructions. Where it says "you," read "an NPC caster" — the second person is a fossil of when the player walked these paths.
@@ -13,14 +13,14 @@ Read this as internals and NPC behaviour, not as instructions. Where it says "yo
 
 Two things commonly mistaken for retired, because they are entangled with the paths below:
 
-- **The Gift prompt still fires** at new-game start (*"Do you feel it still?"*) and still sets `MageKnowledge.IsMage`. It no longer opens the three-branch path menu described below; it keeps the Codex/NPC-parity plumbing consistent, and Alt+L still falls back to the legacy Codex for a non-Spellbook mage.
+- **The Gift prompt is gone (v0.8.0).** A new campaign no longer asks "Do you feel it still?" — `MageKnowledge.SetMage(false)` is simply called directly as part of new-game setup (`CampaignBehavior.Events.FinishNewGameWorldSetup`), and `Alt+L` still falls back to the legacy Codex for a non-Spellbook mage if `MageKnowledge.IsMage` is ever true by some other path. The prompt used to gate ALL of new-game world setup behind its own callbacks (city-states, imperial reassignment, lord seeding) — if it ever wedged, none of that ran either, which is exactly why it was removed rather than merely rewired.
 - **Aging is still a real cost** — just no longer a *casting* cost. The Spellbook never charges aging, but `AgingSystem` still ages and rejuvenates the player through the Ashen Ruins menus and the Reaping. Its documentation stayed in [`README.md`](README.md#aging-cost) for exactly that reason.
 
 ---
 
 ## Getting the Gift *(legacy — describes the underlying Ash and Ember caster paths and mostly no longer chosen at creation)*
 
-**What actually still happens:** every new campaign still opens with a short yes/no "The Gift" prompt (`CampaignBehavior.Events.ShowGiftPrompt`) — *"Do you feel it still?"* — that sets `MageKnowledge.IsMage`. Answering yes no longer opens the old three-branch menu below or lets you cast through the retired element input; it exists to keep the underlying Codex/NPC-parity plumbing (and the Alt+L key's fallback to the legacy Codex for a non-Spellbook mage) consistent. **Actual player casting is exclusively the Spellbook** ([`README.md`](README.md#the-spellbook)). The three-path description below is kept for reference on what the *paths themselves* still are and drive for NPC lords/seers/priests.
+**What actually happens now (v0.8.0):** a new campaign no longer opens with any "Gift" prompt — `MageKnowledge.SetMage(false)` is called directly, and the player is never a "born mage." **Actual player casting is exclusively the Spellbook** ([`README.md`](README.md#the-spellbook)). The three-path description below is kept for reference on what the *paths themselves* still drive for NPC seers/priests on both old and new saves, and for NPC lords on OLD saves that already seeded `ElementLordAI` casters before v0.8.0 retired that seeding for new campaigns (see the note above).
 
 Two paths open at campaign start. Each is permanent — you walk one or the other.
 

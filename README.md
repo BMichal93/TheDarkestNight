@@ -1,4 +1,4 @@
-# The Darkest Night — v0.7.1
+# The Darkest Night — v0.8.0
 
 A total-conversion of Mount & Blade II: Bannerlord. The world shattered overnight: demons crawl out from the underworld every dusk and hunt the living, humanity survives behind walls and wards, gold has stopped mattering, and magic is no longer a noble's birthright but a formula anyone can tap out with their own two hands — if they're brave (or reckless) enough to try an untested one in battle.
 
@@ -25,7 +25,7 @@ What remains below this point is current, with one caveat worth keeping in mind:
 ## Package Structure
 
 ```
-AshAndEmber/                         (module id TheDarkestNight, presented as "The Darkest Night")
+TheDarkestNight/                         (module id TheDarkestNight, presented as "The Darkest Night")
 ├── SubModule.xml                    mod manifest
 ├── ModuleData/
 │   ├── items.xml                    demon/relic/wand/talisman/Holy Sigil/Demon Blood item defs
@@ -77,7 +77,7 @@ AshAndEmber/                         (module id TheDarkestNight, presented as "T
 │   ├── Visual/                      glows, movement, atmospheric scene tone, battle whispers
 │   └── Startup/                     splash, lore intro, loading screen (The Long Night text)
 ├── tests/
-│   ├── AshAndEmber.Tests.csproj
+│   ├── TheDarkestNight.Tests.csproj
 │   └── PureLogicTests.cs            covers every pure *Math.cs above — 627 tests
 ├── README.md                        this file — what you can actually do
 ├── LEGACY.md                        the retired Ash and Ember caster paths (still how NPC casts behave)
@@ -94,9 +94,17 @@ AshAndEmber/                         (module id TheDarkestNight, presented as "T
 - **Game:** Mount & Blade II: Bannerlord — Steam or Xbox / Game Pass
 - **Version compatibility:** built against Bannerlord's `.NET Framework 4.7.2` runtime
 
+### Upgrading from an earlier build — read this first
+
+The mod used to install as `Modules\AshAndEmber\`. It now installs as **`Modules\TheDarkestNight\`**.
+
+**Delete the old `Modules\AshAndEmber\` folder before playing.** If you leave it, the launcher lists it as a separate mod ("Ash and Ember"), and enabling both loads the same systems twice. Nothing in your save lives in that folder — campaign data is stored in the save file itself, so deleting it costs you nothing.
+
+Bannerlord may warn that a save was made with a module that is "no longer present" the first time you load. That is expected: the module's **id** changed from `AshAndEmber` to `TheDarkestNight`. Your campaign loads normally — every save key and item id is unchanged.
+
 ### Step 1 — Download
 
-Download the latest release ZIP. Extract it anywhere. You get a single `AshAndEmber` folder.
+Download the latest release ZIP. Extract it anywhere. You get a single `TheDarkestNight` folder.
 
 ### Step 2 — Install
 
@@ -117,13 +125,13 @@ The script finds your Bannerlord installation automatically (Steam registry, def
 
 #### Option B — Manual
 
-Copy the `AshAndEmber` folder (the one containing `SubModule.xml`) into:
+Copy the `TheDarkestNight` folder (the one containing `SubModule.xml`) into:
 
 ```
-<BannerlordRoot>\Modules\AshAndEmber\
+<BannerlordRoot>\Modules\TheDarkestNight\
 ```
 
-`SubModule.xml` must be directly inside `Modules\AshAndEmber\`, not one level deeper.
+`SubModule.xml` must be directly inside `Modules\TheDarkestNight\`, not one level deeper.
 
 ### Step 3 — Enable in launcher
 
@@ -133,7 +141,7 @@ The launcher may mark the mod with a red *"Couldn't verify some or all of the co
 
 ### Step 4 — Verify
 
-Start a new Sandbox campaign. A lore introduction screen appears. If the **"The Gift"** prompt (*"Do you feel it still?"*) appears shortly after, the mod is installed correctly.
+Start a new Sandbox campaign. A short, four-screen lore introduction appears (*"An Empire ruled all Calradia..."*). If it plays and character creation opens with only "I am a survivor" as a background, the mod is installed correctly.
 
 ---
 
@@ -151,7 +159,11 @@ When starting a new Sandbox campaign, the intro screen (`src/Startup/AshEmberLor
 
 ### Unlocking
 
-Open the spellbook menu (Alt+L once the option appears) and spend **one focus point**. From then on, spells are learned three ways: tap a full, correct formula in battle (even one you've never studied — a lucky/reckless guess is recorded exactly like a taught spell), learn from **the Tower** faction's teaching menu, or find a formula in the **Ruins**.
+Open the spellbook menu (Alt+L on the map, or **Controller X+Y** on a pad) once the option appears, and spend **one focus point**. From then on, spells are learned three ways: tap a full, correct formula in battle (even one you've never studied — a lucky/reckless guess is recorded exactly like a taught spell), learn from **the Tower** faction's teaching menu, or find a formula in the **Ruins**. Picking "a stranger's book" as your character-creation Keepsake unlocks it immediately with two formulas already known.
+
+### Inheritance
+
+If your character dies and an heir succeeds you, you're asked whether the heir keeps the book: every known formula passes on unbroken, or you can let it burn with you and start the family's magic over from nothing. The choice fires once succession completes.
 
 ### Casting
 
@@ -166,7 +178,7 @@ Casting requires **empty hands** — no weapon or shield wielded. A correct sequ
 
 ### Rare casters
 
-Roughly 7% of named lords/companions know 1–3 spells and cast them in battle. A dedicated, rare spellcaster troop tree also exists (recruit through tier 5, each tier knowing 2–3 battle spells) — see `src/Spellbook/SpellcasterLords.cs` / `SpellcasterTroops.cs`. No spells exist on the campaign map; every working is a battlefield cast.
+Roughly 15% of named lords/companions know 1–3 spells and cast them in battle. A dedicated, rare spellcaster troop tree also exists (recruit through tier 5, each tier knowing 2–3 battle spells) — see `src/Spellbook/SpellcasterLords.cs` / `SpellcasterTroops.cs`. No spells exist on the campaign map; every working is a battlefield cast.
 
 ---
 
@@ -174,7 +186,7 @@ Roughly 7% of named lords/companions know 1–3 spells and cast them in battle. 
 
 Ash and Ember's older player-facing casting paths — **Getting the Gift**, the element **Controls** (hold-and-charge), **The Living Ember**, and the legacy two-phase **Spell Forms / Effects** — are no longer how the player casts, and have moved to **[`LEGACY.md`](LEGACY.md)** to keep this file about what you can actually do.
 
-They are not dead code: NPC lords, seers, priests, the Awakened, and demons still cast through that machinery, so it remains the authoritative description of how spells *behave* on the field. Note the Gift prompt at new-game start still fires, and aging is still a live cost (see below) — `LEGACY.md` opens by explaining both.
+They are not dead code: seers, priests, the Awakened, and demons still cast through that machinery, so it remains the authoritative description of how spells *behave* on the field. As of v0.8.0 the old "Gift" prompt is gone entirely — a new campaign never asks, and the legacy unified-element NPC LORD casters are retired for new games too (an existing save that already had them keeps them). Aging is still a live cost (see below) — `LEGACY.md` opens by explaining both.
 
 ---
 
@@ -1016,14 +1028,14 @@ $env:BannerlordPath = "C:\Program Files (x86)\Steam\steamapps\common\Mount & Bla
 dotnet build src\TheDarkestNight.csproj
 ```
 
-Output: `src\bin\Debug\AshAndEmber.dll`. The build copies it to the Modules folder automatically.
+Output: `src\bin\Debug\TheDarkestNight.dll`. The build copies it to the Modules folder automatically.
 
 ---
 
 ## Troubleshooting
 
 **"The fire does not stir in you."**  
-You do not carry the Gift. Start a new campaign and accept the prompt.
+You have not opened the Spellbook yet — spend the one-time focus-point cost (see **The Spellbook** above), or pick "a stranger's book" as your Keepsake at character creation to start with it unlocked.
 
 **"Both hands are full. Free a hand to shape the fire."**  
 You are wielding a weapon or shield. Press **X** to sheathe everything, then cast.

@@ -99,15 +99,29 @@ tests** (identical to the pre-sweep baseline).
 failing to *compile* silently disables the whole suite, so a green mod build alone
 proves nothing), then load a pre-existing save.
 
-## Phase 3 — assembly + folder (breaking; ships alone)
+## Phase 3 — assembly + folder ✅ done
 
 `AshAndEmber.dll` → `TheDarkestNight.dll`; `Modules/AshAndEmber` →
-`Modules/TheDarkestNight`; plus `install.ps1`, the csproj post-build path, `dist/`,
-and `ModLog`'s log directory.
+`Modules/TheDarkestNight`; `dist/AshAndEmber/` → `dist/TheDarkestNight/`;
+`tests/AshAndEmber.Tests.csproj` → `tests/TheDarkestNight.Tests.csproj` (and with it
+`InternalsVisibleTo`, which tracks the **assembly** name); plus `install.ps1`'s
+`$ModName`, the csproj post-build path, the `<SubModule><Name>`, and `ModLog`'s log
+directory. Verified: green build, 631/631 tests, and the deployed DLL confirmed by
+reflection to expose `TheDarkestNight.MainSubModule : MBSubModuleBase` — the exact
+string `SubModuleClassType` names.
 
-**This is a breaking install change.** An upgrading player ends up with two folders
-both declaring `Id=TheDarkestNight`, which the launcher treats as a conflict. Needs
-a release note telling players to delete the old folder. Do **not** bundle with Phase 2.
+**Breaking for players:** they must delete the old `Modules\AshAndEmber\` folder, or
+the launcher lists it as a second mod. The module **id** also changes
+(`AshAndEmber` → `TheDarkestNight`), so Bannerlord warns once on an existing save
+that a module is missing; the campaign loads fine — no save key or item id moved.
+Migration note is in `README.md` under "Upgrading from an earlier build".
+
+> **Gotcha worth remembering:** the post-build copies only the DLL. After Phase 3 the
+> build wrote `Modules/TheDarkestNight/bin/…` containing *just* the DLL and no
+> `SubModule.xml`, so the launcher could not see it at all, while the stale
+> `Modules/AshAndEmber/` (an **Ash and Ember-era v0.48.0.0 manifest** that had never
+> been updated) kept showing as "Ash and Ember". Always re-run `install.ps1` after a
+> manifest change.
 
 ## Phase 4 — legacy type names (cosmetic; optional; per-cluster)
 

@@ -23,7 +23,7 @@ using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 using TaleWorlds.CampaignSystem.MapEvents;
 
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("AshAndEmber.Tests")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("TheDarkestNight.Tests")]
 
 namespace TheDarkestNight
 {

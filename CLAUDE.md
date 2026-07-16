@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**The Darkest Night** (mod id `TheDarkestNight`, presented in-launcher under that name; see `SubModule.xml`) is a total-conversion of Mount & Blade II: Bannerlord (~106K lines, ~430 C# files under `src/`) built on top of **Ash and Ember**, a magic-overhaul mod whose codebase is this project's baseline and "parts bin." The root namespace is `TheDarkestNight`. Two Ash and Ember names deliberately remain, and **both are load-bearing — do not "tidy" either**: the **assembly** is still `AshAndEmber.dll` in `Modules/AshAndEmber/` (renaming it is a breaking install change — see `REFACTOR_NAMING.md` Phase 3), and several legacy **type** names (`Ashen*`, `Miracle*`, `EmberConclave*`) are cosmetic leftovers pending Phase 4. Target framework: .NET Framework 4.7.2. Sandbox only — "New Campaign" (StoryMode) is intercepted and blocked (`Startup/SandboxOnlyGate`).
+**The Darkest Night** (mod id `TheDarkestNight`, presented in-launcher under that name; see `SubModule.xml`) is a total-conversion of Mount & Blade II: Bannerlord (~106K lines, ~430 C# files under `src/`) built on top of **Ash and Ember**, a magic-overhaul mod whose codebase is this project's baseline and "parts bin" — **reuse only; this is a new thing, not a continuation.** The root namespace is `TheDarkestNight`, the assembly is `TheDarkestNight.dll`, and it deploys to `Modules/TheDarkestNight/`. The remaining Ash and Ember names are legacy **type** names (`Ashen*`, `Miracle*`, `EmberConclave*`) — cosmetic leftovers pending `REFACTOR_NAMING.md` Phase 4 — plus the deliberately-frozen strings in the table below. Target framework: .NET Framework 4.7.2. Sandbox only — "New Campaign" (StoryMode) is intercepted and blocked (`Startup/SandboxOnlyGate`).
 
 **The pitch:** the world shattered overnight. Demons crawl out from the underworld every dusk and hunt the living; humanity survives behind walls, wards, and eight desperate factions born from the old kingdoms. Gold has stopped mattering — barter and scarcity define the economy. Magic is cast by tapping directional formulas (the Spellbook), not born of noble blood. Somewhere past day 1000, a named Demon Lord may rise to end the world, or be killed to end the Night.
 
@@ -12,16 +12,15 @@ The player-facing casting model is the **Spellbook** (`src/Spellbook/`): with fr
 
 ### Names that must NOT be "tidied up"
 
-The namespace is now `TheDarkestNight` (renamed and verified — a green build plus 627/627 tests). The remaining `AshAndEmber` / `aae_` strings are **not** leftovers to sweep; each is load-bearing for a specific reason:
+The namespace, assembly, DLL, module folder, and test project are all `TheDarkestNight` now (Phases 2–3, each verified by a green build plus a full test run). The few `AshAndEmber` / `aae_` strings that remain are **not** leftovers to sweep; each is load-bearing for a specific reason:
 
 | String | Why it stays |
 |---|---|
 | `aae_*` item ids (53, in `ModuleData/items.xml` + C#) | **Persisted in player inventories.** Renaming orphans every existing save's items. Never touch. |
-| `InternalsVisibleTo("AshAndEmber.Tests")` (`Spells/SpellEffects.cs`) | Must match the test **assembly name**, which is independent of the namespace. `tests/AshAndEmber.Tests.csproj` sets no `AssemblyName`, so the assembly is still `AshAndEmber.Tests`. Changing this breaks the internals sweep. |
-| `AssemblyName` = `AshAndEmber`, `Modules/AshAndEmber/`, `ModLog`'s `Documents\...\AshAndEmber\errors.log` | A breaking install change (duplicate module folders both claiming `Id=TheDarkestNight`) and orphaned player logs. Deliberately deferred to `REFACTOR_NAMING.md` **Phase 3**, which ships alone with a migration note. |
-| `"AshAndEmberQuest"` (`SpecialQuestType`, 15 files) | Verified by reflection: getter-only, no `SaveableProperty` — computed, never persisted. Harmless either way, and out of scope for a namespace rename. |
+| `"AshAndEmberQuest"` (`SpecialQuestType`, 15 files) | Verified by reflection: getter-only, no `SaveableProperty` — computed, never persisted. Harmless either way, and out of scope. |
 | `"the baseline AshAndEmber mod"` in comments (22) | Correct historical references to the **upstream project**, not to our namespace. |
 | `Ashen*` / `Miracle*` / `EmberConclave*` type names | Cosmetic; `REFACTOR_NAMING.md` **Phase 4**. Note `AI/AshenCitySystem`'s retired rename helpers are kept unreferenced-but-present for save compatibility — do not delete them. |
+| `God-King` / "Tribes of the East" in `AI/AshenCitySystem.Renaming.cs` (`RenameTribesKingdom`, `ApplyTribalCultureTexts`) and all of `AI/TribesDialogue.cs` | **Dead — verified uncalled**, and kept per the row above. Khuzait is the Bloodbound (ruler: **Huntmaster**), and every *live* surface now says so. Before "fixing" a God-King string, check whether its function has a call site: these have none, and `BloodboundCulture`/`BloodboundDialogue` own the live path. |
 
 **A blanket find-and-replace of `AshAndEmber` across this repo will corrupt saves and break the test build.** Work from `REFACTOR_NAMING.md`.
 
@@ -31,16 +30,16 @@ The namespace is now `TheDarkestNight` (renamed and verified — a green build p
 ```bash
 dotnet build src/TheDarkestNight.csproj
 ```
-Post-build automatically copies the DLL to `<BannerlordPath>/Modules/AshAndEmber/bin/<BannerlordBin>/`.
+Post-build automatically copies the DLL to `<BannerlordPath>/Modules/TheDarkestNight/bin/<BannerlordBin>/`.
 
 **Run all tests:**
 ```bash
-dotnet test tests/AshAndEmber.Tests.csproj
+dotnet test tests/TheDarkestNight.Tests.csproj
 ```
 
 **Run a single test:**
 ```bash
-dotnet test tests/AshAndEmber.Tests.csproj --filter "PureLogicTests.<TestMethodName>"
+dotnet test tests/TheDarkestNight.Tests.csproj --filter "PureLogicTests.<TestMethodName>"
 ```
 
 **Install pre-built release:**
@@ -54,7 +53,7 @@ dotnet test tests/AshAndEmber.Tests.csproj --filter "PureLogicTests.<TestMethodN
 
 ### Entry Point and Wiring
 
-`SubModule.xml` registers `AshAndEmber.MainSubModule` as the mod entry point. `MagicSystem.cs` contains `MainSubModule`, which on `OnGameStart()`:
+`SubModule.xml` registers `TheDarkestNight.MainSubModule` as the mod entry point. `MagicSystem.cs` contains `MainSubModule`, which on `OnGameStart()`:
 - Resets **all** in-mission static state (a long block of `SpellEffects.Clear*`, `Element*.ClearBattleState`, `Nature*`, `Miracle*`, `ElementLordAI`, `Demon*`, etc.) so a save-load in the same process cannot carry stale state.
 - Registers `AshenDiplomacyModel` (permanent-war override, also the template the demon faction's own diplomacy model follows).
 - Registers ~40 `CampaignBehaviorBase` subclasses (each in its own try/catch): the original Ash and Ember systems (`MagicCampaignBehavior`, `SchemeCampaignBehavior`, `SanctuaryCampaignBehavior`, `AshenAltarsCampaignBehavior`, `SeaCampaignBehavior`, `CrystallinesCampaignBehavior`, `ExchangeCampaignBehavior`, `TavernCampaignBehavior`, `AshenRuinCampaignBehavior`, `MiracleCampaignBehavior`, `NatureCampaignBehavior`, `ClanOrdersCampaignBehavior`, `SoldierServiceCampaignBehavior`, `ElementalWildsBehavior`, `TribalKingdomBehavior`, `CreationBackstoryRework`) plus every Darkest Night system: `DemonSpawnCampaignBehavior`, `MarketScarcityCampaignBehavior`, `PromotionCampaignBehavior`, `SacredSitesCampaignBehavior`, `AshenRecruitCampaignBehavior`, `GreatAwakeningCampaignBehavior`, `NorthmenStonesCampaignBehavior`, `SpellbookCampaignBehavior`, `SpellcasterTroopBehavior`, one campaign behavior per faction (`WolfBrothersCampaignBehavior`, `TowerCampaignBehavior`, `ForestWidowsCampaignBehavior`, `BloodboundCampaignBehavior`, `TempleCampaignBehavior`, `EmpireCampaignBehavior`, `LegionCampaignBehavior`, `ChosenCampaignBehavior`), `WandsCampaignBehavior`, `TalismansCampaignBehavior`, `CityStateCampaignBehavior`, `RuinsCampaignBehavior`, `MortalLawCampaignBehavior`, `ApocalypseCampaignBehavior`, `ExpeditionCampaignBehavior`, `ForeignMusterCampaignBehavior`, `BeastsOfTheNorthCampaignBehavior`, `FactionQuestTriggerCampaignBehavior`, and one questline behavior per faction (`WolfHuntQuestCampaignBehavior`, `TowerRiteQuestCampaignBehavior`, `ChosenQuestCampaignBehavior`, `ForestWidowsQuestCampaignBehavior`, `BloodboundQuestCampaignBehavior`, `TempleQuestCampaignBehavior`, `EmpireQuestCampaignBehavior`, `LegionQuestCampaignBehavior`).
@@ -82,7 +81,7 @@ Each registration is wrapped in its own try/catch for mod-conflict safety.
   - **Per-bone:** `MBAgentVisuals.ApplySkeletonScale(Vec3, float, sbyte[], Vec3[])` — the same channel Native's own `skeleton_scales.xml` horse entries ride. Applied via `DemonFactory.ApplyBeastWarp` from `DemonBattleBehavior`'s **first tick**, not `OnAgentBuild`: the skeleton is only guaranteed to exist by then (the same lazy timing the `DemonVisuals` shroud uses). Keep every value inside the vanilla-proven 0.8–2.1 envelope, and note `UseScaledWeapons(false)` is what stops a scaled hand bone from ballooning the wielded weapon.
 
   `ModuleData/monsters.xml` holds the additive `demon_hulking` Monster entry (`base_monster="human"`, so combat/animation stay compatible) giving Ravagers a genuinely larger capsule. It is purely additive — the shared vanilla `human` Monster is untouched, and must stay that way.
-- `Spellbook/` — the player's only casting path: `SpellbookCatalog` (30–50 spells, formula 5–20 chars, sparse combo space), `SpellbookInputHandler` (hold-and-tap formula input, hands-free gate), `SpellbookCampaignBehavior` (unlock cost, learn-on-cast, debug grant), `SpellbookEffects`/`SpellburnEffects` (fizzle → spellburn table), and the rare-caster layer `SpellcasterLords`/`SpellcasterLordMath` (≈7% of named lords/companions cast in battle) and `SpellcasterTroops`/`SpellcasterTroopCatalog`/`SpellcasterTroopMath` (a full, rare recruit→tier-5 caster tree). Pure math in `SpellbookMath`, `SpellcasterLordMath`, `SpellcasterTroopMath`.
+- `Spellbook/` — the player's only casting path: `SpellbookCatalog` (30–50 spells, formula 5–20 chars, sparse combo space), `SpellbookInputHandler` (hold-and-tap formula input, hands-free gate), `SpellbookCampaignBehavior` (unlock cost, learn-on-cast, debug grant), `SpellbookEffects`/`SpellburnEffects` (fizzle → spellburn table), and the rare-caster layer `SpellcasterLords`/`SpellcasterLordMath` (≈15% of named lords/companions cast in battle — raised from 7% in v0.8.0 once the legacy NPC lord casters were retired for new games, see `LegacyContent.LegacyNpcCastersEnabled`) and `SpellcasterTroops`/`SpellcasterTroopCatalog`/`SpellcasterTroopMath` (a full, rare recruit→tier-5 caster tree). Pure math in `SpellbookMath`, `SpellcasterLordMath`, `SpellcasterTroopMath`.
 - `Relics/`, `Wands/`, `Talismans/` — magical items looted from demons and ruins: each a `*Catalog` (pure data, generated/curated names), `*Effects` (mission-tick battle hooks, weakened Crystal/Dark Gift-style effects), and a pure `*Math` (Relics also add `RelicNaming`, a name-combinator). Demon-bane bonus damage (Requirement 20) is folded into the same `CastAttack`/relic-hit choke points the element system already used. `Wands/` additionally runs a wandwright shop (the one currently-held Tower town, the one Chosen town, and — permanently — the Children of the Forest's Pen Cannoc) stocking a small rotating case (`WandsMath.ShopStockSize`/`ForestShopStockSize`, re-rolled every `ShopRestockDays`, one purchase per slot) rather than the whole catalog, and grants — and, since v0.5.0, actually equips into `BattleEquipment`, self-healing weekly — a wand to a rolled-once subset of Tower, Chosen, and Children of the Forest lords.
 - `Ruins/` — ~80% of castles become ownerless, explorable Ruins (Requirement 12): `RuinsCastleSystem` (session-start conversion, stable per save), `RuinsCatalog` (the new "ruined places of the old civilization" chamber list, same def-catalog shape as the legacy `AshenRuinDefs`), `RuinsExplorationSystem` (+`.WaitMenu` partial — Scouting-scaled wait-per-chamber, nightfall risk wired to `DemonSpawnCampaignBehavior`), `RuinsMenus`, pure `RuinsMath`.
 - `CityStates/` — every town not claimed by one of the eight factions becomes a one-city, clan-named city-state that never joins a kingdom and recruits Looter/Bandit-culture rabble (Requirements 11, 24): `CityStateSystem`, `CityStateCampaignBehavior`, pure `CityStateMath`. Two settlements are special-cased into permanent, named "sanctuary kingdoms" instead of the generic path (`CityStateSystem.IsSanctuaryKingdom`, kept out of every war via a shared `AshenDiplomacyModel` predicate + daily force-peace backstop): **The Camp** (Revyl — a banner-less mercenary free-camp, original Sturgia troop tree kept) and **the Children of the Forest** (Pen Cannoc — Battania's culture/troop tree kept, no army of their own, their lords held permanently in a young-adult age window via a weekly `SetBirthDay` reanchor; see `Wands/` above for their wand economy and their weapon-free market).

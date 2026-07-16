@@ -4,7 +4,69 @@
 
 ## Unreleased
 
-No gameplay changes. Housekeeping, saves untouched throughout.
+### The mod stops answering to Ash and Ember — ⚠️ delete your old folder
+The mod now installs as **`Modules\TheDarkestNight\`** and ships **`TheDarkestNight.dll`**. Until now it deployed into `Modules\AshAndEmber\` and listed itself in the launcher as "Ash and Ember".
+
+**Delete the old `Modules\AshAndEmber\` folder before playing** — otherwise the launcher lists it as a second, separate mod. Nothing of yours lives in it: campaign data is stored in the save file. Bannerlord may warn once that a save's module is "no longer present", because the module **id** changed from `AshAndEmber` to `TheDarkestNight`; the campaign loads normally, as no save key, item id, or SaveDefiner id moved.
+
+### Every faction fields its own troops at last
+The kingdoms were renamed to The Darkest Night's factions in Phase 7, but the **troop trees were never retargeted with them** — so the Wolf Brothers fielded "Northman Warriors", the Tower fielded "Duneborn Infantry", the Forest Widows fielded "Forest Clan" troops, and the Bloodbound rode as "Tribal Lancers" behind a "God-King's Vanguard". Ash and Ember's factions do not exist in this world; that codebase is a parts bin, not a setting.
+
+- **Khuzait → the Bloodbound** — `Bloodbound X`, with the **Huntmaster's Vanguard**, the **Blooded Rider**, and the **Blood Ravager**.
+- **Sturgia → the Wolf Brothers** — `Wolf X`, with the **Pack Whelp** and the **Packmaster's Own**.
+- **Aserai → the Tower** — `Tower X`, with the **Tower Novice** and the **Magister's Lance**.
+- **Battania → the Forest Widows** — `Forest X`, with the **Forest Whelp** and the **Champion of the Deep Wood**.
+- Vlandia keeps `Templar X`: the Temple is still the Temple, so that one was never a leftover.
+
+Troop names are display-only — read from `CharacterObject` each session and never persisted — so this is save-safe. The sturgia tree is shared with The Camp, and the battania tree with the Children of the Forest, both of which deliberately keep their original troops; the wording is chosen to read correctly for them too.
+
+### The God-King is dead
+Khuzait's ruler has been the **Huntmaster** since the Bloodbound rework, but every *live* surface still told Ash and Ember's story. The character-creation culture card was titled "Tribes of the East" and described a God-King who "takes wives from every city he puts to tribute". The Khuzait backstories swore your family to "the Apostles of the God-King". The Burning Laboratory offered its scrolls to the Tribes. Some 28 world-event strings named a God-King, his divine fire, and his tribesmen. All of it speaks as the Bloodbound now — the hunt, and blood as the only coin they still trust.
+
+"Wives of Conquest" is reframed rather than removed: the Bloodbound are *bound by blood* and trust it over treaties, so every taken town is bound into the Huntmaster's household by marriage. The same mechanic, correctly named.
+
+Left alone by design: the Tribes helpers in `AI/AshenCitySystem.Renaming.cs` and all of `AI/TribesDialogue.cs` are **verified uncalled** — retired and kept for save compatibility, superseded by `BloodboundCulture`/`BloodboundDialogue`.
+
+---
+
+## v0.8.0 — The Night Uncaged
+
+Playtest-driven fix pass. Every item below traces to a specific reported issue; see `FIX_PLAN.md` (removed after this release shipped) for the original diagnosis.
+
+### New campaigns actually finish setting up
+The blocking "Gift" prompt at new-game start could wedge behind a loading-screen transition — and worse, ALL of new-game world setup (city-states, imperial reassignment, lord seeding) ran from inside that prompt's own callbacks, so a wedge silently skipped every one of them. The prompt is gone outright: every culture now starts identically, magic is purely learned through the Spellbook, and world setup runs unconditionally (`CampaignBehavior.Events.FinishNewGameWorldSetup`). The StoryMode gate now pushes the player back to the main menu directly instead of risking the same wedge with a blocking `ShowInquiry`.
+
+### Character creation grants nothing but the Keepsake
+Every narrative stage (Family, Childhood, Adolescence, Youth) now grants zero skill/attribute/trait bonuses — "I am a survivor" really is a background with no hidden bonus. The Keepsake stage (Young Adulthood) is the sole source of starting flavour, and a null-id bug that could silently swallow the whole pick (and abort recording every OTHER selected option in the same loop) is fixed. A confirmation message now always names what was granted. The Spellbook can also be opened on the map with a controller (X+Y), not just Alt+L.
+
+### City-states mint from day one
+Free towns no longer wait out a 3-day dead window: every faction is scoped to its starting towns and every newly-ownerless town converted to a city-state in one eager pass at new-game setup, with the daily tick remaining as the ongoing repair pass.
+
+### The night tide actually rises, and rises hard
+Demon spawning's hideout lookup was one fallback level short of the proven pattern the rest of the codebase's bandit-party spawns already use (own clan hideout → nearest hideout → **any** hideout in the world) — the missing third level was silently failing spawns. Nightly density is now a rolled intensity band (Quiet/Restless/Surge: 8–40 parties, cap raised 40→120) instead of a flat 3–6, spawn locations lean harder toward settlements and roads, and every living demon party is pinned to pure aggression on the campaign map every hour (max attack initiative, never avoids the main party) and bands together with nearby packs when no prey is in reach.
+
+### The Ashen are retired for new games
+The old immortal-villain kingdom no longer stands up on a fresh save — demons already own the night in this fiction, and a second one competing for the same space was clutter. Existing saves that already have an Ashen kingdom keep it fully functional; only the *establishment* path is gated (`LegacyContent.AshenEnabled`).
+
+### Ruins keep their names after a reload
+A reflection-set ruin name could be reverted by the engine's own text reload between session launch and the first frame — the same class of bug `AshenCitySystem`'s renames already had a fix for. Ruin castles now re-apply their appearance from the daily tick and `OnGameInitializationFinished` as a backstop.
+
+### The barter economy actually bites
+New characters start with ~50 gold instead of vanilla's 1000; lord party rosters are halved by a new `PartySizeLimitModel` factor; town markets are pruned once at session launch instead of showing vanilla stock for their first day.
+
+### NPCs use their toys
+The Empire's Schemes access had no NPC-side counterpart — `SchemeSystem.TryQueueNpcScheme` existed but nothing ever called it. An Empire lord now runs one scheme every 10–14 days. The Camp now occasionally sends out its own charter expedition, independent of the player's, purely for texture (a notification, no player-state changes).
+
+### The intro is four sentences, not five paragraphs
+*An Empire ruled all Calradia. The underworld tore open... The Empire fell... Now remnants huddle behind walls and wards...*
+
+### NPC magic is the Spellbook now
+The legacy unified-element NPC lord casters (`ElementLordAI`) are retired for new campaigns — a fresh game never seeds a lord into that system. The Spellbook's own rare casters pick up the slack: `SpellcasterLordMath.TargetFraction` raised from 7% to 15% of named lords. Nature seers and Temple priests are unaffected (their casts are shared with the Wind/Earth/Water Spellbook spells).
+
+### The Spellbook can be inherited
+When your character dies and an heir succeeds, you're now asked whether every known formula passes to them, or burns with you.
+
+No save-breaking changes: `AshAndEmber.dll`/`Modules/AshAndEmber/`, every `aae_*` item id, and all `SyncData` keys are untouched. An existing v0.7.x save loads exactly as before, Ashen kingdom included if it already had one.
 
 ### The mod finally answers to its own name
 The C# namespace is **`TheDarkestNight`** (was `AshAndEmber`) across all 432 source files, along with `TheDarkestNightSaveDefiner` and the `SubModuleClassType` entry point. Verified by a green build and 627/627 tests.

@@ -54,7 +54,7 @@ certain about, confirm it against the actual DLLs rather than assuming.
   `SubModuleClassType` / `DLLName` mismatch means the mod **silently fails to load**,
   with a green build and green tests telling you nothing is wrong. After touching
   `SubModule.xml`, re-run `.\install.ps1` or copy it across by hand.
-- Tests: `dotnet test tests/AshAndEmber.Tests.csproj`. **Run these after any change** —
+- Tests: `dotnet test tests/TheDarkestNight.Tests.csproj`. **Run these after any change** —
   the test project failing to *compile* silently disables the whole suite, so a
   green `dotnet build` of the mod is not enough on its own.
 - Keep tests pure: pure numeric logic lives in `*Math.cs` files (no TaleWorlds
@@ -67,7 +67,7 @@ certain about, confirm it against the actual DLLs rather than assuming.
 - A version bump touches **five** places — keep them in sync:
   1. `src/TheDarkestNight.csproj` (`Version` / `AssemblyVersion` / `FileVersion`)
   2. `SubModule.xml` (the launcher-visible `<Version value="vX.Y.Z.0"/>`)
-  3. `dist/AshAndEmber/SubModule.xml`
+  3. `dist/TheDarkestNight/SubModule.xml`
   4. `CHANGELOG.md` (promote the `## Unreleased` section to the new version)
   5. `README.md` (the `# The Darkest Night — vX.Y.Z` title line)
 
