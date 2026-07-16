@@ -1,6 +1,12 @@
 # Build outputs
 src/bin/
 src/obj/
+tests/bin/
+tests/obj/
+
+# NOTE: dist/AshAndEmber/bin/**/*.dll is deliberately NOT ignored — those are the
+# shipped pre-built DLLs that install.ps1 installs for players who don't build
+# from source. Do not untrack them.
 
 # Visual Studio
 .vs/

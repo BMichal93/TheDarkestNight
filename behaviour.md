@@ -9,15 +9,31 @@ The Bannerlord assemblies do **not** match intuition, and signatures drift
 between game versions. Before using any TaleWorlds type or method you are not
 certain about, confirm it against the actual DLLs rather than assuming.
 
-- This machine is **Xbox / Game Pass**, not Steam. The real DLLs live at:
-  `C:\XboxGames\C5E01182-C50B-4253-8B15-A3376314D4DD\Content\bin\Gaming.Desktop.x64_Shipping_Client`
-  (`BannerlordPath` / `BannerlordBin` env vars point here; the Steam paths in the
-  `.csproj` are only fallbacks and do not exist on this box).
-- To check a member, load the DLL with reflection in PowerShell, e.g.:
+- This machine is **Xbox / Game Pass**, not Steam. **Never hardcode the install
+  path — always resolve it from the `BannerlordPath` / `BannerlordBin` env vars.**
+  Xbox rewrites its install directory (it has already moved once: an older
+  revision of this file documented a since-dead
+  `C:\XboxGames\C5E01182-…-A3376314D4DD\Content` GUID path), so a literal path in
+  a doc or script rots silently. At the time of writing the env vars resolve to
+  `C:\XboxGames\Mount & Blade II- Bannerlord\Content` +
+  `bin\Gaming.Desktop.x64_Shipping_Client` — note the stray `-` after "II", which
+  is part of the real folder name, not a typo. The Steam paths in the `.csproj`
+  are only fallbacks and do not exist on this box.
+- To check a member, load the DLL with reflection in PowerShell — this snippet is
+  copy-pasteable as-is and resolves the path itself:
   ```powershell
-  $asm = [Reflection.Assembly]::LoadFrom("$bl\TaleWorlds.CampaignSystem.dll")
+  $dll = Join-Path $env:BannerlordPath "bin\$env:BannerlordBin\TaleWorlds.CampaignSystem.dll"
+  $asm = [Reflection.Assembly]::LoadFrom($dll)
   $asm.GetType("TaleWorlds.CampaignSystem.Party.MobileParty").GetMethods() |
       Where-Object Name -like "SetMove*"
+  ```
+  To settle whether a property is **persisted** (the question that decides most
+  "is this rename save-safe?" arguments), check for a setter and a
+  `SaveableProperty` attribute — e.g. `QuestBase.SpecialQuestType` has neither,
+  so it is computed, not stored:
+  ```powershell
+  $p = $asm.GetType("TaleWorlds.CampaignSystem.QuestBase").GetProperty("SpecialQuestType")
+  $p.GetSetMethod($true); $p.GetCustomAttributes($true) | ForEach-Object { $_.GetType().Name }
   ```
 
 ### Confirmed gotchas (correct form on the right)
@@ -26,11 +42,18 @@ certain about, confirm it against the actual DLLs rather than assuming.
 - `GameOverlays.MenuOverlayType` → **`GameMenu.MenuOverlayType`**.
 - `Hero.Renown` does not exist → **`hero.Clan?.Renown`**.
 - `Kingdom.TotalStrength` → **`Kingdom.CurrentTotalStrength`**.
+- Runtime agent rescaling **does** exist (an older note in this project claimed it did not — that note is obsolete): whole-body is **`Agent.SetInitialAgentScale`** (always go through the `DemonFactory.SetAgentScale` wrapper), per-bone is **`MBAgentVisuals.ApplySkeletonScale(Vec3, float, sbyte[], Vec3[])`**. Per-bone work must run on a **mission tick, not `OnAgentBuild`** — the skeleton is not guaranteed built yet in the latter.
 - `GlowSystem.BeginAgentGlow` → **`SpellEffects.BeginAgentGlow`** (the `Glow*` API is part of the `SpellEffects` partial class, not a separate type).
 
 ## Build, test, and the version bump
 
 - Build: `dotnet build src/TheDarkestNight.csproj` (auto-deploys the DLL into the Modules folder).
+- **The post-build copies the DLL and *nothing else*.** If you change `SubModule.xml`
+  (or `ModuleData/*.xml`), the installed copy under
+  `$BannerlordPath\Modules\AshAndEmber\` goes stale while the DLL updates — and a
+  `SubModuleClassType` / `DLLName` mismatch means the mod **silently fails to load**,
+  with a green build and green tests telling you nothing is wrong. After touching
+  `SubModule.xml`, re-run `.\install.ps1` or copy it across by hand.
 - Tests: `dotnet test tests/AshAndEmber.Tests.csproj`. **Run these after any change** —
   the test project failing to *compile* silently disables the whole suite, so a
   green `dotnet build` of the mod is not enough on its own.
@@ -41,11 +64,15 @@ certain about, confirm it against the actual DLLs rather than assuming.
   into the tested path. (.NET resolves a method's types at JIT time, so a
   `try/catch` around a `Hero` access does **not** make the method loadable in the
   test runner.)
-- A version bump touches **four** places — keep them in sync:
+- A version bump touches **five** places — keep them in sync:
   1. `src/TheDarkestNight.csproj` (`Version` / `AssemblyVersion` / `FileVersion`)
   2. `SubModule.xml` (the launcher-visible `<Version value="vX.Y.Z.0"/>`)
   3. `dist/AshAndEmber/SubModule.xml`
   4. `CHANGELOG.md` (promote the `## Unreleased` section to the new version)
+  5. `README.md` (the `# The Darkest Night — vX.Y.Z` title line)
+
+  README was **not** on this list until v0.7.1 and silently drifted six releases
+  behind as a result. If you add another version-bearing file, add it here too.
 
 ## Mod-conflict safety
 

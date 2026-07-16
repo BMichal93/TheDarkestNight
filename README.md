@@ -1,8 +1,8 @@
-# The Darkest Night — v0.1.0
+# The Darkest Night — v0.7.1
 
 A total-conversion of Mount & Blade II: Bannerlord. The world shattered overnight: demons crawl out from the underworld every dusk and hunt the living, humanity survives behind walls and wards, gold has stopped mattering, and magic is no longer a noble's birthright but a formula anyone can tap out with their own two hands — if they're brave (or reckless) enough to try an untested one in battle.
 
-This mod is built on **Ash and Ember**, a mature magic-overhaul codebase that serves as this conversion's baseline and "parts bin" — many of the mechanics below (the Kindled, the Codex, crystals, schemes, sea trade, the tavern) are Ash and Ember systems reused wholesale or repurposed; see `CLAUDE.md` for the full architecture map and which folders are new versus inherited.
+This mod is built on **Ash and Ember**, a mature magic-overhaul codebase that serves as this conversion's baseline and "parts bin" — many of the mechanics below (the Awakened, the Codex, crystals, schemes, sea trade, the tavern) are Ash and Ember systems reused wholesale or repurposed; see `CLAUDE.md` for the full architecture map and which folders are new versus inherited.
 
 ## What's new in The Darkest Night
 
@@ -16,7 +16,9 @@ This mod is built on **Ash and Ember**, a mature magic-overhaul codebase that se
 - **Mortal law.** NPC lords live under the same rules as the player: no empire ever re-forms, small parties shelter at dusk instead of travelling, hungry armies raid for food, and enemy rosters look as scarce as yours. See `src/MortalLaw/`.
 - **A survivor's past.** Character creation offers one background — *"I am a survivor"* — and rewrites the Youth/Young Adulthood steps around demons and scarcity instead of peacetime Calradia; choosing "studied the arcane arts" starts you with the Spellbook and two short spells. See `src/AI/CreationBackstoryRework.cs`.
 
-Everything below this point documents the underlying Ash and Ember mechanics that The Darkest Night is built on and, in several cases, still drives NPC casting or specific retained features through (dice games, drinking, and sea travel are explicitly untouched). Where a section describes something the player can no longer do directly (e.g. choosing the Inner Fire/Living Ember/Dark Gift path at creation, or casting through the old hold-and-charge input), it now describes the game's internals rather than the current player experience — see "What's new" above and `CLAUDE.md` for what replaced it.
+The retired Ash and Ember caster paths — the old hold-and-charge input, the Living Ember, the two-phase spell forms, and the Inner Fire/Dark Gift path choice — have moved to **[`LEGACY.md`](LEGACY.md)**. They are still how NPC lords, seers, priests, the Awakened, and demons cast, so that file remains the authoritative description of spell *behaviour*; it is simply no longer a description of anything you do.
+
+What remains below this point is current, with one caveat worth keeping in mind: much of it is inherited Ash and Ember machinery that The Darkest Night kept, re-themed, or gated (dice games, drinking, and sea travel are explicitly untouched). Sections that describe something the player can no longer reach are marked as such where they sit. See `CLAUDE.md` for the full architecture map.
 
 ---
 
@@ -27,8 +29,9 @@ AshAndEmber/                         (module id TheDarkestNight, presented as "T
 ├── SubModule.xml                    mod manifest
 ├── ModuleData/
 │   ├── items.xml                    demon/relic/wand/talisman/Holy Sigil/Demon Blood item defs
-│   └── troops.xml                   elemental_being / demon troop templates
-├── src/                             ~65 000+ lines across ~250 source files (grouped by system folder)
+│   ├── troops.xml                   elemental_being / demon troop templates
+│   └── monsters.xml                 demon_hulking — the Ravager's larger body capsule (additive)
+├── src/                             ~106 000 lines across ~430 source files (grouped by system folder)
 │   ├── MagicSystem.cs               module entry point + mission behaviour + debug-grant hook
 │   ├── MagicInputHandler.cs         keyboard/gamepad combo detection (legacy path)
 │   ├── SpellBuilder.cs              two-phase input parser → SpellCast (legacy / NPC)
@@ -45,7 +48,11 @@ AshAndEmber/                         (module id TheDarkestNight, presented as "T
 │   ├── MortalLaw/                   NPC lords under the same scarcity/night-fear/food rules as the player
 │   ├── Economy/                     barter/scarcity GameModel overrides, daily market pruning
 │   ├── Factions/                    the eight reworked kingdoms (culture, dialogue, joining ritual, city menus)
-│   └── FactionQuests/               one questline per faction, day-50+ trigger
+│   ├── FactionQuests/               one questline per faction, day-50+ trigger
+│   ├── Expeditions/                 the Antiquarian Charter — send a hired team into a ruin (run out of The Camp)
+│   ├── ForeignMuster/               Legion towns' weekly rotating foreign tier-1 recruit
+│   ├── BeastsOfTheNorth/            Wolf Brothers' Jotunn-Blooded giant + Ulfhednar wolf-riders
+│   └── Units/                       promotion/recruit tolls, lord gear weathering
 │   │
 │   │   ── Ash and Ember baseline (still live — NPC casting, retained features, reuse templates) ──
 │   ├── Magic/                       unified element system (Codex, input [player path retired], effects, walls, ultimates, teachers)
@@ -54,7 +61,7 @@ AshAndEmber/                         (module id TheDarkestNight, presented as "T
 │   ├── Miracles/                    Grace — prayers, grace economy, priest troops, battle AI, talents (player path retired)
 │   ├── DarkGifts/                   the Dark Gift path (template for Talismans/Relics)
 │   ├── Crystals/                    consumable crystal items, effects, battle AI (template for Relics)
-│   ├── Elementals/                  the Kindled — elemental beings; direct visual/behaviour template for Demons/
+│   ├── Elementals/                  the Awakened — elemental beings; direct visual/behaviour template for Demons/
 │   ├── Talents/                     talent tree, learning curve, map-spell talents
 │   ├── Schemes/                     covert operations — now Empire-only, influence-paid (see CLAUDE.md)
 │   ├── Soldier/                     Take the Lord's Coin — hire out as a common soldier
@@ -71,8 +78,10 @@ AshAndEmber/                         (module id TheDarkestNight, presented as "T
 │   └── Startup/                     splash, lore intro, loading screen (The Long Night text)
 ├── tests/
 │   ├── AshAndEmber.Tests.csproj
-│   └── PureLogicTests.cs            covers every pure *Math.cs above — 563+ tests
-└── README.md
+│   └── PureLogicTests.cs            covers every pure *Math.cs above — 627 tests
+├── README.md                        this file — what you can actually do
+├── LEGACY.md                        the retired Ash and Ember caster paths (still how NPC casts behave)
+└── CHANGELOG.md                     release history
 ```
 
 ---
@@ -118,11 +127,13 @@ Copy the `AshAndEmber` folder (the one containing `SubModule.xml`) into:
 
 ### Step 3 — Enable in launcher
 
-Open the Bannerlord launcher → Mods → tick **Ash and Ember** → Play.
+Open the Bannerlord launcher → Mods → tick **The Darkest Night** → Play.
+
+The launcher may mark the mod with a red *"Couldn't verify some or all of the code included in this module"* warning. It is cosmetic and safe to ignore — on Xbox / Game Pass installs the launcher's `ModVerifier.exe` is not shipped, so the check cannot run, and a check that cannot run is recorded as a failure. Every enabled community mod on such an install draws the same mark.
 
 ### Step 4 — Verify
 
-Start a new Sandbox campaign. A lore introduction screen appears. If the **"The Inner Fire"** gift prompt appears shortly after, the mod is installed correctly.
+Start a new Sandbox campaign. A lore introduction screen appears. If the **"The Gift"** prompt (*"Do you feel it still?"*) appears shortly after, the mod is installed correctly.
 
 ---
 
@@ -159,220 +170,24 @@ Roughly 7% of named lords/companions know 1–3 spells and cast them in battle. 
 
 ---
 
-## Getting the Gift *(legacy — describes the underlying Ash and Ember caster paths and mostly no longer chosen at creation)*
+## The retired caster paths *(moved)*
 
-**What actually still happens:** every new campaign still opens with a short yes/no "The Gift" prompt (`CampaignBehavior.Events.ShowGiftPrompt`) — *"Do you feel it still?"* — that sets `MageKnowledge.IsMage`. Answering yes no longer opens the old three-branch menu below or lets you cast through the retired element input; it exists to keep the underlying Codex/NPC-parity plumbing (and the Alt+L key's fallback to the legacy Codex for a non-Spellbook mage) consistent. **Actual player casting is exclusively the Spellbook**, described above. The three-path description below is kept for reference on what the *paths themselves* still are and drive for NPC lords/seers/priests.
+Ash and Ember's older player-facing casting paths — **Getting the Gift**, the element **Controls** (hold-and-charge), **The Living Ember**, and the legacy two-phase **Spell Forms / Effects** — are no longer how the player casts, and have moved to **[`LEGACY.md`](LEGACY.md)** to keep this file about what you can actually do.
 
-Two paths open at campaign start. Each is permanent — you walk one or the other.
-
-**The Inner Fire** — The fire must be *found*, not chosen at a menu.
-- A prompt appears asking if the fire has always been there. Accepting grants the Gift.
-- The Gift can also arrive through certain in-game events (aging, bloodline, encounters, companions).
-- Once you carry the Gift, the grimoire is available at any time (Left Alt + X).
-
-**The Living Ember** — For those who hear the land instead of carrying a fire within.
-- At the same gift prompt, choose *"The world beneath me has always been louder than the fire."*
-- This opens the Living Ember path — terrain-drawing, elemental powers, and hermit teachers.
-
-**The Dark Gift** — For the cruel. If your hero is **Dishonourable**, the gift prompt also offers *"I bargained with the dark, and it marked me."* — choosing it starts you bearing **one random Dark Gift** (see *The Dark Altars and the Dark Gifts*). Visit a Dark Altar to buy more or renounce them.
-
-All these paths are **mutually exclusive** — Inner Fire, Grace, Nature, and the Dark Gifts cannot be mixed. **The three-branch menu text above is not shown to the player** in The Darkest Night — only the simplified yes/no Gift prompt described above fires at new-game start. The paths, their talents, and their effects remain fully live for NPC lords, priest troops, and seer troops.
+They are not dead code: NPC lords, seers, priests, the Awakened, and demons still cast through that machinery, so it remains the authoritative description of how spells *behave* on the field. Note the Gift prompt at new-game start still fires, and aging is still a live cost (see below) — `LEGACY.md` opens by explaining both.
 
 ---
 
-## Controls *(legacy — the underlying element input; retired for the player, still drives NPC lords/the Kindled/demons)*
-
-*(As of v0.35.0, fire and nature magic are one unified art. The in-game journal entry **"Notes for the Adventurer"** always holds the authoritative, build-current controls; this is a summary. In The Darkest Night, the hold-and-charge gesture below is no longer bound to the player — see **The Spellbook** above for what Left Alt / focus now actually does for you in battle.)*
-
-### Keyboard
-
-| Action | Input |
-|--------|-------|
-| Focus | Hold **Left Alt** |
-| Load a learned element | **W** Wind · **S** Earth · **A** Water · **D** Spirit (Fire is default) |
-| Draw the charge | Stand still, hand free, armour light — hold to build power |
-| Attack (element cone) | **Left Mouse** while focused |
-| Wall (element barrier) | **Right Mouse** while focused |
-| Open grimoire | **Alt + X** |
-| Codex of the Inner Fire (learn) | **Alt + L** (campaign map) |
-| Litany of Devotions (Grace talents) | **Shift + L** (campaign map) |
-
-### Gamepad
-
-| Action | Input |
-|--------|-------|
-| Focus | Hold **X** — bumpers are taken (LB = order radial, RB = miracles); X keeps both triggers free |
-| Load a learned element | Flick the **left stick** (↑ Wind · ↓ Earth · ← Water · → Spirit); **click L3** for Fire |
-| Attack / Wall | **Right Trigger** / **Left Trigger** |
-| Open grimoire (map) | **LB + Right Bumper (RB)** |
-
-### How casting works
-
-1. **Hold the focus key.** Fire is loaded by default; tap a direction to load a learned element.
-2. **Stand still and draw.** The longer you hold (up to ~5 s), the **stronger** the working — power peaks at five seconds.
-   - **Overchannel:** keep pouring past **~10 s** and the working **overchannels** — it strikes **twice as hard**. You then have until ~15 s to loose it before the charge **disperses**. NPC mage-lords overchannel too (recklessly-tempered and desperate ones most).
-   - There is no minimum, so an instant release is allowed but weak.
-3. **Attack** looses the element's cone; **Block** raises its wall.
-4. **The charge lingers.** Let go of Focus with a charge drawn and it **stays in your hand for ~4 seconds** — loose it with a lone Attack/Block, or re-take Focus to keep drawing. You no longer have to release the instant you stop drawing.
-
-The life-cost of a cast is **flat** — the draw buys power, never a cheaper cast. The **Nature** discipline lowers that flat cost; the Ashen pay in criminal standing instead of years.
-
-Magic is an **inborn gift**, so it deepens as you do: a spell's damage scales slightly with your **character Level** (+1% per level, up to +30%), so it never falls behind late in a long campaign. It lifts damage only — a cone's reach, a wall's depth and its ignite stay as tuned. (Enemy mage lords grow with their level the same way.) **Miracles** deepen with your **Conviction** — the summed strength of your aligned virtues — and **crystals** with your **Medicine**, on the same gentle, capped curve.
-
-**Free hand and light armour required** — unless you know **Steel**, which lets you cast with a weapon drawn and bear twice the weight.
-
-### The five elements
-
-| Element | Attack | Wall |
-|--------|--------|------|
-| **Fire** | cone of fire | wall of fire |
-| **Wind** | hurling, slowing blast | wall that turns arrows and bogs down |
-| **Earth** | close, almost-melee crush of stone (short reach, heavy damage + root) | stone wall |
-| **Water** | slowing wave | mist barrier |
-| **Spirit** | fear + a stray order into enemy ranks | wall that heartens and mends your own |
-
-Elements and disciplines (Steel, Blood, Nature) are learned in the **Codex** with focus points, or from a **teacher** for one point less. Each element also grants a **campaign-map working** cast through the grimoire's *Cast* menu.
-
----
-
-## The Living Ember (legacy path)
-
-> **Note:** As of v0.35.0 the living-world elements are folded into the unified magic above (learned as Wind / Earth / Water / Spirit), and the seers attuned to the land are now **teachers**. The separate Living-Ember attunement below remains for backward compatibility with existing saves.
-
-A discipline for those who hear the living land — root, river, stone, and sky. They **choose** an element, draw it from the world around them, and release it as a natural force. Drawing is never free: every working spends the **living energy** of the place it is fought over, and a land stripped bare turns on those who force it.
-
-### Choosing this path
-
-At the gift prompt at campaign start, select **"The world beneath me has always been louder than the fire."** This grants attunement to the Living Ember instead of the Inner Fire. The two paths are mutually exclusive.
-
-### Controls
-
-You **choose** an element by tracing a direction while focused, gather a charge of it by **standing still**, then spend it with your **Attack** or **Block**. The focus key is shared with miracles (Grace, Cold, Nature and the Dark Gifts are all mutually exclusive).
-
-| Action | Keyboard | Gamepad |
-|--------|----------|---------|
-| Choose element | Hold **Left Ctrl**, trace **W**/**S**/**A**/**D** | Hold **R3**, flick left stick |
-| Gather the charge | …then **stand still** | …then stand still |
-| Cast attack | Hold **Left Ctrl** + **Attack** (left mouse) | Hold **R3** + **Right Trigger** |
-| Cast support | Hold **Left Ctrl** + **Block** (right mouse) | Hold **R3** + **Left Trigger** |
-| Campaign map | Choose element in the litany (**Shift+X** / R3+L3); stand still ~4 hours to gather; cast via the litany | — |
-
-A bar appears while you channel, coloured by your chosen element, filling over ~6 seconds; the charge then lasts ~30 seconds. **Requirements (battle):** both hands empty (no weapon or shield) and armour weight ≤ 25.
-
-### Choosing the element
-
-You pick which element to draw — the land no longer decides. Trace a direction:
-
-| Direction | Element |
-|-----------|---------|
-| **W** (Up) | **Wind** |
-| **S** (Down) | **Earth** |
-| **A** (Left) | **Water** |
-| **D** (Right) | **Storm** |
-
-### Living energy — terrain and cost
-
-Terrain no longer dictates which element answers; it dictates how dearly the draw **costs the land**. Every battlefield and stretch of country holds a hidden reserve of living energy, sized by how much grows there. Each terrain *favours* certain elements — drawing a favoured element spends little of the reserve; drawing against the land spends far more.
-
-| Terrain | Favours (cheap to draw) |
-|---------|-------------------------|
-| Mountain, Hills, Steppe | **Wind** |
-| Forest | **Earth** |
-| River, Lake, Shore, Snow, Wetland | **Water** |
-| Desert, Plains, Meadow | **Storm** |
-| (other / mixed) | none in particular (neutral cost) |
-
-**The reserve.** You are never shown the number, but the land warns you as it thins — at the **half**, the **quarter**, and when it runs **dry**. Both nature draws *and* Inner Fire casts spend it, for the player **and every NPC mage** alike. Forest brims (~120); desert holds almost nothing (~15). Left in peace, a place mends ~6% of its capacity per day. The reserves are saved with your campaign and persist across battles fought in the same region.
-
-**Drawn past empty, the land bites back — but only at nature casters.** A nature draw on exhausted ground **bleeds the hearth of the nearest village** and has a ~35% chance to **sour**. The souring takes many forms — in battle: a raw recoil, dead briars that root you, a hollowing that saps your speed, a gout of grey ash, or a slow wither; on the march: a blood-tithe, blighted (spoiled) food, a contagious despair (morale loss), or a creeping fever that wounds the weakest. Player and NPC nature casters draw from the same palette.
-
-**Inner Fire is immune to this** — fire does not commune with the land, it only burns it. A fire mage is never bitten back, but every fire cast still strips the local reserve, leaving the ground dangerous for any nature caster who draws there. In practice this makes the Living Ember **harder and riskier to use on a battlefield crowded with fire-mages** — they scorch the reserve dry, and the land takes its anger out on you, not them.
-
-**The Old Green.** Any tavern offers a land-attuned hero a pouch of rare weeds (150 denars). Smoking it costs **−10% of your health** and a few drowsy hours, but for **24 hours** each nature draw has a **30% chance to cost the land nothing at all** — you are, briefly, part of it. A way to draw hard without killing the ground beneath you.
-
-### Powers
-
-Each element has one attack (Attack key) and one support (Block key).
-
-| Element | Attack | Support |
-|---------|--------|---------|
-| **Wind** | **Gale** — 360° gust, ~22 damage + knockback + slow, 10 m | **Tailwind** — +35% speed for you and nearby allies, 15 s |
-| **Earth** | **Entangle** — a close, almost-melee crush of rock (~5 m): heavy damage (~85) and foes held fast ~4 s | **Bulwark** — −40% damage taken for you and allies, 12 s |
-| **Water** | **Torrent** — forward cone, ~30 damage + knockback that breaks formations | **Renewal** — heal yourself and nearby allies + morale |
-| **Storm** | **Thunderclap** — ~65 damage bolt that chains to 2 more foes | **Stormstep** — an instant dash forward |
-
-A held charge lasts ~30 seconds in battle. Only one charge at a time unless the **Living Root** talent is active. On the campaign map the support powers help your column (lighter march, mended wounded, a quickening).
-
-### Hermit teachers
-
-Three hermits scatter across the old lands. Each teaches one rite and is a one-time encounter, appearing when you enter a qualifying town with clan renown ≥ 100 (25% chance per visit, 3-day cooldown per settlement).
-
-| Hermit | Region | Teaches |
-|--------|--------|---------|
-| **Gwydion the Root-Listener** | Battanian towns | Living Root |
-| **Birna of the Still Water** | Sturgian towns | Still Draw |
-| **Bekh the Open Hand** | Khuzait towns | Open Grip |
-| **Tiryn of the High Root** | Marunath (village menu, always) | Deep Earth |
-| **Faruk the Patient** | Aserai villages | Dawn Call |
-
-Hermits do not appear for an Inner Fire mage.
-
-### Talents
-
-| Talent | Effect |
-|--------|--------|
-| **Living Root** | Charge capacity ×2 — hold two charges (two elements) at once. |
-| **Still Draw** | The channel bar fills twice as fast. |
-| **Deep Earth** | You draw gently — each charge spends only **half** the land's living energy. |
-| **Open Grip** | Held charges no longer fade. |
-| **Dawn Call** | On the campaign map the land fills your chosen charge an hour sooner. |
-| **Wildsworn** | Class talent — bundles Living Root, Still Draw and Open Grip for 2 focus points. |
-
-### Nature seers (NPC)
-
-Some lords and companions carry attunement to the living world. In battle they draw and release nature charges independently — and their draws spend the battlefield's living energy exactly as yours do, so a place can be exhausted by either side. A seer who draws from drained ground risks the same souring recoil. Seeded at campaign start by culture: Battanian lords (~20%), Sturgian lords (~15%), Khuzait lords (~10%), others (~3%).
-
-Two unit types appear rarely in warbands:
-- **Battanian Forest Listener** — melee nature seer in Battanian parties
-- **Sturgian Storm-Reader** — ranged nature seer in Sturgian parties
-
----
-
-## Spell Forms (before Break) — *pre-v0.35 reference*
-
-> **Superseded in v0.35.0.** The two-phase form/effect/Break system below describes the *old* Inner Fire. The player now casts with the unified element system (see **Controls → How casting works**). These sections are retained for players on older versions and because NPC mages still resolve their casts through the underlying blast/burst effects.
-
-| Key | Arrow | Form | What it does |
-|-----|-------|------|--------------|
-| W | ↑ | **Blast** | Forward cone. Range = max(4, formCount × 2.5) m. Cone visuals scale to match. |
-| A | ← | **Missile** | Fast projectile that travels forward then explodes. Range = max(8, missileCount × 3) m. Explosion radius = 1 + missileCount m. |
-| D | → | **Barrier** | Wall of stationary fire nodes perpendicular to facing. One node per press, 1.5 m apart. Cast again to release. |
-| S | ↓ | **Burst** | Circle centred on caster. Radius = max(2, formCount × 2.5) m. |
-
-### Multi-form example
-
-`WW SS X UUU` — Blast (5 m) + Burst (5 m) simultaneously, 75 fire damage to all units in range including allies. 7 inputs = 8 days cost.
-
----
-
-## Effects (after Break)
-
-Every damage key deals 25 fire damage per press (friendly fire included) — but each carries its own **nature**, with a weak innate effect that the matching enchantment talent amplifies:
-
-| Key | Arrow | Nature | Per count | Innate effect (no talent) | Amplified by |
-|-----|-------|--------|-----------|---------------------------|--------------|
-| W | ↑ | **Sear** | 25 fire damage | +5 searing burn | **Immolate** |
-| A | ← | **Force** | 25 fire damage | 1.5 m concussive push | **Scatter** |
-| D | → | **Shred** | 25 fire damage | +4% damage taken for 4 s (max 12%) | **Sunder** |
-| S | ↓ | **Restore** | 15 healing | +4 morale lift | **Hearthlight** |
-
-Owning a key's talent replaces its weak innate effect with the full version — no double-dipping. **Smoulder** triggers on any damage nature. Natures mix freely in one cast: `WWA` after Break = 75 damage carrying sear ×2 + force ×1.
-
----
 
 ## Aging Cost
 
-Every spell draws on your lifespan. Cost scales **geometrically** with total inputs — weak spells are cheap; powerful spells become very expensive. Hard cap: 84 campaign days (1 Bannerlord year = 4 seasons × 21 days).
+**The Spellbook does not charge aging.** Casting a formula costs you nothing but the risk of a spellburn — so if the Spellbook is all you use, the per-cast table below never applies to you.
+
+Aging is still a live cost, though, through two other doors: the **Ashen Ruins** menus spend days of your life outright, and the **Reaping** and certain rites give days back. The `AgingSystem` and its Ledger of Years remain fully in play — this is where your lifespan actually goes.
+
+The per-input cost table below belongs to the retired element/two-phase casting paths (see [`LEGACY.md`](LEGACY.md)). It is what NPC casters pay, and what a save from an earlier build already spent; it is kept here because the Ledger, the cap, and the Reap/Tempered mechanics it describes are shared with the live paths above.
+
+Cost scales **geometrically** with total inputs — weak spells are cheap; powerful spells become very expensive. Hard cap: 84 campaign days (1 Bannerlord year = 4 seasons × 21 days).
 
 **The Ledger of Years** — the grimoire (Alt+X) opens with a running account of the aging economy: your age, total days the fire has taken, days reclaimed (Reap, Ember, rites), and how many workings you have cast in battle and on the map. When the fire will finally burn out, it does not say — the fire keeps that count, and it does not give receipts.
 
@@ -821,11 +636,15 @@ A random NPC lord may initiate a scheme each day — at most one new scheme laun
 
 ---
 
-## Main Quest — The Last Flight of the Dragons
+## The Last Flight of the Dragons *(retired — cannot start in The Darkest Night)*
+
+> **This is not the main quest, and it will never begin.** Ash and Ember's campaign-ending questline was retired in v0.6.0 (`DragonQuestSystem.DormantForDarkestNight`): its premise — a First Emperor's soul shattered into a world-ending cycle — has no place in this world, which already owns that narrative slot with **the Demon Lord endgame** (see *The clock of the apocalypse* above). Its sibling, *The Hunger of the Void* (`AshenQuestSystem`), is retired the same way.
+>
+> Both are documented below as reference only. A quest already in progress in a save from an earlier build still resolves normally — nothing was deleted, only the trigger was gated off.
 
 *"There is a way to rekindle the world. One great burning — everything, at once."*
 
-### Trigger
+### Trigger *(gated off — retained for saves that already started it)*
 
 Defeat an Ashen lord's party for the first time. A dying old mage approaches you. He has been looking for someone for forty years.
 
@@ -1226,148 +1045,7 @@ Pass the path manually: `.\install.ps1 -BannerlordPath "D:\Games\Mount & Blade I
 
 ---
 
+
 ## Changelog
 
-### v0.15.0
-
-**Overhaul — Sanctuary and Ashen Altar now use iterative ritual mechanics**
-
-Both systems have been redesigned from flat pay-and-receive interactions into multi-round rituals with hidden target thresholds.
-
-**Sanctuary — Meditation ritual:**
-- Selecting a prayer starts a ritual. The game rolls a secret target threshold (never shown).
-- Each round of Meditation inflicts a self-sacrifice cost on the hero: 8–25 HP drained per round depending on rite (clamped to 1 HP minimum — the ritual never kills you outright). The two heaviest rites also cost days of life (aging): Protective Rites 1 day/round, Prayer for a Blessing 2–4 days/round.
-- A hidden number of points is added to the accumulated pool each round. Points scale with alignment — (Mercy + Honor + Generosity) / 6 — so high-alignment characters accumulate faster and need fewer rounds.
-- After each round the player chooses *Continue* or *Stop*. If accumulated points ≥ target when they stop, the prayer fires. If not, the cost paid is lost.
-- Atmospheric hints give a vague sense of progress without revealing the number.
-- Cooldowns are unchanged in base length but reduced 40% for Temple members.
-- Gold and livestock payments removed; the ritual cost replaces them.
-
-**Ashen Altar — Sacrifice ritual:**
-- Same structure. The per-round cost is sacrifice points (prisoners first, then healthy party members). Morale drains proportional to blood spent.
-- *Rite of Subjugation* uses 20 morale per round instead of sacrifice points, so the prison roster is preserved for the conversion effect at success.
-- If the player runs out of available sacrifice mid-ritual, the ritual resolves immediately at the current accumulated total.
-
-**NPC lords — simulated rituals:**
-- Both sanctuary lords and altar lords now simulate ritual rounds rather than applying effects directly. They roll 3–4 rounds of the ritual; if their simulated accumulation meets the threshold, the effect applies. Lords with misaligned traits for their system fail their rituals at realistic rates.
-
-**Balance (v0.15.1 update):**
-- Access gates removed: any hero may attempt any rite. `RollRoundPoints` now returns a floor of 1 pt/round at zero or misaligned multiplier, so success is always possible — but requires ~14–45 rounds depending on rite difficulty, and rewards scale with alignment so a zero-trait hero succeeds for almost nothing.
-- Cooldowns raised to prevent spam: Sanctuary healing 5 → 7 days (matching the wounding rites it recovers from), Turn the Ashen and Protective 5/7 → 10 days, Blood Tribute and Cold Fire 3 → 7 days. Blessing and Solstice unchanged.
-- Location depletion added: after 5 ritual starts at any one sanctuary or altar, the location rests 30 days. Forces travel rather than sitting in one city indefinitely.
-- Sanctuary rite menu options now show per-round HP cost (e.g., "8–15 hero HP/round") so players know what self-sacrifice they are committing to before entering.
-- The hidden target is rolled fresh each attempt, creating variance even for repeated use of the same rite.
-
----
-
-### v0.14.1
-
-**New mechanic — Ritual memory minigame for campaign map casting**
-
-Casting a campaign spell now opens a short ritual memory game. A 3-step ritual description appears (two sentences per step, drawn from three possible variants per step). The player must then identify each step's exact phrasing from its three variants. Recall score scales the spell's output power. The aging cost is always paid.
-
-| Correct | Multiplier |
-|---------|-----------|
-| 3 / 3 | 1.50× |
-| 2 / 3 | 1.00× (baseline — unchanged from previous behaviour) |
-| 1 / 3 | 0.75× |
-| 0 / 3 | 0.50× |
-
-A "Cast without the rite" button skips the minigame at 1.00× for players who prefer the direct route.
-
-All six campaign spell effects now scale with the multiplier: morale deltas, influence, gold, hearth reduction, troop count, and Fade duration (3/3 extends concealment by one extra day).
-
----
-
-### v0.12.0
-
-**Balance — Spell aging cost is now geometric (applies to player AND mage lords)**
-
-Battle spell cost now follows a geometric curve. Weak spells stay cheap; powerful spells become meaningfully expensive. Hard cap: 84 campaign days (1 Bannerlord year = 4 seasons × 21 days). Mage lords now pay the same geometric rate — previously they were undercharged. Off-screen battles also now apply a small random aging to mage lords who participated.
-
-| Total inputs | Cost | With BattleMage |
-|---|---|---|
-| 1–2 | 1 day | 1 day |
-| 5 | 4 days | 3 days |
-| 7 | 8 days | 7 days |
-| 10 | 21 days | 20 days |
-| 14 | 80 days | 79 days |
-| 16+ | 84 days (cap) | 83 days |
-
-**Bug fix — Minimum mage age is now 20**
-
-Rejuvenation effects (Reap talent, Ember kills) can no longer push hero age below 20.
-
-**Bug fix — Reap lord execution no longer fires twice**
-
-Added deduplication guard against HeroKilledEvent double-firing.
-
-**AI — Enemies scatter after AOE spells**
-
-Surviving non-hero enemies near a Burst, Blast, or Missile explosion scatter outward. Units just outside the hit radius also react.
-
-**AI — Barrier warning zone extended**
-
-Enemies avoid a fire wall from 5 m beyond the barrier edge (was 3.5 m). Hero-tier enemies also nudge away.
-
-**Schemes — "Hire an Assassin (wound)" removed**
-
-Replaced: a failed Assassination now has a 30% chance to bloody the target's escort before the blade breaks off (near-miss outcome instead of a separate scheme).
-
-**World — Ashen lords escape captivity after 3 days**
-
-The cold does not yield to chains. Any Ashen lord held prisoner for 3 days automatically escapes at midnight.
-
-**World — Ashen lords cannot have children**
-
-The cold preserves; it does not create. Births to Ashen parents no longer occur. Instead, mage lords aged 80+ now have a small daily chance of hearing the cold's call and converting to Ashen (chance scales with age). A mage lord who ages 15+ days in a single battle also has an 8% chance of conversion.
-
-**World — NPC mage lords age from all battles, not just player battles**
-
-Mage lords now receive small random aging (1–3 days, 40% chance) from off-screen battles where the player was not present.
-
-### v0.12.2
-
-**AI — Larger NPC blast and burst spells; cost scales automatically**
-
-All mage lord and Ashen lord combat spells now fire at larger form counts, increasing range and radius. Cost adjusts automatically because `RecordCast` feeds each cast through the same geometric aging formula the player uses.
-
-| Situation | Old form | New form | Old range/radius | New range/radius |
-|---|---|---|---|---|
-| Non-Ashen lord — standard blast/burst | 2 | 3 | 5 m | 7.5 m |
-| Non-Ashen lord — near-death defensive burst | 2 | 3 | 5 m | 7.5 m |
-| Non-Ashen lord — surrounded (3–4 enemies) | 2 | 3 | 5 m | 7.5 m |
-| Non-Ashen lord — surrounded (5+ enemies) | 3 | 4 | 7.5 m | 10 m |
-| Ashen lord — standard blast/burst | 2–3 | 3–4 | 5–7.5 m | 7.5–10 m |
-| Ashen lord — heavy cast (many targets) | 3 | 4 | 7.5 m | 10 m |
-| Ashen lord — near-death defensive burst | 3 | 4 | 7.5 m | 10 m |
-| Ashen lord — surrounded (5+) | 3 | 5 | 7.5 m | 12.5 m |
-
-Detection ranges used for the friendly-fire check updated to match (`blastRange` 6→8 m for lords, 8→10 m for Ashen; burst-check radius 5→7.5 m for lords, 5→10 m for Ashen).
-
-Aging cost examples (auto-computed, no manual change needed):
-- Standard lord cast: 6 inputs → **5 days** (was 4 inputs → 3 days)
-- Ashen heavy cast: 8 inputs → **11 days** (was 6 inputs → 5 days)
-- Ashen surrounded 5-cast: 10 inputs → **21 days** (was 6 inputs → 5 days)
-
----
-
-### v0.12.1
-
-**World events — Whispers from the Ash fires twice as often**
-
-Chance per week raised from 1.5% to 3% (~every 33 weeks instead of ~every 67 weeks). Mage lords defecting to the Ashen are now a more regular part of a long campaign.
-
-**World events — The Temple is nearly guaranteed by day 250**
-
-After day 250 the Temple founding chance jumps from 4%/week to 85%/week, so it fires within 1–2 weeks past that threshold. The normal 4%/week rate still applies between day 100 and day 250.
-
----
-
-### v0.11.2
-
-NPC spell AI: improved friendly fire avoidance and target-density scaling.
-
-### v0.11.0
-
-Ashen Altars, Sanctuary, Schemes, Dragon Quest, and 27 world events.
+The full release history lives in [`CHANGELOG.md`](CHANGELOG.md) — including the Ash and Ember era (v0.11 onward), which was previously archived here.

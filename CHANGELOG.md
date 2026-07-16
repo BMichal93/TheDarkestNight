@@ -2,6 +2,38 @@
 
 ---
 
+## Unreleased
+
+No gameplay changes. Housekeeping, saves untouched throughout.
+
+### The mod finally answers to its own name
+The C# namespace is **`TheDarkestNight`** (was `AshAndEmber`) across all 432 source files, along with `TheDarkestNightSaveDefiner` and the `SubModuleClassType` entry point. Verified by a green build and 627/627 tests.
+
+The rename had been deferred since v0.1.0 as too risky for saves. That rationale turned out not to survive checking: `SaveDefiner` persists **numeric ids**, never type names; all 544 `SyncData` keys are hand-written prefixes (`SEA_*`, `APOC_*`) with no namespace in them; and the item ids are `aae_*`, which a namespace rename never matches. Nothing in a save records the C# namespace.
+
+What genuinely does persist is untouched and documented in `CLAUDE.md` as not-to-be-tidied: the `aae_*` item ids (they sit in player inventories), the `AshAndEmber.dll` assembly and `Modules/AshAndEmber/` folder (renaming those is a **breaking install change**, deferred to its own release), and `InternalsVisibleTo("AshAndEmber.Tests")`, which matches the test *assembly* name and is independent of the namespace.
+
+### The documentation caught up with the mod
+`README.md` had been frozen at **v0.1.0** for six releases — it is now a version sync point in `behaviour.md` (the bump touches five places, not four). It told players to tick a mod named "Ash and Ember" in the launcher and to expect an "The Inner Fire" prompt that the code titles "The Gift" — so a correct install looked broken. The retired Ash and Ember caster paths moved to **`LEGACY.md`**; they remain the authoritative description of how spells behave for NPC casters, but they are no longer presented as things you can do.
+
+`CLAUDE.md`'s architecture map was missing six live systems entirely (`Expeditions/`, `ForeignMuster/`, `BeastsOfTheNorth/`, `Units/`, `Mage/`, `Talents/`) and undercounted the codebase by 63% (~65K/250 files → ~106K/430). It now also records v0.7.0's verified agent-scaling hooks (`Agent.SetInitialAgentScale`, `MBAgentVisuals.ApplySkeletonScale`), superseding the v0.2.0 note that claimed no safe runtime scale surface existed.
+
+### Recovered history
+`CHANGELOG.md` was missing **v0.15.0, v0.12.2, v0.12.1, v0.11.2, and v0.11.0** — its `v0.11.x` entry read *"no changelog recorded"* while README's archive quietly held the records. All five are merged back; README now points here.
+
+### Housekeeping
+47 test build artifacts untracked and gitignored (`tests/bin`, `tests/obj` — `.gitignore` already covered `src/`), taking the last `TheWitheringArt` / `ColoursOfCalradia` ghosts with them. `dist/AshAndEmber/bin/**/*.dll` stays tracked deliberately: those are the pre-built DLLs `install.ps1` installs for players who don't build from source. `behaviour.md`'s documented Bannerlord DLL path pointed at a dead Xbox GUID folder and now resolves from `$env:BannerlordPath` instead.
+
+---
+
+## v0.7.1 — A Watchman Who Cannot Read
+
+No gameplay changes. This is a version bump only.
+
+The official launcher marks the mod with a red warning — *"Couldn't verify some or all of the code included in this module."* It is cosmetic and safe to ignore. The launcher hands every enabled community DLL to `bin\ModVerifier\ModVerifier.exe` before listing it; on Xbox / Game Pass installs that tool is not shipped, so the check cannot run, and a check that cannot run is recorded as a failure. Any enabled community mod on such an install draws the same mark. Nothing in the mod, its deployment, or its load order is at fault, and there is nothing on this side to fix.
+
+---
+
 ## v0.7.0 — The Shapes in the Dark
 
 ### Demons read as beasts, not reskinned looters
@@ -1297,6 +1329,40 @@ Damage enchantments are split across the Sear/Force/Shred natures, so one cast o
 
 ---
 
+## v0.15.0
+
+**Overhaul — Sanctuary and Ashen Altar now use iterative ritual mechanics**
+
+Both systems have been redesigned from flat pay-and-receive interactions into multi-round rituals with hidden target thresholds.
+
+**Sanctuary — Meditation ritual:**
+- Selecting a prayer starts a ritual. The game rolls a secret target threshold (never shown).
+- Each round of Meditation inflicts a self-sacrifice cost on the hero: 8–25 HP drained per round depending on rite (clamped to 1 HP minimum — the ritual never kills you outright). The two heaviest rites also cost days of life (aging): Protective Rites 1 day/round, Prayer for a Blessing 2–4 days/round.
+- A hidden number of points is added to the accumulated pool each round. Points scale with alignment — (Mercy + Honor + Generosity) / 6 — so high-alignment characters accumulate faster and need fewer rounds.
+- After each round the player chooses *Continue* or *Stop*. If accumulated points ≥ target when they stop, the prayer fires. If not, the cost paid is lost.
+- Atmospheric hints give a vague sense of progress without revealing the number.
+- Cooldowns are unchanged in base length but reduced 40% for Temple members.
+- Gold and livestock payments removed; the ritual cost replaces them.
+
+**Ashen Altar — Sacrifice ritual:**
+- Same structure. The per-round cost is sacrifice points (prisoners first, then healthy party members). Morale drains proportional to blood spent.
+- *Rite of Subjugation* uses 20 morale per round instead of sacrifice points, so the prison roster is preserved for the conversion effect at success.
+- If the player runs out of available sacrifice mid-ritual, the ritual resolves immediately at the current accumulated total.
+
+**NPC lords — simulated rituals:**
+- Both sanctuary lords and altar lords now simulate ritual rounds rather than applying effects directly. They roll 3–4 rounds of the ritual; if their simulated accumulation meets the threshold, the effect applies. Lords with misaligned traits for their system fail their rituals at realistic rates.
+
+**Balance (v0.15.1 update):**
+- Access gates removed: any hero may attempt any rite. `RollRoundPoints` now returns a floor of 1 pt/round at zero or misaligned multiplier, so success is always possible — but requires ~14–45 rounds depending on rite difficulty, and rewards scale with alignment so a zero-trait hero succeeds for almost nothing.
+- Cooldowns raised to prevent spam: Sanctuary healing 5 → 7 days (matching the wounding rites it recovers from), Turn the Ashen and Protective 5/7 → 10 days, Blood Tribute and Cold Fire 3 → 7 days. Blessing and Solstice unchanged.
+- Location depletion added: after 5 ritual starts at any one sanctuary or altar, the location rests 30 days. Forces travel rather than sitting in one city indefinitely.
+- Sanctuary rite menu options now show per-round HP cost (e.g., "8–15 hero HP/round") so players know what self-sacrifice they are committing to before entering.
+- The hidden target is rolled fresh each attempt, creating variance even for repeated use of the same rite.
+
+---
+
+---
+
 ## v0.14.1
 
 ### New mechanic: Arcane sequence minigame for campaign map spell casting
@@ -1407,6 +1473,48 @@ A large number of settlement, battle, and siege encounters have been removed fro
 
 ---
 
+## v0.12.2
+
+**AI — Larger NPC blast and burst spells; cost scales automatically**
+
+All mage lord and Ashen lord combat spells now fire at larger form counts, increasing range and radius. Cost adjusts automatically because `RecordCast` feeds each cast through the same geometric aging formula the player uses.
+
+| Situation | Old form | New form | Old range/radius | New range/radius |
+|---|---|---|---|---|
+| Non-Ashen lord — standard blast/burst | 2 | 3 | 5 m | 7.5 m |
+| Non-Ashen lord — near-death defensive burst | 2 | 3 | 5 m | 7.5 m |
+| Non-Ashen lord — surrounded (3–4 enemies) | 2 | 3 | 5 m | 7.5 m |
+| Non-Ashen lord — surrounded (5+ enemies) | 3 | 4 | 7.5 m | 10 m |
+| Ashen lord — standard blast/burst | 2–3 | 3–4 | 5–7.5 m | 7.5–10 m |
+| Ashen lord — heavy cast (many targets) | 3 | 4 | 7.5 m | 10 m |
+| Ashen lord — near-death defensive burst | 3 | 4 | 7.5 m | 10 m |
+| Ashen lord — surrounded (5+) | 3 | 5 | 7.5 m | 12.5 m |
+
+Detection ranges used for the friendly-fire check updated to match (`blastRange` 6→8 m for lords, 8→10 m for Ashen; burst-check radius 5→7.5 m for lords, 5→10 m for Ashen).
+
+Aging cost examples (auto-computed, no manual change needed):
+- Standard lord cast: 6 inputs → **5 days** (was 4 inputs → 3 days)
+- Ashen heavy cast: 8 inputs → **11 days** (was 6 inputs → 5 days)
+- Ashen surrounded 5-cast: 10 inputs → **21 days** (was 6 inputs → 5 days)
+
+---
+
+---
+
+## v0.12.1
+
+**World events — Whispers from the Ash fires twice as often**
+
+Chance per week raised from 1.5% to 3% (~every 33 weeks instead of ~every 67 weeks). Mage lords defecting to the Ashen are now a more regular part of a long campaign.
+
+**World events — The Temple is nearly guaranteed by day 250**
+
+After day 250 the Temple founding chance jumps from 4%/week to 85%/week, so it fires within 1–2 weeks past that threshold. The normal 4%/week rate still applies between day 100 and day 250.
+
+---
+
+---
+
 ## v0.12.0
 
 ### Balance: Battle spell cost — geometric scaling
@@ -1461,6 +1569,17 @@ Each dream stage in the trinket settlement encounter now picks from 2–3 varian
 
 ---
 
-## v0.11.x
+## v0.11.2
+
+NPC spell AI: improved friendly fire avoidance and target-density scaling.
+
+---
+
+## v0.11.0
+
+Ashen Altars, Sanctuary, Schemes, Dragon Quest, and 27 world events.
+---
+
+## v0.10.x and earlier
 
 *(previous releases — no changelog recorded)*
