@@ -46,8 +46,14 @@ namespace AshAndEmber
 
         // The combat skills the join gate checks for any invested focus point —
         // mirrors the exact set AmbientRemarks.cs already treats as "weapon
-        // skills" for this codebase.
-        private static readonly SkillObject[] _combatSkills =
+        // skills" for this codebase. Built on demand rather than in a static
+        // field initializer: the DefaultSkills.* accessors are null until the
+        // engine has populated them, and this type's .cctor runs during
+        // OnGameStart (via ResetForNewGame) — reading them there threw a
+        // TypeInitializationException that poisoned the whole behavior for the
+        // session. AmbientRemarks.cs reads the same set inside a method for the
+        // same reason.
+        private static SkillObject[] CombatSkills() => new[]
         {
             DefaultSkills.OneHanded, DefaultSkills.TwoHanded, DefaultSkills.Polearm,
             DefaultSkills.Bow, DefaultSkills.Crossbow, DefaultSkills.Throwing,
@@ -167,7 +173,7 @@ namespace AshAndEmber
                 int endurance = hero.GetAttributeValue(DefaultCharacterAttributes.Endurance);
                 int combatFocus = 0;
                 if (hero.HeroDeveloper != null)
-                    foreach (var skill in _combatSkills)
+                    foreach (var skill in CombatSkills())
                         try { combatFocus += hero.HeroDeveloper.GetFocus(skill); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
 
                 return BloodboundMath.QualifiesForBloodbound(vigor, endurance, combatFocus);

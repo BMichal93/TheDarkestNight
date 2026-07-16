@@ -32,6 +32,9 @@ namespace AshAndEmber
     {
         private const BindingFlags F = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
+        // The sole surviving background's culture id (Requirement 23, Step 1).
+        private const string EmpireId = "empire";
+
         // One renamed card per culture: display name, lore (feat-free), and the
         // cultural feats shown in the dedicated feats panel. Feats are listed
         // { positive, positive, negative } in display order, mirroring
@@ -49,12 +52,14 @@ namespace AshAndEmber
         private static readonly CultureCard[] Cards =
         {
             // Empire → the sole surviving background (Requirement 23, Step 1).
-            // RestrictBackgroundToSurvivor (CreationBackstoryRework) removes every
-            // other culture from the selection stage's option pool entirely, so
-            // this is the only card that will ever actually build — the rename
-            // still goes through this same VM-patch mechanism because the card
-            // caches its resolved name/description/feats the moment it is built,
-            // same as the other four renamed cultures below. No Feats: the brief
+            // The native culture stage still BUILDS a card for every base culture
+            // (its SortCultureList hard-requires them — see RestrictToEmpire and
+            // CreationBackstoryRework.RestrictBackgroundToSurvivor), but this fixer
+            // removes every non-Empire card from the live stage the moment it can,
+            // so "I am a survivor" is the only card the player ever sees. The
+            // rename still goes through this same VM-patch mechanism because the
+            // card caches its resolved name/description/feats the moment it is
+            // built, same as the other renamed cultures below. No Feats: the brief
             // strips every faction bonus from the standard options, and the one
             // background that remains carries none either.
             new CultureCard
@@ -205,9 +210,12 @@ namespace AshAndEmber
 
                 int budget = 8000;
                 var visited = new HashSet<object>(RefComparer.Instance);
-                // Cultures still awaiting a rewrite this pass.
-                var pending = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                foreach (var c in Cards) pending.Add(c.Id);
+                // Only the Empire card must be corrected before we release the gate:
+                // every other base culture's card is stripped by RestrictToEmpire once
+                // the stage is reached, so we neither wait on nor gate against them.
+                // (The Cards table still carries their rename data — harmless, and it
+                // documents what each culture was — but they are never displayed.)
+                var pending = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { EmpireId };
 
                 _stageVmThisPass = null;
                 // Direct path first: screen._currentStageView._dataSource IS the live
@@ -219,6 +227,11 @@ namespace AshAndEmber
                 object ds = CurrentStageDataSource(screen);
                 if (ds != null) Walk(ds, visited, 0, ref budget, pending);
                 else            Walk(screen, visited, 0, ref budget, pending);
+
+                // Survivor-only: now that the native SortCultureList (which needs all
+                // base-culture cards present) has run inside the stage's constructor,
+                // strip every non-Empire card so "I am a survivor" is the only pick.
+                RestrictToEmpire(_stageVmThisPass);
 
                 // Gate the stage while any card still shows its stale (vanilla) text:
                 // the rename lands a few frames after the screen is built, and we do
@@ -378,6 +391,38 @@ namespace AshAndEmber
                         : negative;
                     try { ft.GetProperty("Description", F)?.SetValue(feat, desc); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
                 }
+            }
+            catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+        }
+
+        // Removes every non-Empire card from the culture stage's bound Cultures
+        // list, leaving "I am a survivor" as the only selectable background. Safe
+        // to call ONLY after the native CharacterCreationCultureStageVM constructor
+        // has run — its SortCultureList does .Single(c => CultureID.Contains("vlan"
+        // /"stur"/"empi"/"aser"/"khuz")) and would throw if any base card were
+        // missing — but by the time this fixer can reach the live VM at all, that
+        // construction is long done. Empire stays pre-selected (set in
+        // CreationBackstoryRework.RestrictBackgroundToSurvivor), so trimming the
+        // rest leaves a valid, advanceable selection. Idempotent and guarded.
+        private static void RestrictToEmpire(object stageVm)
+        {
+            if (stageVm == null) return;
+            try
+            {
+                if (!(stageVm.GetType().GetProperty("Cultures", F)?.GetValue(stageVm) is IList cards)) return;
+
+                var toRemove = new List<object>();
+                foreach (var card in cards)
+                {
+                    if (card == null) continue;
+                    object culture = card.GetType().GetProperty("Culture", F)?.GetValue(card);
+                    string id = null;
+                    try { id = culture?.GetType().GetProperty("StringId")?.GetValue(culture) as string; }
+                    catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
+                    if (!string.Equals(id, EmpireId, StringComparison.OrdinalIgnoreCase)) toRemove.Add(card);
+                }
+                foreach (var card in toRemove)
+                    try { cards.Remove(card); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             }
             catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
         }

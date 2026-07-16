@@ -525,8 +525,10 @@
     <Compile Include="Tribes\TribalKingdomBehavior.cs"/>
   </ItemGroup>
 
-  <!-- Auto-copy DLL into the game's Modules folder after every successful build. -->
-  <Target Name="DeployToGame" AfterTargets="Build">
+  <!-- Auto-copy DLL into the game's Modules folder after every successful build.
+       Pass -p:SkipDeploy=true to build/test while the game is running (the game
+       locks the deployed DLL, which would otherwise fail the build). -->
+  <Target Name="DeployToGame" AfterTargets="Build" Condition="'$(SkipDeploy)' != 'true'">
     <PropertyGroup>
       <_ModuleBinDir>$(BannerlordPath)\Modules\AshAndEmber\bin\$(BannerlordBin)</_ModuleBinDir>
     </PropertyGroup>

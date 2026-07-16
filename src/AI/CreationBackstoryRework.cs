@@ -107,11 +107,6 @@ namespace AshAndEmber
         private static readonly FieldInfo OnConditionField =
             typeof(NarrativeMenuOption).GetField("_onConditionInternal", FPriv);
 
-        // Requirement 23, Step 1 — the culture-selection stage builds its card
-        // list from this dictionary (CultureObject -> focus/skill bonus pair).
-        private static readonly FieldInfo CulturesDictField =
-            typeof(CharacterCreationContent).GetField("_characterCreationCultures", FPriv);
-
         // A visibility condition that always passes — used to surface the two
         // Step-6 renames whose vanilla option is otherwise gated to a culture
         // that can no longer be picked (see ForceAlwaysVisible).
@@ -268,31 +263,32 @@ namespace AshAndEmber
 
         // ── Requirement 23, Step 1 — the sole background ─────────────────────
 
-        // Removes every culture but the Empire from the culture-selection stage's
-        // option pool (CharacterCreationContent._characterCreationCultures — the
-        // dictionary CharacterCreationContent.GetCultures() reads to build the
-        // stage's cards), so "I am a survivor" is the only pick that can ever be
-        // made. The card's own display text/lore/feats are rewritten by
-        // TempleCultureCardFixer (its Cards table carries the "empire" entry) —
-        // the same VM-patch mechanism already used for the other four renamed
-        // cultures, just extended to the one background this phase keeps.
+        // Pre-selects the Empire ("I am a survivor") as the only background the
+        // player ends up with, so "I am a survivor" is effectively the only pick.
+        //
+        // It deliberately does NOT strip the other cultures from
+        // CharacterCreationContent._characterCreationCultures: the native
+        // CharacterCreationCultureStageVM, when it builds, runs SortCultureList,
+        // which calls .Single(c => c.CultureID.Contains("vlan"/"stur"/"empi"/
+        // "aser"/"khuz")) over the built card list. An emptied pool makes those
+        // Single() calls throw "Sequence contains no matching element", which
+        // unwinds through LaunchSandboxCharacterCreation and wedges the whole
+        // character-creation screen (the intro freezes, no new game can start).
+        // So we leave the native pool whole — the native sort is happy — and the
+        // single-background restriction is enforced cosmetically by
+        // TempleCultureCardFixer, which removes every non-Empire card from the
+        // live stage view-model AFTER that sort has already run.
         private static void RestrictBackgroundToSurvivor(CharacterCreationManager m)
         {
             try
             {
                 var content = m?.CharacterCreationContent;
                 if (content == null) return;
-                if (!(CulturesDictField?.GetValue(content) is System.Collections.IDictionary dict)) return;
 
                 CultureObject empire = null;
                 try { empire = MBObjectManager.Instance?.GetObject<CultureObject>(EmpireCultureId); }
                 catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
-                if (empire == null) return;   // Empire missing — leave the vanilla pool alone rather than break creation.
-
-                var toRemove = new List<object>();
-                foreach (var key in dict.Keys)
-                    if (!(key is CultureObject c) || c.StringId != EmpireCultureId) toRemove.Add(key);
-                foreach (var key in toRemove) dict.Remove(key);
+                if (empire == null) return;   // Empire missing — leave creation alone rather than break it.
 
                 try { content.SetSelectedCulture(empire, m); } catch (System.Exception logEx) { AshAndEmber.ModLog.Error(logEx); }
             }
