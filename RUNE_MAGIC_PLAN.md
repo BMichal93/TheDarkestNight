@@ -340,6 +340,19 @@ one comment line each noting the distinction is deliberate.
   Calling/Sundering dear); ruins finds and the arcane backstory grant runes
   (`LearnRuneFromRuin`, `GrantStartingRune` — same stub-hook pattern as
   today); Ctrl+Shift+F12 debug grants all runes.
+- **"A stranger's book" keepsake** (`CreationBackstoryRework.Keepsakes.cs`,
+  `KeepsakeId.Book` — today: unlock + two random short formulas via
+  `QualifyingForArcaneStart`): now unlocks the Spellbook and grants **two
+  runes with a guaranteed shape** — the first is always one of the five
+  element runes; the second is either *another* element rune or one from a
+  curated starter pool (`RuneCatalog.StarterEligible`: the Long Mark, the
+  Bar, the Circle, the Mending, the Lamp — simple, safe first lessons; the
+  dark and blood runes — Night Mark, Price, Maw — are never in a stranger's
+  opening pages). Pure pick logic `RuneCatalog.PickStarterPair(Random)`,
+  tested: every possible pair is castable on day one (element alone works;
+  element+element fuses; element+form shapes). Keepsake menu/confirmation
+  text updated to say *runes*, not formulas ("two runes already written in a
+  stranger's hand").
 - **Spellbook UI** (`ShowSpellbook`): two sections — *The Marks* (known
   runes: name, triplet, meaning, solo working) and *The Craft* (a short
   static primer: repetition amplifies, elements fuse, the Long Mark throws,
@@ -397,7 +410,8 @@ discovery flow.
 
 **Phase 4 — NPCs + learning sources.** `SpellcasterLords`, `SpellcasterTroops`
 (+ their `*Math`), `TowerCampaignBehavior.Menus`/`TowerMath`, ruins/backstory
-grant hooks, debug grant-all.
+grant hooks, the "stranger's book" keepsake pair-grant
+(`RuneCatalog.PickStarterPair` + `Keepsakes.cs` text), debug grant-all.
 
 **Phase 5 — docs + version.** v0.9.0 bump in all **five** places
 (`src/TheDarkestNight.csproj`, `SubModule.xml`, `dist/TheDarkestNight/SubModule.xml`,
@@ -425,3 +439,6 @@ paragraph update, lore flavour strings.
   9. Old v0.8 save load → migration line, runes granted, wands still fire.
   10. Watch an NPC caster lord battle → bound sequences cast, occasional
       misfire.
+  11. New character with "a stranger's book" → Spellbook unlocked, exactly
+      two runes known, first always an element, and the pair casts something
+      real on day one.
