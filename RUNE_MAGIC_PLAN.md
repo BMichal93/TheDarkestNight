@@ -23,9 +23,9 @@ speed — scriving in empty air.
 Mechanically:
 
 - A **rune is exactly 3 marks** of U/D/L/R (W/A/S/D → U/L/D/R, same mapping
-  as today). 64 possible triplets; **21 are real runes** — the space stays
-  sparse, exactly like the old formula space (Requirement 16's old promise,
-  re-asserted by tests).
+  as today). 64 possible triplets; **28 are real runes** — the space stays
+  sparse enough that discovery is a hunt, and large enough that the hunt
+  lasts (re-asserted by tests).
 - Each rune **means something** (Fire, Water, Reach, Wall, Summon…) and
   **does something alone** (release after one rune = its base working).
 - **Repetition amplifies**: `DDD DDD` is twice-written Fire — longer burn,
@@ -64,11 +64,11 @@ Mechanically:
 
 ---
 
-## 2. The rune catalog (21 runes)
+## 2. The rune catalog (28 runes)
 
 New file: `src/Spellbook/RuneCatalog.cs` — pure data, no TaleWorlds types,
 mirroring `SpellbookCatalog`'s shape. Each rune: id, name, triplet, meaning,
-description, and its **solo working**.
+description, **grammatical role** (§3), and its **solo working**.
 
 Triplets are chosen so the five elements read as "pure strokes", modifiers as
 "turned strokes". (W=U, A=L, S=D, D=R.)
@@ -96,9 +96,19 @@ Triplets are chosen so the five elements read as "pure strokes", modifiers as
 | 19 | **The Rot** | `DRD` | SDS | Curse | Gnawing curse on the nearest foe (as Bonewind Curse, weakened) |
 | 20 | **The Beacon** | `RRU` | DDW | Rally | A hearth-glow that lifts the courage of every soul near it (as Hearthlight's morale half) |
 | 21 | **The Maw** | `DDL` | SSA | Hunger | Dark draw: small damage to nearest foe, half returned as healing (new small effect from `DamageAgent`+`HealAgent`) |
+| 22 | **The Vigil** | `ULD` | WAS | Linger | Alone: harmless fizzle, no burn ("the vigil keeps watch over nothing"). Bound: the working **persists** — bursts become lingering ground-patches, walls stand longer, summons stay, snares wait |
+| 23 | **The Brand** | `URD` | WDS | Imbue | Alone: a faint gleam along the blade, nothing more. Bound: element + Brand = the caster's **weapon carries the element** for a time (reuse the legacy enchantment machinery in `Spells/`) |
+| 24 | **The Husk** | `RDR` | DSD | Mantle | Alone: a brittle plain mantle (small ward). Bound: element + Husk = an **elemental mantle** — Cinder-husk burns attackers, Stone-husk soaks blows, Tide-husk shrugs off slow/burn, Gale-husk quickens the step |
+| 25 | **The Night Mark** | `DLR` | SAD | Dark | Alone: a breath of false night — foes falter, but nearby **demons quicken** (double-edged, reuses the FalseNight primitives). Bound: + Calling = **summon a demon** (rogue chance — it is the Night's, not yours); + element = darker working that also gnaws morale; **+ the Lamp = contradiction → spellburn** |
+| 26 | **The Price** | `DUL` | SWA | Blood | Alone: you bleed for nothing (self-damage, no burn roll — a lesson). Bound: costs a cut of the caster's health, multiplies the working's power beyond what repetition reaches |
+| 27 | **The Snare** | `LDR` | ASD | Trap | Alone: a bare snare — trips the first foe who crosses (tiny root). Bound: element + Snare = the working is **buried ahead** and detonates when a foe steps in |
+| 28 | **The Chain** | `RLD` | DAS | Arc | Alone: a static snap at the nearest foe, trivial damage. Bound: the working **leaps** foe-to-nearest-foe, up to 3 leaps at ~65% decaying power (vs the Echo's full-power duplicate at a *random* target) |
 
-Tests assert: exactly-3-mark triplets, all-distinct, only U/D/L/R, count ≥ 20,
-and space sparseness (21/64 < 35%).
+Tests assert: exactly-3-mark triplets, all-distinct, only U/D/L/R, count ≥ 25,
+and space sparseness (28/64 ≤ 45%).
+
+> The Night Mark is drawn `S-A-D` and the Vigil `W-A-S` — deliberate; the
+> keys spell the mood.
 
 > Naming note: rune names must stay climatic and mysterious per the project's
 > style — they are *marks*, not spells, so they read as nouns of the old
@@ -111,10 +121,26 @@ and space sparseness (21/64 < 35%).
 New file: `src/Spellbook/RuneSequenceMath.cs` — **pure** resolver, no
 TaleWorlds types, fully covered by `PureLogicTests`. Input: the ordered list
 of rune ids drawn this focus. Output: a `ResolvedWorking` struct
-(`Kind`, `Element`, `Power`, `Shape`, `TargetCount`, `Name`) or
+(`Kind`, `Element`, `Power`, `Form`, `TargetCount`, `Strain`, `Name`) or
 `Malformed` (→ fizzle + spellburn roll).
 
-Resolution rules, applied in order:
+### The binding is read as a sentence
+
+Every rune has one **grammatical role**, stored on its `RuneCatalog` entry:
+
+- **Matter** (5): Cinder, Tide, Stone, Gale, Wyrd — what the working is made of.
+- **Form** (5, mutually exclusive — at most ONE per binding): the Bar (wall),
+  the Calling (summon), the Long Mark (bolt), the Snare (trap), the Brand
+  (imbue). What the matter is poured into.
+- **Manner** (5, freely stackable): the Echo, the Chain, the Vigil, the
+  Price, the Night Mark. How the working behaves.
+- **Coda** (the rest): Circle, Shroud, Mending, Lamp, Fetter, Hush, Stride,
+  Rot, Beacon, Maw, Grave Mark, Sundering — self-contained workings that
+  simply stack their solo effect onto the binding.
+
+Resolution rules, applied in order (order of runes within the sequence does
+NOT matter — the resolver reads a multiset, which keeps it pure, testable,
+and forgiving):
 
 1. **Chunking** (input layer, but validated here): marks are consumed 3 at a
    time. A trailing 1–2 marks on release = malformed. A triplet that is not a
@@ -125,7 +151,7 @@ Resolution rules, applied in order:
    twice-fire example). Duration-type workings scale duration, damage-type
    scale damage — the resolver only outputs the scalar; the effect layer
    decides which axis it multiplies.
-3. **Elements fuse** (Req 7, 18). Distinct element runes present:
+3. **Matter fuses** (Req 7, 18) — by count of distinct element runes:
    - **1 element** → that element is the working's element.
    - **2 elements** → `ElementComboMath.TryFuse(a, b)` — the six fusions
      already implemented and tuned: Fire+Wind→**Lightning**,
@@ -134,33 +160,73 @@ Resolution rules, applied in order:
      Fire+Earth→**Magma**, Wind+Water→**Ice**, Wind+Earth→**Sandstorm**,
      Earth+Water→**Mire**. Element+Wyrd → the four battle **commands**
      (Onslaught/Quicken/Steadfast/Hold the Line), also already implemented.
-   - **3+ distinct elements** → **malformed** ("the weave tears").
-4. **Shape modifiers** re-form the working:
-   - **+ The Long Mark (Reach)** → projectile: the working flies as a bolt
-     and delivers its effect on impact. Reach+Fire = **Fireball** (the
-     existing `FireMissile` bolt); Reach+fusion = that fusion thrown
-     (Fog thrown far = the existing `FogThrowDistance`, extended).
-   - **+ The Bar (Wall)** → `CastWall(element)` — Fire Wall, Mistwall, etc.
+   - **3 elements, no Wyrd** → a named **Triad** — greater than any fusion,
+     and inherently unstable (see Strain): **The Tempest** (Fire+Wind+Water —
+     lightning strikes under a slowing rain), **The Eruption**
+     (Fire+Wind+Earth — a burning, blinding wave), **The Seething**
+     (Fire+Water+Earth — a boiling mire that burns and bogs), **The
+     Avalanche** (Wind+Water+Earth — a knockdown wave that roots). Each
+     Triad's effect composes two existing fusion/element casts — no new
+     engine surface.
+   - **All 4 elements** → **The Unbound Weave** — the mightiest working in
+     the catalog, a field-wide composite, and it *always* bites its caster
+     back (a guaranteed backlash component — self-damage — on top of Strain).
+   - **Wyrd + 2 or more other elements** → malformed — will is not matter;
+     the mind cannot share a weave with more than one other ("the weave
+     tears").
+4. **One Form re-shapes the whole working:**
+   - **The Long Mark (Reach)** → projectile: the working flies as a bolt and
+     delivers its effect on impact. Reach+Fire = **Fireball** (the existing
+     `FireMissile` bolt); Reach+fusion = that fusion thrown (Fog thrown far =
+     the existing `FogThrowDistance`, extended).
+   - **The Bar (Wall)** → `CastWall(element)` — Fire Wall, Mistwall, etc.
      Fusion walls use `ElementComboMath.WallFallback` (already written).
-     "Fog Wall" = Fog + Bar → the Mistwall path. 
-   - **+ The Calling (Summon)** → `ElementalFactory.SpawnElemental` of the
-     element's kind (fire/water/stone/storm… via the existing
-     `ElementalKind` mapping); amplified = higher tier.
-   - **+ The Echo (Multiply)** → the working strikes `1 + echoes` eligible
-     targets (extra random targets in range — Req 10's multiply).
-   - **Wall + Summon together**, or any two shape modifiers that cannot
-     co-exist → **malformed**.
-5. **Utility runes compose additively**: Circle/Shroud/Mending/Lamp etc.
-   stack their solo effect onto the working (e.g. `Cinder + Circle` = flame
-   burst + self-ward). A sequence of only utility runes just performs each.
-6. **Anything unresolvable** → malformed → fizzle + spellburn roll (Req 8).
+     "Fog Wall" = Fog + Bar → the Mistwall path.
+   - **The Calling (Summon)** → `ElementalFactory.SpawnElemental` of the
+     matter's kind (fire/water/stone/storm… via the existing `ElementalKind`
+     mapping; a Triad calls its dominant kind — the Tempest a storm
+     elemental); amplified = higher tier; + Night Mark = a **demon** instead
+     (`DemonFactory.SpawnDemon`, with a rogue chance).
+   - **The Snare (Trap)** → the working is planted ahead and detonates on
+     the first foe to cross it; the Vigil extends how long it waits.
+   - **The Brand (Imbue)** → the working is bound into the caster's wielded
+     weapon for a time.
+   - **Two or more Forms in one binding** → **malformed**.
+5. **Manner stacks:** the Echo adds `+1` random eligible target per echo
+   (Req 10's multiply); the Chain makes the working leap foe-to-nearest-foe
+   (≤3 leaps, ~65% decay per leap); the Vigil multiplies duration/persistence;
+   the Price costs a cut of the caster's health for a large power multiplier;
+   the Night Mark darkens the working (adds morale damage) and is the demon
+   key for the Calling. Night Mark + the Lamp in one binding = contradiction
+   → **malformed** (a special fizzle line — "the lamp gutters").
+6. **Codas compose additively**: Circle/Shroud/Mending/Lamp etc. stack their
+   solo effect onto the working (e.g. `Cinder + Circle` = flame burst +
+   self-ward). A sequence of only codas just performs each.
+7. **Strain — the price of ambition.** Every rune past the third adds
+   inherent spellburn risk *even to a perfectly valid binding*:
+   `StrainChance = (runeCount − 3) × 0.04`, reduced by the same Intellect
+   scaling as the fizzle-burn curve, floored at 0. Short bindings are safe
+   craft; a six-rune Triad is a gamble a master takes when the line breaks.
+   Strain is rolled after a successful cast — the working still happens; the
+   burn arrives on top of it.
+8. **Anything unresolvable** → malformed → fizzle + spellburn roll (Req 8).
+
+### Worked example
+
+`Gale + Cinder + Tide + Calling + Echo` (15 marks):
+matter Gale+Cinder+Tide → **the Tempest**; form the Calling → a **storm
+elemental**; manner the Echo → the summon doubled; 5 runes → 8% strain
+before Intellect. Result: *"The Twin Callings of the Tempest"* — two storm
+elementals torn into being, with a real chance the weave burns its caster.
+No table anywhere lists this spell; the grammar produced it.
 
 ### Composed names (Req 13)
 
 `RuneSequenceMath.ComposeName(resolved)` — pure string composition:
-element/fusion name (reuse `ElementComboMath.ElementName`) + shape word +
-amplification prefix. Examples: "Fire Blast", "Fireball", "Fog Wall",
-"Twice-Written Cinder", "Storm of Echoes". Shown on release via
+matter name (element / fusion via `ElementComboMath.ElementName` / Triad /
+"the Unbound Weave") + form word + manner qualifiers + amplification prefix.
+Examples: "Fire Blast", "Fireball", "Fog Wall", "Twice-Written Cinder",
+"The Twin Callings of the Tempest". Shown on release via
 `InformationManager.DisplayMessage` in the Spellbook's purple, exactly where
 "`{def.Name}` answers." prints today (`SpellbookInputHandler.TryResolve`).
 
@@ -207,6 +273,20 @@ New small effects needed (all from proven primitives):
 - **The Maw**: `DamageAgent` + `HealAgent(half)`.
 - **Echo targeting**: re-run the single-target effect on extra
   random eligible targets.
+- **Chain leaps**: nearest-to-nearest re-application with decay — a loop over
+  `NearestEnemy` excluding already-struck agents.
+- **Mantles** (the Husk): a mission-scoped token list (same shape as
+  `NatureEffects`' speed tokens / `SpellburnEffects._wildDemons`) — per-element
+  on-hit/passive behaviour, ticked from `MagicMissionBehavior`, cleared with
+  battle state.
+- **Snares**: a planted-position list checked against enemy proximity each
+  tick — the same pattern `ElementWallWards` uses for its standing lines.
+- **Brand**: reuse the legacy weapon-enchantment machinery in `Spells/`
+  (verify its current entry point against the DLL before wiring — never guess
+  the signature; see behaviour.md).
+- **Triads / the Unbound Weave**: each composes two (or more) existing
+  element/fusion casts fired together + the backlash self-damage — no new
+  engine surface.
 
 Everything else is a call into existing `ElementSpellEffects` /
 `ElementUltimates` / `ElementalFactory` / `SpellEffects` code.
@@ -301,9 +381,11 @@ Each phase ends with a green `dotnet build` + full `dotnet test` run.
 **Phase 1 — pure core.** `RuneCatalog.cs`, `RuneSequenceMath.cs` (resolver,
 amplification, naming, NPC bound-sequence list, legacy-spell→runes map),
 `SpellbookMath.NpcSpellburnChance`. Tests: triplet validity/uniqueness/
-sparseness, resolver table-driven cases (each grammar rule, each fusion,
-malformed cases), name composition, amplification curve, NPC burn curve,
-migration map completeness (every `SpellId` maps to only-known runes).
+sparseness, role assignment completeness, resolver table-driven cases (each
+grammar rule, each fusion, all four Triads, the Unbound Weave, Wyrd-overload
+and two-Form and Lamp/Night-Mark malformed cases), strain curve, name
+composition, amplification curve, NPC burn curve, migration map completeness
+(every `SpellId` maps to only-known runes).
 
 **Phase 2 — effects.** `SpellbookEffectPrimitives` lift-out (no behaviour
 change), `RuneEffects.cs`, force-bolt parameterisation in
@@ -337,6 +419,9 @@ paragraph update, lore flavour strings.
   4. `SSS SSS` → amplified burn duration.
   5. `SSS ADA` → "Fire Wall". `DDD LLL ADA` → "Fog Wall".
   6. Draw junk (`WSD` ×2) → fizzle, spellburn sometimes.
-  7. Old v0.8 save load → migration line, runes granted, wands still fire.
-  8. Watch an NPC caster lord battle → bound sequences cast, occasional
-     misfire.
+  7. `WDW SSS AAA SWS DAD` (Gale+Cinder+Tide+Calling+Echo) → two storm
+     elementals, "The Twin Callings of the Tempest", occasional strain burn.
+  8. `SAD SWS` (Night Mark + Calling) → a demon answers; sometimes it turns.
+  9. Old v0.8 save load → migration line, runes granted, wands still fire.
+  10. Watch an NPC caster lord battle → bound sequences cast, occasional
+      misfire.
