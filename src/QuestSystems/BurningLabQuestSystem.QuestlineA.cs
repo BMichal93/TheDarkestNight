@@ -431,7 +431,7 @@ namespace TheDarkestNight
                 {
                     string arName = arHero.Name?.ToString() ?? "The false emperor";
                     InformationManager.DisplayMessage(new InformationMessage(
-                        $"{arName} — the cold answers. {added} cult warriors emerge from shadow.",
+                        $"{arName} — the cold answers. {added} Hollow warriors emerge from shadow.",
                         new Color(0.4f, 0.5f, 0.8f)));
                 }
 
@@ -490,7 +490,7 @@ namespace TheDarkestNight
                     "Children are born without warmth in their lungs. The rivers run slower. The land does not grow.\n\n" +
                     "Calradia is the demon-cult's now — vast, still, perfect. The world the fires built is ended. " +
                     "You are standing in what comes after.\n\n" +
-                    "(cult Victory)";
+                    "(The Night's Victory)";
                 button = "The cold has won.";
             }
             else

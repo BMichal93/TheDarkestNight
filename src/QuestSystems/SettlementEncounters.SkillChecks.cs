@@ -75,8 +75,8 @@ namespace TheDarkestNight
                 "A woman in rough-spun wool steps into your path as you ride out. She carries a small child — you can see at a glance it is burning with fever. She has heard what you carry inside you. She weeps and offers nothing but her prayers.",
                 new List<InquiryElement>
                 {
-                    new InquiryElement("a", "Extend the inner fire to the child.", null, true,
-                        "The fire can be given. It is not without cost."),
+                    new InquiryElement("a", "Set a healing mark on the child.", null, true,
+                        "The work can be given. It is not without cost."),
                     new InquiryElement("b", "Refuse. The road pulls at you.", null, true,
                         "The road continues."),
                     new InquiryElement("c", "Press coins into her hands — see a healer.", null, true,
@@ -259,7 +259,7 @@ namespace TheDarkestNight
         {
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "✦  What She Sees",
-                "A girl of perhaps six stops playing and stares at you. Not at your horse, not at your armor — at you. She reaches toward something she cannot name, cannot see, but clearly senses — the same pull that will one day let her tap a formula of her own, if the Night doesn't take her first. Her mother pulls her back. The girl's eyes do not leave yours.",
+                "A girl of perhaps six stops playing and stares at your hands — not at your horse, not at your armor, but at the way your fingers still hold the shape of the last formula you tapped. She copies the motion, clumsily, watching to see whether anything answers. Nothing does; not yet, not without someone to teach her which marks mean something and which are only air. Her mother pulls her back. The girl's eyes do not leave your hands.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Crouch down and say a quiet word to her.", null, true,
@@ -280,10 +280,10 @@ namespace TheDarkestNight
                             break;
                         case "b":
                             ShiftTrait(DefaultTraits.Calculating, 1);
-                            Msg("The mother sees you see it. You nod once. She does not know what the nod means, but she will think about it later, and later still, and eventually she will start watching her daughter's hands near candles.", FireColor);
+                            Msg("The mother sees you see it. You nod once. She does not know what the nod means, but she will think about it later, and later still, and eventually she will start watching the shapes her daughter's hands make.", FireColor);
                             break;
                         case "c":
-                            Msg("You ride past. Behind you, the girl is still facing the direction you were. The fire in you turns back once, briefly, the way it does when it recognises its own.", FireColor);
+                            Msg("You ride past. Behind you, the girl is still facing the direction you were, her fingers repeating the half-shape they caught. Someone will teach her the rest, or no one will.", FireColor);
                             break;
                     }
                 }, null, "", false), false, true);
@@ -298,7 +298,7 @@ namespace TheDarkestNight
         {
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "✦  The Watching Figure",
-                "Leaving the city, you become aware — not by sight but by the particular absence of warmth — of someone in a building's shadow cataloguing your party. Grey cloak, pale still face, the patient posture of something that is not in a hurry because it has learned not to be. A demon-cult agent is noting your movements.",
+                "Leaving the city, you become aware — not by sight but by the particular absence of warmth — of someone in a building's shadow cataloguing your party. Grey cloak, pale still face, the patient posture of something that is not in a hurry because it has learned not to be. One of the Night's servants is noting your movements.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Confront them directly.", null, true,

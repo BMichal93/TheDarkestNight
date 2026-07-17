@@ -42,6 +42,16 @@ namespace TheDarkestNight
         //     slot so it cannot stack with another event in the same tick.
         private static void TryFireDeadMarch()
         {
+            // Legacy event — the risen dead are the Ashen kingdom's. Without a living
+            // Ashen kingdom (never created in new games; see LegacyContent.AshenEnabled)
+            // there is nothing to reinforce, so stay silent rather than announce a
+            // ghost host. A legacy save that still carries the kingdom is unaffected.
+            try
+            {
+                if (!Kingdom.All.Any(k => k.StringId == AshenKingdomId && !k.IsEliminated)) return;
+            }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+
             int day = (int)ElapsedCampaignDays();
 
             if (!_deadMarchFirstFired)
@@ -137,6 +147,17 @@ namespace TheDarkestNight
         private static void TryFireTheUndyingHost()
         {
             if (_undyingHostFired) return;
+
+            // Legacy event — the risen dead are the Ashen kingdom's. Without a living
+            // Ashen kingdom (never created in new games; see LegacyContent.AshenEnabled)
+            // there is nothing to reinforce, so stay silent rather than announce a
+            // ghost host. A legacy save that still carries the kingdom is unaffected.
+            try
+            {
+                if (!Kingdom.All.Any(k => k.StringId == AshenKingdomId && !k.IsEliminated)) return;
+            }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+
 
             double days = ElapsedCampaignDays();
             if (days < UndyingHostEarliestDay) return;

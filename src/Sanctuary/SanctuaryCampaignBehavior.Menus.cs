@@ -103,8 +103,8 @@ namespace TheDarkestNight
                             if (!blockedByDark && MageKnowledge.IsMage)
                             {
                                 int wt = MageKnowledge.WhisperTier;
-                                if (wt >= 3) coldNote = "  [the cold dims the flame: −2 Grace]";
-                                else if (wt >= 2) coldNote = "  [the cold resists the flame: −1 Grace]";
+                                if (wt >= 3) coldNote = "  [the Night dims the flame: −2 Grace]";
+                                else if (wt >= 2) coldNote = "  [the Night resists the flame: −1 Grace]";
                             }
 
                             int prayHpCost = TalentSystem.Has(TalentId.EmberCovenant) ? 8 : 12;
@@ -139,7 +139,7 @@ namespace TheDarkestNight
 
                             int wardPreview = TalentSystem.Has(TalentId.UnbrokenWard) ? 21 : 14;
                             MBTextManager.SetTextVariable("SANCT_WARD_TEXT",
-                                $"Take the Warding Seal  (costs 15 HP) — ward against Ashen events for {wardPreview} days{active}{cd}");
+                                $"Take the Warding Seal  (costs 15 HP) — ward against the Night's attentions for {wardPreview} days{active}{cd}");
                             try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         }
                         catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }

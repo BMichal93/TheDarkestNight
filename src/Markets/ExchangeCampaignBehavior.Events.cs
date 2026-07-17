@@ -60,7 +60,7 @@ namespace TheDarkestNight
                 if (MageKnowledge.IsMage)
                     options.Add(new InquiryElement("read",
                         $"Read the speaker's intent ({bonusM}% if sincere, nothing if lying)", null, true,
-                        "Let the Inner Fire taste his intentions. A sincere tip pays well; a false one costs you nothing."));
+                        "Let the reading-lines taste his intentions. A sincere tip pays well; a false one costs you nothing."));
 
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                     "The Exchange — Insider Tip",
@@ -87,13 +87,13 @@ namespace TheDarkestNight
                                         _ventureMultiplier = SpeculationMath.ApplyDelta(_ventureMultiplier, bonusM);
                                         _roundHistory.Add($"Tip (verified)  +{bonusM}%  →  {_ventureMultiplier}%");
                                         MBInformationManager.AddQuickInformation(new TextObject(
-                                            $"The Inner Fire reads no deceit in him. The {name} position gains {bonusM}%."));
+                                            $"The lines read no deceit in him. The {name} position gains {bonusM}%."));
                                     }
                                     else
                                     {
                                         _roundHistory.Add("Tip (false) — nothing gained.");
                                         MBInformationManager.AddQuickInformation(new TextObject(
-                                            "The Inner Fire finds cold calculation behind the offer — a misdirection. You wave him off."));
+                                            "The lines find cold calculation behind the offer — a misdirection. You wave him off."));
                                     }
                                     break;
                                 default: // ignore
@@ -221,7 +221,7 @@ namespace TheDarkestNight
                 if (MageKnowledge.IsMage)
                     options.Add(new InquiryElement("read",
                         "Read the factor spreading the news", null, true,
-                        "Let the Inner Fire taste his intent. Manufactured fear means the board may recover; a real embargo means cut and run."));
+                        "Let the reading-lines taste his intent. Manufactured fear means the board may recover; a real embargo means cut and run."));
 
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                     $"⚠  Embargo Scare — {name}",
@@ -256,7 +256,7 @@ namespace TheDarkestNight
                                         _ventureMultiplier = SpeculationMath.ApplyDelta(_ventureMultiplier, bonus);
                                         _roundHistory.Add($"Embargo (false)  +{bonus}%  →  {_ventureMultiplier}%");
                                         MBInformationManager.AddQuickInformation(new TextObject(
-                                            $"The Inner Fire finds theatre in him, not conviction. The embargo writ is leverage, not law. " +
+                                            $"The lines find theatre in him, not conviction. The embargo writ is leverage, not law. " +
                                             $"The {name} board ticks upward as the short sellers close. +{bonus}%"));
                                         ShowRound();
                                     }

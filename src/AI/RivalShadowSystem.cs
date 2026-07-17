@@ -74,7 +74,7 @@ namespace TheDarkestNight
                 InformationManager.DisplayMessage(new InformationMessage(
                     $"You sense a cold fire fixed on you — {shadow.Name} marks you as their quarry.",
                     new Color(0.38f, 0.50f, 0.75f)));
-                MageKnowledge._deferredInquiry = () => ShowDesignationEvent(shadow.Name?.ToString() ?? "an Ashen lord");
+                MageKnowledge._deferredInquiry = () => ShowDesignationEvent(shadow.Name?.ToString() ?? "a cult lord");
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
@@ -84,8 +84,8 @@ namespace TheDarkestNight
             InformationManager.ShowInquiry(new InquiryData(
                 "A Cold Attention",
                 $"Your name has begun to travel. Banners know it; courts repeat it.\n\n" +
-                $"Something else has heard it too. In the north, where the fire went out, " +
-                $"{shadowName} has turned their face toward you. The dark forces of the Ashen " +
+                $"Something else has heard it too. Out past the last watch-fires, where the Night keeps its own counsel, " +
+                $"{shadowName} has turned their face toward you. The servants of the dark " +
                 $"have noticed you — and one of them has made you their personal concern.\n\n" +
                 $"Expect their hand in your affairs.",
                 true, false, "I am ready", "",
@@ -256,7 +256,7 @@ namespace TheDarkestNight
                         title = "The Last Letter";
                         body  = $"You find the words written in charcoal on the inside of your tent. No one entered. No one saw anything.\n\n" +
                                 $"\"We are done writing. Four times we shaped your world and left our mark where you would find it. {shadowName} rides now — not to scheme, not to watch.\"\n\n" +
-                                "\"The Shadow comes to meet the fire. Prepare yourself. Or don't. It makes less difference than you think.\"";
+                                "\"The Shadow comes to meet the hand that draws. Prepare yourself. Or don't. It makes less difference than you think.\"";
                         break;
                 }
 
@@ -313,7 +313,7 @@ namespace TheDarkestNight
                     if (choice == "lead")
                     {
                         if (_rng.NextDouble() < lChance) OnShadowDefeated(shadowName);
-                        else OnDuelLoss(shadowName, "Your will bent under the cold.");
+                        else OnDuelLoss(shadowName, "Your will bent under the dark.");
                     }
                     else if (choice == "body")
                     {
@@ -366,7 +366,7 @@ namespace TheDarkestNight
                     {
                         ElementLordRegistry.SetAshen(nearest, false);
                         InformationManager.DisplayMessage(new InformationMessage(
-                            $"{nearest.Name} — the cold breaks in them. Something warmer stirs.",
+                            $"{nearest.Name} — the dark breaks in them. Something warmer stirs.",
                             new Color(0.9f, 0.6f, 0.3f)));
                     }
                 }

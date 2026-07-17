@@ -153,9 +153,9 @@ namespace TheDarkestNight
                 "The Temple's Covenant",
                 $"An envoy of The Temple finds your camp — grey-robed, travel-worn, unarmed. "
                 + $"They carry a letter sealed by {leaderName}.\n\n"
-                + "\"We have watched you. Your fire burns clean, and the cold has not found purchase in it. "
+                + "\"We have watched you. Your workings run clean, and the dark has not found purchase in them. "
                 + "The Temple offers covenant: stand with us against the demon-cult when we call, and our rites "
-                + "will steady your fire — every working in battle will cost you one day less of your life.\"\n\n"
+                + "will steady your hand — every working in battle will cost you one day less of your life.\"\n\n"
                 + "The envoy waits. The covenant binds both ways: the Temple will call for aid, "
                 + "and an answer will be expected.",
                 true, true,
@@ -173,7 +173,7 @@ namespace TheDarkestNight
                     }
                     catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     InformationManager.DisplayMessage(new InformationMessage(
-                        "The covenant is sworn. The Temple's rites settle over your fire like a steady hand — "
+                        "The covenant is sworn. The Temple's rites settle over your workings like a steady hand — "
                         + "battle workings now cost one day less.",
                         new Color(0.85f, 0.75f, 0.45f)));
                 },
@@ -202,7 +202,7 @@ namespace TheDarkestNight
                 new List<InquiryElement>
                 {
                     new InquiryElement("ride", "Ride with the strike", null, true,
-                        "Your veterans join the templar column. cult warbands are bloodied, your renown grows, and the Temple remembers."),
+                        "Your veterans join the templar column. Cult warbands are bloodied, your renown grows, and the Temple remembers."),
                     new InquiryElement("coin", $"Send coin ({goldOffer} denars)", null, true,
                         "Fund the strike without leaving your road. A smaller mark of faith, but a mark."),
                     new InquiryElement("decline", "Stand aside this time", null, true,
@@ -321,11 +321,11 @@ namespace TheDarkestNight
 
             string body = wasSworn
                 ? "A templar courier delivers a single torn page: your name, struck through in grey ink.\n\n"
-                  + "\"The covenant is revoked. The cold speaks through your fire now — we have heard it. "
+                  + "\"The covenant is revoked. The dark speaks through your workings now — we have heard it. "
                   + "Until it falls silent, you are anathema to The Temple, and our hunters will treat "
                   + "your column accordingly.\""
                 : "A templar courier delivers a single page bearing your name, struck through in grey ink.\n\n"
-                  + "\"The Temple has listened to your fire, and what answers is not the flame. "
+                  + "\"The Temple has listened to your workings, and what answers is not the Fire. "
                   + "You are declared anathema. Our hunters will be watching your roads.\"";
 
             if (MageKnowledge._deferredInquiry == null)

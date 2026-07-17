@@ -346,7 +346,7 @@ namespace TheDarkestNight
             ExpeditionTeamType.LegionVeterans   => "Old company men who took their discharge in coin, not a pension. Steadier under pressure, less likely to lose the leader — but they do not come cheap.",
             ExpeditionTeamType.ImperialScholars => "Sharper against the deepest sites, but the first thing to break when it goes wrong.",
             ExpeditionTeamType.HiredBlades      => "Cheap, quick, and loyal exactly as far as the coin reaches.",
-            ExpeditionTeamType.TempleWardens    => "Steady against the cold and the Ashen — and unwilling to go anywhere truly dark.",
+            ExpeditionTeamType.TempleWardens    => "Steady against the cold and the Night's own — and unwilling to go anywhere truly dark.",
             _ => "",
         };
 

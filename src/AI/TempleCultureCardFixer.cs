@@ -124,10 +124,10 @@ namespace TheDarkestNight
                     "The Northmen hold the cold edge of the world, where the forest gives way to ice and the "
                     + "winter nights run longest. They are a hard folk — raiders and shipwrights, sworn to oath, "
                     + "blood-feud, and the long memory of their kings.\n\n"
-                    + "But what truly shapes them is the war that never ends. Out of the deeper north press the "
-                    + "Ashen — the dead-cold lords who neither age nor tire — and it falls to the Northmen to "
+                    + "But what truly shapes them is the war that never ends. Out of the long dark press the "
+                    + "demons — dead-cold hunters that neither age nor tire — and it falls to the Northmen to "
                     + "stand in the gap. Every hall keeps its watch-fires burning; every child learns the axe "
-                    + "before the plough. They do not expect to break the cold. They expect to hold the line.",
+                    + "before the plough. They do not expect to break the Night. They expect to hold the line.",
                 Feats = new string[0],
             },
             // Aserai → the Duneborn. Name, blurb AND feats: the caravan bonus is
@@ -140,7 +140,7 @@ namespace TheDarkestNight
                 Name = "Duneborn",
                 Desc =
                     "The desert does not forgive, and the Duneborn stopped asking it to. Once they kept the same "
-                    + "covenant with the inner fire as every tribe beneath the sun — a warmth earned, a debt honoured. "
+                    + "covenant with the Fire as every tribe beneath the sun — a warmth earned, a debt honoured. "
                     + "Then came the long drought: three generations of cracked wells and a sun that gave nothing "
                     + "back for what it took, and the fire-covenant went dry along with everything else.\n\n"
                     + "In the black-glass caverns beneath the dunes, where no torch had ever burned, the first "

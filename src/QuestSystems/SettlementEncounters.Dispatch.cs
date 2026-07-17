@@ -198,7 +198,7 @@ namespace TheDarkestNight
 
         private static readonly string[] _enterVillageHints = {
             "Something stirs as you pass through the village.",
-            "A hush settles over the road — the fire feels it before you do.",
+            "A hush settles over the road — the marks you carry feel it before you do.",
             "The air changes as you enter the village.",
             "A dog stops barking when you pass. A child stops playing.",
         };

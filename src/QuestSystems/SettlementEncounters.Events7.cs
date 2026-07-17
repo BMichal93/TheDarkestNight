@@ -70,7 +70,7 @@ namespace TheDarkestNight
                     new InquiryElement("power",
                         "Agree — play for power.",
                         null, true,
-                        "Four gifts of the Inner Fire, against the fire itself."),
+                        "Four secrets of the work, wagered against the work itself."),
                 },
                 false, 1, 1, "Decide", "",
                 chosen =>
@@ -136,14 +136,14 @@ namespace TheDarkestNight
                                     "He flips the coin. It rises higher than it should, hangs for a long moment, " +
                                     "and falls heads. He sets four fingers briefly on the table — a count — then lifts them. " +
                                     "Something arrives in you that was not there before. Four things, settling " +
-                                    "into the fire like wood laid on a ready hearth. He says nothing. He leaves. " +
-                                    "The fire is louder in you than it was.",
+                                    "into your hands like marks you have always half-known. He says nothing. He leaves. " +
+                                    "The work is louder in you than it was.",
                                 winColor: FireColor,
                                 winAction: GrantMerchantTalents,
                                 lossMsg:
                                     "He flips the coin. It hangs — it actually hangs, suspended, for one long moment — " +
                                     "and then falls tails. He extends one hand across the table, palm up, and everything " +
-                                    "that made the fire yours leaves before you can reach for it. " +
+                                    "that made the work yours leaves before you can reach for it. " +
                                     "You can feel the shape of the absence. He is gone before the coin stops spinning.");
                             break;
                     }

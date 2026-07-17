@@ -313,11 +313,11 @@ namespace TheDarkestNight
             if (whisperTier >= 3)
             {
                 string[] cold = {
-                    "The campfire leans toward you when you sit close. It has been doing that more often.",
+                    "Your fingers trace a half-mark on your knee while you sit at the fire. You only notice when it is finished.",
                     "Someone in your column is watching your hands. You catch them at it twice. They don't look away.",
-                    "You wake in the night and the fire is out, but your hands are warm. You do not mention this to anyone.",
+                    "You wake in the night and the fire is out, but a faint line of light is fading on your palm. You do not mention this to anyone.",
                     "The ash from the campfire settles into a shape. You scatter it before anyone else sees.",
-                    "The cold feels closer tonight. Not the air — something behind the air. It has been like this for a while now.",
+                    "The dark feels closer tonight. Not the night — something behind it. It has been like this for a while now.",
                     "Your shadow on the tent wall doesn't quite match your movements. You watch it for a while. It catches up.",
                     "A soldier asks if you're feeling well. You say yes. He doesn't look convinced, and you're not sure you are either.",
                     "The frost near your bedroll melts in a ring no wider than your shoulders. You've stopped being surprised by it.",
@@ -333,8 +333,8 @@ namespace TheDarkestNight
                     "A young soldier asks how long you have been campaigning. You give a number. He goes quiet.",
                     "The fire is warm. You notice things like that now — small warmths. They matter more than they used to.",
                     "You ache in the morning. Not from injury. Just time. The fire helps.",
-                    "One of your men was born after you first carried the fire. You are trying not to think about that.",
-                    "The fire you lit tonight took no effort. That ease is not reassurance. You know what it means.",
+                    "One of your men was born after you traced your first formula. You are trying not to think about that.",
+                    "The ward you set over camp tonight took no effort at all. That ease is not reassurance. You know what it means.",
                     "A recruit half your age asks for advice. You give it. It sounds like something someone once told you, decades gone.",
                     "You count the years by scars now, not by seasons. There are more scars than there used to be.",
                     "You wake before the watch changes, out of habit rather than need. You lie still and let the fire finish the job for you.",
@@ -344,16 +344,16 @@ namespace TheDarkestNight
             }
             {
                 string[] mage = {
-                    "The fire burns a little too evenly tonight. No wind would explain it.",
+                    "The frost stops in a clean line an arm's reach from your bedroll. No wind would explain it.",
                     "You catch yourself staring into the campfire for longer than you meant to.",
-                    "The flame on your candle goes out. You light it again without thinking. Then you think about how you lit it.",
-                    "There is something satisfying about a good fire that has nothing to do with warmth. You know what it is. You don't say it.",
-                    "The fire in the hearth at the last inn bent toward you when you passed. The innkeeper did not notice.",
+                    "The flame on your candle goes out. You catch your hand halfway through the mark that would relight it — and think about when that became the first instinct.",
+                    "There is something satisfying in a well-drawn line that has nothing to do with what it is for. You know what it is. You don't say it.",
+                    "The charcoal ward above the last inn's door was drawn wrong. Your hand itched to correct it all evening. The innkeeper did not notice.",
                     "You press your palms together in the dark and feel them warmer than the night allows. You do not find this strange anymore.",
                     "A moth circles your hand instead of the lantern. You let it. You understand the impulse.",
                     "The embers hold their shape longer than embers should. You give them a moment before you scatter them.",
-                    "Rain falls all around camp and somehow not on your fire. You decide not to mention this to the men drying their boots.",
-                    "You warm your hands over a fire you didn't light. It still answers to you anyway.",
+                    "Rain falls all around camp and somehow not inside the line you drew at dusk. You decide not to mention this to the men drying their boots.",
+                    "You pass a ward-stone someone else set, and it brightens as you go by. It should not know your hand.",
                 };
                 return mage[_rng.Next(mage.Length)];
             }
@@ -632,11 +632,11 @@ namespace TheDarkestNight
                                     "The cold ones aren't raiding randomly. They're clearing routes. Someone should be paying attention.");
                     case RelationTier.Negative:
                         return Pick("The grey advance has a pattern. Consistent arc each season. Someone is directing it.",
-                                    "Cold kingdom expansion follows supply lines. For what that's worth.");
+                                    "The demons' advance follows the old supply lines. For what that's worth.");
                     case RelationTier.Neutral:
                         return Pick("The grey ones don't raid randomly. They're clearing routes. Someone is directing that.",
-                                    "I've been mapping the Ashen advance against the kingdom borders. The correlation is not coincidental.",
-                                    "The cold kingdom's expansion has been consistent — roughly the same arc each season. That takes planning.");
+                                    "I've been mapping the demons' advance against the walls that still hold. The correlation is not coincidental.",
+                                    "The dark's advance has been consistent — roughly the same arc each season. That takes planning.");
                     case RelationTier.Positive:
                         return Pick("I've been mapping the grey advance. Thought you'd want to know — the pattern suggests they're moving toward the river roads.",
                                     "The cold ones aren't random. I've been tracking it. I'll brief you when you have a moment.");

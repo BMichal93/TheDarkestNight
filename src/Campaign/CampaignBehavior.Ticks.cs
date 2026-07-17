@@ -252,8 +252,8 @@ namespace TheDarkestNight
                 if (lords.Count == 0) return;
 
                 InformationManager.DisplayMessage(new InformationMessage(
-                    $"The fire stirs — you sense other flames across Calradia. " +
-                    $"{lords.Count} lord{(lords.Count != 1 ? "s" : "")} carr{(lords.Count != 1 ? "y" : "ies")} the gift.",
+                    $"The fire stirs — you sense other workings across Calradia. " +
+                    $"{lords.Count} lord{(lords.Count != 1 ? "s" : "")} ha{(lords.Count != 1 ? "ve" : "s")} learned the symbols.",
                     new Color(0.7f, 0.5f, 1.0f)));
 
                 const int maxNamed = 5;

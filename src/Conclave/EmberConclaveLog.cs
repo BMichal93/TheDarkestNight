@@ -60,12 +60,12 @@ namespace TheDarkestNight
         internal void LogOpened() =>
             AddLog(new TextObject(
                 "Somewhere in Calradia, a circle of mage lords has formed in secret. " +
-                "They call themselves the Ember Conclave. They believe the Ashen can be controlled."));
+                "They call themselves the Ember Conclave. They believe the Night can be controlled."));
 
         internal void LogFirstContact() =>
             AddLog(new TextObject(
-                "The Ember Conclave has made contact. They believe they have discovered a way to direct the cold — " +
-                "to use the Ashen as a weapon rather than resist them. They are seeking allies."));
+                "The Ember Conclave has made contact. They believe they have discovered a way to direct the dark — " +
+                "to use the Night as a weapon rather than resist it. They are seeking allies."));
 
         internal void LogPlayerAllied() =>
             AddLog(new TextObject(
@@ -103,13 +103,13 @@ namespace TheDarkestNight
 
         internal void LogAllyEnding() =>
             AddLog(new TextObject(
-                "The binding worked. The throne stands occupied. The Conclave believed they had mastered the cold. " +
+                "The binding worked. The throne stands occupied. The Conclave believed they had mastered the dark. " +
                 "What sits in the high seat is not their candidate. " +
                 "The cold simply found a better container than they intended to provide."));
 
         internal void LogNeutralEnding() =>
             AddLog(new TextObject(
-                "The Ember Conclave is gone. Their candidate is Ashen — hollowed out and inhabited by something " +
+                "The Ember Conclave is gone. Their candidate is hollow — emptied out and inhabited by something " +
                 "that chose him long before their rite. The remaining members did not return from the hall. " +
                 "The cold does not negotiate. It waits, and then it takes."));
 
@@ -127,7 +127,7 @@ namespace TheDarkestNight
 
         internal void LogEnemyAscendantWarning() =>
             AddLog(new TextObject(
-                "The Conclave has chosen someone. A mage lord seen at multiple Ashen sites in close succession — " +
+                "The Conclave has chosen someone. A mage lord seen at multiple unhallowed sites in close succession — " +
                 "not as a scholar, but as a subject. Someone is being prepared for something. " +
                 "The rite is close. You do not know who the candidate is."));
 

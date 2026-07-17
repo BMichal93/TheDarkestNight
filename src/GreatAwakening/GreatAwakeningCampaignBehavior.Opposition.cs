@@ -35,7 +35,7 @@ namespace TheDarkestNight
             try
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "The Tower's kingdom is destroyed. Whatever waited beyond the Sands waits still — the Great " +
+                    "The Tower's realm is destroyed. Whatever waited beyond the Sands waits still — the Great " +
                     "Awakening has failed. The Dark Altar stands cold and unfinished."));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }

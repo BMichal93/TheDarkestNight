@@ -333,7 +333,7 @@ namespace TheDarkestNight
                 totalBurned += burned;
             }
 
-            string ashenPart = ashenHit > 0 ? $"{ashenHit} Ashen {(ashenHit == 1 ? "banner" : "banners")}" : "";
+            string ashenPart = ashenHit > 0 ? $"{ashenHit} Hollow {(ashenHit == 1 ? "banner" : "banners")}" : "";
             string wildPart  = wildHit  > 0 ? $"{wildHit} wild {(wildHit == 1 ? "band" : "bands")}"        : "";
             string who = (ashenPart.Length > 0 && wildPart.Length > 0) ? $"{ashenPart} and {wildPart}" : ashenPart + wildPart;
             return $"The Fire finds what resists it. {who} recoil — {totalBurned} burned or scattered.";
@@ -395,8 +395,8 @@ namespace TheDarkestNight
             try { SpellEffects.RecordMagicCast(pos); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (announce)
                 Log(caster, hit > 0
-                    ? $"calls down the light — {hit} Ashen recoil from the golden flame."
-                    : "calls down the light — but no Ashen are near enough to feel it.");
+                    ? $"calls down the light — {hit} Hollow recoil from the golden flame."
+                    : "calls down the light — but none of the Night's own are near enough to feel it.");
         }
 
         private static void BattleRadiantMending(Agent caster, bool announce)
@@ -647,7 +647,7 @@ namespace TheDarkestNight
             try { SpellEffects.RecordMagicCast(pos); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             if (announce)
-                Log(caster, $"calls the Undivided Flame — {ashenBurned} Ashen seared, {kindledBurned} Awakened unmade, " +
+                Log(caster, $"calls the Undivided Flame — {ashenBurned} Hollow seared, {kindledBurned} Awakened unmade, " +
                             $"{othersScorched} others burned, {alliesMended} allies mended.");
         }
 
@@ -668,7 +668,7 @@ namespace TheDarkestNight
                 .Where(t => t.d2 < rng2).OrderBy(t => t.d2).Take(3).Select(t => t.party).ToList();
 
             if (targets.Count == 0)
-                return "The golden light surges outward. No Ashen are near enough to feel its heat.";
+                return "The golden light surges outward. None of the Night's own are near enough to feel its heat.";
 
             int totalWounded = 0;
             foreach (var mp in targets)
@@ -686,7 +686,7 @@ namespace TheDarkestNight
                 try { mp.RecentEventsMorale -= 30f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 totalWounded += w;
             }
-            return $"The light of repulsion sweeps the horizon. {targets.Count} Ashen {(targets.Count > 1 ? "forces" : "force")} recoil. {totalWounded} grey soldiers burned.";
+            return $"The light of repulsion sweeps the horizon. {targets.Count} {(targets.Count > 1 ? "warbands" : "warband")} of the Night recoil. {totalWounded} grey soldiers burned.";
         }
 
         private static string CampaignRadiantMending(Hero hero, MobileParty party)

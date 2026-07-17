@@ -49,7 +49,7 @@ namespace TheDarkestNight
                 {
                     MBInformationManager.AddQuickInformation(new TextObject(
                         "The count is paid. The Dark Altar drinks the last of it — and The Great Other steps out " +
-                        "of the space behind the stone, into the Tower's service. Every kingdom in Calradia is now " +
+                        "of the space behind the stone, into the Tower's service. Every power left standing in Calradia is now " +
                         "the Tower's enemy, and the Tower means to keep it that way until the thing dies."));
                 }
                 catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }

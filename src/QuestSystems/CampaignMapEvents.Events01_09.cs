@@ -32,7 +32,7 @@ namespace TheDarkestNight
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "cult Plague — the sanctuary's protective ward turns it aside. The grey sickness finds no purchase."));
+                    "The Grey Plague — the sanctuary's protective ward turns it aside. The sickness finds no purchase."));
                 return;
             }
             try
@@ -73,7 +73,7 @@ namespace TheDarkestNight
 
                 if (totalWounded > 0 || spawned > 0)
                     MBInformationManager.AddQuickInformation(new TextObject(
-                        $"cult Plague — a grey sickness sweeps through the garrison of {target.Name}. " +
+                        $"The Grey Plague — a grey sickness sweeps through the garrison of {target.Name}. " +
                         $"{totalWounded} soldier{(totalWounded != 1 ? "s" : "")} are struck down by fever and ash." +
                         (spawned > 0 ? $" {spawned} demons close on the afflicted settlement." : "")));
                 RecordScar(target.StringId, 1);
@@ -138,7 +138,7 @@ namespace TheDarkestNight
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "cult March — the holy ward holds. The grey tide finds the roads blocked by something it cannot name."));
+                    "The Night's March — the holy ward holds. The grey tide finds the roads blocked by something it cannot name."));
                 return;
             }
             try
@@ -168,8 +168,8 @@ namespace TheDarkestNight
 
                 MBInformationManager.AddQuickInformation(new TextObject(
                     spawned > 0
-                        ? $"cult March — {spawned} demons descend upon {kingdom.Name}. The grey tide does not rest."
-                        : $"cult March — the grey tide stirs near {kingdom.Name}, but finds no foothold today."));
+                        ? $"The Night's March — {spawned} warbands of the Hollow descend upon {kingdom.Name}. The grey tide does not rest."
+                        : $"The Night's March — the grey tide stirs near {kingdom.Name}, but finds no foothold today."));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
@@ -212,7 +212,7 @@ namespace TheDarkestNight
 
             MBInformationManager.AddQuickInformation(new TextObject(
                 $"Long Night — the sun does not rise. {LongNightDuration} days of unbroken darkness fall over Calradia. " +
-                (spawned > 0 ? $"cult shapes pour from the shadow. {spawned} warbands take the roads." : "Something stirs in the dark.")));
+                (spawned > 0 ? $"The Hollow pour from the shadow. {spawned} warbands take the roads." : "Something stirs in the dark.")));
         }
 
         // ── Event 5: cult Tide ───────────────────────────────────────────────
@@ -226,7 +226,7 @@ namespace TheDarkestNight
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "cult Tide — the sanctuary's blessing turns the cold back. The castle holds."));
+                    "The Cold Tide — the sanctuary's blessing turns the cold back. The castle holds."));
                 return;
             }
             try
@@ -254,7 +254,7 @@ namespace TheDarkestNight
                 if (lord.Clan != null) AshenCitySystem.RegisterConqueredSettlement(castle, lord.Clan);
 
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    $"cult Tide — {castle.Name} bends to the cold fire. " +
+                    $"The Cold Tide — {castle.Name} bends to the cold. " +
                     $"{lord.Name} claims it without a blade drawn."));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
@@ -390,8 +390,8 @@ namespace TheDarkestNight
                 string darkenedMsg = IsTempleFaction(kingdom)
                     ? $"Darkened Roads — {destroyed} supply train{(destroyed != 1 ? "s" : "")} and pilgrim convoy{(destroyed != 1 ? "s" : "")} vanish on the holy roads of {kingdom.Name}. The tithe-carts do not arrive. The temple gates close early. " + (spawned > 0 ? "Something grey moves in the silence left behind." : "The pilgrims' road is cold and still.")
                     : IsTribes(kingdom)
-                    ? $"Darkened Roads — {destroyed} tribute-column{(destroyed != 1 ? "s" : "")} vanish on the steppe-roads of {kingdom.Name}. Tribute-riders do not return. The war-camp waits for gold and grain that will not arrive. " + (spawned > 0 ? "cult shapes follow the tribute-lanes east." : "The tribute roads are cold and empty.")
-                    : $"Darkened Roads — {destroyed} caravan{(destroyed != 1 ? "s" : "")} vanish on the roads of {kingdom.Name}. Trade dies. Prosperity crumbles. " + (spawned > 0 ? "cult shapes move where merchants once walked." : "The roads fall silent and cold.");
+                    ? $"Darkened Roads — {destroyed} tribute-column{(destroyed != 1 ? "s" : "")} vanish on the steppe-roads of {kingdom.Name}. Tribute-riders do not return. The war-camp waits for gold and grain that will not arrive. " + (spawned > 0 ? "Shapes of the Hollow follow the tribute-lanes east." : "The tribute roads are cold and empty.")
+                    : $"Darkened Roads — {destroyed} caravan{(destroyed != 1 ? "s" : "")} vanish on the roads of {kingdom.Name}. Trade dies. Prosperity crumbles. " + (spawned > 0 ? "Shapes of the Hollow move where merchants once walked." : "The roads fall silent and cold.");
                 MBInformationManager.AddQuickInformation(new TextObject(darkenedMsg));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }

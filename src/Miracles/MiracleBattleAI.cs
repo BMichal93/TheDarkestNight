@@ -152,8 +152,9 @@ namespace TheDarkestNight
                 string name = a.Character?.Name?.ToString() ?? "";
                 // Grace priests: Priest of the Flame, Sanctuary Priest, etc.
                 // Ashen Priests and Dark Priests use Dark Gifts, not Grace miracles.
-                return name.IndexOf("Ashen", StringComparison.OrdinalIgnoreCase) < 0
-                    && name.IndexOf("Dark",  StringComparison.OrdinalIgnoreCase) < 0;
+                return name.IndexOf("Ashen",  StringComparison.OrdinalIgnoreCase) < 0
+                    && name.IndexOf("Hollow", StringComparison.OrdinalIgnoreCase) < 0
+                    && name.IndexOf("Dark",   StringComparison.OrdinalIgnoreCase) < 0;
             }
             catch { return true; }
         }

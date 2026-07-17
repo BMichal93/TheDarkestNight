@@ -210,7 +210,7 @@ namespace TheDarkestNight
             bool autoPass = roguery > 150 || proficiency >= 10;
 
             InformationManager.ShowInquiry(new InquiryData(
-                "Ashen Wardens",
+                "Grey Wardens of the Ruin",
                 $"A patrol guards the approach to {def.RuinName}. Alone, you might slip past — or spend 2 aging days to create a distraction and guarantee it. Or wait for nightfall (costs 1 day).",
                 true, true, "Attempt to slip past", "Wait for nightfall (1 day, guaranteed)",
                 () =>

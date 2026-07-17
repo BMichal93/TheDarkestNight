@@ -51,7 +51,7 @@ namespace TheDarkestNight
         {
             { "looter",           "Fire Zealot"    },
             { "forest_bandit",    "Hedge Witch"     },
-            { "sea_raider",       "Ashen Caller"    },
+            { "sea_raider",       "Hollow Caller"   },
             { "mountain_bandit",  "Ash Shaman"      },
             { "steppe_bandit",    "Wind Dancer"     },
             { "desert_bandit",    "Ember Binder"    },
@@ -59,8 +59,8 @@ namespace TheDarkestNight
             { "fire_zealot",      "Fire Zealot"     },
             { "ember_caller",     "Ember Caller"    },
             { "ember_shaman",     "Ember Sorcerer"  },
-            { "ashen_thrall",     "Ashen Thrall"    },
-            { "ashen_invoker",    "Ashen Invoker"   },
+            { "ashen_thrall",     "Hollow Thrall"    },
+            { "ashen_invoker",    "Hollow Invoker"   },
             { "circle_acolyte",   "Acolyte"         },
             { "circle_druid",     "Druid"           },
             { "circle_shaman",    "Shaman"          },
@@ -258,7 +258,7 @@ namespace TheDarkestNight
                 string title = GetTitle(mage);
                 InformationManager.DisplayMessage(new InformationMessage(
                     isAshen ? $"The {title} draws the ashen cold!"
-                            : $"The {title} channels the fire!",
+                            : $"The {title} looses a working!",
                     isAshen ? new Color(0.45f, 0.55f, 0.70f)
                             : new Color(0.85f, 0.35f, 0.15f)));
 
@@ -320,8 +320,8 @@ namespace TheDarkestNight
                     {
                         SpellEffects.QueueKill(mage);
                         InformationManager.DisplayMessage(new InformationMessage(
-                            isAshen ? $"The {title} is consumed by the cold."
-                                    : $"The {title} is consumed by the fire.",
+                            isAshen ? $"The {title} is consumed by the dark."
+                                    : $"The {title} is consumed by their own working.",
                             isAshen ? new Color(0.35f, 0.42f, 0.55f)
                                     : new Color(0.6f, 0.2f, 0.1f)));
                     }

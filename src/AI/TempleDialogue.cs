@@ -91,7 +91,7 @@ namespace TheDarkestNight
             "The Order does not stand on ceremony. Say what you have come to say.",
             "Speak plainly. The vigil does not pause for titles.",
             "You stand before a servant of the Light. Make your words count.",
-            "Your fire reaches me before your name does. What is it you want?",
+            "The marks on you reach me before your name does. What is it you want?",
             "The march will not wait. Neither do I. Speak.",
             "You have been watched. The Order remembers every face that comes twice. What brings you here?",
             "Every Brother Templar keeps the same watch, whatever face wears the title today. What brings you to mine?",
@@ -115,7 +115,7 @@ namespace TheDarkestNight
         {
             "The vigil does not end with a single defeat. The Order continues whether I stand or not.",
             "Well struck. The Order teaches us to acknowledge that honestly. I acknowledge it.",
-            "The fire in you is not the cold. That matters more than the outcome of any single field.",
+            "What answers your hand is not the cold. That matters more than the outcome of any single field.",
         };
 
         private static readonly string[] _prisoners =

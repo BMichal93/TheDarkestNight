@@ -565,7 +565,7 @@ namespace TheDarkestNight
                     }
                     catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     MBInformationManager.AddQuickInformation(new TaleWorlds.Localization.TextObject(
-                        "[DEBUG] No hostile found — Ashen ambush spawned nearby."));
+                        "[DEBUG] No hostile found — demon ambush spawned nearby."));
                 }
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
