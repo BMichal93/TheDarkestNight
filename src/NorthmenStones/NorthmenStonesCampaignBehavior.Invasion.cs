@@ -25,15 +25,15 @@ namespace TheDarkestNight
             {
                 _invasion90Fired = true;
                 SpawnInvasionWave(2,
-                    "The Night can feel the stones close to whole — and demons come for Varcheg in a horde, " +
-                    "meaning to break the working before it binds shut for good.");
+                    "The Night can feel the stones close to whole — and demons pour toward Varcheg in a flood, " +
+                    "drawn to tear at the working the way beasts are drawn to a fire that burns them.");
             }
             else if (!_invasion75Fired && progress >= NorthmenStonesMath.InvasionThresholds[1])
             {
                 _invasion75Fired = true;
                 SpawnInvasionWave(1,
-                    "Three-quarters raised, and the Night has noticed. Warbands of demons break from the dark " +
-                    "and turn north, toward Varcheg.");
+                    "Three-quarters raised, and the Night has noticed. Packs of demons break from the dark " +
+                    "and turn north, toward Varcheg, hungry for whatever stands near the stones.");
             }
             else if (!_invasion50Fired && progress >= NorthmenStonesMath.InvasionThresholds[0])
             {

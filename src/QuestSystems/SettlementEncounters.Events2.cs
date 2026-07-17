@@ -463,7 +463,7 @@ namespace TheDarkestNight
                                         new InquiryElement("x1", "Execute him publicly — make an example.", null, true,
                                             "Crime +5. Village preserved. Relation with settlement lord +5."),
                                         new InquiryElement("x2", "Exile him. Tell the village what was found.", null, true,
-                                            "He escapes. The demon-cult lose this agent here, for now."),
+                                            "He escapes. The dark loses this servant here, for now."),
                                         new InquiryElement("x3", "Use him — feed false information through the channel.", null, true,
                                             "Calculating +1. Difficult to sustain, but the intelligence value is real."),
                                     },
@@ -479,11 +479,11 @@ namespace TheDarkestNight
                                                 Msg("You hold a brief public reckoning. The tanner does not deny it. The village watches. The elder thanks you. The settlement lord, receiving word of how you handled it, revises his opinion of you upward — you found the problem, judged it, and left the village intact.", GoodColor);
                                                 break;
                                             case "x2":
-                                                Msg("You escort him to the village boundary and tell him what exile means in your jurisdiction: never return, never make contact, and be grateful the alternative was available. He goes. The demon-cult network loses this thread — but threads can be replaced.", DimColor);
+                                                Msg("You escort him to the village boundary and tell him what exile means in your jurisdiction: never return, never make contact, and be grateful the alternative was available. He goes. The dark loses this thread — but the desperate are never in short supply.", DimColor);
                                                 break;
                                             case "x3":
                                                 ShiftTrait(DefaultTraits.Calculating, 1);
-                                                Msg("You explain his situation to him precisely. He understands. Whether he cooperates fully or plays both sides is a question you cannot answer without infrastructure you do not have. What you have is a frightened man with divided loyalties and a specific contact in the demon-cult's local network. That is worth something.", AshenColor);
+                                                Msg("You explain his situation to him precisely. He understands. Whether he cooperates fully or plays both sides is a question you cannot answer without infrastructure you do not have. What you have is a frightened man with divided loyalties and a name — one of the very few in this valley who truly serves the dark. That is worth something.", AshenColor);
                                                 break;
                                         }
                                     }, null, "", false), false, true);
@@ -716,7 +716,7 @@ namespace TheDarkestNight
                 $"A worn priest intercepts you at the city gate of {cName}. " +
                 $"He speaks quickly — he has been turned away by two lords already. " +
                 $"He wants to build a sanctuary here: a place where the honourable can seek " +
-                $"blessing, healing, and protection against the demon-cult. He needs coin. A great deal of it.",
+                $"blessing, healing, and protection against the Night. He needs coin. A great deal of it.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Donate 10,000 denars — build it properly.", null, true,

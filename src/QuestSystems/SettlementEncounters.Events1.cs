@@ -77,7 +77,7 @@ namespace TheDarkestNight
                 MageKnowledge._deferredInquiry = () =>
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                         "★  Ash's Debt",
-                        "A messenger reaches you on the road — rough-spoken, half-panicked, sent by the same village. The girl you healed is gone. Taken in the night by figures in grey cloaks. The mother sent word not as a plea but as an accusation: she knows what you are now — someone who can work the symbols — and she knows the demon-cult hunt for exactly that. She says you painted a target on her daughter's forehead the moment you drew the mark that healed her.",
+                        "A messenger reaches you on the road — rough-spoken, half-panicked, sent by the same village. The girl you healed is gone. Taken in the night by figures in grey cloaks. The mother sent word not as a plea but as an accusation: she knows what you are now — someone who can work the symbols — and she knows the Night's servants take exactly such children, hoping the dark will count it in their favour. She says you painted a target on her daughter's forehead the moment you drew the mark that healed her.",
                         new List<InquiryElement>
                         {
                             new InquiryElement("ok", "There is nothing to say.", null, true,
@@ -301,7 +301,7 @@ namespace TheDarkestNight
                                 ShiftTrait(DefaultTraits.Honor, 1);
                                 ChangeRenown(5f);
                                 Msg("He listens to you — not to the words, but to the way you say them. Something settles in him, then hardens. " +
-                                    "A week later, word reaches you from the north: a young mage was seen leading a small band of volunteers against a demon-cult raiding column. " +
+                                    "A week later, word reaches you from the north: a young mage was seen leading a small band of volunteers against a raiding pack of the Night's servants. " +
                                     "They held the village road. Against expectation, they held it. " +
                                     "His name is already travelling faster than he is. He inspired them not by being powerful — by being certain.", GoodColor);
                                 // Deferred consequence: castle town stirs — rebellion chance in ~14 days
@@ -337,7 +337,7 @@ namespace TheDarkestNight
                                 Msg("He hears the urgency but not the reason. He runs — but without direction, without a plan, " +
                                     "toward the grey hills rather than away from them. " +
                                     "Your warning sent him exactly where you were warning him away from.", BadColor);
-                                Msg("A week later, the demon-cult gain a recruit.", BadColor);
+                                Msg("A week later, the dark gains another servant.", BadColor);
                                 // No city rebellion — he went to the wrong side
                             }
                             break;
@@ -530,7 +530,7 @@ namespace TheDarkestNight
         {
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "✦  Left Behind",
-                "In a room off the keep's great hall, placed on a shelf between two books as if it belonged there: a small object of grey stone that is cold in a way that has nothing to do with temperature. The demon-cult put this here before the siege began — possibly years before. It is a marker. It means: we were here. We will return for it.",
+                "In a room off the keep's great hall, placed on a shelf between two books as if it belonged there: a small object of grey stone that is cold in a way that has nothing to do with temperature. Someone the Night owns put this here before the siege began — possibly years before. It is a marker. It means: this place is counted. Something will come back for it.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Destroy it completely.", null, true,
@@ -554,7 +554,7 @@ namespace TheDarkestNight
                         case "b":
                             _ashenCrystalOutcome  = 2;
                             _ashenCrystalCountdown = 30;
-                            Msg("You wrap it in cloth and keep it separate from everything else. It will be cold to the touch for as long as you carry it. The demon-cult use these to locate each other across distances. You now own a gap in their network. How long before the gap is noticed is a question without an answer yet.", AshenColor);
+                            Msg("You wrap it in cloth and keep it separate from everything else. It will be cold to the touch for as long as you carry it. Those the Night has broken are drawn to these — and found through them. You now carry a hole in the dark's map of the living. How long before the hole is noticed is a question without an answer yet.", AshenColor);
                             break;
                         case "c":
                             ShiftTrait(DefaultTraits.Calculating, 1);
@@ -579,7 +579,7 @@ namespace TheDarkestNight
             {
                 case 1: // destroyed — fire-mage finds you
                     MageKnowledge._deferredInquiry = () =>
-                        Msg("A mage finds you on the road — young, precise, her hands still chalk-stained from a hundred practice-formulas, clearly following a thread she picked up some time ago. She was tracking a demon-cult marker that has gone silent. She knew what it was. She knows you destroyed it. She does not thank you with words. She tells you something about where she found the thread's other end: a direction, a name, a piece of the network you did not have before.", FireColor);
+                        Msg("A mage finds you on the road — young, precise, her hands still chalk-stained from a hundred practice-formulas, clearly following a thread she picked up some time ago. She was tracking a demon-cult marker that has gone silent. She knew what it was. She knows you destroyed it. She does not thank you with words. She tells you something about where she found the thread's other end: a direction, a name, one more of the scattered few who serve the dark — something you did not have before.", FireColor);
                     break;
 
                 case 2: // kept — cult collector arrives
@@ -638,7 +638,7 @@ namespace TheDarkestNight
                             .FirstOrDefault();
                         if (nearbySettlement != null) ChangeRelWithOwner(nearbySettlement, 5);
                         string sName = nearbySettlement?.Name?.ToString() ?? "the keep";
-                        Msg($"Word reaches you: cult scouts entered {sName} two nights ago and departed before dawn. The garrison commander reports they went directly to one room and left without searching further — they found the marker undisturbed and concluded their absence went unnoticed. Your deception holds. The garrison commander, who trusted you with this intelligence, is now more inclined to trust you with others.", DimColor);
+                        Msg($"Word reaches you: two of the grey slipped into {sName} two nights ago and were gone before dawn. The garrison commander reports they went directly to one room and left without searching further — they found the marker undisturbed and concluded their absence went unnoticed. Your deception holds. The garrison commander, who trusted you with this intelligence, is now more inclined to trust you with others.", DimColor);
                     };
                     break;
             }
@@ -1409,7 +1409,7 @@ namespace TheDarkestNight
                                 Msg("The permit office's response comes in two days: legitimate. The merchant had a real permit and a delayed shipment and is furious about the detention at a level that may become a formal complaint. The guard's instinct was wrong. Your backing made it stick. He is embarrassed. You have a complaint pending. The seal was genuine.", BadColor);
                             break;
                         case "c":
-                            Msg("The permit was forged. The wagon contained grey-dyed cloth that matches cult courier colours exactly — not contraband in any legal sense, but material with a specific use. It cleared your gate. The merchant was gone before the guard's follow-up instinct completed. You made a small decision at a gate and someone's supply run went through. Whether that matters depends on what the cloth is for.", BadColor);
+                            Msg("The permit was forged. The wagon carried grey-dyed cloth of the kind the Night's servants wrap themselves in — not contraband in any legal sense, but material with one use. It cleared your gate. The merchant was gone before the guard's follow-up instinct completed. You made a small decision at a gate and someone's errand went through. Whether that matters depends on who sent them on it.", BadColor);
                             break;
                         case "d":
                             ShiftTrait(DefaultTraits.Calculating, 1);

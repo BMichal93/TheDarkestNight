@@ -174,7 +174,7 @@ namespace TheDarkestNight
                                 ChangeRenown(8f);
                                 Msg("You follow the apprentice for six blocks. He leads you — unknowingly — to a safehouse in the " +
                                     "tanner's quarter, where he knocks three times and enters. You note the address, the time, " +
-                                    "the route. The next cult patrol through this city will find that house empty. Someone " +
+                                    "the route. The next of the grey that drift through this city will find that house empty. Someone " +
                                     "who receives your message will make sure of it.", GoodColor);
                             }
                             else
@@ -256,8 +256,8 @@ namespace TheDarkestNight
                             ChangeRelWithRandomLord(10);
                             ChangeRenown(8f);
                             Msg("You name what you have seen to a lord whose forces reach the city within a day. They find the " +
-                                "square, the marks, and — at the grain market, too late for the cartographer to stop them — an " +
-                                "cult operative preparing the final stage. The ritual does not complete. Your name is in the " +
+                                "square, the marks, and — at the grain market, too late for the cartographer to stop them — a " +
+                                "grey-robed servant of the Night preparing the final stage. The ritual does not complete. Your name is in the " +
                                 "garrison commander's report. The lord reads it.", GoodColor);
                             _cartographerPhase = 3; // clean — no consequence
                             break;
