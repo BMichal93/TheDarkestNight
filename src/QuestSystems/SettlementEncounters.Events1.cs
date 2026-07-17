@@ -77,14 +77,14 @@ namespace TheDarkestNight
                 MageKnowledge._deferredInquiry = () =>
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                         "★  Ash's Debt",
-                        "A messenger reaches you on the road — rough-spoken, half-panicked, sent by the same village. The girl you healed is gone. Taken in the night by figures in grey cloaks. The mother sent word not as a plea but as an accusation: she knows your kind now, and she knows the demon-cult follow the fire. She says you painted a target on her daughter's forehead the moment you touched her.",
+                        "A messenger reaches you on the road — rough-spoken, half-panicked, sent by the same village. The girl you healed is gone. Taken in the night by figures in grey cloaks. The mother sent word not as a plea but as an accusation: she knows what you are now — someone who can work the symbols — and she knows the demon-cult hunt for exactly that. She says you painted a target on her daughter's forehead the moment you drew the mark that healed her.",
                         new List<InquiryElement>
                         {
                             new InquiryElement("ok", "There is nothing to say.", null, true,
                                 "She may not be wrong."),
                         },
                         false, 1, 1, "Endure", "",
-                        _ => Msg("She may not be wrong. The fire draws the cold. You have known this for some time. Knowing it and living with it are different skills.", BadColor),
+                        _ => Msg("She may not be wrong. The working draws the cold — every symbol you set is a light in the dark, and the dark notices lights. You have known this for some time. Knowing it and living with it are different skills.", BadColor),
                         null, "", false), false, true);
             }
             else if (roll == 1)
@@ -100,7 +100,7 @@ namespace TheDarkestNight
                     else
                     {
                         ChangeRenown(12f);
-                        talentLine = "Something shifts in you as you handle it. The fire turns back once and finds its own edge.";
+                        talentLine = "Something shifts in you as you handle it. The marks you already know turn over once and settle deeper.";
                     }
 
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
@@ -165,13 +165,13 @@ namespace TheDarkestNight
             MageKnowledge._deferredInquiry = () =>
             {
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                    "✦  The Fire She Was Born From",
-                    "A young woman presents herself at your camp with the unhurried certainty of someone who has been walking a long time and has rehearsed the last sentence of the journey. She was a child with a fever, ten years ago, on a road you have long since forgotten. She has not. She knows what you did. She knows what she has been ever since. She has learned the shape of the fire in her own way, in her own years. She wants to learn the rest from you.",
+                    "✦  The Shape She Was Left With",
+                    "A young woman presents herself at your camp with the unhurried certainty of someone who has been walking a long time and has rehearsed the last sentence of the journey. She was a child with a fever, ten years ago, on a road you have long since forgotten. She has not. She knows what you did — the mark you drew to pull her back. She knows what she has been ever since. She has been teaching herself the symbols in her own way, in her own years. She wants to learn the rest from you.",
                     new List<InquiryElement>
                     {
                         new InquiryElement("a", "Take her in. She has earned the right to ask.", null, true,
                             "She is a mage. She found you. That is already more than most manage."),
-                        new InquiryElement("b", "Turn her away. The fire is not a family business.", null, true,
+                        new InquiryElement("b", "Turn her away. What you carry is not a family business.", null, true,
                             "She will learn without you. She is clearly going to."),
                     },
                     false, 1, 1, "Decide", "",
@@ -184,7 +184,7 @@ namespace TheDarkestNight
                                 break;
                             case "b":
                                 ShiftTrait(DefaultTraits.Mercy, -1);
-                                Msg("She listens to your refusal without argument. She nods once, as if filing it away. She walks back the way she came with the same unhurried pace. You watch her go and notice the fire in you turns back once — the way it does when it recognises its own, and knows better than you do that you made the wrong call.", DimColor);
+                                Msg("She listens to your refusal without argument. She nods once, as if filing it away. She walks back the way she came with the same unhurried pace. You watch her go and notice something in you turns back once — the way it does when it recognises its own, and knows better than you do that you made the wrong call.", DimColor);
                                 break;
                         }
                     }, null, "", false), false, true);
@@ -281,7 +281,7 @@ namespace TheDarkestNight
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "✦  There Is Always Hope",
                 "A young man waits at the city gate with the stiff posture of someone who practiced what they would say and forgot it anyway. " +
-                "He can feel the fire in you from here. His own gift is new — two years, maybe three. " +
+                "He can feel what you carry from here. He is new to the work himself — two years, maybe three. " +
                 "He has heard what the demon-cult do to people like him. He wants to know if it has to end that way.",
                 new List<InquiryElement>
                 {
@@ -501,7 +501,7 @@ namespace TheDarkestNight
                             ShiftTrait(DefaultTraits.Mercy, -2);
                             ShiftTrait(DefaultTraits.Honor, -1);
                             Msg("You open the door. Something floods through you — cold, complete, and enormously purposeful. " +
-                                "You understand things about the fire that you did not understand before. " +
+                                "You understand things about the working that you did not understand before. " +
                                 "You cannot remember what you gave it. " +
                                 "Your men back away from you without being told to.", AshenColor);
                             MBInformationManager.AddQuickInformation(new TextObject(
@@ -579,7 +579,7 @@ namespace TheDarkestNight
             {
                 case 1: // destroyed — fire-mage finds you
                     MageKnowledge._deferredInquiry = () =>
-                        Msg("A fire-mage finds you on the road — young, precise, clearly following a thread she picked up some time ago. She was tracking a demon-cult marker that has gone silent. She knew what it was. She knows you destroyed it. She does not thank you with words. She tells you something about where she found the thread's other end: a direction, a name, a piece of the network you did not have before.", FireColor);
+                        Msg("A mage finds you on the road — young, precise, her hands still chalk-stained from a hundred practice-formulas, clearly following a thread she picked up some time ago. She was tracking a demon-cult marker that has gone silent. She knew what it was. She knows you destroyed it. She does not thank you with words. She tells you something about where she found the thread's other end: a direction, a name, a piece of the network you did not have before.", FireColor);
                     break;
 
                 case 2: // kept — cult collector arrives
@@ -734,16 +734,16 @@ namespace TheDarkestNight
         {
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "✦  The Self-Taught",
-                "A mage at the village inn — self-trained, clearly capable, and entirely certain that the gift he found alone is the real version and what you carry is a lesser, inherited thing. He says this to your face without hostility, the way people state facts. He has been working with fire for eight years. He is wrong about the comparison. He is not wrong about his eight years.",
+                "A mage at the village inn — self-trained, clearly capable, and entirely certain that the formulas he worked out alone are the real ones and the marks you were taught are a lesser, secondhand thing. He says this to your face without hostility, the way people state facts. He has been drawing his own symbols for eight years, with no one to correct him. He is wrong about the comparison. He is not wrong about his eight years.",
                 new List<InquiryElement>
                 {
-                    new InquiryElement("a", "Show him what the fire actually is — no argument, just the thing itself.", null, true,
+                    new InquiryElement("a", "Show him a formula worked clean — no argument, just the thing itself.", null, true,
                         "A day spent showing him the real thing. He cannot unknow it."),
                     new InquiryElement("b", "Challenge him formally — demonstrate the difference by working the same problem.", null, true,
-                        "Working the same problem reveals something. His gift is real, if different."),
+                        "Working the same problem reveals something. His method is real, if different."),
                     new InquiryElement("c", "Let him demonstrate first. Eight years of self-teaching is worth hearing.", null, true,
                         "Eight years of self-teaching is worth hearing. He may surprise you."),
-                    new InquiryElement("d", "Agree with him — the gift finds what it finds. He's not wrong about that.", null, true,
+                    new InquiryElement("d", "Agree with him — a formula works no matter who first drew it. He's not wrong about that.", null, true,
                         "Agreement disarms the whole conversation. You leave him with something."),
                 },
                 false, 1, 1, "Decide", "",
@@ -753,12 +753,12 @@ namespace TheDarkestNight
                     {
                         case "a":
                             AgePlayer(1);
-                            Msg("You set something on the table between you — not a trick, not a demonstration, just the fire being what it is without the performance layer. He watches it for a long time. His own fire responds to it in a way that surprises him. He doesn't revise his opinion out loud. He revises it where opinions actually live. You ride out with a day of your life spent on a genuine exchange.", FireColor);
+                            Msg("You set a single formula working on the table between you — not a trick, not a demonstration, just the thing being what it is without the performance layer. He watches it for a long time. His own version of the same mark shifts in his mind in a way that surprises him. He doesn't revise his opinion out loud. He revises it where opinions actually live. You ride out with a day of your life spent on a genuine exchange.", FireColor);
                             _selfTaughtMageOutcome = 1; _selfTaughtMageCountdown = 60 + _rng.Next(60);
                             break;
                         case "b":
                             ShiftTrait(DefaultTraits.Calculating, 1);
-                            Msg("You give him a problem: heat a specific point without warming what surrounds it. He solves it differently than you would — more slowly, with more control over the margins. You solve it faster and with less precision. You both sit with this for a moment. He is not lesser. He is different. The difference matters in specific contexts. Neither of you had clearly understood that before.", FireColor);
+                            Msg("You give him a problem: hold a working over a single handspan without letting it spread past the line. He solves it differently than you would — more slowly, with more control over the margins. You solve it faster and with less precision. You both sit with this for a moment. He is not lesser. He is different. The difference matters in specific contexts. Neither of you had clearly understood that before.", FireColor);
                             _selfTaughtMageOutcome = 2; _selfTaughtMageCountdown = 60 + _rng.Next(60);
                             break;
                         case "c":
@@ -768,7 +768,7 @@ namespace TheDarkestNight
                             break;
                         case "d":
                             ShiftTrait(DefaultTraits.Honor, 1);
-                            Msg("You agree with him — the fire is the fire, wherever it lands. He expected a contest. Your agreement disarms the whole conversation. He sits with it for a moment and then buys you a drink, which is the self-taught mage's version of a concession. You ride out with nothing changed and one person in the world who will speak well of you, specifically, for the rest of his life.", GoodColor);
+                            Msg("You agree with him — a mark holds the same power whoever first set it down. He expected a contest. Your agreement disarms the whole conversation. He sits with it for a moment and then buys you a drink, which is the self-taught mage's version of a concession. You ride out with nothing changed and one person in the world who will speak well of you, specifically, for the rest of his life.", GoodColor);
                             _selfTaughtMageOutcome = 4; _selfTaughtMageCountdown = 60 + _rng.Next(60);
                             break;
                     }
@@ -800,7 +800,7 @@ namespace TheDarkestNight
                         break;
                     case 4: // agreed with him
                         ChangeRelWithRandomLord(5);
-                        Msg("Word reaches you through a tavern keeper two settlements west: a self-taught mage has been telling anyone who will listen that you are the only lord of rank he has met who understood the gift does not care about rank. Three lords who heard him secondhand have filed that detail away.", GoodColor);
+                        Msg("Word reaches you through a tavern keeper two settlements west: a self-taught mage has been telling anyone who will listen that you are the only lord of rank he has met who understood the work does not care about rank. Three lords who heard him secondhand have filed that detail away.", GoodColor);
                         break;
                 }
             };
@@ -840,7 +840,7 @@ namespace TheDarkestNight
                             break;
                         case "c":
                             AgePlayer(1);
-                            Msg("You give her a working to complete — not a display, a test of understanding. She completes it three-quarters correctly and then does something you didn't expect: corrects herself mid-working without stopping, which is harder than getting it right the first time and significantly rarer. Her gift is real and her control is better than yours was at her age. The answer you give her afterward is the best version you have. She is ready for it.", FireColor);
+                            Msg("You give her a working to complete — not a display, a test of understanding. She completes it three-quarters correctly and then does something you didn't expect: corrects herself mid-working without stopping, which is harder than getting it right the first time and significantly rarer. Her training shows, and her control is better than yours was at her age. The answer you give her afterward is the best version you have. She is ready for it.", FireColor);
                             _oldMastersStudentOutcome = 3; _oldMastersStudentCountdown = 120;
                             break;
                         case "d":
@@ -940,7 +940,7 @@ namespace TheDarkestNight
             string hint  = SkillHint(DefaultSkills.Roguery, 0.25f, "Read the deception precisely");
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "◆  The Lie",
-                "An old man at the inn table tells you there have been no grey-cloaked visitors in a week. He says this with full eye contact and complete stillness and the specific absence of the small corrections honest people make when they're trying to be accurate. He is lying. Whatever he saw, he was told to say he hadn't. The fire in you feels the cold in the room that isn't the weather.",
+                "An old man at the inn table tells you there have been no grey-cloaked visitors in a week. He says this with full eye contact and complete stillness and the specific absence of the small corrections honest people make when they're trying to be accurate. He is lying. Whatever he saw, he was told to say he hadn't. What you carry feels the cold in the room that isn't the weather.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Read the lie precisely — what is he hiding and who asked him to.", null, true, hint),

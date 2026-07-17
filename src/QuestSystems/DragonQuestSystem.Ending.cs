@@ -73,10 +73,10 @@ namespace TheDarkestNight
                 }
 
                 string fireNote = wasNotMage
-                    ? "His covenant opens the fire in you — a flame you did not know you carried. " +
-                      "Ten focus points. The gift is real.\n\n"
+                    ? "His covenant sets the first formulas burning in your mind — marks you could not have named a moment ago and now cannot forget. " +
+                      "Ten focus points. The knowledge is real.\n\n"
                     : "His covenant deepens what you already carry. " +
-                      "The fire you know becomes something older and heavier.\n\n";
+                      "The symbols you know become something older and heavier.\n\n";
 
                 InformationManager.ShowInquiry(new InquiryData(
                     "The Vessel",

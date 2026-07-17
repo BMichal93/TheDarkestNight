@@ -259,7 +259,7 @@ namespace TheDarkestNight
         {
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "✦  What She Sees",
-                "A girl of perhaps six stops playing and stares at you. Not at your horse, not at your armor — at you. She reaches toward something she cannot name, cannot see, but clearly senses — the same pull that will one day let her tap a formula of her own, if the Night doesn't take her first. Her mother pulls her back. The girl's eyes do not leave yours.",
+                "A girl of perhaps six stops playing and stares at your hands — not at your horse, not at your armor, but at the way your fingers still hold the shape of the last formula you tapped. She copies the motion, clumsily, watching to see whether anything answers. Nothing does; not yet, not without someone to teach her which marks mean something and which are only air. Her mother pulls her back. The girl's eyes do not leave your hands.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Crouch down and say a quiet word to her.", null, true,

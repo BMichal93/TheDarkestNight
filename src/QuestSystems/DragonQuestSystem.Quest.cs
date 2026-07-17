@@ -32,7 +32,7 @@ namespace TheDarkestNight
                     "Something underneath all of it. A pull. A sensation like hearing a voice " +
                     "from across a great distance, in a language you have never been taught " +
                     "but feel you should know.\n\n" +
-                    "Your fire-sense recoils. If you have no fire — something recoils anyway.\n\n" +
+                    "Something in you recoils — whatever part of a person answers when the old power reaches for them. If you have never set a symbol in your life, it recoils anyway.\n\n" +
                     "It is not hostile. It is desperate. The way something is desperate when it has " +
                     "been waiting a very long time and cannot be certain it will not lose its chance again.\n\n" +
                     "It does not speak in words yet. Only images: fire spreading across a dark plain. " +

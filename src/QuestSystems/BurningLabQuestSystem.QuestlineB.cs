@@ -222,7 +222,7 @@ namespace TheDarkestNight
                     $"The Burning Laboratory — {faction.Name}'s armies grow. " +
                     $"{armiesReinforced} warband{(armiesReinforced != 1 ? "s" : "")} " +
                     $"reinforced with {QBGoodUnitCount} fire-touched soldiers each. " +
-                    "The gift is still giving. How long that lasts is the question.");
+                    "The work is still bearing fruit. How long that lasts is the question.");
         }
 
         private static void TriggerQBBadPath(Kingdom faction)

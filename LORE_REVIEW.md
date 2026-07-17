@@ -161,8 +161,8 @@ Existing baseline encounters rewritten so the antagonist is the demon-cult and t
 fantasy is the Spellbook / the Night. These are the passages I changed; each is one
 moment inside a larger encounter. Files: `SettlementEncounters.*.cs`.
 
-**The healed girl — messenger's accusation**
-> A messenger reaches you on the road — rough-spoken, half-panicked, sent by the same village. The girl you healed is gone. Taken in the night by figures in grey cloaks. The mother sent word not as a plea but as an accusation: she knows your kind now, and she knows the demon-cult follow the fire. She says you painted a target on her daughter's forehead the moment you touched her.
+**The healed girl — messenger's accusation** *(revised: was "your kind / follow the fire")*
+> A messenger reaches you on the road — rough-spoken, half-panicked, sent by the same village. The girl you healed is gone. Taken in the night by figures in grey cloaks. The mother sent word not as a plea but as an accusation: she knows what you are now — someone who can work the symbols — and she knows the demon-cult hunt for exactly that. She says you painted a target on her daughter's forehead the moment you drew the mark that healed her.
 
 **The young mage — "does it have to end that way"**
 > He has heard what the demon-cult do to people like him. He wants to know if it has to end that way.
@@ -175,8 +175,8 @@ moment inside a larger encounter. Files: `SettlementEncounters.*.cs`.
 - Take it: *"You wrap it in cloth and keep it separate from everything else. It will be cold to the touch for as long as you carry it. The demon-cult use these to locate each other across distances. You now own a gap in their network…"*
 - Leave it: *"You leave it exactly where it is, touching nothing. When the demon-cult return — and they will return — they will find the keep changed but the marker undisturbed. They will conclude their absence was unnoticed. You will know they concluded that. That is a small and specific advantage."*
 
-**The fire-mage who tracked the marker**
-> A fire-mage finds you on the road — young, precise, clearly following a thread she picked up some time ago. She was tracking a demon-cult marker that has gone silent. She knew what it was. She knows you destroyed it. She does not thank you with words. She tells you something about where she found the thread's other end: a direction, a name, a piece of the network you did not have before.
+**The mage who tracked the marker** *(revised: was "A fire-mage")*
+> A mage finds you on the road — young, precise, her hands still chalk-stained from a hundred practice-formulas, clearly following a thread she picked up some time ago. She was tracking a demon-cult marker that has gone silent. She knew what it was. She knows you destroyed it. She does not thank you with words. She tells you something about where she found the thread's other end: a direction, a name, a piece of the network you did not have before.
 
 **The undisturbed marker holds — deception pays off**
 > Word reaches you: cult scouts entered {Settlement} two nights ago and departed before dawn. The garrison commander reports they went directly to one room and left without searching further — they found the marker undisturbed and concluded their absence went unnoticed. Your deception holds. The garrison commander, who trusted you with this intelligence, is now more inclined to trust you with others.
@@ -212,8 +212,8 @@ moment inside a larger encounter. Files: `SettlementEncounters.*.cs`.
 - You've outgrown him: *"…'You have gone further than I can follow.' He does not mean it as a compliment."*
 - Warning: *"A door that opens both ways," he says. "Every formula you tap, something on the other side feels it too."*
 
-**The child who senses the pull**
-> A girl of perhaps six stops playing and stares at you. Not at your horse, not at your armor — at you. She reaches toward something she cannot name, cannot see, but clearly senses — the same pull that will one day let her tap a formula of her own, if the Night doesn't take her first. Her mother pulls her back. The girl's eyes do not leave yours.
+**The child who copies your hands** *(revised: was born-with-the-gift "pull")*
+> A girl of perhaps six stops playing and stares at your hands — not at your horse, not at your armor, but at the way your fingers still hold the shape of the last formula you tapped. She copies the motion, clumsily, watching to see whether anything answers. Nothing does; not yet, not without someone to teach her which marks mean something and which are only air. Her mother pulls her back. The girl's eyes do not leave your hands.
 
 **The cult watcher in the shadow**
 > Leaving the city, you become aware — not by sight but by the particular absence of warmth — of someone in a building's shadow cataloguing your party. Grey cloak, pale still face, the patient posture of something that is not in a hurry because it has learned not to be. A demon-cult agent is noting your movements.
