@@ -71,7 +71,7 @@ namespace TheDarkestNight
 
                 MBInformationManager.AddQuickInformation(new TextObject(
                     spawned > 0
-                        ? $"The Long March — {spawned} great columns of demons set foot in {kingdom.Name}. " +
+                        ? $"The Long March — {spawned} great columns of the Hollow set foot in {kingdom.Name}. " +
                           $"These are not raiders. They do not break and scatter. They march."
                         : $"The Long March — something moved through {kingdom.Name}. The roads show it. The villages show it. But whatever passed has gone."));
             }

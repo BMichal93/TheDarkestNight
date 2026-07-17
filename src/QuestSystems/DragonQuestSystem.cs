@@ -441,7 +441,7 @@ namespace TheDarkestNight
 
             _objLords = AddDiscreteLog(
                 new TextObject("Silence seven cult lords in battle — each one releases a shard of Aelisar."),
-                new TextObject("cult Lords Silenced"), 0, DragonQuestSystem.TargetLordsSlain, null, false);
+                new TextObject("Cult Lords Silenced"), 0, DragonQuestSystem.TargetLordsSlain, null, false);
             _objRuin1 = AddDiscreteLog(
                 new TextObject("Clear the Sunken Scriptorium (Dravend) — where the first covenant was written."),
                 new TextObject("Sunken Scriptorium"), 0, 1, null, false);

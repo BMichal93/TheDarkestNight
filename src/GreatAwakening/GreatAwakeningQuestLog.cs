@@ -85,12 +85,12 @@ namespace TheDarkestNight
                       "will stand on Calradian soil and rule it. You mean to see it done."
                     : "You have heard it from the Archmagister's own mouth: the Tower means to drag something ancient and " +
                       "dark out of the deep desert on ten thousand sacrificed lives. If it arrives, nothing that " +
-                      "follows will be undone. The Tower's kingdom must fall before the count is paid in full."));
+                      "follows will be undone. The Tower's realm must fall before the count is paid in full."));
 
                 log._objProgress = log.AddDiscreteLog(
                     new TextObject(duneborn
                         ? "Feed the Dark Altar until the Great Summoning is complete."
-                        : "Destroy the Tower's kingdom before the Great Summoning completes."),
+                        : "Destroy the Tower's realm before the Great Summoning completes."),
                     new TextObject("Prisoners Sacrificed"), 0, GreatAwakeningMath.PrisonerTarget, null, false);
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
@@ -135,7 +135,7 @@ namespace TheDarkestNight
             try
             {
                 _questLog?.AddLog(new TextObject(
-                    "The Tower's kingdom is broken and gone. Whatever waited beyond the Sands waits still — the " +
+                    "The Tower's realm is broken and gone. Whatever waited beyond the Sands waits still — the " +
                     "count was never paid, and never will be."));
                 _questLog?.CompleteQuestWithSuccess();
             }

@@ -202,7 +202,7 @@ namespace TheDarkestNight
                 new List<InquiryElement>
                 {
                     new InquiryElement("ride", "Ride with the strike", null, true,
-                        "Your veterans join the templar column. cult warbands are bloodied, your renown grows, and the Temple remembers."),
+                        "Your veterans join the templar column. Cult warbands are bloodied, your renown grows, and the Temple remembers."),
                     new InquiryElement("coin", $"Send coin ({goldOffer} denars)", null, true,
                         "Fund the strike without leaving your road. A smaller mark of faith, but a mark."),
                     new InquiryElement("decline", "Stand aside this time", null, true,

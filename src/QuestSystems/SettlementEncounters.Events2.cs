@@ -402,7 +402,7 @@ namespace TheDarkestNight
                 $"facing the same direction. The villagers won't meet your eyes. " +
                 $"Someone lit fires in the northern field after midnight, " +
                 $"the wrong colour and shape for hearth or harvest. " +
-                $"You cannot prove it, but something cult has been here recently.",
+                $"You cannot prove it, but something of the cult has been here recently.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Burn the village. Cultists hide among the innocent here.", null, true,
@@ -805,7 +805,7 @@ namespace TheDarkestNight
         }
 
         // ── LV_ColdEmbrace — village leave ────────────────────────────────────
-        // Resting in the afternoon, a ring of demons closes around you.
+        // Resting in the afternoon, a ring of cultists closes around you.
         // They reach out the cold and wait.
         private static void LV_ColdEmbrace(Settlement s)
         {
@@ -814,7 +814,7 @@ namespace TheDarkestNight
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "★ The Circle Closes",
                 "You are resting in the afternoon shade outside the village when they arrive. " +
-                "A ring of demons — grey-cloaked, cold-eyed — has closed around you without a sound. " +
+                "A ring of grey-cloaked cultists — cold-eyed, silent as falling ash — has closed around you. " +
                 "They do not speak. They extend their hands toward you, and the air drops ten degrees. " +
                 "They are offering you something.",
                 new List<InquiryElement>
@@ -837,7 +837,7 @@ namespace TheDarkestNight
                             BecomeAshen();
                             Msg("You reach back. The cold is not a sensation — it is a state. " +
                                 "The grey settles into your eyes before you are aware it has begun. " +
-                                "The demons lower their hands. You are one of them now.", BadColor);
+                                "The cultists lower their hands. You are one of them now.", BadColor);
                             break;
                         case "b":
                             if (_rng.NextDouble() < athChance)

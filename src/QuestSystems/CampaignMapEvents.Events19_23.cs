@@ -425,7 +425,7 @@ namespace TheDarkestNight
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "The demon-cult Gambit — The sanctuary's ward blazes bright. The assassins feel it like a wall of fire " +
+                    "The Night's Gambit — The sanctuary's ward blazes bright. The assassins feel it like a wall of fire " +
                     "and pull back into the dark. Tonight, the Empire's lords sleep safely."));
                 return;
             }
@@ -604,7 +604,7 @@ namespace TheDarkestNight
                       + $" and {seizedNames[seizedNames.Count - 1]} fell to the demon-cult before the sun rose. ";
 
             MBInformationManager.AddQuickInformation(new TextObject(
-                $"The demon-cult Gambit — In a single night of cold fire and silence, every Imperial throne was struck at once. " +
+                $"The Night's Gambit — In a single night of cold fire and silence, every Imperial throne was struck at once. " +
                 $"{leaderStr}. Their courts woke to ash on the pillows and cooling blood on the floors. " +
                 (moraleHit > 0 ? $"Dread swept through {moraleHit} Imperial warbands. " : "") +
                 (secHit > 0 ? $"{secHit} Imperial cit{(secHit != 1 ? "ies" : "y")} erupted in panic and suspicion. " : "") +

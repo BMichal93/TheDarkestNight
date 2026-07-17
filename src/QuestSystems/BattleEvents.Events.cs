@@ -206,7 +206,7 @@ namespace TheDarkestNight
             SpawnGroundFireField(centre, 30f, 5, ColorSchool.Ashen, AshenGroundInterval * 0.80f);
             if (count > 0)
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    $"cult Ground — {count} mount{(count != 1 ? "s" : "")} fall. No one rides today."));
+                    $"Tainted Ground — {count} mount{(count != 1 ? "s" : "")} fall. No one rides today."));
         }
 
         // ── Event: Frenzy ─────────────────────────────────────────────────────
