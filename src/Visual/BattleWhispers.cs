@@ -1,7 +1,8 @@
 // =============================================================================
-// ASH AND EMBER — Visual/BattleWhispers.cs
-// Ambient Ashen-atmosphere messages during battles involving mages or cold-fire lords.
-// Fires at most 4 times per battle, spaced ~45 s apart, never repeating.
+// THE DARKEST NIGHT — Visual/BattleWhispers.cs
+// Ambient demonic-dread messages during battles where the Night's demons are on
+// the field. Fires at most 4 times per battle, spaced ~45 s apart, never repeating.
+// A deeply-attuned mage (WhisperTier 3) hears the dark address them by name.
 // =============================================================================
 
 using System;
@@ -25,16 +26,16 @@ namespace TheDarkestNight
 
         private static readonly string[] _whispers =
         {
-            "Their cold gaze finds you through the smoke.",
-            "The ash on the wind is not from the battle.",
+            "A cold gaze finds you through the smoke. Nothing living looks at you that way.",
+            "The dark presses closer than the fighting warrants.",
             "You hear your name — no one's lips are moving.",
-            "The fire in you pulls toward something cold on the other side.",
-            "One of them is not here to win. They are here to remember what you look like afraid.",
-            "The cold one studies you between blows. Learning.",
+            "Something on the far side of the field pulls at you, patient and cold.",
+            "One of them is not here to win. It is here to remember what you look like afraid.",
+            "A demon studies you between blows. Learning.",
             "You smell winter. It is midsummer.",
-            "Their commander's eyes find yours across the field. They hold.",
-            "The ash gathers thicker around the cold-fire ones. The battle is secondary to them.",
-            "Something in the enemy line is not afraid of you. That is the one to watch.",
+            "Across the field, a pair of eyes that are not a man's find yours. They hold.",
+            "The dark gathers thicker where the demons stand. The battle is secondary to them.",
+            "Something in their line is not afraid of you. That is the one to watch.",
             "You feel watched from inside your own shadow.",
             "A familiar cold brushes the back of your neck.",
             "One of their soldiers glances at you — not with hate, but with recognition.",
@@ -42,14 +43,14 @@ namespace TheDarkestNight
             "Something beyond the treeline watches with familiar eyes.",
         };
 
-        // Only reached at WhisperTier 3 — the cold now speaks directly to you.
+        // Only reached at WhisperTier 3 — the dark now speaks directly to you.
         private static readonly string[] _whispersPersonal =
         {
             "The voice says your name the way someone says the name of a thing they already own.",
-            "You know which one of them carries the cold. You knew before you saw them.",
-            "The fire in you leans toward their line. You have to remind it which side you are on.",
+            "You know which of them carries the deepest cold. You knew before you saw it.",
+            "Something in you leans toward their line. You have to remind it which side you are on.",
             "One of them smiles at you across the field. You almost smile back.",
-            "The ash drifts toward you, not away. As if it remembers where it came from.",
+            "The dark drifts toward you, not away. As if it remembers the marks you have been drawing.",
         };
 
         public static void Reset()
@@ -71,25 +72,20 @@ namespace TheDarkestNight
 
             if (!_enabled)
             {
-                bool trigger = MageKnowledge.IsAshen;
-                if (!trigger)
+                // The whispers are the Night itself — they only stir when demons
+                // are actually on the field.
+                bool trigger = false;
+                try
                 {
-                    try
-                    {
-                        if (Agent.Main != null && Mission.Current != null)
-                            trigger = Mission.Current.Agents.Any(a =>
-                                a != null && a.IsActive() && !a.IsMount && a.IsHero &&
-                                a.Team != null && Agent.Main.Team != null && a.Team != Agent.Main.Team &&
-                                (a.Character as CharacterObject)?.HeroObject is Hero h &&
-                                ElementLordRegistry.IsAshenLord(h));
-                    }
-                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    if (Mission.Current != null)
+                        trigger = DemonBattleBehavior.GetActiveDemons().Count > 0;
                 }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 if (!trigger) return;
                 _enabled = true;
             }
 
-            // Skip probability scales with how deeply the cold has seeped in.
+            // Skip probability scales with how deeply the dark has seeped in.
             // Tier 3: no skip — the voice does not wait for permission.
             int whisperTier = MageKnowledge.IsMage ? MageKnowledge.WhisperTier : 0;
             int skipDenominator = whisperTier >= 3 ? 0 : whisperTier >= 2 ? 4 : 3;
