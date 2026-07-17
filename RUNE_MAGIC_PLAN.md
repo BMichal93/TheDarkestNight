@@ -245,6 +245,53 @@ and forgiving):
    burn arrives on top of it.
 8. **Anything unresolvable** → malformed → fizzle + spellburn roll (Req 8).
 
+### The completeness rule — no undefined cells, and forms stay outnumbered
+
+Two standing constraints, both enforced by tests, so the grammar cannot rot
+as content grows:
+
+**a) Effects must outnumber forms — permanently.** Matter is not 5 effects
+but **20 distinct matter-states** (5 elements + 6 fusions + 4 Triads + the
+Unbound Weave + 4 commands), against 8 Forms. **Forms are capped at 8
+forever**: every future rune must be effect-side (a Manner or a Coda), never
+a new Form. A test asserts the role census (`Forms == 8`,
+`matter-states + codas > 2 × forms`).
+
+**b) Every cell of the matter-state × Form matrix is defined.** The resolver
+must return a real working or an *explicitly declared* contradiction for
+every pair — no accidental holes. The awkward columns, decided now:
+
+- **Wyrd × forms** (will, shaped): + Long Mark = a bolt of dread (morale
+  damage on the struck foe); + Bar = the spirit wall (the existing
+  `CastWall(Spirit)` — Ward of Whispers' path); + Calling = a lesser Bent
+  Knee — the nearest foe's will bends and fights for you briefly (the
+  existing Thrall machinery in `ElementUltimates`, weakened); + Snare = a
+  panic-trap; + Brand = a weapon that strikes fear (morale damage on hit);
+  + Husk = a presence-mantle (morale drains from foes who close in);
+  + Ring = courage over every nearby ally; + Rain = dread falling across an
+  area.
+- **Commands × forms**: a command (Wyrd+element) is already a complete
+  working — a Form in the same binding = **malformed** ("a command cannot be
+  poured into a vessel").
+- **The Unbound Weave × forms**: **malformed** — what is unbound cannot be
+  shaped. (Triads DO take forms — Tempest+Calling is the storm elemental.)
+- **Fusions/Triads × forms**: defined by the same per-element parameter
+  tables the base elements use (Fog wall = Mistwall path, Ice brand = a
+  freezing edge, Magma snare = a buried burst that burns and bogs…) — the
+  effect layer keys on `MagicElement`, so every fusion inherits every form
+  for free; only the Triads' four rows are new tuning.
+- **Manners** apply where they can; a manner that cannot touch the working
+  (the Echo on a pure self-ward, the Gift with no self-working present) is
+  **inert wasted ink** — the cast still resolves, but the wasted rune still
+  counts toward Strain (rule 7), so sloppy writing is taxed, not detonated.
+  The ONLY manner-level malformed cases are the declared contradictions
+  (Lamp + Night Mark, Mirror + Gift, Still + Vigil).
+
+A pure test enumerates all 20 matter-states × 9 form-states (8 forms +
+formless) and asserts each resolves to a working or a declared contradiction
+— never a silent hole; a second test walks every manner against every
+form-state the same way.
+
 ### Worked example
 
 `Gale + Cinder + Tide + Calling + Echo` (15 marks):
@@ -436,11 +483,14 @@ Each phase ends with a green `dotnet build` + full `dotnet test` run.
 **Phase 1 — pure core.** `RuneCatalog.cs`, `RuneSequenceMath.cs` (resolver,
 amplification, naming, NPC bound-sequence list, legacy-spell→runes map),
 `SpellbookMath.NpcSpellburnChance`. Tests: triplet validity/uniqueness/
-sparseness, role assignment completeness, resolver table-driven cases (each
-grammar rule, each fusion, all four Triads, the Unbound Weave, Wyrd-overload
-and two-Form and Lamp/Night-Mark malformed cases), strain curve, name
-composition, amplification curve, NPC burn curve, migration map completeness
-(every `SpellId` maps to only-known runes).
+sparseness, role assignment completeness and the role census (Forms == 8,
+effect-side > 2× forms), resolver table-driven cases (each grammar rule,
+each fusion, all four Triads, the Unbound Weave, Wyrd-overload and two-Form
+and contradiction malformed cases), **the completeness matrix** (all 20
+matter-states × 9 form-states resolve or declare a contradiction; every
+manner × form-state likewise — no silent holes), strain curve, inert-manner
+strain taxing, name composition, amplification curve, NPC burn curve,
+migration map completeness (every `SpellId` maps to only-known runes).
 
 **Phase 2 — effects.** `SpellbookEffectPrimitives` lift-out (no behaviour
 change), `RuneEffects.cs`, force-bolt parameterisation in
