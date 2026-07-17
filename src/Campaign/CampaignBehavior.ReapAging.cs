@@ -121,7 +121,7 @@ namespace TheDarkestNight
                     float excess      = Math.Min(15f, (float)h.Age - 80f);
                     float dailyChance = 0.0005f + excess * 0.00003f; // 0.05%→0.095%/day
                     if (_rng.NextDouble() < dailyChance)
-                        TryConvertMageToAshen(h, "could feel the cold at the edge of the fire");
+                        TryConvertMageToAshen(h, "could feel the dark at the edge of the work");
                 }
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
@@ -142,7 +142,7 @@ namespace TheDarkestNight
                 try { AshenCitySystem.OnHeroSetAshen(h); }                 catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { MageKnowledge.ApplyAshenAppearance(h); }             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 InformationManager.DisplayMessage(new InformationMessage(
-                    $"{h.Name} — {reason}. The fire did not answer. Something colder did.",
+                    $"{h.Name} — {reason}. The runes did not answer. Something colder did.",
                     new Color(0.38f, 0.50f, 0.75f)));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }

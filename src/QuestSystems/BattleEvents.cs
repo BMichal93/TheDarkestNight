@@ -285,11 +285,11 @@ namespace TheDarkestNight
                 AddOneShot("Last Light", OneShotDelay + 1f, FireLastLight);
             }
 
-            // ── Dead Ground ──────────────────────────────────────────────────
+            // ── Tainted Ground ───────────────────────────────────────────────
             if (Rolled("AshenGround", ChanceAshenGround))
             {
-                names.Add("Dead Ground");
-                Add("Dead Ground", AshenGroundInterval, FireAshenGround);
+                names.Add("Tainted Ground");
+                Add("Tainted Ground", AshenGroundInterval, FireAshenGround);
             }
 
             // ── Frenzy ────────────────────────────────────────────────────────

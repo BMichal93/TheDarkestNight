@@ -181,7 +181,7 @@
        ═══════════════════════════════════════════════════════════════════ -->
 
   <NPCCharacter id="ashen_thrall"
-                name="{=ashen_thrall_name}Ashen Thrall"
+                name="{=ashen_thrall_name}Hollow Thrall"
                 age="25"
                 level="12"
                 culture="Culture.khuzait"
@@ -232,7 +232,7 @@
   </NPCCharacter>
 
   <NPCCharacter id="ashen_invoker"
-                name="{=ashen_invoker_name}Ashen Invoker"
+                name="{=ashen_invoker_name}Hollow Invoker"
                 age="25"
                 level="22"
                 culture="Culture.khuzait"
@@ -273,7 +273,7 @@
   </NPCCharacter>
 
   <NPCCharacter id="ashen_warrior"
-                name="{=ashen_warrior_name}Ashen Warrior"
+                name="{=ashen_warrior_name}Hollow Warrior"
                 age="25"
                 level="20"
                 culture="Culture.khuzait"
@@ -314,7 +314,7 @@
   </NPCCharacter>
 
   <NPCCharacter id="ashen_warden"
-                name="{=ashen_warden_name}Ashen Warden"
+                name="{=ashen_warden_name}Hollow Warden"
                 age="25"
                 level="24"
                 culture="Culture.khuzait"
@@ -355,7 +355,7 @@
   </NPCCharacter>
 
   <NPCCharacter id="ashen_revenant"
-                name="{=ashen_revenant_name}Ashen Revenant"
+                name="{=ashen_revenant_name}Hollow Revenant"
                 age="25"
                 level="28"
                 culture="Culture.khuzait"
@@ -556,7 +556,7 @@
   </NPCCharacter>
 
   <NPCCharacter id="ashen_priest"
-                name="{=ashen_priest_name}Ashen Priest"
+                name="{=ashen_priest_name}Hollow Priest"
                 age="35"
                 level="20"
                 culture="Culture.khuzait"

@@ -175,7 +175,7 @@ namespace TheDarkestNight
                 Type = MiracleType.UndividedFlame, Trait = GraceTrait.Calculating, IsGrace = true,
                 RequiresAllTraits = true,
                 Name = "The Undivided Flame",
-                Effect = "Every part of you agrees at once, and the Fire answers whole — those beside you are warded and mended, and the Ashen's cold and the Awakened's untempered wildness burn hardest of all.",
+                Effect = "Every part of you agrees at once, and the Fire answers whole — those beside you are warded and mended, and the Night's cold and the Awakened's untempered wildness burn hardest of all.",
                 Flavour = "Mercy does not flinch. Honour does not calculate. Calculation does not hesitate. For one breath there is no seam left in you for the Fire to catch on — so it simply pours through.",
                 UsableInBattle = true, UsableOnMap = false,
                 Sequence = MiracleMath.SeqUndividedFlame },

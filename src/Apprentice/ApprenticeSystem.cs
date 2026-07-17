@@ -66,8 +66,8 @@ namespace TheDarkestNight
             };
 
             InformationManager.ShowInquiry(new InquiryData(
-                "A Latent Fire",
-                $"{flavor}\n\n{candidateName} carries the gift. Untrained, unguided — dangerous to themselves and others. You could take them on. The training would take weeks and cost you nothing but time. The risks are yours to carry.",
+                "An Untaught Hand",
+                $"{flavor}\n\n{candidateName} has been reaching for the work alone — half-guessed marks, no teacher, no one to say which shapes answer and which bite back. Dangerous to themselves and others. You could take them on. The training would take weeks and cost you nothing but time. The risks are yours to carry.",
                 true, true, "Take them on", "Not now",
                 () => BeginTraining(candidate, candidateName),
                 () => { }), true);
@@ -137,21 +137,21 @@ namespace TheDarkestNight
             MageKnowledge._deferredInquiry = () =>
             {
                 InformationManager.ShowInquiry(new InquiryData(
-                    "A Shadow on the Flame",
-                    $"{apprenticeName}'s fire has a new quality to it — grey at the edges. Something has been speaking to them in the nights, and they have been listening. You can push through the training regardless, or dismiss them before the corruption runs deeper.",
-                    true, true, "Continue training (they may emerge Ashen)", "Dismiss them (no reward, training ends)",
+                    "A Shadow on the Work",
+                    $"{apprenticeName}'s marks have a new quality to them — grey at the edges, strokes you never taught. Something has been speaking to them in the nights, and they have been listening. You can push through the training regardless, or dismiss them before the corruption runs deeper.",
+                    true, true, "Continue training (they may emerge Nightbound)", "Dismiss them (no reward, training ends)",
                     () =>
                     {
                         // Stay corrupted; graduation will make them Ashen
                         InformationManager.DisplayMessage(new InformationMessage(
-                            $"You continue with {apprenticeName}. The cold watches with interest.",
+                            $"You continue with {apprenticeName}. The dark watches with interest.",
                             new Color(0.45f, 0.4f, 0.65f)));
                     },
                     () =>
                     {
                         // Dismiss — no cap penalty, but 90-day cooldown only
                         InformationManager.DisplayMessage(new InformationMessage(
-                            $"You send {apprenticeName} away before the corruption sets. The fire inside them is their own problem now.",
+                            $"You send {apprenticeName} away before the corruption sets. What they taught themselves in the dark is their own problem now.",
                             new Color(0.6f, 0.55f, 0.5f)));
                         _apprenticeId      = null;
                         _trainingDaysLeft  = 0;
@@ -192,7 +192,7 @@ namespace TheDarkestNight
                 try { Hero.MainHero?.HeroDeveloper?.UnspentFocusPoints += 1; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 InformationManager.ShowInquiry(new InquiryData(
                     "Training Complete",
-                    $"{name} is not ready to carry the fire fully — but the weeks of work sharpened your own teaching instincts. +1 focus point.",
+                    $"{name} is not ready to work the symbols unwatched — but the weeks of teaching sharpened your own understanding. +1 focus point.",
                     true, false, "Release them", "", () => { }, null), true);
             }
             else
@@ -200,7 +200,7 @@ namespace TheDarkestNight
                 // Failed
                 InformationManager.ShowInquiry(new InquiryData(
                     "Training Failed",
-                    $"{name} could not sustain it. The fire found no purchase. They leave with a terse goodbye and a talent for avoiding eye contact.",
+                    $"{name} could not sustain it. The runes found no purchase in them. They leave with a terse goodbye and a talent for avoiding eye contact.",
                     true, false, "Let them go", "", () => { }, null), true);
             }
 
@@ -216,10 +216,10 @@ namespace TheDarkestNight
             {
                 ElementLordRegistry.SetMage(h, true);
                 if (ashen) ElementLordRegistry.SetAshen(h, true);
-                string kind = ashen ? "Ashen" : "mage";
+                string kind = ashen ? "Nightbound" : "mage";
                 InformationManager.ShowInquiry(new InquiryData(
-                    "A New Fire in the World",
-                    $"{name} carries it now. Not a student anymore. The {kind}'s fire burns in them — smaller than yours, rougher around the edges, but real. What they do with it is their own story.",
+                    "A New Hand at the Work",
+                    $"{name} carries it now. Not a student anymore. The {kind}'s marks answer them — smaller workings than yours, rougher around the edges, but real. What they do with them is their own story.",
                     true, false, "Release them to their fate", "",
                     () => { }, null), true);
             }

@@ -300,7 +300,7 @@ namespace TheDarkestNight
                 if (MageKnowledge.IsMage)
                     options.Add(new InquiryElement("burn",
                         $"Burn it away ({SeaMath.FogBurnAgingDays} days aging)", null, true,
-                        "Push a thread of the Inner Fire through the air. The fog boils off clean — no delay, no danger."));
+                        "Set a burning rune against the air itself. The fog boils off clean — no delay, no danger."));
                 // Wind-element cast (was a Living Ember option before the v0.35 merge —
                 // now gated on actually knowing Wind, like the harbor's Call the Wind).
                 if (MageElementKnowledge.HasElement(MagicElement.Wind))
@@ -329,7 +329,7 @@ namespace TheDarkestNight
                             case "burn":
                                 try { AgingSystem.AgeHero(Hero.MainHero, SeaMath.FogBurnAgingDays); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 MBInformationManager.AddQuickInformation(new TextObject(
-                                    "A breath of the Inner Fire and the fog tears apart like cloth. " +
+                                    "One drawn mark and the fog tears apart like cloth. " +
                                     "The crew stares. The crossing continues."));
                                 break;
                             case "part":
@@ -387,7 +387,7 @@ namespace TheDarkestNight
                 if (MageKnowledge.IsMage)
                     options.Add(new InquiryElement("sense",
                         $"Read the wreck ({SeaMath.SenseWreckAgingDays} days aging)", null, true,
-                        "Let the Inner Fire taste the hull — feel where coin and cargo lay heaviest. Finds more than blind hands would."));
+                        "Let the reading-lines taste the hull — feel where coin and cargo lay heaviest. Finds more than blind hands would."));
                 // Spirit-element cast (was a Living Ember option before the v0.35 merge).
                 if (MageElementKnowledge.HasElement(MagicElement.Spirit))
                 {
@@ -431,7 +431,7 @@ namespace TheDarkestNight
                                     try { GiveGoldAction.ApplyBetweenCharacters(null, Hero.MainHero, gold, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 InformationManager.ShowInquiry(new InquiryData(
                                     "⚓  Flotsam — Sensed",
-                                    "The Inner Fire finds the warm spots — where hands last gripped, where coin lay heaviest. " +
+                                    "The lines find the warm spots — where hands last gripped, where coin lay heaviest. " +
                                     $"Your men follow the warmth and pull {gold} denars from the wreck before it rolls and sinks.",
                                     true, false, "Back on course.", "", null, null), true);
                                 break;
@@ -484,7 +484,7 @@ namespace TheDarkestNight
                 };
                 if (MageKnowledge.IsMage)
                     options.Add(new InquiryElement("sear", $"Sear the Tide ({SeaMath.SearTheTideAgingDays} days aging)", null, true,
-                        "Open the Inner Fire over open water. Burning rigging, screaming corsairs, and much better odds."));
+                        "Loose fire-runes over open water. Burning rigging, screaming corsairs, and much better odds."));
                 // Water-element cast (was a Living Ember option before the v0.35 merge —
                 // gated on knowing Water, like the harbor's Still the Waters).
                 if (MageElementKnowledge.HasElement(MagicElement.Water))
@@ -606,7 +606,7 @@ namespace TheDarkestNight
                 if (MageKnowledge.IsMage)
                     options.Add(new InquiryElement("sear",
                         $"Sear the Tide ({SeaMath.SearTheTideAgingDays} days aging)", null, true,
-                        "Open the Inner Fire over the blockade line. Burning rigging, broken formation, and much better odds."));
+                        "Loose fire-runes over the blockade line. Burning rigging, broken formation, and much better odds."));
                 // Water-element cast (was a Living Ember option before the v0.35 merge).
                 if (MageElementKnowledge.HasElement(MagicElement.Water))
                 {
@@ -723,7 +723,7 @@ namespace TheDarkestNight
                 if (MageKnowledge.IsMage)
                     options.Add(new InquiryElement("read",
                         $"Read the boat before you close ({SeaMath.SenseWreckAgingDays} day aging)", null, true,
-                        "The Inner Fire can taste the boat from here — learn who they are before you decide whether to close."));
+                        "The reading-lines can taste the boat from here — learn who they are before you decide whether to close."));
                 // Spirit-element cast (was a Living Ember option before the v0.35 merge).
                 if (MageElementKnowledge.HasElement(MagicElement.Spirit))
                 {
@@ -819,7 +819,7 @@ namespace TheDarkestNight
                                         try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, lord, 2, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                         InformationManager.ShowInquiry(new InquiryData(
                                             "🚣  Survivors — Sensed",
-                                            $"The Inner Fire tastes the boat: men sworn to {lName}, worth saving. " +
+                                            $"The lines taste the boat: men sworn to {lName}, worth saving. " +
                                             $"You take them on. {lName} will hear of this. " +
                                             $"Two hours lost. (Relation with {lName}: +2)",
                                             true, false, "Sail on.", "", null, null), true);
@@ -828,7 +828,7 @@ namespace TheDarkestNight
                                     {
                                         InformationManager.ShowInquiry(new InquiryData(
                                             "🚣  Survivors — Sensed",
-                                            "The Inner Fire finds honest men in misfortune — no threat, no trick. You take them on. " +
+                                            "The lines find honest men in misfortune — no threat, no trick. You take them on. " +
                                             "Two hours lost.",
                                             true, false, "Sail on.", "", null, null), true);
                                     }
@@ -836,7 +836,7 @@ namespace TheDarkestNight
                                 else
                                 {
                                     MBInformationManager.AddQuickInformation(new TextObject(
-                                        "The Inner Fire finds fever and delirium in the boat — disease, not misfortune. " +
+                                        "The lines find fever and delirium in the boat — disease, not misfortune. " +
                                         "You pass them a waterskin on a rope and sail on. Grim arithmetic."));
                                 }
                                 break;
@@ -871,7 +871,7 @@ namespace TheDarkestNight
                 };
                 if (MageKnowledge.IsMage)
                     options.Add(new InquiryElement("speak",
-                        $"Speak to it through the Inner Fire ({SeaMath.SerpentAgingDays} days aging)", null, true,
+                        $"Speak to it through the old marks ({SeaMath.SerpentAgingDays} days aging)", null, true,
                         "Ancient things in the deep listen to the Fire. It costs years — but they do not always mean harm."));
                 // Water-element cast (was a Living Ember option before the v0.35 merge).
                 if (MageElementKnowledge.HasElement(MagicElement.Water))

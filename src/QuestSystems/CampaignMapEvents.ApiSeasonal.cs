@@ -60,7 +60,7 @@ namespace TheDarkestNight
                 }
 
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    $"Iron Winter (Dark Altar) — the cold you called up at the altar comes down hard on {kingdom.Name}. " +
+                    $"Iron Winter (Dark Altar) — the cold called by the altar has descended on {kingdom.Name}. " +
                     $"{villages} village{(villages != 1 ? "s" : "")} cannot keep their fires lit. " +
                     $"{towns} cit{(towns != 1 ? "ies" : "y")} ha{(towns != 1 ? "ve" : "s")} halved their stores."));
             }
@@ -95,7 +95,7 @@ namespace TheDarkestNight
                 }
 
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    $"Scorching Sun (Dark Altar) — the heat you called up at the altar bakes {kingdom.Name}. " +
+                    $"Scorching Sun (Dark Altar) — the heat called by the altar burns {kingdom.Name}. " +
                     $"The wells in {villages} village{(villages != 1 ? "s" : "")} are low or dry. " +
                     $"{towns} cit{(towns != 1 ? "ies" : "y")} ha{(towns != 1 ? "ve" : "s")} rationed their stores."));
             }

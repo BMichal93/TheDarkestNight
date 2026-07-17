@@ -51,7 +51,7 @@ namespace TheDarkestNight
         private static readonly string[] _qcWhispers =
         {
             "You found yourself reading again last night. You do not remember picking up the scrolls.",
-            "The fire in your hands looked different this morning. Cooler. You told yourself it was the cold.",
+            "The marks came slower under your hand this morning. Cooler. You told yourself it was the cold.",
             "You dreamed of the scholar who wrote this. He was standing in a city that no longer exists. He did not look up.",
             "There is a passage near the end you cannot read twice in succession. The words shift between readings.",
             "Your servants have started giving you more space. You have not asked them to.",
@@ -77,7 +77,7 @@ namespace TheDarkestNight
                 var elements = new List<InquiryElement>();
 
                 elements.Add(new InquiryElement("perform", "Perform the rite.", null, true,
-                    "Long, strange, exhausting. Something about the fire inside. The price is ambiguous in all the ways that matter."));
+                    "Long, strange, exhausting. Something about what the runes have written into you. The price is ambiguous in all the ways that matter."));
 
                 AddImperialOption(elements, "empire_s", "give_s",
                     "Pass them to Rhagaea's scholars.",
@@ -116,7 +116,7 @@ namespace TheDarkestNight
 
                     "The scrolls are still there. You have read further than you intended. " +
                     "There is a rite described — long, strange, exhausting. The text says it does something to the practitioner. " +
-                    "Something about the fire inside, burning hotter and stranger. " +
+                    "Something about the work inside you, running hotter and stranger. " +
                     "The price, described in the dry language of an old scholar, is ambiguous in all the ways that matter.\n\n" +
                     "The last paragraph is marked. Someone read this before you.",
 
@@ -235,7 +235,7 @@ namespace TheDarkestNight
                 try { AshenCitySystem.OnPlayerBecameAshen(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 InformationManager.DisplayMessage(new InformationMessage(
-                    "The Burning Laboratory — the fire in you goes cold. Something else answers instead.",
+                    "The Burning Laboratory — the runes go cold under your hand. Something else answers instead.",
                     new Color(0.3f, 0.35f, 0.7f)));
                 try { _qcQuestLog?.LogBecameAshen(); _qcQuestLog?.CompleteSuccess(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 _qcActive = false;

@@ -32,7 +32,7 @@ namespace TheDarkestNight
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "Nightfever — the wards on the sanctuary hold, and the sickness breaks against them. Not this town. Not tonight."));
+                    "The Grey Plague — the sanctuary's protective ward turns it aside. The sickness finds no purchase."));
                 return;
             }
             try
@@ -73,9 +73,9 @@ namespace TheDarkestNight
 
                 if (totalWounded > 0 || spawned > 0)
                     MBInformationManager.AddQuickInformation(new TextObject(
-                        $"Nightfever — a sickness rips through the garrison of {target.Name}. Men burn up in their bunks, sweat black, and don't wake. " +
-                        $"{totalWounded} soldier{(totalWounded != 1 ? "s" : "")} down, and the walls half-manned." +
-                        (spawned > 0 ? $" The demons can smell it: {spawned} band{(spawned != 1 ? "s" : "")} closing on the weakened town." : "")));
+                        $"The Grey Plague — a grey sickness sweeps through the garrison of {target.Name}. " +
+                        $"{totalWounded} soldier{(totalWounded != 1 ? "s" : "")} are struck down by fever and ash." +
+                        (spawned > 0 ? $" {spawned} demons close on the afflicted settlement." : "")));
                 RecordScar(target.StringId, 1);
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
@@ -138,7 +138,7 @@ namespace TheDarkestNight
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "The Horde Marches — but the wards hold this week. The demons hit the warded roads and turn away, looking for softer ground."));
+                    "The Night's March — the holy ward holds. The grey tide finds the roads blocked by something it cannot name."));
                 return;
             }
             try
@@ -168,8 +168,8 @@ namespace TheDarkestNight
 
                 MBInformationManager.AddQuickInformation(new TextObject(
                     spawned > 0
-                        ? $"The Horde Marches — {spawned} demon band{(spawned != 1 ? "s" : "")} come up out of the dark across {kingdom.Name}. They don't tire, and they don't stop."
-                        : $"The Horde Marches — something stirs in the dark near {kingdom.Name}, but finds no way through tonight."));
+                        ? $"The Night's March — {spawned} warbands of the Hollow descend upon {kingdom.Name}. The grey tide does not rest."
+                        : $"The Night's March — the grey tide stirs near {kingdom.Name}, but finds no foothold today."));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
@@ -211,8 +211,8 @@ namespace TheDarkestNight
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             MBInformationManager.AddQuickInformation(new TextObject(
-                $"Long Night — the sun doesn't rise. {LongNightDuration} days of unbroken dark settle over the world, and the demons don't have to crawl back below at dawn, because there is no dawn. " +
-                (spawned > 0 ? $"They pour out of the shadow and stay. {spawned} warband{(spawned != 1 ? "s" : "")} take the roads." : "Something out in the dark is moving, and it is in no hurry.")));
+                $"Long Night — the sun does not rise. {LongNightDuration} days of unbroken darkness fall over Calradia. " +
+                (spawned > 0 ? $"The Hollow pour from the shadow. {spawned} warbands take the roads." : "Something stirs in the dark.")));
         }
 
         // ── Event 5: A Keep Falls ────────────────────────────────────────────
@@ -226,7 +226,7 @@ namespace TheDarkestNight
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "A Keep Falls — or would have. The wards on the sanctuary hold the Night off the walls one more night. The castle stands."));
+                    "The Cold Tide — the sanctuary's blessing turns the cold back. The castle holds."));
                 return;
             }
             try
@@ -254,8 +254,8 @@ namespace TheDarkestNight
                 if (lord.Clan != null) AshenCitySystem.RegisterConqueredSettlement(castle, lord.Clan);
 
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    $"A Keep Falls — the garrison of {castle.Name} opened the gates from the inside, or died where they stood. Either way the walls belong to the Night now. " +
-                    $"{lord.Name} takes it without drawing a blade."));
+                    $"The Cold Tide — {castle.Name} bends to the cold. " +
+                    $"{lord.Name} claims it without a blade drawn."));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
@@ -390,8 +390,8 @@ namespace TheDarkestNight
                 string darkenedMsg = IsTempleFaction(kingdom)
                     ? $"Darkened Roads — {destroyed} supply train{(destroyed != 1 ? "s" : "")} and pilgrim convoy{(destroyed != 1 ? "s" : "")} go silent on the roads of {kingdom.Name}. The tithe-carts never arrive. The temple bars its gates before dusk now. " + (spawned > 0 ? "Something moves in the quiet they left behind." : "The pilgrims' road lies empty.")
                     : IsTribes(kingdom)
-                    ? $"Darkened Roads — {destroyed} tribute-column{(destroyed != 1 ? "s" : "")} go silent on the steppe-roads of {kingdom.Name}. The riders don't come back. The war-camp waits on gold and grain that will never arrive. " + (spawned > 0 ? "Demons work the tribute-lanes now, picking off what's left." : "The tribute roads lie empty.")
-                    : $"Darkened Roads — {destroyed} caravan{(destroyed != 1 ? "s" : "")} vanish on the roads of {kingdom.Name}. Trade dies. Prosperity bleeds out. " + (spawned > 0 ? "Demons walk where merchants used to." : "The roads fall silent.");
+                    ? $"Darkened Roads — {destroyed} tribute-column{(destroyed != 1 ? "s" : "")} vanish on the steppe-roads of {kingdom.Name}. Tribute-riders do not return. The war-camp waits for gold and grain that will not arrive. " + (spawned > 0 ? "Shapes of the Hollow follow the tribute-lanes east." : "The tribute roads are cold and empty.")
+                    : $"Darkened Roads — {destroyed} caravan{(destroyed != 1 ? "s" : "")} vanish on the roads of {kingdom.Name}. Trade dies. Prosperity crumbles. " + (spawned > 0 ? "Shapes of the Hollow move where merchants once walked." : "The roads fall silent and cold.");
                 MBInformationManager.AddQuickInformation(new TextObject(darkenedMsg));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }

@@ -252,7 +252,7 @@ namespace TheDarkestNight
                 EntryLore = "A farmhouse built directly over a much older structure. The farmer left recently — the hearth is still warm.",
                 Tier      = RuinTier.Standard,
                 Challenges = new[] { Ch(ChallengeType.VoidWhisper), Ch(ChallengeType.RiddleGate), Ch(ChallengeType.VisionChamber) },
-                MainReward    = Rew(RewardType.LoreVision, 0, "The oracle left a single phrase carved into the floor: 'The fire does not choose who carries it. It simply burns.' Below that, in a different hand: 'It lies.' You are unsettled for days afterward."),
+                MainReward    = Rew(RewardType.LoreVision, 0, "The oracle left a single phrase carved into the floor: 'The runes do not choose who writes them. They simply answer.' Below that, in a different hand: 'They lie.' You are unsettled for days afterward."),
                 PartialReward = Rew(RewardType.WhisperPurge, 10),
             },
             new RuinDef
@@ -271,7 +271,7 @@ namespace TheDarkestNight
             new RuinDef
             {
                 VillageName = "Tamnuh",
-                RuinName  = "The Ashen Crypt",
+                RuinName  = "The Grey Crypt",
                 EntryLore = "The crypt is unmarked. No names, no dates. Only handprints on the walls in ash — dozens of them — all facing inward.",
                 Tier      = RuinTier.Brutal,
                 Challenges = new[] { Ch(ChallengeType.AshenSentinel), Ch(ChallengeType.SoulHarvest), Ch(ChallengeType.BloodLock) },
@@ -306,7 +306,7 @@ namespace TheDarkestNight
                 Tier      = RuinTier.Brutal,
                 Challenges = new[] { Ch(ChallengeType.VoidWhisper), Ch(ChallengeType.SealedMemory), Ch(ChallengeType.VisionChamber) },
                 MainReward    = Rew(RewardType.LoreVision, 0,
-                    "The vision is not one of fire. It is one of cold — a calm, grey light spreading from horizon to horizon while the world holds very still. You wake with the sense that someone just looked at you through a keyhole. And then the sensation of warmth that follows, as if the fire inside you pressed back."),
+                    "The vision is not one of fire. It is one of cold — a calm, grey light spreading from horizon to horizon while the world holds very still. You wake with the sense that someone just looked at you through a keyhole. And then a flare of warmth against your palm, as if every mark you know pressed back at once."),
                 PartialReward = Rew(RewardType.WhisperBrand, 8),
             },
             new RuinDef
@@ -352,7 +352,7 @@ namespace TheDarkestNight
             new RuinDef
             {
                 VillageName = "Pen Dolen",
-                RuinName  = "The Ashen Cathedral",
+                RuinName  = "The Cold Cathedral",
                 EntryLore = "Not a cathedral of a god you recognise. The iconography is wrong — fire depicted as the thing that is feared, not worshipped.",
                 Tier      = RuinTier.Brutal,
                 Challenges = new[] { Ch(ChallengeType.AshenSentinel), Ch(ChallengeType.SoulHarvest), Ch(ChallengeType.DragonEgg) },
@@ -366,7 +366,7 @@ namespace TheDarkestNight
             {
                 VillageName = "Myzea",
                 RuinName  = "The Dragon's Tomb",
-                EntryLore = "A cliff-face with a door that has no hinges and no handle. It opens anyway when you press your fire against it. The warmth that answers is not yours.",
+                EntryLore = "A cliff-face with a door that has no hinges and no handle. It opens anyway when you trace the opening-mark against it. The warmth that answers is not yours.",
                 Tier      = RuinTier.Legendary,
                 Challenges = new[]
                 {
@@ -398,7 +398,7 @@ namespace TheDarkestNight
             {
                 VillageName = "Ronneld",
                 RuinName  = "The Binding Dark",
-                EntryLore = "A building that has no interior angles. The rooms curve. The floors tilt inward. You feel your inner fire lean away from the walls as you enter.",
+                EntryLore = "A building that has no interior angles. The rooms curve. The floors tilt inward. You feel every rune you carry lean away from the walls as you enter.",
                 Tier      = RuinTier.Legendary,
                 Challenges = new[]
                 {

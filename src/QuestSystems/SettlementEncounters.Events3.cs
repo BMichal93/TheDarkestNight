@@ -266,7 +266,7 @@ namespace TheDarkestNight
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "★  The Darkening Inheritance",
-                $"You have been watching {childName} for some time now — the way light behaves wrong around them in certain rooms, the cold that has no source, the dreams they won't describe. You have seen this before. Not in yourself, but in others. Something is waking in them, and it is not the fire you carry. It is the other thing. The cold thing. The thing that undoes people from the inside.",
+                $"You have been watching {childName} for some time now — the way light behaves wrong around them in certain rooms, the cold that has no source, the dreams they won't describe. You have seen this before. Not in yourself, but in others. Something is waking in them, and it is not the work you carry. It is the other thing. The cold thing. The thing that undoes people from the inside.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", $"Ignore it. {childName} is your child and you love them.", null, true,
@@ -401,7 +401,7 @@ namespace TheDarkestNight
                 {
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                         "★  The Thread Pulls Both Ways",
-                        "Three days since the alchemist took a drop of your blood. It arrives as a sensation, not a wound — a pull, specific and directional, as though someone has attached a thread to the fire you carry and is testing whether it holds. He used the blood to create a working that reaches back through the sample. The fire inside you feels it. You can feel where it is coming from.",
+                        "Three days since the alchemist took a drop of your blood. It arrives as a sensation, not a wound — a pull, specific and directional, as though someone has attached a thread to every mark you know and is testing whether it holds. He used the blood to create a working that reaches back through the sample. The runes you carry feel it. You can feel where it is coming from.",
                         new List<InquiryElement>
                         {
                             new InquiryElement("a", "Follow the thread. Find out where he is.", null, true,
@@ -424,7 +424,7 @@ namespace TheDarkestNight
                                     break;
                                 case "b":
                                     AgePlayer(1);
-                                    Msg("You push the fire through the thread deliberately until it burns. The pull stops. You are one day older. You know someone was reaching through your blood toward you, and that you ended the reach before it became anything more.", DimColor);
+                                    Msg("You push your own working back through the thread deliberately until it burns. The pull stops. You are one day older. You know someone was reaching through your blood toward you, and that you ended the reach before it became anything more.", DimColor);
                                     break;
                                 case "c":
                                     _bloodTitheRevealCountdown = 7;
@@ -441,7 +441,7 @@ namespace TheDarkestNight
                 {
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                         "★  Spectral Pain",
-                        "Three days since the alchemist took a drop of your blood. It arrives in the night — not a wound but something working through the fire you carry, using the drop as a thread to reach back through. Your body registers it as pain before your mind can name it. You come awake on the floor of whatever inn you are in, the fire inside doing something involuntary.",
+                        "Three days since the alchemist took a drop of your blood. It arrives in the night — not a wound but something working through the marks you carry, using the drop as a thread to reach back through. Your body registers it as pain before your mind can name it. You come awake on the floor of whatever inn you are in, your hands drawing something involuntary.",
                         new List<InquiryElement>
                         {
                             new InquiryElement("ok", "Endure it.", null, true,
@@ -461,7 +461,7 @@ namespace TheDarkestNight
             {
                 // Quiet tracker — something now knows where you are
                 MageKnowledge._deferredInquiry = () =>
-                    Msg("Three days since the alchemist took a drop of your blood. Whatever he intended, it has not arrived in any form you can feel. The fire you carry is unchanged. But you notice, over the following days, that certain things find you more easily than they should — a message through an intermediary you did not know had your route, a face in a market you have seen before in a different city. Something knows your location. It has not yet decided what to do with that information.", DimColor);
+                    Msg("Three days since the alchemist took a drop of your blood. Whatever he intended, it has not arrived in any form you can feel. The marks you carry are unchanged. But you notice, over the following days, that certain things find you more easily than they should — a message through an intermediary you did not know had your route, a face in a market you have seen before in a different city. Something knows your location. It has not yet decided what to do with that information.", DimColor);
             }
         }
 
@@ -857,7 +857,7 @@ namespace TheDarkestNight
                             ChangeRenown(10f);
                             _trinketPhase     = 2;
                             _trinketCountdown = 7;
-                            Msg("You reach. Something in the warmth extends toward you in return. You feel the contact as a jolt through the hand and through whatever the fire inside you is. When you wake, you are shaking, and there is one more thing you know how to do. You're not sure where the knowledge came from.", FireColor);
+                            Msg("You reach. Something in the warmth extends toward you in return. You feel the contact as a jolt through the hand and through whatever it is the runes made of you. When you wake, you are shaking, and there is one more thing you know how to do. You're not sure where the knowledge came from.", FireColor);
                             break;
                         case "b":
                             _trinketPhase     = 2;
@@ -950,7 +950,7 @@ namespace TheDarkestNight
                         "You drop it into a well at dusk — listen for the sound of it striking water below. There is no sound. You ride on. The warmth you carried for seven days is simply gone, and you notice its absence the way you notice a tooth when it stops hurting."
                     }[_rng.Next(3)];
                     successMsg = new[]{
-                        "You open your hand in the dream and let the warmth come the rest of the way in. It passes through you like a tide: slow, total, indifferent to your comfort. When you wake, your purse is somehow heavier, three lords who have never spoken well of you have revised their estimate, and the fire you carry burns with a steadier quality. You don't know how to explain any of it. You don't try.",
+                        "You open your hand in the dream and let the warmth come the rest of the way in. It passes through you like a tide: slow, total, indifferent to your comfort. When you wake, your purse is somehow heavier, three lords who have never spoken well of you have revised their estimate, and the marks you draw hold with a steadier quality. You don't know how to explain any of it. You don't try.",
                         "The shard pulses once, twice — a heartbeat that isn't yours. Something passes between you in the dream, a transaction with no words. You wake with ash on your fingers and a stranger's debt settled in your name. Gold finds you before noon. Morale in the camp runs higher than the weather warrants. The shard in your pocket is warm but ordinary-looking. Nobody else feels it.",
                         "You hold nothing back in the dream and the warmth holds nothing back in return. It is like standing too close to a forge — your skin does not burn but you understand what burning is. When you wake, three favors have been called in overnight by no one you instructed. Coin arrives. The camp's temper steadies. The shard sits quiet in your coat, waiting."
                     }[_rng.Next(3)];
@@ -959,7 +959,7 @@ namespace TheDarkestNight
                         "The warmth comes all the way in. The amber cracks in the dream — hairline fractures that spread until the whole piece is a web of them. You understand what is being traded before it is finished. Fifty years, drawn precisely through you like thread through a needle. You wake with grey where there wasn't grey and a weight in your joints that will not leave. The shard in your pocket is just amber now."
                     }[_rng.Next(2)];
                     deathMsg = new[]{
-                        "The warmth comes all the way in and keeps coming. You understand, in the last moment, that it was never warmth — it was appetite. The fire inside you feeds it until there is nothing left to feed with. You do not wake.",
+                        "The warmth comes all the way in and keeps coming. You understand, in the last moment, that it was never warmth — it was appetite. Everything the runes ever wrote into you feeds it until there is nothing left to feed with. You do not wake.",
                         "You let it in completely and it does not stop. The warmth becomes heat becomes the specific temperature of something feeding. The last clear thought you have is that you were the fuel the whole time. You do not wake."
                     }[_rng.Next(2)];
                     break;

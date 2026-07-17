@@ -397,12 +397,12 @@ namespace TheDarkestNight
             string scoutHint  = SkillHint(DefaultSkills.Scouting, 0.30f, "Read the signs for what they are");
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                "★ Something Came Through Here",
-                $"Your scouts find livestock dead in the fields near {vName} — drained white, cold, " +
-                $"all of them facing the same way, out toward the dark. The villagers won't meet your eyes. " +
-                $"Someone burned marks into the northern field after midnight: sigils, not stubble, " +
-                $"the kind of thing you carve when you want the Night to know your door from your neighbour's. " +
-                $"You can't prove it. But someone here has been leaving the demons an invitation.",
+                "★ Darkness in the Roots",
+                $"Your scouts found livestock dead in the fields near {vName} — bloodless, cold, " +
+                $"facing the same direction. The villagers won't meet your eyes. " +
+                $"Someone lit fires in the northern field after midnight, " +
+                $"the wrong colour and shape for hearth or harvest. " +
+                $"You cannot prove it, but something of the cult has been here recently.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Burn the village. The demon-sworn hide among the frightened.", null, true,
@@ -463,7 +463,7 @@ namespace TheDarkestNight
                                         new InquiryElement("x1", "Execute him publicly — make an example.", null, true,
                                             "Crime +5. Village preserved. Relation with settlement lord +5."),
                                         new InquiryElement("x2", "Exile him. Tell the village what was found.", null, true,
-                                            "He escapes. the demons lose this agent here, for now."),
+                                            "He escapes. The dark loses this servant here, for now."),
                                         new InquiryElement("x3", "Use him — feed false information through the channel.", null, true,
                                             "Calculating +1. Difficult to sustain, but the intelligence value is real."),
                                     },
@@ -479,11 +479,11 @@ namespace TheDarkestNight
                                                 Msg("You hold a brief public reckoning. The tanner does not deny it. The village watches. The elder thanks you. The settlement lord, receiving word of how you handled it, revises his opinion of you upward — you found the problem, judged it, and left the village intact.", GoodColor);
                                                 break;
                                             case "x2":
-                                                Msg("You escort him to the village boundary and tell him what exile means in your jurisdiction: never return, never make contact, and be grateful the alternative was available. He goes. the demons network loses this thread — but threads can be replaced.", DimColor);
+                                                Msg("You escort him to the village boundary and tell him what exile means in your jurisdiction: never return, never make contact, and be grateful the alternative was available. He goes. The dark loses this thread — but the desperate are never in short supply.", DimColor);
                                                 break;
                                             case "x3":
                                                 ShiftTrait(DefaultTraits.Calculating, 1);
-                                                Msg("You explain his situation to him precisely. He understands. Whether he cooperates fully or plays both sides is a question you cannot answer without infrastructure you do not have. What you have is a frightened man with divided loyalties and a specific contact in the demons's local network. That is worth something.", AshenColor);
+                                                Msg("You explain his situation to him precisely. He understands. Whether he cooperates fully or plays both sides is a question you cannot answer without infrastructure you do not have. What you have is a frightened man with divided loyalties and a name — one of the very few in this valley who truly serves the dark. That is worth something.", AshenColor);
                                                 break;
                                         }
                                     }, null, "", false), false, true);
@@ -716,7 +716,7 @@ namespace TheDarkestNight
                 $"A worn priest intercepts you at the city gate of {cName}. " +
                 $"He speaks quickly — he has been turned away by two lords already. " +
                 $"He wants to build a sanctuary here: a place where the honourable can seek " +
-                $"blessing, healing, and protection against the demons. He needs coin. A great deal of it.",
+                $"blessing, healing, and protection against the Night. He needs coin. A great deal of it.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Donate 10,000 denars — build it properly.", null, true,
@@ -805,18 +805,18 @@ namespace TheDarkestNight
         }
 
         // ── LV_ColdEmbrace — village leave ────────────────────────────────────
-        // Resting in the afternoon, a ring of demons closes around the player.
-        // They hold out the bargain and wait.
+        // Resting in the afternoon, a ring of cultists closes around you.
+        // They reach out the cold and wait.
         private static void LV_ColdEmbrace(Settlement s)
         {
             float athChance = Math.Min(0.90f, 0.35f + (Hero.MainHero?.GetSkillValue(DefaultSkills.Athletics) ?? 0) * 0.003f);
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "★ The Circle Closes",
-                "You're resting in the shade outside the village when they come — in daylight, which is the wrong. " +
-                "A ring of demons has closed around you without a sound, ember eyes steady, heat rolling off them like an open forge. " +
-                "They don't attack. They hold out their clawed hands, palms up, the way a man offers a deal he expects you to take. " +
-                "They're offering you what they are.",
+                "You are resting in the afternoon shade outside the village when they arrive. " +
+                "A ring of grey-cloaked cultists — cold-eyed, silent as falling ash — has closed around you. " +
+                "They do not speak. They extend their hands toward you, and the air drops ten degrees. " +
+                "They are offering you something.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Take it. Grip the hand and be what they are.", null, true,
@@ -835,9 +835,9 @@ namespace TheDarkestNight
                     {
                         case "a":
                             BecomeAshen();
-                            Msg("You grip the hand. The heat goes into you like swallowed coals and doesn't stop. " +
-                                "By the time your reflection shows the ember at the back of your eyes, it's already done. " +
-                                "The demons lower their hands and step back. You're theirs now.", BadColor);
+                            Msg("You reach back. The cold is not a sensation — it is a state. " +
+                                "The grey settles into your eyes before you are aware it has begun. " +
+                                "The cultists lower their hands. You are one of them now.", BadColor);
                             break;
                         case "b":
                             if (_rng.NextDouble() < athChance)
@@ -1024,7 +1024,7 @@ namespace TheDarkestNight
                 : "Requires Honourable and Merciful traits and party morale of 60 or above.";
 
             string mageHint = mage
-                ? "Push the fire outward — cold auras cannot hold against it. Costs a day."
+                ? "Set a warding rune against it — cold auras cannot hold against the mark. Costs a day."
                 : "Requires mage ability.";
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
@@ -1087,7 +1087,7 @@ namespace TheDarkestNight
                         case "c":
                             AgePlayer(1);
                             AddMorale(5f);
-                            Msg("You push the fire outward — not a spell, exactly, more a refusal: " +
+                            Msg("You trace the warding mark and push it outward — not a spell, exactly, more a refusal: " +
                                 "warmth moving against cold in the way warmth does when it remembers what it is. " +
                                 "The fog pulls back in sections, like cloth being peeled from something wet. " +
                                 "Gone before the sky lightens. Your men sleep through it entirely. " +

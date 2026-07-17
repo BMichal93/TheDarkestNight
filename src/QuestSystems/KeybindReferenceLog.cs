@@ -228,7 +228,7 @@ namespace TheDarkestNight
                 "you his thanks."), true);
 
             AddLog(new TextObject(
-                "READING THE SIGNS — The Codex of the Inner Fire (Left Alt + L on the map) still teaches the " +
+                "READING THE SIGNS — The Codex of the Runes (Left Alt + L on the map) still teaches the " +
                 "old element-craft to any mage who has not yet opened a spellbook of their own; once the book is " +
                 "open, the same keys show you the book instead. Whatever else this world has taken from you, it " +
                 "has not taken the ability to learn. Use it."), true);

@@ -4,7 +4,7 @@
 // Game menu implementation for recruiting the Ashen dead.
 //
 // Menu tree:
-//   "town" → "Muster the Ashen Dead"
+//   "town" → "Muster the Hollow Dead"
 //     → "ashen_recruit_main"  (description + which rank to bind)
 //       → "ashen_recruit_bind_<0..4>"  (per-troop option — checks prisoners)
 //       → "ashen_recruit_leave"
@@ -41,7 +41,7 @@ namespace TheDarkestNight
                         try
                         {
                             if (!HasAshenRecruiter(Settlement.CurrentSettlement)) return false;
-                            MBTextManager.SetTextVariable("ASHEN_RECRUIT_ENTER_TEXT", "Muster the Ashen Dead");
+                            MBTextManager.SetTextVariable("ASHEN_RECRUIT_ENTER_TEXT", "Muster the Hollow Dead");
                             try { args.optionLeaveType = GameMenuOption.LeaveType.Submenu; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             args.IsEnabled = true;
                             return true;

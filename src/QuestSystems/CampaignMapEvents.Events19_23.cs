@@ -78,10 +78,10 @@ namespace TheDarkestNight
                 if (targets.Count == 0)
                 {
                     string noKillMsg = isFatwaTemple
-                        ? $"The Inquisitor's Writ — the Templar Inquisition of {kingdomName} raised a writ against the fire-touched. The accused sealed their doors and let the order's fury burn itself out. No blood was spilled — this time."
+                        ? $"The Inquisitor's Writ — the Templar Inquisition of {kingdomName} raised a writ against the rune-marked. The accused sealed their doors and let the order's fury burn itself out. No blood was spilled — this time."
                         : isFatwaTribes
                         ? $"Mage Fatwa — the Huntmaster of {kingdomName} moved against fire-touched who answer to no blood-pact but their own. The accused rode fast enough. The Vanguard came back empty-handed."
-                        : $"Mage Fatwa — fear of the fire and ash swept {kingdomName} like a fever. Torches were lit. Doors were barred. The mages stayed hidden long enough for the mood to break.";
+                        : $"Mage Fatwa — fear of the marks and the hands that draw them swept {kingdomName} like a fever. Torches were lit. Doors were barred. The mages stayed hidden long enough for the mood to break.";
                     MBInformationManager.AddQuickInformation(new TextObject(noKillMsg));
                     return;
                 }
@@ -102,10 +102,10 @@ namespace TheDarkestNight
                     : $"{killed[0]}, {killed[1]}, and {killed.Count - 2} others";
 
                 string fatwaMsg = isFatwaTemple
-                    ? $"The Inquisitor's Writ — the Templar Inquisition of {kingdomName} declared the fire-touched an abomination against the Light's covenant. There was no mob. There was only the writ, the guard, and the door. {nameList} did not survive the chapter-room. The Temple does not need a crowd to be thorough."
+                    ? $"The Inquisitor's Writ — the Templar Inquisition of {kingdomName} declared the rune-marked an abomination against the Light's covenant. There was no mob. There was only the writ, the guard, and the door. {nameList} did not survive the chapter-room. The Temple does not need a crowd to be thorough."
                     : isFatwaTribes
-                    ? $"Mage Fatwa — the Huntmaster of {kingdomName} named the fire-touched as rivals to his own flame. The riders agreed without much persuading. {nameList} did not survive the week. The Huntmaster does not share fire with those who serve no blood-pact."
-                    : $"Mage Fatwa — a preacher in {kingdomName} declared that the fire-touched were an abomination. The crowd agreed. {nameList} did not survive the week. The mob does not need to understand what it fears — only that it fears it.";
+                    ? $"Mage Fatwa — the Huntmaster of {kingdomName} named the rune-marked as rivals to his own blood-rite. The riders agreed without much persuading. {nameList} did not survive the week. The Huntmaster does not share power with those who serve no blood-pact."
+                    : $"Mage Fatwa — a preacher in {kingdomName} declared that the rune-marked were an abomination. The crowd agreed. {nameList} did not survive the week. The mob does not need to understand what it fears — only that it fears it.";
                 MBInformationManager.AddQuickInformation(new TextObject(fatwaMsg));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
@@ -247,7 +247,7 @@ namespace TheDarkestNight
                         string scapeMsg = isWolfTemple
                             ? $"A Wolf in Sheep's Clothing — The tribunal of {kingdomName} needed a name. {victim.Name} gave them one by existing. Condemned before sunset; their faith neither proven nor questioned."
                             : isWolfTribes
-                            ? $"A Wolf in Sheep's Clothing — The Huntmaster needed the accusation to land somewhere. {victim.Name} was closest when the fire fell. Gone before sunrise; guilt neither spoken nor answered."
+                            ? $"A Wolf in Sheep's Clothing — The Huntmaster needed the accusation to land somewhere. {victim.Name} was closest when the blow fell. Gone before sunrise; guilt neither spoken nor answered."
                             : $"A Wolf in Sheep's Clothing — {kingdomName}'s court needed an answer. {victim.Name} gave them one by existing. Executed before sunset; guilt neither proven nor questioned.";
                         MBInformationManager.AddQuickInformation(new TextObject(scapeMsg));
                     }
@@ -425,7 +425,7 @@ namespace TheDarkestNight
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "The Long Knife — The sanctuary's wards blaze bright. The killers hit them like a wall of fire " +
+                    "The Night's Gambit — The sanctuary's ward blazes bright. The assassins feel it like a wall of fire " +
                     "and pull back into the dark. Tonight, the Empire's lords sleep safely."));
                 return;
             }
@@ -604,8 +604,8 @@ namespace TheDarkestNight
                       + $" and {seizedNames[seizedNames.Count - 1]} fell to the demons before the sun rose. ";
 
             MBInformationManager.AddQuickInformation(new TextObject(
-                $"The Long Knife — In a single night of fire and quiet murder, every Imperial throne was struck at once. " +
-                $"{leaderStr}. Their courts woke to soot on the pillows and cooling blood on the floors. " +
+                $"The Night's Gambit — In a single night of cold fire and silence, every Imperial throne was struck at once. " +
+                $"{leaderStr}. Their courts woke to ash on the pillows and cooling blood on the floors. " +
                 (moraleHit > 0 ? $"Dread swept through {moraleHit} Imperial warbands. " : "") +
                 (secHit > 0 ? $"{secHit} Imperial cit{(secHit != 1 ? "ies" : "y")} erupted in panic and suspicion. " : "") +
                 seizedStr +

@@ -441,7 +441,7 @@ namespace TheDarkestNight
 
             _objLords = AddDiscreteLog(
                 new TextObject("Silence seven cult lords in battle — each one releases a shard of Aelisar."),
-                new TextObject("cult Lords Silenced"), 0, DragonQuestSystem.TargetLordsSlain, null, false);
+                new TextObject("Cult Lords Silenced"), 0, DragonQuestSystem.TargetLordsSlain, null, false);
             _objRuin1 = AddDiscreteLog(
                 new TextObject("Clear the Sunken Scriptorium (Dravend) — where the first covenant was written."),
                 new TextObject("Sunken Scriptorium"), 0, 1, null, false);
@@ -490,7 +490,7 @@ namespace TheDarkestNight
         internal void LogColdConversion()
         {
             AddLog(new TextObject(
-                "Your fire has gone out. The presence of Aelisar Veth — " +
+                "Your hand has gone cold and still. The presence of Aelisar Veth — " +
                 "who sacrificed himself to hold the cycle — recedes. " +
                 "You are now the thing he spent himself to stop. The quest is closed."));
             CompleteQuestWithFail();

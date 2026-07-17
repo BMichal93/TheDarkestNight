@@ -303,7 +303,7 @@ namespace TheDarkestNight
                     var item = DemonBloodItem();
                     if (item != null && MobileParty.MainParty?.ItemRoster != null)
                         MobileParty.MainParty.ItemRoster.AddToCounts(item, 2 + _rng.Next(3));
-                    Msg("The broker's guild remembers a useful, uncomplaining partner. A courier leaves a case of Demon Blood at your camp with no note attached — and the standing, unspoken expectation that you will be just as useful the next time they ask.", GoodColor);
+                    Msg("The Bloodbound brokers remember a useful, uncomplaining partner. A courier leaves a case of Demon Blood at your camp with no note attached — and the standing, unspoken expectation that you will be just as useful the next time they ask.", GoodColor);
                 };
             }
         }

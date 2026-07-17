@@ -99,7 +99,7 @@ namespace TheDarkestNight
         private static readonly string[] _barters =
         {
             "I don't haggle. Name your need straight, or don't name it at all.",
-            "Coin doesn't hold the line against the Ashen. Bring me something that does.",
+            "Coin doesn't hold the line against the Night. Bring me something that does.",
             "A Northman's word is worth more than his purse. I'll not trade in the other direction.",
         };
 

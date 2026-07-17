@@ -6,6 +6,7 @@
 // Partial of CampaignMapEvents (shared state lives in CampaignMapEvents.cs).
 // =============================================================================
 
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -40,8 +41,13 @@ namespace TheDarkestNight
                     new Color(0.38f, 0.50f, 0.75f)));
             }
 
-            // Undying Host: fires once the day threshold is first crossed
-            if (!_undyingHostFired && !_undyingHostPortentShown
+            // Undying Host: fires once the day threshold is first crossed.
+            // Same legacy gate as the event itself — no living Ashen kingdom,
+            // no host, no omen of one.
+            bool ashenAlive = false;
+            try { ashenAlive = Kingdom.All.Any(k => k.StringId == AshenKingdomId && !k.IsEliminated); }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            if (!_undyingHostFired && !_undyingHostPortentShown && ashenAlive
                 && day >= UndyingHostEarliestDay)
             {
                 _undyingHostPortentShown = true;

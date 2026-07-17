@@ -1,6 +1,6 @@
 // =============================================================================
-// ASH AND EMBER — MageKnowledge.Events.cs
-// Ashen prompt, possession event, and 'The Cold Calls Your Name'.
+// THE DARKEST NIGHT — MageKnowledge.Events.cs
+// The dying-mage prompt, possession event, and 'The Night Calls Your Name'.
 // Partial of MageKnowledge (shared static state lives in MageKnowledge.cs).
 // =============================================================================
 
@@ -32,12 +32,12 @@ namespace TheDarkestNight
         private static void ShowAshenPrompt(Action onResolved)
         {
             InformationManager.ShowInquiry(new InquiryData(
-                "The Last Ember",
-                "A century of years. The fire should have consumed you by now — but it has not gone out. Something darker waits at the edge of the ash.\n\n" +
-                "You can let go. The fire will burn clean, and it will end.\n\n" +
-                "Or you can take the cold that remains. You will not die. But what burns in you afterward will not be warm.",
+                "The Last Mark",
+                "A century of years. The work should have used you up by now — but your hand still remembers every rune. Something darker waits at the edge of the lamplight, reading over your shoulder.\n\n" +
+                "You can set the stylus down. The ledger closes clean, and it ends.\n\n" +
+                "Or you can let the dark finish writing you. You will not die. But what signs your name afterward will not be you.",
                 true, true,
-                "Take the cold", "Let it end",
+                "Let the dark finish it", "Let it end",
                 () =>
                 {
                     onResolved?.Invoke();
@@ -53,14 +53,14 @@ namespace TheDarkestNight
                     // Leave old kingdom and join the Ashen
                     try { AshenCitySystem.OnPlayerBecameAshen(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     InformationManager.DisplayMessage(new InformationMessage(
-                        "The fire dies. Something colder and older takes its place. The world will see it in your eyes.",
+                        "The last rune you drew unravels. Something colder and older writes itself in the space you leave. The world will see it in your eyes.",
                         new Color(0.3f, 0.35f, 0.7f)));
                 },
                 () =>
                 {
                     onResolved?.Invoke();
                     InformationManager.DisplayMessage(new InformationMessage(
-                        "The fire burns clean at last.",
+                        "The ledger closes clean at last.",
                         new Color(0.8f, 0.6f, 0.3f)));
                     try { TaleWorlds.CampaignSystem.Actions.KillCharacterAction.ApplyByOldAge(Hero.MainHero, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
@@ -84,7 +84,7 @@ namespace TheDarkestNight
             if (_possessionStrainDays > 0)
             {
                 InformationManager.DisplayMessage(new InformationMessage(
-                    failText + " There was nothing left to hold it back. The cold claims you.",
+                    failText + " There was nothing left to hold it back. The dark claims you.",
                     new Color(0.3f, 0.35f, 0.7f)));
                 try { TaleWorlds.CampaignSystem.Actions.KillCharacterAction.ApplyByOldAge(Hero.MainHero, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 return;
@@ -93,7 +93,7 @@ namespace TheDarkestNight
             try { Hero.MainHero.HitPoints = Math.Min(Hero.MainHero.HitPoints, 5); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try { MobileParty.MainParty.RecentEventsMorale -= 20f; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             InformationManager.DisplayMessage(new InformationMessage(
-                failText + " You wake face-down in the ash, body broken, the cold a half-step closer. " +
+                failText + " You wake face-down in the dirt, body broken, the dark a half-step closer. " +
                 "If it turns on you again before your strength returns (21 days), it will not let go.",
                 new Color(0.3f, 0.35f, 0.7f)));
         }
@@ -109,12 +109,12 @@ namespace TheDarkestNight
             float aChance = Math.Min(0.9f, aSkill * 0.003f);
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                "The Flame Turns",
-                "Dark instincts and cold flame flood your body. The ash stirs something ancient — it recognises itself in you, and it is not yet satisfied.\n\nFor a terrible moment you cannot tell whether you are resisting the cold or whether what fights back is still you.",
+                "The Hand That Is Not Yours",
+                "Dark instinct floods your body, and your hands begin a mark you never chose to draw. Something ancient stirs behind the rune — it recognises its own writing in you, and it is not yet satisfied.\n\nFor a terrible moment you cannot tell whether you are resisting the dark or whether what fights back is still you.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("surrender", "Surrender to it.", null, true,
-                        "Let the cold take what it wants. It will not need much more."),
+                        "Let the dark take what it wants. It will not need much more."),
                     new InquiryElement("leader", "Focus your will — fight it from within.", null, true,
                         $"Leadership test. Skill: {lSkill}. Success chance: {lPct}%." +
                         (IsPossessionStrained ? " You are still strained — failure now is death." : " Failure leaves you broken and strained, not dead.")),
@@ -129,14 +129,14 @@ namespace TheDarkestNight
                     if (choice == "surrender")
                     {
                         InformationManager.DisplayMessage(new InformationMessage(
-                            "You let go. The cold is grateful.", new Color(0.3f, 0.35f, 0.7f)));
+                            "You let go. The dark is grateful.", new Color(0.3f, 0.35f, 0.7f)));
                         try { TaleWorlds.CampaignSystem.Actions.KillCharacterAction.ApplyByOldAge(Hero.MainHero, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     }
                     else if (choice == "leader")
                     {
                         if (_rng.NextDouble() < lChance)
                             InformationManager.DisplayMessage(new InformationMessage(
-                                "Your will holds. The cold retreats — for now.", new Color(0.7f, 0.7f, 0.9f)));
+                                "Your will holds. The dark retreats — for now.", new Color(0.7f, 0.7f, 0.9f)));
                         else
                             OnPossessionTestFailed("Your will breaks.");
                     }
@@ -144,7 +144,7 @@ namespace TheDarkestNight
                     {
                         if (_rng.NextDouble() < aChance)
                             InformationManager.DisplayMessage(new InformationMessage(
-                                "You push it back. The cold recoils.", new Color(0.7f, 0.7f, 0.9f)));
+                                "You push it back. The dark recoils.", new Color(0.7f, 0.7f, 0.9f)));
                         else
                             OnPossessionTestFailed("Your body gives out.");
                     }
@@ -170,8 +170,8 @@ namespace TheDarkestNight
         private static readonly string[] _dreamTexts =
         {
             // 1. Hands burning gently
-            "Your hands are burning — not painfully, but with the patient insistence of something that has been waiting. " +
-            "The fire is not angry. It is looking for a way out that isn't destruction. You watch it move under your skin like a slow tide. " +
+            "Your hands are drawing in your sleep — patiently, insistently, a mark you have never been taught. " +
+            "It is not an angry shape. It is looking for a way to be written that isn't destruction. You watch your own fingers move like a slow tide. " +
             "You wake certain of something you cannot name, and the certainty stays with you through the morning.",
 
             // 2. Woman across an uncrossable river
@@ -187,7 +187,7 @@ namespace TheDarkestNight
             "They do not speak. They do not need to. You stand there looking at each other across the dark until you wake.",
 
             // 4. Teaching a child, child becomes frightened old man
-            "You are teaching a child how to make fire from nothing — showing them the gesture, the stillness before the flame. " +
+            "You are teaching a child their first rune — showing them the strokes, the stillness before the mark takes. " +
             "They watch with the absolute attention children bring to things that matter. " +
             "When you look up from your hands, the child is old. Frightened, the way old men are frightened — " +
             "not of dying, but of having waited too long. You do not know if they are frightened of you " +
@@ -195,8 +195,8 @@ namespace TheDarkestNight
 
             // 5. Walking a battlefield, the dead watching
             "The battlefield is quiet in the way only battlefields ever are. You walk it after. " +
-            "The dead watch you pass — not accusingly, just watching, the way the dead are said to watch those who can still burn. " +
-            "One of them reaches out. You take their hand. The fire passes between you, not much, " +
+            "The dead watch you pass — not accusingly, just watching, the way the dead are said to watch those who still know the work. " +
+            "One of them reaches out. You take their hand and trace a small mark on the palm, not much, " +
             "but some — and their expression changes from watching to something close to gratitude. " +
             "You wake with the weight of that hand still in yours.",
 
@@ -207,45 +207,45 @@ namespace TheDarkestNight
             "You stay there, kneeling, while they call and call the wrong name, until the cold wakes you.",
 
             // 7. The cold walking beside you
-            "The cold walks beside you on the road, carrying something wrapped in cloth. " +
+            "The dark walks beside you on the road, carrying something wrapped in cloth. " +
             "You do not look at it directly. You walk together for a long time without speaking. " +
-            "Eventually the cold sets the bundle down beside the road and continues walking without it. " +
+            "Eventually it sets the bundle down beside the road and continues walking without it. " +
             "You stop. You look at what it left. You do not pick it up. " +
             "You don't know, when you wake, whether that was wisdom or cowardice.",
 
             // 8. Fire dying to a coal
-            "A fire dying slowly — not going out, just settling into itself, " +
-            "the wood becoming coal becoming something smaller and more essential than fire. " +
-            "You watch it for a long time. Near the end, when there is only the one coal left, " +
-            "it looks back at you. Not with eyes. With the particular attention of things that have burned " +
+            "A rune fading slowly from a stone — not scoured away, just settling into itself, " +
+            "the line becoming groove becoming something smaller and more essential than writing. " +
+            "You watch it for a long time. Near the end, when there is only one stroke left, " +
+            "it looks back at you. Not with eyes. With the particular attention of things that have held " +
             "for a long time and know what it costs.",
 
             // 9. Old mage across a fire
-            "An old mage across a fire from you, somewhere without walls. They look the way " +
+            "An old mage across a campfire from you, somewhere without walls. They look the way " +
             "people look when they have paid a great deal and do not regret it. " +
             "\"The cost was this,\" they say. \"I knew it. I paid anyway.\" " +
             "You ask what the cost was. They look at you with something like patience. " +
-            "\"That you had to ask,\" they say. The fire settles between you. You wake not sure which of you they were speaking to.",
+            "\"That you had to ask,\" they say. The embers settle between you. You wake not sure which of you they were speaking to.",
 
             // 10. The fire is very small in your palm
-            "The fire is very small in your palm — smaller than you have ever held it, " +
-            "small enough to cup your hands around and breathe on. It does not ask for more. " +
+            "The rune is very small in your palm — drawn finer than you have ever managed, " +
+            "faint enough to cup your hands around and shelter. It does not ask for more. " +
             "It simply trusts you to carry it. You walk carefully through the dream, hands cupped, " +
             "protecting something that has never needed protecting before. " +
             "You wake with the feeling that something is very close. Not threatening. Just close.",
 
             // 11. The cold speaks clearly
-            "The cold speaks to you clearly, the way it rarely does — without the usual indirection, " +
-            "without the cold distance it usually keeps. \"There is not much left,\" it says. " +
-            "\"Use it well.\" You do not know if it means the fire, or the time, or something else entirely. " +
+            "The dark speaks to you clearly, the way it rarely does — without the usual indirection, " +
+            "without the distance it usually keeps. \"There is not much left,\" it says. " +
+            "\"Use it well.\" You do not know if it means the work, or the time, or something else entirely. " +
             "It does not sound like a warning. It does not sound like an offer. " +
             "It sounds like both at once, the way the truth sometimes does.",
 
             // 12. Younger self frightened of what you've become
             "Your younger self stands across from you, frightened — not of you, but of what you show them " +
             "you will become. You understand. You were frightened too, before you understood " +
-            "what the fire was asking. You show them, carefully, what the fire does when you trust it: " +
-            "a small warmth, nothing dangerous, nothing cold. They watch. " +
+            "what the work was asking. You show them, carefully, what a rune does when you trust it: " +
+            "a small light, nothing dangerous, nothing cold. They watch. " +
             "Their fear doesn't leave all at once, but it changes shape into something more like wonder. " +
             "You wake not afraid.",
         };
@@ -265,24 +265,24 @@ namespace TheDarkestNight
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
-        // ── The Cold Calls Your Name ──────────────────────────────────────────
+        // ── The Night Calls Your Name ──────────────────────────────────────────
         // Fires when WhisperCount reaches 100. After Resist or Bargain, whispers
         // drop and the event can fire again once they climb back to 100.
         private static void ShowColdCallsEvent()
         {
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                "The Cold Calls Your Name",
+                "The Night Calls Your Name",
                 "Three pale figures stand at the crossroads. They wear no faces you recognise — but they know yours. " +
-                "The ash in your blood has been speaking to them for a long time, and tonight they have come to collect.\n\n" +
-                "You can feel the fire straining against them. It always has. But it has never strained this hard.",
+                "Every mark you have drawn was a word in a long conversation, and tonight they have come to answer it.\n\n" +
+                "You can feel every rune you know straining against them. They always have. But they have never strained this hard.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("resist", "I will not hear it. Not tonight. Not ever.", null, true,
                         "Resist. −10 days. −30 whispers. They will return."),
                     new InquiryElement("bargain", "Hear them out. Give what they ask and walk away.", null, true,
                         "Bargain. −30 days. −60 whispers. They withdraw, satisfied — for now."),
-                    new InquiryElement("accept", "The fire in me has always been theirs.", null, true,
-                        "Accept the cold. Become Ashen."),
+                    new InquiryElement("accept", "Every mark I ever drew was a letter to them. Let them collect.", null, true,
+                        "Accept the dark. Become one of the Night's own."),
                 },
                 false, 1, 1, "Decide", "",
                 chosen =>
@@ -293,7 +293,7 @@ namespace TheDarkestNight
                         AgingSystem.AgeHero(Hero.MainHero, 10);
                         RemoveWhispers(30);
                         InformationManager.DisplayMessage(new InformationMessage(
-                            "The figures recede into the dark. The fire holds — barely. They will return. −10 days, −30 whispers.",
+                            "The figures recede into the dark. Your wards hold — barely. They will return. −10 days, −30 whispers.",
                             new Color(0.7f, 0.6f, 0.8f)));
                     }
                     else if (choice == "bargain")
@@ -313,7 +313,7 @@ namespace TheDarkestNight
                         ApplyAshenAppearance(Hero.MainHero);
                         try { AshenCitySystem.OnPlayerBecameAshen(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         InformationManager.DisplayMessage(new InformationMessage(
-                            "The fire goes out. Something older and colder fills the space where it was.",
+                            "Every rune you know goes dark at once. Something older and colder writes itself where they were.",
                             new Color(0.3f, 0.35f, 0.7f)));
                     }
                 },

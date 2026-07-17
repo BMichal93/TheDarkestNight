@@ -63,7 +63,7 @@ namespace TheDarkestNight
                 GlowColor   = ColorSchool.Red,
                 EffectDesc  = "Shard burst: deals 35 fire damage to all enemies within 5 m.",
                 Lore        = "The lattice grew too tight. The crystal holds more light than its structure can bear, "
-                            + "and when the inner fire of its bearer meets that surplus, the whole thing detonates. "
+                            + "and when a bearer's working meets that surplus, the whole thing detonates. "
                             + "Brief. Bright. Not particularly concerned with what is nearby.",
             },
             new CrystalDef

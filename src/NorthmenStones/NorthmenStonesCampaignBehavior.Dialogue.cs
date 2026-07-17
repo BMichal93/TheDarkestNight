@@ -20,7 +20,7 @@ namespace TheDarkestNight
             {
                 starter.AddPlayerLine(
                     "nstones_ask_open", "hero_main_options", "nstones_reveal",
-                    "I hear the seers have found a way to shut the Ashen out for good. Tell me.",
+                    "I hear the seers have found a way to shut the Night out for good. Tell me.",
                     CondCanAsk, null, DialoguePriority);
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
@@ -30,7 +30,7 @@ namespace TheDarkestNight
                 starter.AddDialogLine(
                     "nstones_reveal_npc", "nstones_reveal", "nstones_reveal_player",
                     "You have heard true, then. The seers say the standing stones can be raised at Varcheg " +
-                    "and bound with Fire — any Ashen thing that tries to cross there will burn before it " +
+                    "and bound with Fire — any demon that tries to cross there will burn before it " +
                     "sets foot on living ground. To raise them we need iron, hardwood, tools, silver, coin " +
                     "enough to keep the masons fed for years, and — this is the seers' price, not mine — " +
                     "Awakened bound and given up, one of every kind the Forest Clans' sacred sites can wake. " +

@@ -81,7 +81,7 @@ namespace TheDarkestNight
                 }
                 else if (pick == 1)
                 {
-                    TryRenameParty(party, "Ashen Spawn");
+                    TryRenameParty(party, "Spawn of the Night");
                     _ashenSpawnIds.Add(party.StringId);
                     InjectCustomTroops(party, "ashen_thrall", 3 + _rng.Next(5));
                     AdoptIntoAshenFaction(party);
@@ -137,7 +137,7 @@ namespace TheDarkestNight
         public static void ForceMarkAsAshenSpawn(MobileParty party)
         {
             if (party == null) return;
-            TryRenameParty(party, "Ashen Spawn");
+            TryRenameParty(party, "Spawn of the Night");
             _ashenSpawnIds.Add(party.StringId);
             InjectCustomTroops(party, "ashen_thrall",  3 + _rng.Next(6));
             InjectCustomTroops(party, "ashen_invoker", 1 + _rng.Next(3));

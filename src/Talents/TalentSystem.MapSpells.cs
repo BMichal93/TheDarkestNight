@@ -168,7 +168,7 @@ namespace TheDarkestNight
                 {
                     int gold = (int)(700f * mult);
                     Hero.MainHero.ChangeHeroGold(gold);
-                    Msg($"Clairvoyance — no throne to bend, but the fire finds other currents. +{gold} gold.");
+                    Msg($"Clairvoyance — no throne to bend, but the lines find other currents. +{gold} gold.");
                 }
             }
             catch { Msg("Clairvoyance — insight granted."); }
