@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — SettlementEncounters.Events3.cs
+// THE DARKEST NIGHT — SettlementEncounters.Events3.cs
 // Ember tithe, elixirs, inheritance, blood collector, trinkets, tavern.
 // Partial of SettlementEncounters (shared state lives in SettlementEncounters.cs).
 // =============================================================================

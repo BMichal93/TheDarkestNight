@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — CampaignMapEvents.Portents.cs
+// THE DARKEST NIGHT — CampaignMapEvents.Portents.cs
 // Atmospheric portent messages that fire once as day-thresholds approach for
 // once-per-campaign events. They telegraph dread before the hammer falls —
 // giving the player a 7–14 day window of unease before the big event fires.
@@ -29,7 +29,7 @@ namespace TheDarkestNight
         {
             int day = (int)ElapsedCampaignDays();
 
-            // cult Gambit: fires 14 days before the earliest possible trigger
+            // The Long Knife: fires 14 days before the earliest possible trigger
             if (!_ashenGambitFired && !_ashenGambitPortentShown
                 && day >= AshenGambitEarliestDay - 14)
             {
@@ -46,9 +46,9 @@ namespace TheDarkestNight
             {
                 _undyingHostPortentShown = true;
                 InformationManager.DisplayMessage(new InformationMessage(
-                    "A herald found cold on the northern road — no wounds, no horse, no name. " +
-                    "The demon-cult have stopped raiding the villages. " +
-                    "When your enemies go quiet, they are not retreating.",
+                    "A herald found dead on the northern road — no wounds, no horse, no name. " +
+                    "The demons have stopped raiding the villages. " +
+                    "When the Night goes quiet, it isn't because it's leaving.",
                     new Color(0.38f, 0.50f, 0.75f)));
             }
 
@@ -58,8 +58,8 @@ namespace TheDarkestNight
             {
                 _brokenWillPortentShown = true;
                 InformationManager.DisplayMessage(new InformationMessage(
-                    "Court rumours of a kingdom losing its compass — lords who looked into the grey too long. " +
-                    "Kingdoms have broken faith with themselves before. The pattern has a name now.",
+                    "Court rumours of a kingdom losing its compass — crowned heads who've spent too many nights listening to the dark. " +
+                    "Realms have turned on themselves before. There's a name for the pattern now.",
                     new Color(0.38f, 0.50f, 0.75f)));
             }
         }

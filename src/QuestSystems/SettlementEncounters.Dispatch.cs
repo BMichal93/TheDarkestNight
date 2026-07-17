@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — SettlementEncounters.Dispatch.cs
+// THE DARKEST NIGHT — SettlementEncounters.Dispatch.cs
 // Event dispatch — selecting and firing encounters on enter/leave/battle.
 // Partial of SettlementEncounters (shared state lives in SettlementEncounters.cs).
 // =============================================================================

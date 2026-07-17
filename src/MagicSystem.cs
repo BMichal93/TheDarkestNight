@@ -467,7 +467,9 @@ namespace TheDarkestNight
                 }
                 catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-                // Ctrl+Shift+F11 — debug combat trigger: warp nearest hostile to player (or spawn one)
+                // Ctrl+Shift+F11 — debug combat trigger: warp nearest hostile to player
+                // (or spawn a true demon ambush — the Demons/ system, not the legacy
+                // Ashen-cult bandit reskin CampaignMapEvents used to fall back to)
                 try
                 {
                     if (TaleWorlds.InputSystem.Input.IsKeyDown(TaleWorlds.InputSystem.InputKey.LeftControl)
@@ -479,14 +481,16 @@ namespace TheDarkestNight
                 }
                 catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-                // Ctrl+Shift+F9 — debug: spawn a Kindled (elemental) band beside the player
+                // Ctrl+Shift+F9 — debug: spawn a demon ambush beside the player
+                // (the Demons/ night-tide system — DemonFactory bodies, DemonVisuals
+                // shroud, DemonBattleBehavior AI — not the legacy Kindled/Awakened band)
                 try
                 {
                     if (TaleWorlds.InputSystem.Input.IsKeyDown(TaleWorlds.InputSystem.InputKey.LeftControl)
                      && TaleWorlds.InputSystem.Input.IsKeyDown(TaleWorlds.InputSystem.InputKey.LeftShift)
                      && TaleWorlds.InputSystem.Input.IsKeyPressed(TaleWorlds.InputSystem.InputKey.F9))
                     {
-                        ElementalWildsBehavior.DebugSpawnNearPlayer();
+                        DebugSpawnDemonAmbush();
                     }
                 }
                 catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
@@ -501,6 +505,24 @@ namespace TheDarkestNight
                      && TaleWorlds.InputSystem.Input.IsKeyPressed(TaleWorlds.InputSystem.InputKey.F12))
                     {
                         DebugGrantAll();
+                    }
+                }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+
+                // Ctrl+Shift+F8 — debug: force the Demon Lord to rise now (Apocalypse/
+                // endgame), bypassing the day-1000+ eligibility gate, so the endgame
+                // content can be tested without a multi-year campaign
+                try
+                {
+                    if (TaleWorlds.InputSystem.Input.IsKeyDown(TaleWorlds.InputSystem.InputKey.LeftControl)
+                     && TaleWorlds.InputSystem.Input.IsKeyDown(TaleWorlds.InputSystem.InputKey.LeftShift)
+                     && TaleWorlds.InputSystem.Input.IsKeyPressed(TaleWorlds.InputSystem.InputKey.F8))
+                    {
+                        bool appeared = DemonLordSystem.TryAppear();
+                        MBInformationManager.AddQuickInformation(new TaleWorlds.Localization.TextObject(
+                            appeared
+                                ? "[DEBUG] The Demon Lord has risen."
+                                : "[DEBUG] Demon Lord force-appear failed (already risen, or no free castle found)."));
                     }
                 }
                 catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
@@ -557,16 +579,34 @@ namespace TheDarkestNight
                 }
                 else
                 {
-                    // No existing hostile — spawn a fresh Ashen ambush party
+                    // No existing hostile — spawn a fresh demon ambush party
                     try
                     {
-                        CampaignMapEvents.SpawnAshenAmbushNear(
-                            main.GetPosition2D + new Vec2(0.1f, 0f), 30, 0f);
+                        DemonSpawnCampaignBehavior.SpawnAmbushNear(main.GetPosition2D + new Vec2(0.1f, 0f));
                     }
                     catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     MBInformationManager.AddQuickInformation(new TaleWorlds.Localization.TextObject(
-                        "[DEBUG] No hostile found — Ashen ambush spawned nearby."));
+                        "[DEBUG] No hostile found — demon ambush spawned nearby."));
                 }
+            }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+        }
+
+        // Ctrl+Shift+F9 — force-spawns a demon ambush right beside the player,
+        // ready to engage. The reliable way to SEE the Demons/ system (DemonFactory
+        // bodies + DemonVisuals shroud + DemonBattleBehavior AI) without waiting for
+        // dusk. Replaces the old Kindled/Awakened debug spawn.
+        private static void DebugSpawnDemonAmbush()
+        {
+            try
+            {
+                var main = MobileParty.MainParty;
+                if (main == null) return;
+                var party = DemonSpawnCampaignBehavior.SpawnAmbushNear(main.GetPosition2D + new Vec2(0.15f, 0f));
+                MBInformationManager.AddQuickInformation(new TaleWorlds.Localization.TextObject(
+                    party == null
+                        ? "[DEBUG] Demon ambush spawn FAILED — no bandit clan/hideout available."
+                        : "[DEBUG] A demon ambush has risen beside you — engage it."));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }

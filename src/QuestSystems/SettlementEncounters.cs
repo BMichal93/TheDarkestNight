@@ -1,9 +1,9 @@
 // =============================================================================
-// ASH AND EMBER — SettlementEncounters.cs
+// THE DARKEST NIGHT — SettlementEncounters.cs
 // Random personal encounters triggered when the player enters or leaves a
 // settlement. The system tracks Hero.MainHero.CurrentSettlement on the daily
 // tick to detect transitions, then fires one encounter from an appropriate
-// pool (gated by mage status, cult status, and renown).
+// pool (gated by mage status, demon-sworn status, and renown).
 //
 // ┌─────────────────────────────┬───────────────────────┬──────────────────┐
 // │ Event                       │ Trigger               │ Gate             │
@@ -19,14 +19,14 @@
 // │ The Eager Recruit           │ Leave village         │ General          │
 // │ The Festival Farewell       │ Leave village         │ General          │
 // │ The Hollow Hour             │ Leave village         │ General          │
-// │ The Old Flame-Seer          │ Enter village         │ Mage             │
+// │ The Old Spell-Reader        │ Enter village         │ Mage             │
 // │ The Healer's Trade          │ Enter village         │ Mage             │
 // │ Fire and Straw              │ Enter village         │ Mage             │
 // │ The Shrine Goes Out         │ Enter village         │ Mage             │
 // │ The Warmth Merchant         │ Enter village         │ Mage             │
 // │ A Family's Quarrel          │ Enter village         │ General          │
 // │ The Harvest Festival        │ Enter village         │ General          │
-// │ cult Aftermath             │ Enter village         │ General          │
+// │ After the Demons            │ Enter village         │ General          │
 // │ The Warning                 │ Enter village         │ General          │
 // │ The Spilled Cart            │ Enter village         │ General          │
 // │ The Veteran's Question      │ Leave city/castle     │ Mage             │
@@ -36,19 +36,19 @@
 // │ The Bard's Request          │ Leave city/castle     │ General, Ren≥300 │
 // │ A Detained Soldier          │ Leave city/castle     │ General          │
 // │ The Guild's Offer           │ Leave city/castle     │ General, Ren≥500 │
-// │ The demon-cult Informant         │ Leave city/castle     │ General          │
+// │ The Demons' Informant       │ Leave city/castle     │ General          │
 // │ An Insult at the Gate       │ Leave city/castle     │ General          │
 // │ The Curious Scholar         │ Enter city/castle     │ Mage             │
 // │ Another Fire                │ Enter city/castle     │ Mage             │
-// │ The Ash-Touched Market      │ Enter city/castle     │ Mage             │
-// │ Grey Eyes                   │ Enter city/castle     │ cult            │
-// │ The Fellow Cold             │ Enter city/castle     │ cult            │
+// │ The Warded Market           │ Enter city/castle     │ Mage             │
+// │ Ember Eyes                  │ Enter city/castle     │ Demon-sworn      │
+// │ One of Your Own             │ Enter city/castle     │ Demon-sworn      │
 // │ The Crowd Wants a Sign      │ Enter city/castle     │ Mage, Renown≥1000│
 // │ A Soldier Dying             │ Enter city/castle     │ General          │
 // │ The Child's Bead            │ Enter city/castle     │ General          │
 // │ The Trade Council           │ Enter city/castle     │ General, Ren≥700 │
 // │ An Old Enemy                │ Enter city/castle     │ General          │
-// │ The Ember-Tithe             │ Enter village/city    │ Mage             │
+// │ The Last Warmth             │ Enter village/city    │ Mage             │
 // │ What the Keep Concealed     │ Siege (won)           │ Mage             │
 // │ The Alchemist's Promise     │ Enter city/castle     │ General          │
 // │ The Ember Shard             │ Enter village/city    │ General, no trinket│

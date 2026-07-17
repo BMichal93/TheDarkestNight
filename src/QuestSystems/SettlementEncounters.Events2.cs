@@ -1,6 +1,6 @@
 // =============================================================================
-// ASH AND EMBER — SettlementEncounters.Events2.cs
-// After-battle/siege encounters and cult village/city events.
+// THE DARKEST NIGHT — SettlementEncounters.Events2.cs
+// After-battle/siege encounters and demon-sworn village/city events.
 // Partial of SettlementEncounters (shared state lives in SettlementEncounters.cs).
 // =============================================================================
 
@@ -22,12 +22,12 @@ namespace TheDarkestNight
 {
     public static partial class SettlementEncounters
     {
-        // ── AFTER BATTLE (cult): Memory Drain ────────────────────────────────
-        // Fires when a demon-cult player cast 3+ spells in a single battle.
+        // ── AFTER BATTLE (demon-sworn): Memory Drain ─────────────────────────
+        // Fires when a demon-sworn player cast 3+ spells in a single battle.
         // Choices: resist (Leadership roll), accept loss, or feed it (gains XP, larger loss).
         private static void EB_AshenMemoryDrain()
         {
-            // Pick one of the three humane traits to drain (the ones cult players are losing)
+            // Pick one of the three humane traits to drain (the ones the demon-sworn are losing)
             var candidates = new[] { DefaultTraits.Mercy, DefaultTraits.Honor, DefaultTraits.Generosity };
             var drainTrait = candidates[_rng.Next(candidates.Length)];
             string traitName = drainTrait == DefaultTraits.Mercy ? "Mercy"
@@ -37,16 +37,16 @@ namespace TheDarkestNight
             string resistHint = SkillHint(DefaultSkills.Leadership, 0.35f, "Hold the memory through will");
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                "◆  The Fading",
-                "Afterward, in the quiet, you reach for something and it is not there. A name. A face. Something that was yours. " +
-                "The working took more than years this time — it reached further back and took something you did not offer. " +
-                "You are aware of the shape of what is missing. You are not certain you know what it was.",
+                "◆  What the Casting Took",
+                "After, when it's quiet, you reach for something and there's a hole where it was. A name. A face. Something that was yours. " +
+                "The spells take more than sweat — every one you throw, the Night takes a little back, and it doesn't ask which piece you can spare. " +
+                "You know the shape of what's gone. You can't quite remember what filled it.",
                 new List<InquiryElement>
                 {
-                    new InquiryElement("a", "Hold on. Reach for it — force it back.", null, true, resistHint),
-                    new InquiryElement("b", "Let it go. There was a cost. You paid it.", null, true,
-                        $"What is gone is gone. You remain. {traitName} fades."),
-                    new InquiryElement("c", "Feed it more. If it wants to take, let it take — and take something in return.", null, true,
+                    new InquiryElement("a", "Hold on. Reach for it — drag it back.", null, true, resistHint),
+                    new InquiryElement("b", "Let it go. There's a price for the power. You paid it.", null, true,
+                        $"Gone is gone. You're still breathing. {traitName} fades."),
+                    new InquiryElement("c", "Feed it more. If it wants to take, let it — and take something back.", null, true,
                         $"A deeper trade. More is lost. Something is gained."),
                 },
                 false, 1, 1, "Decide", "",
@@ -57,33 +57,33 @@ namespace TheDarkestNight
                         case "a":
                             if (SkillRoll(DefaultSkills.Leadership, 0.35f))
                             {
-                                Msg("You force it. The memory surfaces — incomplete, edges worn, but present. A face. The shape of a place. " +
-                                    "Something that was yours is still yours. The effort costs you the rest of the evening. " +
-                                    "You are aware the cold is patient.", AshenColor);
+                                Msg("You force it. The memory surfaces — half-eaten, edges worn, but there. A face. The shape of a place. " +
+                                    "Something that was yours is still yours. It costs you the rest of the evening and a headache that lasts two days. " +
+                                    "The Night is patient. It'll come back for the rest.", AshenColor);
                             }
                             else
                             {
                                 ShiftTrait(drainTrait, -1);
-                                Msg($"You reach for it and find the reaching itself is unfamiliar — the path to it has gone cold. " +
-                                    $"You hold the effort until it becomes clear that there is nothing left to hold. {traitName} fades. " +
-                                    "The cold does not announce itself. It simply expands.", BadColor);
+                                Msg($"You reach — and even the reaching feels wrong, like groping for a step that isn't there. " +
+                                    $"You keep at it until it's plain there's nothing left to grab. {traitName} fades. " +
+                                    "It doesn't announce itself. It just spreads, quiet, like rot under a floorboard.", BadColor);
                             }
                             break;
                         case "b":
                             ShiftTrait(drainTrait, -1);
                             ChangeGold(-300);
-                            Msg($"{traitName} fades. Something else goes with it — the thread of a connection you can no longer name. " +
-                                "Three hundred coin gone by morning, in a sequence of decisions you do not entirely remember making. " +
-                                "You paid what was asked. You are still here. The accounting is unclear.", BadColor);
+                            Msg($"{traitName} fades. Something goes with it — the thread of someone you can no longer put a name to. " +
+                                "Three hundred coin gone by morning too, spent in a night you don't fully remember. " +
+                                "You paid what was asked. You're still here. Whatever 'here' is worth now.", BadColor);
                             break;
                         case "c":
                             ShiftTrait(drainTrait, -1);
                             ShiftTrait(candidates[_rng.Next(candidates.Length)], -1);
                             try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints += 1; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             ChangeRenown(-10f);
-                            Msg("You open the door. Something passes through you in both directions — you feel the loss clearly, two things, maybe more. " +
-                                "What returns is not the same shape as what left. It is colder. It is useful. " +
-                                "Your men look at you strangely over the fire that evening. You do not ask them why.", AshenColor);
+                            Msg("You open the door wide. Something passes through you both ways at once — you feel it leave, two pieces, maybe more. " +
+                                "What comes back isn't the same shape as what went. It's harder. It's useful. " +
+                                "Your men watch you across the fire that night and go quiet. You don't ask them why. You already know.", AshenColor);
                             break;
                     }
                 }, null, "", false), false, true);
@@ -366,7 +366,7 @@ namespace TheDarkestNight
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
-        // ── Helper: become cult-bound (full conversion sequence) ───────────────────
+        // ── Helper: become demon-sworn (full conversion sequence) ──────────────
         private static void BecomeAshen()
         {
             // Sync MageKnowledge player flags first so grimoire + spell aging work correctly.
@@ -386,7 +386,7 @@ namespace TheDarkestNight
         }
 
         // ════════════════════════════════════════════════════════════════════
-        // DARK / ASHEN SETTLEMENT EVENTS
+        // DEMON-SWORN SETTLEMENT EVENTS
         // ════════════════════════════════════════════════════════════════════
 
         // ── EV_DarknessSpreads — village enter ────────────────────────────────────
@@ -397,18 +397,18 @@ namespace TheDarkestNight
             string scoutHint  = SkillHint(DefaultSkills.Scouting, 0.30f, "Read the signs for what they are");
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                "★ Darkness in the Roots",
-                $"Your scouts found livestock dead in the fields near {vName} — bloodless, cold, " +
-                $"facing the same direction. The villagers won't meet your eyes. " +
-                $"Someone lit fires in the northern field after midnight, " +
-                $"the wrong colour and shape for hearth or harvest. " +
-                $"You cannot prove it, but something cult has been here recently.",
+                "★ Something Came Through Here",
+                $"Your scouts find livestock dead in the fields near {vName} — drained white, cold, " +
+                $"all of them facing the same way, out toward the dark. The villagers won't meet your eyes. " +
+                $"Someone burned marks into the northern field after midnight: sigils, not stubble, " +
+                $"the kind of thing you carve when you want the Night to know your door from your neighbour's. " +
+                $"You can't prove it. But someone here has been leaving the demons an invitation.",
                 new List<InquiryElement>
                 {
-                    new InquiryElement("a", "Burn the village. Cultists hide among the innocent here.", null, true,
-                        "Fire answers certainty. What it finds is another matter."),
-                    new InquiryElement("b", "Spare them. There is no solid proof.", null, true,
-                        "Mercy without proof. The outcome will tell you if you were right."),
+                    new InquiryElement("a", "Burn the village. The demon-sworn hide among the frightened.", null, true,
+                        "Fire's a blunt answer. What it catches is anyone's guess."),
+                    new InquiryElement("b", "Leave them be. You've got no proof, only a bad feeling.", null, true,
+                        "Mercy on a hunch. You'll learn soon enough if it was the right one."),
                     new InquiryElement("c", $"Question the villagers quietly — read the signs for what they are. ({(int)(scoutChance*100)}% Scouting)", null, true,
                         scoutHint),
                 },
@@ -441,8 +441,8 @@ namespace TheDarkestNight
                             if (_rng.NextDouble() < 0.5)
                             {
                                 Msg($"You passed through {vName} and rode on. " +
-                                    $"The cold feeling faded by nightfall. Perhaps you misread the signs. " +
-                                    $"Perhaps the cultists saw your mercy and scattered.", DimColor);
+                                    $"The bad feeling faded by nightfall. Maybe you misread the signs. " +
+                                    $"Maybe whoever was leaving the marks saw your mercy and thought better of it.", DimColor);
                             }
                             else
                             {
@@ -457,13 +457,13 @@ namespace TheDarkestNight
                             {
                                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                                     "★  The Hidden Root",
-                                    $"Your questioning finds a thread. A tanner at the edge of {vName} — not frightened, not defiant, just quietly wrong. The wrong kind of calm for someone who has seen what he has seen. You put the pieces together: one man, acting alone, laying markings in the fields at the demon-cult's instruction. He does not know what they mean. He knows what he was paid and what he was threatened with.",
+                                    $"Your questioning finds a thread. A tanner at the edge of {vName} — not frightened, not defiant, just quietly wrong. The wrong kind of calm for someone who has seen what he has seen. You put the pieces together: one man, acting alone, laying markings in the fields at the demons's instruction. He does not know what they mean. He knows what he was paid and what he was threatened with.",
                                     new List<InquiryElement>
                                     {
                                         new InquiryElement("x1", "Execute him publicly — make an example.", null, true,
                                             "Crime +5. Village preserved. Relation with settlement lord +5."),
                                         new InquiryElement("x2", "Exile him. Tell the village what was found.", null, true,
-                                            "He escapes. The demon-cult lose this agent here, for now."),
+                                            "He escapes. the demons lose this agent here, for now."),
                                         new InquiryElement("x3", "Use him — feed false information through the channel.", null, true,
                                             "Calculating +1. Difficult to sustain, but the intelligence value is real."),
                                     },
@@ -479,11 +479,11 @@ namespace TheDarkestNight
                                                 Msg("You hold a brief public reckoning. The tanner does not deny it. The village watches. The elder thanks you. The settlement lord, receiving word of how you handled it, revises his opinion of you upward — you found the problem, judged it, and left the village intact.", GoodColor);
                                                 break;
                                             case "x2":
-                                                Msg("You escort him to the village boundary and tell him what exile means in your jurisdiction: never return, never make contact, and be grateful the alternative was available. He goes. The demon-cult network loses this thread — but threads can be replaced.", DimColor);
+                                                Msg("You escort him to the village boundary and tell him what exile means in your jurisdiction: never return, never make contact, and be grateful the alternative was available. He goes. the demons network loses this thread — but threads can be replaced.", DimColor);
                                                 break;
                                             case "x3":
                                                 ShiftTrait(DefaultTraits.Calculating, 1);
-                                                Msg("You explain his situation to him precisely. He understands. Whether he cooperates fully or plays both sides is a question you cannot answer without infrastructure you do not have. What you have is a frightened man with divided loyalties and a specific contact in the demon-cult's local network. That is worth something.", AshenColor);
+                                                Msg("You explain his situation to him precisely. He understands. Whether he cooperates fully or plays both sides is a question you cannot answer without infrastructure you do not have. What you have is a frightened man with divided loyalties and a specific contact in the demons's local network. That is worth something.", AshenColor);
                                                 break;
                                         }
                                     }, null, "", false), false, true);
@@ -570,9 +570,9 @@ namespace TheDarkestNight
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "★ The Pyre",
                 "In the village square, a young girl is bound to a stake. The crowd " +
-                "has built a pyre at her feet. \"A witch,\" they say. \"She brings the grey cold " +
-                "into our fields.\" Her eyes are dark and frightened — or very still, which is worse. " +
-                "The village elder watches you to see what you do.",
+                "has piled a pyre at her feet. \"A witch,\" they say. \"She calls the demons " +
+                "to our fields — the beasts pass us by and take the next village down the road.\" Her eyes are dark and streaming — " +
+                "or very still, which is worse. The village elder watches to see what you'll do.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Let them burn her. She may truly be a witch.", null, true,
@@ -608,22 +608,22 @@ namespace TheDarkestNight
                             try { MageKnowledge.RemoveWhispers(3); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             if (_rng.NextDouble() < 0.5)
                             {
-                                // She was cult — casts Curse before dying
+                                // She was demon-sworn — casts Curse before dying
                                 int w = 5 + _rng.Next(8);
                                 WoundPartyTroops(w);
                                 try { AgePlayer(3); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                                Msg($"You step forward. The crowd parts. The girl raises her head — " +
-                                    $"and her eyes are grey. Not frightened. Cold. She speaks one word " +
-                                    $"and your soldiers cry out. {w} of them are clutching wounds " +
-                                    $"that were not there a moment ago. She was what they said she was.", BadColor);
+                                Msg($"You step forward. The crowd parts. The girl lifts her head — " +
+                                    $"and there's an ember burning low behind each eye. Not frightened. Amused. She says one word " +
+                                    $"and your soldiers scream. {w} of them are clutching burns " +
+                                    $"that weren't there a breath ago. The villagers had her dead to rights.", BadColor);
                             }
                             else
                             {
-                                Msg("You step forward. The crowd parts. The girl raises her head — " +
-                                    "her eyes are human and wet and terrified. You cut her free. " +
+                                Msg("You step forward. The crowd parts. The girl lifts her head — " +
+                                    "her eyes are human, wet, terrified, nothing behind them but a child who's about to burn. You cut her loose. " +
                                     "The elder says nothing. The villagers say nothing. " +
-                                    "You ride out with a girl who was not a witch, and the knowledge " +
-                                    "of what would have happened if you had kept riding.", GoodColor);
+                                    "You ride out with a girl who was no witch, and the exact knowledge " +
+                                    "of what you'd have left behind if you'd kept riding.", GoodColor);
                                 _burningWitchOutcome   = 3;
                                 _burningWitchCountdown = 90;
                             }
@@ -716,7 +716,7 @@ namespace TheDarkestNight
                 $"A worn priest intercepts you at the city gate of {cName}. " +
                 $"He speaks quickly — he has been turned away by two lords already. " +
                 $"He wants to build a sanctuary here: a place where the honourable can seek " +
-                $"blessing, healing, and protection against the demon-cult. He needs coin. A great deal of it.",
+                $"blessing, healing, and protection against the demons. He needs coin. A great deal of it.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Donate 10,000 denars — build it properly.", null, true,
@@ -739,9 +739,9 @@ namespace TheDarkestNight
                             if (!ChangeGold(-10000)) break;
                             SanctuaryCampaignBehavior.AddPermanentSanctuary(s.StringId);
                             try { MageKnowledge.RemoveWhispers(5); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                            Msg($"You give him the coin without ceremony. He bows once and says nothing further. " +
-                                $"Within a week, the sanctuary of {cName} is open. " +
-                                $"The flame burns clean inside it.", GoodColor);
+                            Msg($"You give him the coin without ceremony. He bows once and says nothing more. " +
+                                $"Within a week the sanctuary of {cName} opens its doors. " +
+                                $"Wards on every lintel, and a place inside them for people the Night would otherwise take.", GoodColor);
                             break;
                         case "b":
                             if (!ChangeGold(-5000)) break;
@@ -805,28 +805,28 @@ namespace TheDarkestNight
         }
 
         // ── LV_ColdEmbrace — village leave ────────────────────────────────────
-        // Resting in the afternoon, a ring of demons closes around you.
-        // They reach out the cold and wait.
+        // Resting in the afternoon, a ring of demons closes around the player.
+        // They hold out the bargain and wait.
         private static void LV_ColdEmbrace(Settlement s)
         {
             float athChance = Math.Min(0.90f, 0.35f + (Hero.MainHero?.GetSkillValue(DefaultSkills.Athletics) ?? 0) * 0.003f);
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "★ The Circle Closes",
-                "You are resting in the afternoon shade outside the village when they arrive. " +
-                "A ring of demons — grey-cloaked, cold-eyed — has closed around you without a sound. " +
-                "They do not speak. They extend their hands toward you, and the air drops ten degrees. " +
-                "They are offering you something.",
+                "You're resting in the shade outside the village when they come — in daylight, which is the wrong. " +
+                "A ring of demons has closed around you without a sound, ember eyes steady, heat rolling off them like an open forge. " +
+                "They don't attack. They hold out their clawed hands, palms up, the way a man offers a deal he expects you to take. " +
+                "They're offering you what they are.",
                 new List<InquiryElement>
                 {
-                    new InquiryElement("a", "Embrace the cold. Accept what they offer.", null, true,
-                        "The cold does not wait for second thoughts."),
+                    new InquiryElement("a", "Take it. Grip the hand and be what they are.", null, true,
+                        "The Night doesn't wait for second thoughts."),
                     new InquiryElement("b", $"Run. Get out of the ring. (Athletics {(int)(athChance*100)}%)", null, true,
-                        "Speed may be enough. It may not."),
-                    new InquiryElement("c", "Fight them off. Draw your blade — let steel answer the cold.", null, true,
-                        "Eight of them. They move without fear. So do you."),
+                        "Fast legs might do it. Might not."),
+                    new InquiryElement("c", "Cut your way out. Draw steel and make them earn it.", null, true,
+                        "Eight of them, and they don't know fear. Neither do you, today."),
                     new InquiryElement("d", "Burn them with magic. Age 3 days.", null, true,
-                        "Fire scatters cold things. The cost is paid in years."),
+                        "Fire scatters the Night's own. You pay for it in years."),
                 },
                 false, 1, 1, "Decide", "",
                 chosen =>
@@ -835,61 +835,61 @@ namespace TheDarkestNight
                     {
                         case "a":
                             BecomeAshen();
-                            Msg("You reach back. The cold is not a sensation — it is a state. " +
-                                "The grey settles into your eyes before you are aware it has begun. " +
-                                "The demons lower their hands. You are one of them now.", BadColor);
+                            Msg("You grip the hand. The heat goes into you like swallowed coals and doesn't stop. " +
+                                "By the time your reflection shows the ember at the back of your eyes, it's already done. " +
+                                "The demons lower their hands and step back. You're theirs now.", BadColor);
                             break;
                         case "b":
                             if (_rng.NextDouble() < athChance)
                                 Msg("You break from the ring at a dead run, low and fast. " +
-                                    "One of them reaches — you feel the cold graze your shoulder " +
-                                    "and then you are through and moving and they do not follow. " +
-                                    "You do not stop running until the village is behind you.", DimColor);
+                                    "A claw rakes past your shoulder — close enough to blister the cloth — " +
+                                    "and then you're through and moving and they don't give chase. " +
+                                    "You don't stop until the village is a smudge behind you.", DimColor);
                             else
                             {
                                 WoundPlayer();
-                                Msg("You move — but not fast enough. The cold finds you before you clear the ring. " +
-                                    "You come through bleeding and slow, the grey chill deep in your shoulder. " +
-                                    "They let you go. You cannot decide if that makes it better or worse.", BadColor);
+                                Msg("You move — not fast enough. One of them catches you before you clear the ring. " +
+                                    "You come through bleeding, half your side scorched, dragging a leg. " +
+                                    "They let you go. You can't decide if that's mercy or just patience.", BadColor);
                             }
                             break;
                         case "c":
                             TriggerEncounterBattle(s, 8, ashen: true);
-                            Msg("You draw. They do not flinch — they never do. " +
+                            Msg("You draw. They don't flinch — they never do. " +
                                 "The ring tightens. Whatever happens next happens in the open, " +
-                                "blade against cold, until one side stops moving.", BadColor);
+                                "steel against claw, until one side stops moving.", BadColor);
                             break;
                         case "d":
                             AgePlayer(3);
                             try { MageKnowledge.AddWhispers(1); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                            Msg("The fire comes from somewhere older than your hands. " +
-                                "They scatter before it — cold things do not like what burns. " +
-                                "They are gone in seconds. You are three days older. " +
-                                "Some costs are paid faster than others.", DimColor);
+                            Msg("The fire comes up out of you from somewhere older than your hands. " +
+                                "They scatter before it — even the Night's own don't love what burns hotter than they do. " +
+                                "Gone in seconds. You're three years poorer for it. " +
+                                "Some prices come due faster than others.", DimColor);
                             break;
                     }
                 }, null, "", false), false, true);
         }
 
         // ── LV_ColdDream — village leave ──────────────────────────────────────
-        // Sleeping at the village inn, the cold reaches into your dreams.
+        // Sleeping at the village inn, the Night reaches into the player's dreams.
         private static void LV_ColdDream(Settlement s)
         {
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                "★ Ash in the Dream",
-                "You slept at the village inn and woke before dawn, cold and certain. " +
-                "The dream was vivid: grey plains stretching without horizon, " +
-                "something vast and patient moving at the edge of it. " +
-                "It looked at you — not with eyes — and extended an invitation. " +
-                "You are awake now. The decision feels more real than waking usually does.",
+                "★ The Thing in the Dream",
+                "You slept at the village inn and woke before dawn, sweating, certain. " +
+                "The dream was too clear to be one: a burned plain with no horizon, red light with no sun, " +
+                "and something vast and unhurried moving out at the edge of it. " +
+                "It turned toward you — not with eyes — and held the moment open like a door. " +
+                "You're awake now. The choice sitting in your chest feels heavier than waking usually allows.",
                 new List<InquiryElement>
                 {
-                    new InquiryElement("a", "Accept the invitation. Join the cold.", null, true,
-                        "Invitations from the cold are rarely what they appear to be."),
+                    new InquiryElement("a", "Walk through the door. Give yourself to the Night.", null, true,
+                        "Doors like that don't open twice, and never for free."),
                     new InquiryElement("b", "Refuse. It was only a dream.", null, true,
                         "It was only a dream."),
-                    new InquiryElement("c", "Reach back — try to learn what it wants.", null, true,
-                        "Reaching toward the cold is not without risk. What it wants is not nothing."),
+                    new InquiryElement("c", "Reach back — find out what it wants.", null, true,
+                        "Reaching toward that thing has a price. And it wants something, all right."),
                 },
                 false, 1, 1, "Decide", "",
                 chosen =>
@@ -898,14 +898,14 @@ namespace TheDarkestNight
                     {
                         case "a":
                             BecomeAshen();
-                            Msg("You answer the invitation. By morning you are different in ways you cannot fully describe yet. " +
-                                "Your reflection in the horse trough shows grey at the edges of your eyes.", BadColor);
+                            Msg("You step through. By morning you're changed in ways you don't have words for yet. " +
+                                "The water in the horse trough throws back your face — and a dull ember burning low behind each eye.", BadColor);
                             break;
                         case "b":
                             try { MageKnowledge.RemoveWhispers(2); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                            Msg("You get up, drink cold water, and decide it was only a dream. " +
-                                "You are probably right. The world looks normal in daylight. " +
-                                "It usually does.", DimColor);
+                            Msg("You get up, splash water on your face, and decide it was only a dream. " +
+                                "You're probably right. The world looks ordinary in daylight. " +
+                                "It usually does. That's the trick of it.", DimColor);
                             break;
                         case "c":
                         {
@@ -913,25 +913,25 @@ namespace TheDarkestNight
                             if (roll < 0.30)
                             {
                                 WoundPlayer();
-                                Msg("You reach toward it and it reaches back — harder than you expected. " +
-                                    "You come awake on the floor, bleeding from nowhere you can explain. " +
-                                    "The dream is gone. The wounds are not.", BadColor);
+                                Msg("You reach for it and it reaches back — harder, faster than you're ready for. " +
+                                    "You come awake on the floor of the room, bleeding from cuts you can't account for. " +
+                                    "The dream's gone. The blood on the boards isn't.", BadColor);
                             }
                             else if (roll < 0.50)
                             {
                                 BecomeAshen();
-                                Msg("You reach toward it and it takes you the rest of the way. " +
-                                    "You learn what it wants. It wants everything. " +
-                                    "By the time you understand that, the grey is already in your eyes.", BadColor);
+                                Msg("You reach for it and it drags you the rest of the way in. " +
+                                    "You learn what it wants. It wants all of it — every living thing that draws breath. " +
+                                    "By the time you understand that, the ember's already lit behind your eyes.", BadColor);
                             }
                             else
                             {
                                 try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints += 1; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 try { MageKnowledge.AddWhispers(5); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                                Msg("You reach toward it carefully, like touching something hot from the side. " +
-                                    "You pull back before it pulls you in — but you bring something with you: " +
-                                    "a clarity, a sense of how things connect. One focus point, " +
-                                    "paid for in proximity to something you do not fully understand.", GoodColor);
+                                Msg("You reach for it the way you'd test a hot pan — from the side, ready to pull back. " +
+                                    "And you do pull back, before it can close its grip — but you don't come away empty: " +
+                                    "a clarity, a sense of how the pieces of things fit. One focus point, " +
+                                    "bought by standing too close to something that should have killed you.", GoodColor);
                             }
                             break;
                         }

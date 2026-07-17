@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — BattleEvents.Helpers.cs
+// THE DARKEST NIGHT — BattleEvents.Helpers.cs
 // Spawn helper, general helpers, visual atmosphere, registration.
 // Partial of BattleEvents (shared state lives in BattleEvents.cs).
 // =============================================================================
@@ -22,9 +22,9 @@ namespace TheDarkestNight
     {
         // ── Helpers ───────────────────────────────────────────────────────────
 
-        // Returns true if the agent belongs to the demon-cult side.
+        // Returns true if the agent belongs to the demon side.
         // Uses team membership when _ashenTeam is known; falls back to checking
-        // the hero's cult status directly for hero agents only.
+        // the hero's demon-sworn status directly for hero agents only.
         private static bool IsAshenAgent(Agent agent)
         {
             if (_ashenTeam != null) return agent.Team == _ashenTeam;

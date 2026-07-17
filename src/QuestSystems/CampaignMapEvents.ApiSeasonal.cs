@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — CampaignMapEvents.ApiSeasonal.cs
+// THE DARKEST NIGHT — CampaignMapEvents.ApiSeasonal.cs
 // Sanctuary/protective public API and cult-altar seasonal events.
 // Partial of CampaignMapEvents (shared state lives in CampaignMapEvents.cs).
 // =============================================================================
@@ -28,10 +28,10 @@ namespace TheDarkestNight
         internal static void StartProtection(int days)
             => _protectedDaysRemaining = Math.Max(_protectedDaysRemaining, days);
 
-        // ── cult Altar forced seasonal events ───────────────────────────────
+        // ── Dark Altar forced seasonal events ───────────────────────────────
         // Called by AshenAltarsCampaignBehavior when a player performs the
-        // cult Solstice rite. The season-check guard is intentionally omitted —
-        // the sacrifice is what makes it possible regardless of the calendar.
+        // Solstice sacrifice. The season-check guard is intentionally omitted —
+        // the blood spilled is what makes it possible regardless of the calendar.
         public static void ForceIronWinter()
         {
             try
@@ -60,7 +60,7 @@ namespace TheDarkestNight
                 }
 
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    $"Iron Winter (cult Altar) — the cold called by the altar has descended on {kingdom.Name}. " +
+                    $"Iron Winter (Dark Altar) — the cold you called up at the altar comes down hard on {kingdom.Name}. " +
                     $"{villages} village{(villages != 1 ? "s" : "")} cannot keep their fires lit. " +
                     $"{towns} cit{(towns != 1 ? "ies" : "y")} ha{(towns != 1 ? "ve" : "s")} halved their stores."));
             }
@@ -95,7 +95,7 @@ namespace TheDarkestNight
                 }
 
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    $"Scorching Sun (cult Altar) — the heat called by the altar burns {kingdom.Name}. " +
+                    $"Scorching Sun (Dark Altar) — the heat you called up at the altar bakes {kingdom.Name}. " +
                     $"The wells in {villages} village{(villages != 1 ? "s" : "")} are low or dry. " +
                     $"{towns} cit{(towns != 1 ? "ies" : "y")} ha{(towns != 1 ? "ve" : "s")} rationed their stores."));
             }
@@ -112,7 +112,7 @@ namespace TheDarkestNight
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "Broken Will — the protective rites hold. The cold fire finds no crack in the ward to slip through."));
+                    "Broken Will — the wards hold. Whatever's been whispering to the crowned heads finds no crack to slip through this time."));
                 return;
             }
 
@@ -148,11 +148,11 @@ namespace TheDarkestNight
                 finally { _declaringBrokenWill = false; }
 
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    $"Broken Will — {leaderName} of {brokenName} has stared into the cold fire " +
-                    $"long enough that it began to stare back. " +
-                    $"Their banners are raised against every throne in Calradia. " +
-                    $"The cold does not negotiate. It does not offer terms. " +
-                    $"It only waits. " +
+                    $"Broken Will — {leaderName} of {brokenName} has spent too many nights listening to the dark, " +
+                    $"and somewhere along the way the dark started listening back. " +
+                    $"Their banners are up against every throne in the world now. " +
+                    $"You can't reason with what's got into them. There are no terms. " +
+                    $"There's just the war, and the waiting. " +
                     $"[{brokenName} declared war on all kingdoms.]"));
             }
             catch { _declaringBrokenWill = false; }

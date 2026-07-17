@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — SettlementEncounters.Events5.cs
+// THE DARKEST NIGHT — SettlementEncounters.Events5.cs
 // Cinder Vigil, the Cold Machine, and their deferred consequences.
 // Partial of SettlementEncounters (shared state lives in SettlementEncounters.cs).
 // =============================================================================
@@ -216,7 +216,7 @@ namespace TheDarkestNight
                 : "Among the fallen cult your men have found something and brought it to you because they did not know what else to do with it. " +
                   "A framework of iron and dark glass packed with crystals, arranged in no pattern you recognise. " +
                   "The mages were moving toward it when your soldiers cut them down. " +
-                  "You do not know what it does. You know that the demon-cult were willing to die for it.";
+                  "You do not know what it does. You know that the demons were willing to die for it.";
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "⚗  The Cold Machine",

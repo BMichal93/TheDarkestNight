@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — SettlementEncounters.WaitMenu.cs
+// THE DARKEST NIGHT — SettlementEncounters.WaitMenu.cs
 // A general-purpose blocking wait, mirroring SeaCampaignBehavior's voyage menu
 // and TavernCampaignBehavior's inn-stay menu, for the rare settlement encounter
 // choice that means the player actually stands still — as opposed to the

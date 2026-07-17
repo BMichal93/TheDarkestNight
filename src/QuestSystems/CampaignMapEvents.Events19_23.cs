@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — CampaignMapEvents.Events19_23.cs
+// THE DARKEST NIGHT — CampaignMapEvents.Events19_23.cs
 // World events 19–23 (Mage Fatwa, Temple Rises, Wolf, Gambit, …).
 // Partial of CampaignMapEvents (shared state lives in CampaignMapEvents.cs).
 // =============================================================================
@@ -159,7 +159,7 @@ namespace TheDarkestNight
         }
 
         // ── Event 22: A Wolf in Sheep's Clothing ─────────────────────────────
-        // A minor lord in a random kingdom is accused of serving the demon-cult.
+        // A minor lord in a random kingdom is accused of serving the demons.
         //
         // Not in player's kingdom: silent execution, notification only.
         // Player in kingdom, tier < 4: Charm-modified 33% chance player is accused
@@ -215,10 +215,10 @@ namespace TheDarkestNight
                     var victim = minorLords[_rng.Next(minorLords.Count)];
                     try { KillCharacterAction.ApplyByMurder(victim, null, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     string worldNotif = isWolfTemple
-                        ? $"A Wolf in Sheep's Clothing — {victim.Name} of {kingdomName} was denounced before the tribunal as a demon-cult sympathiser. The Inquisitor's writ arrived before they could answer the charge. Their family maintains their faith. The tribunal did not ask."
+                        ? $"A Wolf in Sheep's Clothing — {victim.Name} of {kingdomName} was denounced before the tribunal as one who leaves the door open for the Night. The Inquisitor's writ arrived before they could answer the charge. Their family maintains their faith. The tribunal did not ask."
                         : isWolfTribes
-                        ? $"A Wolf in Sheep's Clothing — {victim.Name} of {kingdomName} was named before the Huntmaster's war-council as having sold a blood-pact to the demon-cult. The Huntmaster's word was sentence enough. Their kin deny it. The denial was not heard."
-                        : $"A Wolf in Sheep's Clothing — {victim.Name} of {kingdomName} was accused of serving the demon-cult. The verdict arrived before they could speak. Their family maintains innocence. The court did not ask.";
+                        ? $"A Wolf in Sheep's Clothing — {victim.Name} of {kingdomName} was named before the Huntmaster's war-council as having sold a blood-pact to the demons. The Huntmaster's word was sentence enough. Their kin deny it. The denial was not heard."
+                        : $"A Wolf in Sheep's Clothing — {victim.Name} of {kingdomName} was accused of serving the demons. The verdict arrived before they could speak. Their family maintains innocence. The court did not ask.";
                     MBInformationManager.AddQuickInformation(new TextObject(worldNotif));
                     return;
                 }
@@ -255,9 +255,9 @@ namespace TheDarkestNight
                 }
 
                 // Tier ≥ 4: four choices
-                string accuseLabel1 = isWolfTemple ? $"Name {lord1Name} — they carry the demon-cult mark." : isWolfTribes ? $"Name {lord1Name} — they broke the blood-pact." : $"Accuse {lord1Name} — they are the traitor.";
+                string accuseLabel1 = isWolfTemple ? $"Name {lord1Name} — they carry the Night's mark." : isWolfTribes ? $"Name {lord1Name} — they broke the blood-pact." : $"Accuse {lord1Name} — they are the traitor.";
                 string accuseLabel2 = hasBoth
-                    ? (isWolfTemple ? $"Name {lord2Name} — they carry the demon-cult mark." : isWolfTribes ? $"Name {lord2Name} — they sold the blood-pact to the demon-cult." : $"Accuse {lord2Name} — they are the traitor.")
+                    ? (isWolfTemple ? $"Name {lord2Name} — they carry the Night's mark." : isWolfTribes ? $"Name {lord2Name} — they sold the blood-pact to the demons." : $"Accuse {lord2Name} — they are the traitor.")
                     : (isWolfTemple ? "Let the Inquisition choose." : isWolfTribes ? "Let the Huntmaster decide." : "Let the court choose.");
                 string silenceLabel = isWolfTemple ? "Keep silent. Let the tribunal decide." : isWolfTribes ? "Say nothing. Let the Huntmaster's fire fall where it falls." : "Say nothing. Let the court decide.";
                 string innocentLabel = isWolfTemple ? "Vouch for their faith. The evidence was planted." : isWolfTribes ? "Speak for them. A blood-pact cannot be broken so easily." : "Suggest both are innocent. The evidence doesn't hold.";
@@ -275,10 +275,10 @@ namespace TheDarkestNight
                 };
 
                 string bodyOpening = isWolfTemple
-                    ? $"The Inquisition of {kingdomName} has named names. {lord1Name}" + (hasBoth ? $" and {lord2Name} are" : " is") + $" accused of bearing the demon-cult mark. The evidence is an interpreter's word and a cold hearthstone. The mood in the chapter house is not."
+                    ? $"The Inquisition of {kingdomName} has named names. {lord1Name}" + (hasBoth ? $" and {lord2Name} are" : " is") + $" accused of bearing the Night's mark. The evidence is an interpreter's word and a cold hearthstone. The mood in the chapter house is not."
                     : isWolfTribes
-                    ? $"The Huntmaster has spoken a name. {lord1Name}" + (hasBoth ? $" and {lord2Name} are" : " is") + $" accused of swearing a blood-pact to the demon-cult. The accusation comes from the war-council, not from proof. But the riders believe what the Huntmaster says."
-                    : $"The court of {kingdomName} is alive with whispers. {lord1Name}" + (hasBoth ? $" and {lord2Name} are" : " is") + $" accused of serving the demon-cult. The evidence is thin. The mood is not.";
+                    ? $"The Huntmaster has spoken a name. {lord1Name}" + (hasBoth ? $" and {lord2Name} are" : " is") + $" accused of swearing a blood-pact to the demons. The accusation comes from the war-council, not from proof. But the riders believe what the Huntmaster says."
+                    : $"The court of {kingdomName} is alive with whispers. {lord1Name}" + (hasBoth ? $" and {lord2Name} are" : " is") + $" accused of serving the demons. The evidence is thin. The mood is not.";
                 string body = $"{bodyOpening}\n\n{rulerName} turns to you. At your clan's standing, your voice carries weight.";
 
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
@@ -363,10 +363,10 @@ namespace TheDarkestNight
                                             try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(
                                                 Hero.MainHero, ruler, -10, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                         string dTrueMsg = isWolfTemple
-                                            ? $"A Wolf in Sheep's Clothing — You vouched for their faith and were believed. Three days later, {traitor.Name} was found at the edge of the demon-cult lands — grey-eyed and cold. The accusation was true. {rulerName} has not forgotten that you spoke for them."
+                                            ? $"A Wolf in Sheep's Clothing — You vouched for their faith and were believed. Three days later, {traitor.Name} was found at the edge of the demon lands — ember-eyed and burning. The accusation was true. {rulerName} has not forgotten that you spoke for them."
                                             : isWolfTribes
-                                            ? $"A Wolf in Sheep's Clothing — You spoke for them before the Huntmaster's war-council and were heard. Three nights later, {traitor.Name} rode out of camp and did not return — found among the demon-cult, grey-eyed and cold. The blood-pact was real. {rulerName} did not forget."
-                                            : $"A Wolf in Sheep's Clothing — You spoke for their innocence and were believed. Three days later, {traitor.Name} vanished from their chambers, found among the demon-cult — grey-eyed and cold. The accusation was true. {rulerName} did not forget that you vouched for them.";
+                                            ? $"A Wolf in Sheep's Clothing — You spoke for them before the Huntmaster's war-council and were heard. Three nights later, {traitor.Name} rode out of camp and did not return — found among the demons, ember-eyed and burning. The blood-pact was real. {rulerName} did not forget."
+                                            : $"A Wolf in Sheep's Clothing — You spoke for their innocence and were believed. Three days later, {traitor.Name} vanished from their chambers, found among the demons — ember-eyed and burning. The accusation was true. {rulerName} did not forget that you vouched for them.";
                                         MBInformationManager.AddQuickInformation(new TextObject(dTrueMsg));
                                     }
                                     else
@@ -406,7 +406,7 @@ namespace TheDarkestNight
         //             siege, not player-owned) are seized by a random cult lord via
         //             ChangeOwnerOfSettlementAction. Each castle is stabilised to
         //             prevent an immediate rebellion tick.
-        //   Phase 5 — Ensure the demon-cult kingdom is at war with every Empire faction,
+        //   Phase 5 — Ensure the demon kingdom is at war with every Empire faction,
         //             then surge cult lord party morale +50 to drive them onto the
         //             offensive.
         //
@@ -425,7 +425,7 @@ namespace TheDarkestNight
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "The demon-cult Gambit — The sanctuary's ward blazes bright. The assassins feel it like a wall of fire " +
+                    "The Long Knife — The sanctuary's wards blaze bright. The killers hit them like a wall of fire " +
                     "and pull back into the dark. Tonight, the Empire's lords sleep safely."));
                 return;
             }
@@ -599,20 +599,20 @@ namespace TheDarkestNight
 
             string seizedStr = seizedNames.Count == 0 ? "" :
                 seizedNames.Count == 1
-                    ? $"{seizedNames[0]} fell to the demon-cult before the sun rose. "
+                    ? $"{seizedNames[0]} fell to the demons before the sun rose. "
                     : string.Join(", ", seizedNames.Take(seizedNames.Count - 1))
-                      + $" and {seizedNames[seizedNames.Count - 1]} fell to the demon-cult before the sun rose. ";
+                      + $" and {seizedNames[seizedNames.Count - 1]} fell to the demons before the sun rose. ";
 
             MBInformationManager.AddQuickInformation(new TextObject(
-                $"The demon-cult Gambit — In a single night of cold fire and silence, every Imperial throne was struck at once. " +
-                $"{leaderStr}. Their courts woke to ash on the pillows and cooling blood on the floors. " +
+                $"The Long Knife — In a single night of fire and quiet murder, every Imperial throne was struck at once. " +
+                $"{leaderStr}. Their courts woke to soot on the pillows and cooling blood on the floors. " +
                 (moraleHit > 0 ? $"Dread swept through {moraleHit} Imperial warbands. " : "") +
                 (secHit > 0 ? $"{secHit} Imperial cit{(secHit != 1 ? "ies" : "y")} erupted in panic and suspicion. " : "") +
                 seizedStr +
                 (spawned > 0
-                    ? $"{spawned} demons rose from the shadows across the heartlands before dawn. "
+                    ? $"{spawned} demon band{(spawned != 1 ? "s" : "")} rose from the shadows across the heartlands before dawn. "
                     : "") +
-                "The cold armies do not wait. They march."));
+                "The horde doesn't wait. It marches."));
         }
 
     }

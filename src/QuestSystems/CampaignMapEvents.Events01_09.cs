@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — CampaignMapEvents.Events01_09.cs
+// THE DARKEST NIGHT — CampaignMapEvents.Events01_09.cs
 // World events 1–9 (Plague, Withering, March, Long Night, Tide, …).
 // Partial of CampaignMapEvents (shared state lives in CampaignMapEvents.cs).
 // =============================================================================
@@ -22,9 +22,9 @@ namespace TheDarkestNight
 {
     public static partial class CampaignMapEvents
     {
-        // ── Event 1: cult Plague ─────────────────────────────────────────────
+        // ── Event 1: Nightfever ──────────────────────────────────────────────
         // Wounds all healthy garrison troops in a random city or castle, then
-        // spawns AshenPlagueSpawnCount demons parties near the settlement.
+        // spawns AshenPlagueSpawnCount demon parties near the settlement.
         private static void TryFireAshenPlague()
         {
             if (_rng.NextDouble() >= ChanceAshenPlague) return;
@@ -32,7 +32,7 @@ namespace TheDarkestNight
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "cult Plague — the sanctuary's protective ward turns it aside. The grey sickness finds no purchase."));
+                    "Nightfever — the wards on the sanctuary hold, and the sickness breaks against them. Not this town. Not tonight."));
                 return;
             }
             try
@@ -63,7 +63,7 @@ namespace TheDarkestNight
                     catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
-                // Spawn demons parties near the afflicted settlement
+                // Spawn demon parties near the afflicted settlement
                 int spawned = 0;
                 for (int i = 0; i < AshenPlagueSpawnCount; i++)
                 {
@@ -73,9 +73,9 @@ namespace TheDarkestNight
 
                 if (totalWounded > 0 || spawned > 0)
                     MBInformationManager.AddQuickInformation(new TextObject(
-                        $"cult Plague — a grey sickness sweeps through the garrison of {target.Name}. " +
-                        $"{totalWounded} soldier{(totalWounded != 1 ? "s" : "")} are struck down by fever and ash." +
-                        (spawned > 0 ? $" {spawned} demons close on the afflicted settlement." : "")));
+                        $"Nightfever — a sickness rips through the garrison of {target.Name}. Men burn up in their bunks, sweat black, and don't wake. " +
+                        $"{totalWounded} soldier{(totalWounded != 1 ? "s" : "")} down, and the walls half-manned." +
+                        (spawned > 0 ? $" The demons can smell it: {spawned} band{(spawned != 1 ? "s" : "")} closing on the weakened town." : "")));
                 RecordScar(target.StringId, 1);
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
@@ -103,8 +103,8 @@ namespace TheDarkestNight
                     target.Village.Hearth = Math.Max(10f, before * 0.20f);
 
                     MBInformationManager.AddQuickInformation(new TextObject(
-                        $"Great Withering — the hearth-fires of {target.Name} gutter and die. " +
-                        $"Hearth: {before:F0} → {target.Village.Hearth:F0}."));
+                        $"Great Withering — the fields around {target.Name} go black overnight, the wells foul, the stock drop dead in the byres. " +
+                        $"Whatever the Night touched here, nothing grows in it now. Hearth: {before:F0} → {target.Village.Hearth:F0}."));
                     RecordScar(target.StringId, 0);
                 }
                 else
@@ -120,17 +120,17 @@ namespace TheDarkestNight
                     target.Town.Prosperity = Math.Max(10f, before * 0.50f);
 
                     MBInformationManager.AddQuickInformation(new TextObject(
-                        $"Great Withering — something cold and old passes through {target.Name}. " +
-                        $"Prosperity: {before:F0} → {target.Town.Prosperity:F0}."));
+                        $"Great Withering — trade dies in {target.Name} the way a limb dies: cold first, then black, then gone. " +
+                        $"Half the market packs up and doesn't come back. Prosperity: {before:F0} → {target.Town.Prosperity:F0}."));
                     RecordScar(target.StringId, 0);
                 }
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
-        // ── Event 3: cult March ──────────────────────────────────────────────
-        // Spawns AshenMarchPartyCount demons parties (each with TotalStrength
-        // ≥ MinAshenMarchStrength) spread across a random non-cult stronghold.
+        // ── Event 3: The Horde Marches ───────────────────────────────────────
+        // Spawns AshenMarchPartyCount demon parties (each with TotalStrength
+        // ≥ MinAshenMarchStrength) spread across a random living kingdom.
         private static void TryFireAshenMarch()
         {
             if (_rng.NextDouble() >= ChanceAshenMarch) return;
@@ -138,7 +138,7 @@ namespace TheDarkestNight
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "cult March — the holy ward holds. The grey tide finds the roads blocked by something it cannot name."));
+                    "The Horde Marches — but the wards hold this week. The demons hit the warded roads and turn away, looking for softer ground."));
                 return;
             }
             try
@@ -168,8 +168,8 @@ namespace TheDarkestNight
 
                 MBInformationManager.AddQuickInformation(new TextObject(
                     spawned > 0
-                        ? $"cult March — {spawned} demons descend upon {kingdom.Name}. The grey tide does not rest."
-                        : $"cult March — the grey tide stirs near {kingdom.Name}, but finds no foothold today."));
+                        ? $"The Horde Marches — {spawned} demon band{(spawned != 1 ? "s" : "")} come up out of the dark across {kingdom.Name}. They don't tire, and they don't stop."
+                        : $"The Horde Marches — something stirs in the dark near {kingdom.Name}, but finds no way through tonight."));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
@@ -193,7 +193,7 @@ namespace TheDarkestNight
 
             _longNightDaysRemaining = LongNightDuration;
 
-            // Spawn cult parties that emerge from the darkness
+            // Spawn demon parties that emerge from the darkness
             int spawned = 0;
             try
             {
@@ -211,12 +211,12 @@ namespace TheDarkestNight
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
             MBInformationManager.AddQuickInformation(new TextObject(
-                $"Long Night — the sun does not rise. {LongNightDuration} days of unbroken darkness fall over Calradia. " +
-                (spawned > 0 ? $"cult shapes pour from the shadow. {spawned} warbands take the roads." : "Something stirs in the dark.")));
+                $"Long Night — the sun doesn't rise. {LongNightDuration} days of unbroken dark settle over the world, and the demons don't have to crawl back below at dawn, because there is no dawn. " +
+                (spawned > 0 ? $"They pour out of the shadow and stay. {spawned} warband{(spawned != 1 ? "s" : "")} take the roads." : "Something out in the dark is moving, and it is in no hurry.")));
         }
 
-        // ── Event 5: cult Tide ───────────────────────────────────────────────
-        // A random non-cult castle is claimed by a random cult lord via
+        // ── Event 5: A Keep Falls ────────────────────────────────────────────
+        // A random living-held castle is claimed by a random demon-touched lord via
         // ChangeOwnerOfSettlementAction.ApplyByDefault. The castle's original
         // clan loses the fief instantly — no siege required.
         private static void TryFireAshenTide()
@@ -226,7 +226,7 @@ namespace TheDarkestNight
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "cult Tide — the sanctuary's blessing turns the cold back. The castle holds."));
+                    "A Keep Falls — or would have. The wards on the sanctuary hold the Night off the walls one more night. The castle stands."));
                 return;
             }
             try
@@ -239,7 +239,7 @@ namespace TheDarkestNight
                     .ToList();
                 if (castles.Count == 0) return;
 
-                // Claimant: any living cult lord who is not a prisoner
+                // Claimant: any living demon-touched lord who is not a prisoner
                 var ashenLords = Hero.AllAliveHeroes
                     .Where(h => h.IsLord && h.IsAlive && !h.IsDisabled && !h.IsPrisoner
                              && ElementLordRegistry.IsAshenLord(h))
@@ -254,16 +254,16 @@ namespace TheDarkestNight
                 if (lord.Clan != null) AshenCitySystem.RegisterConqueredSettlement(castle, lord.Clan);
 
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    $"cult Tide — {castle.Name} bends to the cold fire. " +
-                    $"{lord.Name} claims it without a blade drawn."));
+                    $"A Keep Falls — the garrison of {castle.Name} opened the gates from the inside, or died where they stood. Either way the walls belong to the Night now. " +
+                    $"{lord.Name} takes it without drawing a blade."));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
-        // ── Event 6: Fire Fades ───────────────────────────────────────────────
-        // 2–4 non-cult lords aged 25–55 who are NOT clan leaders are killed.
+        // ── Event 6: The Night Takes Them ─────────────────────────────────────
+        // 2–4 living lords aged 25–55 who are NOT clan leaders are killed.
         // Player hero is always spared. Their home settlement also loses
-        // hearth/prosperity as their fire fades from that place too.
+        // hearth/prosperity as the life goes out of that place too.
         //
         // Safety constraints:
         //   • !IsChild  — Bannerlord's ApplyByOldAge/succession code is not safe
@@ -322,8 +322,8 @@ namespace TheDarkestNight
                         ? string.Join(", ", names)
                         : $"{names[0]}, {names[1]}, and {killed - 2} others";
                     MBInformationManager.AddQuickInformation(new TextObject(
-                        $"Fire Fades — {nameList} did not wake this morning. " +
-                        "Something ancient and cold moved through the realm in the dark hours. Their hearths grow cold behind them. " +
+                        $"The Night Takes Them — {nameList} didn't wake this morning. No wound, no mark, no forced door. " +
+                        "Something came through the halls in the dead hours and took what it came for. Their homes feel it too — a cold in the stone that wasn't there yesterday. " +
                         $"[{killed} lord{(killed != 1 ? "s" : "")} killed; home settlements lost hearth and prosperity.]"));
                 }
             }
@@ -331,9 +331,9 @@ namespace TheDarkestNight
         }
 
         // ── Event 7: Darkened Roads ───────────────────────────────────────────
-        // All caravans operating in a random non-cult stronghold are destroyed.
+        // All caravans operating in a random living kingdom are destroyed.
         // Also drains 15% prosperity from every town in the kingdom and spawns
-        // 2 cult ambush parties to fill the vacuum. Skips if no caravans exist.
+        // 2 demon ambush parties to fill the vacuum. Skips if no caravans exist.
         // Uses DestroyPartyAction which is the clean campaign-system way to
         // remove a mobile party; the owning merchant heroes survive and may
         // rebuild their caravans later.
@@ -374,7 +374,7 @@ namespace TheDarkestNight
                 }
                 catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-                // cult spawn move in to fill the vacuum
+                // demon parties move in to fill the vacuum
                 var anchors = Settlement.All
                     .Where(s => (s.IsTown || s.IsCastle) && s.MapFaction == kingdom)
                     .Select(s => s.GetPosition2D)
@@ -388,10 +388,10 @@ namespace TheDarkestNight
                 }
 
                 string darkenedMsg = IsTempleFaction(kingdom)
-                    ? $"Darkened Roads — {destroyed} supply train{(destroyed != 1 ? "s" : "")} and pilgrim convoy{(destroyed != 1 ? "s" : "")} vanish on the holy roads of {kingdom.Name}. The tithe-carts do not arrive. The temple gates close early. " + (spawned > 0 ? "Something grey moves in the silence left behind." : "The pilgrims' road is cold and still.")
+                    ? $"Darkened Roads — {destroyed} supply train{(destroyed != 1 ? "s" : "")} and pilgrim convoy{(destroyed != 1 ? "s" : "")} go silent on the roads of {kingdom.Name}. The tithe-carts never arrive. The temple bars its gates before dusk now. " + (spawned > 0 ? "Something moves in the quiet they left behind." : "The pilgrims' road lies empty.")
                     : IsTribes(kingdom)
-                    ? $"Darkened Roads — {destroyed} tribute-column{(destroyed != 1 ? "s" : "")} vanish on the steppe-roads of {kingdom.Name}. Tribute-riders do not return. The war-camp waits for gold and grain that will not arrive. " + (spawned > 0 ? "cult shapes follow the tribute-lanes east." : "The tribute roads are cold and empty.")
-                    : $"Darkened Roads — {destroyed} caravan{(destroyed != 1 ? "s" : "")} vanish on the roads of {kingdom.Name}. Trade dies. Prosperity crumbles. " + (spawned > 0 ? "cult shapes move where merchants once walked." : "The roads fall silent and cold.");
+                    ? $"Darkened Roads — {destroyed} tribute-column{(destroyed != 1 ? "s" : "")} go silent on the steppe-roads of {kingdom.Name}. The riders don't come back. The war-camp waits on gold and grain that will never arrive. " + (spawned > 0 ? "Demons work the tribute-lanes now, picking off what's left." : "The tribute roads lie empty.")
+                    : $"Darkened Roads — {destroyed} caravan{(destroyed != 1 ? "s" : "")} vanish on the roads of {kingdom.Name}. Trade dies. Prosperity bleeds out. " + (spawned > 0 ? "Demons walk where merchants used to." : "The roads fall silent.");
                 MBInformationManager.AddQuickInformation(new TextObject(darkenedMsg));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
@@ -542,9 +542,9 @@ namespace TheDarkestNight
         }
 
         // ── Event 9: Broken Will ─────────────────────────────────────────────
-        // A faction leader looks into the cold fire long enough that it begins
-        // to look back. That faction declares war on every other kingdom —
-        // it becomes as isolated and hostile as the demon-cult themselves.
+        // A faction leader stares into the dark too long and something in them
+        // stares back. That faction declares war on every other kingdom —
+        // as isolated and hostile as the demons themselves.
         //
         // Fires at most BrokenWillMaxFires times per campaign, never before
         // campaign day BrokenWillEarliestDay. Uses a re-entrancy guard.

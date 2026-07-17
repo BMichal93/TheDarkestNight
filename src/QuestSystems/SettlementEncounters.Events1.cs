@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — SettlementEncounters.Events1.cs
+// THE DARKEST NIGHT — SettlementEncounters.Events1.cs
 // Gate/village/city skill-check encounters and their consequences.
 // Partial of SettlementEncounters (shared state lives in SettlementEncounters.cs).
 // =============================================================================
@@ -70,14 +70,14 @@ namespace TheDarkestNight
 
             if (roll == 0)
             {
-                // a) Daughter kidnapped by the demon-cult — mother blames you, then comes for you
+                // a) Daughter kidnapped by the demons — mother blames you, then comes for you
                 ShiftTrait(DefaultTraits.Mercy, -1);
                 _mothersPleaPhase = 5;
                 _mothersPleaCountdown = 5;
                 MageKnowledge._deferredInquiry = () =>
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                         "★  Ash's Debt",
-                        "A messenger reaches you on the road — rough-spoken, half-panicked, sent by the same village. The girl you healed is gone. Taken in the night by figures in grey cloaks. The mother sent word not as a plea but as an accusation: she knows your kind now, and she knows the demon-cult follow the fire. She says you painted a target on her daughter's forehead the moment you touched her.",
+                        "A messenger reaches you on the road — rough-spoken, half-panicked, sent by the same village. The girl you healed is gone. Taken in the night by figures in ragged black cloaks. The mother sent word not as a plea but as an accusation: she knows your kind now, and she knows the demons follow the fire. She says you painted a target on her daughter's forehead the moment you touched her.",
                         new List<InquiryElement>
                         {
                             new InquiryElement("ok", "There is nothing to say.", null, true,
@@ -272,7 +272,7 @@ namespace TheDarkestNight
         // NEW ENCOUNTERS — LEAVE CITY (mage, non-cult, clan tier ≥ 2)
         // ═══════════════════════════════════════════════════════════════════
 
-        // LC_YoungMageHope — A young mage afraid of the demon-cult asks about hope [Leadership]
+        // LC_YoungMageHope — A young mage afraid of the demons asks about hope [Leadership]
         private static void LC_YoungMageHope(Settlement s)
         {
             float leadershipChance = SkillChance(DefaultSkills.Leadership, 0.35f);
@@ -282,7 +282,7 @@ namespace TheDarkestNight
                 "✦  There Is Always Hope",
                 "A young man waits at the city gate with the stiff posture of someone who practiced what they would say and forgot it anyway. " +
                 "He can feel the fire in you from here. His own gift is new — two years, maybe three. " +
-                "He has heard what the demon-cult do to people like him. He wants to know if it has to end that way.",
+                "He has heard what the demons do to people like him. He wants to know if it has to end that way.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "\"There is always hope. If you know what you are, you can choose what you become.\"", null, true, hint),
@@ -301,7 +301,7 @@ namespace TheDarkestNight
                                 ShiftTrait(DefaultTraits.Honor, 1);
                                 ChangeRenown(5f);
                                 Msg("He listens to you — not to the words, but to the way you say them. Something settles in him, then hardens. " +
-                                    "A week later, word reaches you from the north: a young mage was seen leading a small band of volunteers against a demon-cult raiding column. " +
+                                    "A week later, word reaches you from the north: a young mage was seen leading a small band of volunteers against a demon raiding column. " +
                                     "They held the village road. Against expectation, they held it. " +
                                     "His name is already travelling faster than he is. He inspired them not by being powerful — by being certain.", GoodColor);
                                 // Deferred consequence: castle town stirs — rebellion chance in ~14 days
@@ -337,7 +337,7 @@ namespace TheDarkestNight
                                 Msg("He hears the urgency but not the reason. He runs — but without direction, without a plan, " +
                                     "toward the grey hills rather than away from them. " +
                                     "Your warning sent him exactly where you were warning him away from.", BadColor);
-                                Msg("A week later, the demon-cult gain a recruit.", BadColor);
+                                Msg("A week later, the demons gain a recruit.", BadColor);
                                 // No city rebellion — he went to the wrong side
                             }
                             break;
@@ -530,7 +530,7 @@ namespace TheDarkestNight
         {
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "✦  Left Behind",
-                "In a room off the keep's great hall, placed on a shelf between two books as if it belonged there: a small object of grey stone that is cold in a way that has nothing to do with temperature. The demon-cult put this here before the siege began — possibly years before. It is a marker. It means: we were here. We will return for it.",
+                "In a room off the keep's great hall, placed on a shelf between two books as if it belonged there: a small object of grey stone that is cold in a way that has nothing to do with temperature. the demons put this here before the siege began — possibly years before. It is a marker. It means: we were here. We will return for it.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Destroy it completely.", null, true,
@@ -554,14 +554,14 @@ namespace TheDarkestNight
                         case "b":
                             _ashenCrystalOutcome  = 2;
                             _ashenCrystalCountdown = 30;
-                            Msg("You wrap it in cloth and keep it separate from everything else. It will be cold to the touch for as long as you carry it. The demon-cult use these to locate each other across distances. You now own a gap in their network. How long before the gap is noticed is a question without an answer yet.", AshenColor);
+                            Msg("You wrap it in cloth and keep it separate from everything else. It will be cold to the touch for as long as you carry it. the demons use these to locate each other across distances. You now own a gap in their network. How long before the gap is noticed is a question without an answer yet.", AshenColor);
                             break;
                         case "c":
                             ShiftTrait(DefaultTraits.Calculating, 1);
                             _ashenCrystalOutcome      = 3;
                             _ashenCrystalSettlementId = null; // resolved in consequence via nearby settlement
                             _ashenCrystalCountdown    = 14;
-                            Msg("You leave it exactly where it is, touching nothing. When the demon-cult return — and they will return — they will find the keep changed but the marker undisturbed. They will conclude their absence was unnoticed. You will know they concluded that. That is a small and specific advantage.", DarkColor);
+                            Msg("You leave it exactly where it is, touching nothing. When the demons return — and they will return — they will find the keep changed but the marker undisturbed. They will conclude their absence was unnoticed. You will know they concluded that. That is a small and specific advantage.", DarkColor);
                             break;
                     }
                 }, null, "", false), false, true);
@@ -579,7 +579,7 @@ namespace TheDarkestNight
             {
                 case 1: // destroyed — fire-mage finds you
                     MageKnowledge._deferredInquiry = () =>
-                        Msg("A fire-mage finds you on the road — young, precise, clearly following a thread she picked up some time ago. She was tracking a demon-cult marker that has gone silent. She knew what it was. She knows you destroyed it. She does not thank you with words. She tells you something about where she found the thread's other end: a direction, a name, a piece of the network you did not have before.", FireColor);
+                        Msg("A fire-mage finds you on the road — young, precise, clearly following a thread she picked up some time ago. She was tracking a demon marker that has gone silent. She knew what it was. She knows you destroyed it. She does not thank you with words. She tells you something about where she found the thread's other end: a direction, a name, a piece of the network you did not have before.", FireColor);
                     break;
 
                 case 2: // kept — cult collector arrives
@@ -940,7 +940,7 @@ namespace TheDarkestNight
             string hint  = SkillHint(DefaultSkills.Roguery, 0.25f, "Read the deception precisely");
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "◆  The Lie",
-                "An old man at the inn table tells you there have been no grey-cloaked visitors in a week. He says this with full eye contact and complete stillness and the specific absence of the small corrections honest people make when they're trying to be accurate. He is lying. Whatever he saw, he was told to say he hadn't. The fire in you feels the cold in the room that isn't the weather.",
+                "An old man at the inn table tells you there have been no black-cloaked visitors in a week. He says this with full eye contact and complete stillness and the specific absence of the small corrections honest people make when they're trying to be accurate. He is lying. Whatever he saw, he was told to say he hadn't. The fire in you feels the cold in the room that isn't the weather.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Read the lie precisely — what is he hiding and who asked him to.", null, true, hint),
@@ -960,7 +960,7 @@ namespace TheDarkestNight
                             if (SkillRoll(DefaultSkills.Roguery, 0.25f))
                             {
                                 ShiftTrait(DefaultTraits.Calculating, 1);
-                                Msg("His hands moved once — toward his left pocket when you said 'visitors', then caught themselves. He was given something to keep and told to say nothing. You do not confront him. You wait until he uses the privy and check the pocket: a folded note with a demon-cult symbol and a date three days from now. He was given a message to hold, not just a cover story. The date is a meeting.", AshenColor);
+                                Msg("His hands moved once — toward his left pocket when you said 'visitors', then caught themselves. He was given something to keep and told to say nothing. You do not confront him. You wait until he uses the privy and check the pocket: a folded note with a demon symbol and a date three days from now. He was given a message to hold, not just a cover story. The date is a meeting.", AshenColor);
                             }
                             else
                                 Msg("You read the performance but not the content behind it — you can see the lie clearly but not what it contains. He was told something and told to deny it. What specifically, you cannot extract from his manner alone. You know the shape of the secret without its substance. That is useful, imprecisely.", DimColor);
@@ -1176,7 +1176,7 @@ namespace TheDarkestNight
                             {
                                 ShiftTrait(DefaultTraits.Calculating, 1);
                                 ChangeRenown(5f);
-                                Msg("You use a shop window and a narrow passage to get a clear look without stopping. City watch — not uniformed, working plainclothes. This is a sanctioned surveillance, not a freelance tail. Someone in city administration has an official interest in your movements. That is a different kind of problem than a demon-cult watcher. You continue your route as if unaware and note everything they observe.", DimColor);
+                                Msg("You use a shop window and a narrow passage to get a clear look without stopping. City watch — not uniformed, working plainclothes. This is a sanctioned surveillance, not a freelance tail. Someone in city administration has an official interest in your movements. That is a different kind of problem than a demon watcher. You continue your route as if unaware and note everything they observe.", DimColor);
                             }
                             else
                                 Msg("You try to get a look but they are better than you expected and shift position exactly when you commit to the read. You confirm they are professional and confirm they are still there. That is all you get. You cannot tell employer, motive, or number — there may be more than one. You continue with incomplete information, which is the standard condition.", DimColor);

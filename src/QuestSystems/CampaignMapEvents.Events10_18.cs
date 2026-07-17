@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — CampaignMapEvents.Events10_18.cs
+// THE DARKEST NIGHT — CampaignMapEvents.Events10_18.cs
 // World events 10–18 (Long March, Whispers, Tyranny, seasons, …).
 // Partial of CampaignMapEvents (shared state lives in CampaignMapEvents.cs).
 // =============================================================================
@@ -23,11 +23,11 @@ namespace TheDarkestNight
     public static partial class CampaignMapEvents
     {
         // ── Event 10: The Long March ─────────────────────────────────────────
-        // Four massive cult warbands (100+ troops each) materialise within
+        // Four massive demon warbands (100+ troops each) materialise within
         // one of the southern, eastern, or northern realms:
         // Aserai, the Khuzait Khanate, or Sturgia (see LongMarchTargets).
-        // Vlandia — The Holy Temple — is never the target: the grey tide does
-        // not test the warded ground of its sworn enemy in a mere march.
+        // Vlandia — The Holy Temple — is never the target: the Night does
+        // not throw a full march at the best-warded ground on the map.
         // This is a deliberate targeted invasion, not a scatter event.
         //
         // Safety constraints:
@@ -40,7 +40,7 @@ namespace TheDarkestNight
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "The Long March — the protective rites form a wall the grey tide cannot cross. The columns turn back."));
+                    "The Long March — the wards form a wall the Night can't cross. The columns break against it and turn back into the dark."));
                 return;
             }
             try
@@ -78,10 +78,10 @@ namespace TheDarkestNight
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
-        // ── Event 11: Whispers from the Ash ──────────────────────────────────
-        // 1–3 mage lords hear the cold calling them by name. They abandon their
-        // factions and join the demon-cult, gaining cult lord status, personality,
-        // and the cold fire's mark.
+        // ── Event 11: The Night Calls Them ───────────────────────────────────
+        // 1–3 mage lords hear the Night calling them by name. They abandon their
+        // factions and go over to the demons, gaining demon-touched status, personality,
+        // and the ember in the eyes.
         //
         // Safety constraints:
         //   • Never converts the player hero.
@@ -98,7 +98,7 @@ namespace TheDarkestNight
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "Whispers from the Ash — the holy ward silences the call. The mages hear nothing but flame."));
+                    "The Night Calls Them — but the wards drown out the call this week. Whatever the mages heard in the dark, they didn't answer."));
                 return;
             }
             try
@@ -142,11 +142,11 @@ namespace TheDarkestNight
                     : string.Join(", ", names.Take(names.Count - 1)) + " and " + names[names.Count - 1];
 
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    $"Whispers from the Ash — {nameStr} heard something in the fire " +
-                    $"that they cannot explain and cannot forget. They have gone north. " +
-                    $"Their banners are cold. Their eyes are grey. " +
-                    $"Their former lords received only a letter — unsigned, unaddressed, already cold. " +
-                    $"[{names.Count} mage lord{(names.Count != 1 ? "s" : "")} defected to the demon-cult.]"));
+                    $"The Night Calls Them — {nameStr} heard something out in the dark " +
+                    $"they can't explain and can't stop hearing. They've walked out to meet it. " +
+                    $"No banners now, and an ember burning low behind each eye. " +
+                    $"Their old lords got one letter apiece — unsigned, unaddressed, the ink already dry. " +
+                    $"[{names.Count} mage lord{(names.Count != 1 ? "s" : "")} went over to the demons.]"));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
@@ -594,8 +594,8 @@ namespace TheDarkestNight
 
         // ── Event 16: The First Green ─────────────────────────────────────────
         // Spring only. The world stirs back to life — flowers push through the
-        // soil, rivers run clear. Ash has not yet smothered the season.
-        // All active lord parties outside the demon-cult kingdom receive a small
+        // soil, rivers run clear. For a few days the nights feel shorter.
+        // All active lord parties outside the demon kingdom receive a small
         // morale boost (+10 RecentEventsMorale).
         private static void TryFireFirstGreen()
         {
@@ -614,17 +614,17 @@ namespace TheDarkestNight
                 }
 
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    $"The First Green — flowers push through the soil. Rivers run clear. " +
-                    $"For a week the ash feels further away than it is. " +
-                    $"Across {boosted} warband{(boosted != 1 ? "s" : "")}, soldiers lift their eyes from the grey horizon. " +
-                    $"The world has not forgotten how to be alive."));
+                    $"The First Green — flowers push up through the mud. Rivers run clear. " +
+                    $"For a week the nights come later and leave sooner, and it's almost possible to forget what waits in them. " +
+                    $"Across {boosted} warband{(boosted != 1 ? "s" : "")}, soldiers lift their heads and remember there's something worth holding the line for. " +
+                    $"The world hasn't forgotten how to be alive. Not yet."));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // ── Event 17: The Amber Harvest ───────────────────────────────────────
         // Autumn only. The crops gave what they promised before the cold comes.
-        // All villages not under the demon-cult banner gain +20 hearth as granaries
+        // All villages not under the demon banner gain +20 hearth as granaries
         // fill and hearths are stocked for winter.
         private static void TryFireAmberHarvest()
         {
@@ -656,7 +656,7 @@ namespace TheDarkestNight
         // They keep their fiefs — the kingdom fractures.
         //
         // Safety constraints:
-        //   • Never fires for the demon-cult (excluded at trigger).
+        //   • Never fires for the demon kingdom (excluded at trigger).
         //   • Never fires for the player's faction.
         //   • Never ejects the current ruling clan or the player's clan.
         //   • Each ejection in its own try/catch; a bad clan can't abort others.

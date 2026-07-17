@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — SettlementEncounters.Events6.cs
+// THE DARKEST NIGHT — SettlementEncounters.Events6.cs
 // Five new multi-phase, consequence-heavy settlement encounters.
 // Partial of SettlementEncounters (shared state lives in SettlementEncounters.cs).
 //
@@ -89,7 +89,7 @@ namespace TheDarkestNight
                             break;
                         case "confront":
                             ShiftTrait(DefaultTraits.Honor, 1);
-                            Msg("You step toward him. He is gone — not hurried, simply gone, the way the demon-cult go when they choose " +
+                            Msg("You step toward him. He is gone — not hurried, simply gone, the way the demons go when they choose " +
                                 "not to be found. The marks remain on the cobblestones for three days before rain removes them. " +
                                 "You were not fast enough to read all of them. He knows you saw him. That will change what he does next.", DimColor);
                             break;
@@ -944,7 +944,7 @@ namespace TheDarkestNight
             bool isMage    = MageKnowledge.IsMage;
             bool isAshen   = MageKnowledge.IsAshen;
             // Old attunement or the merged art — any living mage draws the living
-            // world now. Not the demon-cult: the cold has its own answer below.
+            // world now. Not the demons: the cold has its own answer below.
             bool isNature  = NatureKnowledge.IsAttuned || (isMage && !isAshen);
 
             MageKnowledge._deferredInquiry = () =>
@@ -1206,7 +1206,7 @@ namespace TheDarkestNight
                         {
                             ShiftTrait(DefaultTraits.Mercy, -1);
                             Msg("Word from the region: the eastern family — expelled, homeless, with nowhere to go — was " +
-                                "met on the grey road by figures in grey cloaks who offered them food and shelter and something " +
+                                "met on the grey road by figures in ragged black cloaks who offered them food and shelter and something " +
                                 "to do with their anger. The cold has found three new voices. Your name is in one of the " +
                                 "reasons they gave for accepting.", AshenColor);
                         }

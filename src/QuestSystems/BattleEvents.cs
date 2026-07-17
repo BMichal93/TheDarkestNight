@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — BattleEvents.cs
+// THE DARKEST NIGHT — BattleEvents.cs
 // Randomised battlefield conditions that activate at mission start.
 // Each event rolls independently; active ones run until the battle ends.
 //
@@ -8,12 +8,12 @@
 // ├──────────────┼─────┼────────────────────────────────────────────────────────┤
 // │ Cinder Rain  │ 12s │ Scatters impartial patches of falling fire that burn  │
 // │              │     │ on contact (they hurt whoever stands in them)          │
-// │ The Rising   │ 20s │ Tier-1 units spawn on the demon-cult side (cult battle    │
-// │              │     │ only — skipped if no cult side detected)             │
-// │ Dread        │ ×1  │ All non-cult agents lose 30 morale (fires once)      │
-// │ Last Light   │ ×1  │ Sky drowns in dark fog; non-cult −20 morale, cult   │
+// │ The Rising   │ 20s │ Tier-1 units spawn on the demon side (demon battle   │
+// │              │     │ only — skipped if no demon side detected)            │
+// │ Dread        │ ×1  │ All living agents lose 30 morale (fires once)        │
+// │ Last Light   │ ×1  │ Sky drowns in dark fog; living −20 morale, demons    │
 // │              │     │ +15 and lit like beacons (fires once)                 │
-// │ cult Ground │ 20s │ All mounted agents are dismounted                     │
+// │ Dead Ground  │ 20s │ All mounted agents are dismounted                    │
 // │ Frenzy       │ 20s │ Charge order issued to every formation on both sides  │
 // │ The Kindling │ ×1  │ Raw magic wakes into elementals that join a side      │
 // │ Storm        │  6s │ Constant gale; ranged weapons are all but useless     │
@@ -27,7 +27,7 @@
 //   • Active events are printed to the message log at battle start.
 //     No events = no message (quiet battle).
 //   • Add breakpoints in BuildActiveEvents() to trace rolls.
-//   • _ashenTeam is set in FindAshenTeam() — null if no cult hero found in the
+//   • _ashenTeam is set in FindAshenTeam() — null if no demon hero found in the
 //     mission agents list. The Rising will silently skip if null.
 //   • SpawnRisingUnits() wraps Mission.SpawnAgent inside try/catch; if the
 //     troop CharacterObject is missing the spawn silently no-ops.
@@ -62,7 +62,7 @@ namespace TheDarkestNight
         // Total expected events per battle: ~0.35 → most battles are clean,
         // roughly 1-in-3 has one event, and a rare few carry two.
         public const float ChanceCinderRain    = 0.05f;
-        public const float ChanceTheRising     = 0.06f; // only if cult side present
+        public const float ChanceTheRising     = 0.06f; // only if demon side present
         public const float ChanceDread         = 0.04f;
         public const float ChanceLastLight     = 0.03f;
         public const float ChanceAshenGround   = 0.04f;
@@ -186,7 +186,7 @@ namespace TheDarkestNight
             _ashenTeam   = null;
             _skySet      = false;
 
-            // Battlefield echo: 3+ casts marks the ground — cult are drawn to it
+            // Battlefield echo: 3+ casts marks the ground — demons are drawn to it
             if (castCount >= 3 && MageKnowledge.IsMage)
             {
                 try
@@ -212,9 +212,9 @@ namespace TheDarkestNight
             BuildActiveEvents();
         }
 
-        // Scan hero agents to find which team (if any) represents the demon-cult side.
-        // Player cult status comes from MageKnowledge.IsAshen;
-        // NPC cult status comes from ElementLordRegistry.IsAshenLord.
+        // Scan hero agents to find which team (if any) represents the demon side.
+        // Player demon-sworn status comes from MageKnowledge.IsAshen;
+        // NPC demon-touched status comes from ElementLordRegistry.IsAshenLord.
         private static void FindAshenTeam()
         {
             _ashenTeam = null;
@@ -262,8 +262,8 @@ namespace TheDarkestNight
                 Add("Cinder Rain", CinderRainInterval, FireCinderRain);
             }
 
-            // ── The Rising (cult side only) ──────────────────────────────────
-            // The demon-cult gate is NOT memoised — it depends on who is on the field
+            // ── The Rising (demon side only) ──────────────────────────────────
+            // The demon-side gate is NOT memoised — it depends on who is on the field
             // this mission — but the underlying roll is, so re-entry is stable.
             if (_ashenTeam != null && Rolled("TheRising", ChanceTheRising))
             {
@@ -285,11 +285,11 @@ namespace TheDarkestNight
                 AddOneShot("Last Light", OneShotDelay + 1f, FireLastLight);
             }
 
-            // ── cult Ground ──────────────────────────────────────────────────
+            // ── Dead Ground ──────────────────────────────────────────────────
             if (Rolled("AshenGround", ChanceAshenGround))
             {
-                names.Add("cult Ground");
-                Add("cult Ground", AshenGroundInterval, FireAshenGround);
+                names.Add("Dead Ground");
+                Add("Dead Ground", AshenGroundInterval, FireAshenGround);
             }
 
             // ── Frenzy ────────────────────────────────────────────────────────

@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — SettlementEncounters.SkillChecks.cs
+// THE DARKEST NIGHT — SettlementEncounters.SkillChecks.cs
 // Skill-check helpers (chance/hint/roll) shared by all encounters.
 // Partial of SettlementEncounters (shared state lives in SettlementEncounters.cs).
 // =============================================================================
@@ -298,7 +298,7 @@ namespace TheDarkestNight
         {
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "✦  The Watching Figure",
-                "Leaving the city, you become aware — not by sight but by the particular absence of warmth — of someone in a building's shadow cataloguing your party. Grey cloak, pale still face, the patient posture of something that is not in a hurry because it has learned not to be. A demon-cult agent is noting your movements.",
+                "Leaving the city, you become aware — not by sight but by the particular absence of warmth — of someone in a building's shadow cataloguing your party. Grey cloak, pale still face, the patient posture of something that is not in a hurry because it has learned not to be. A demon agent is noting your movements.",
                 new List<InquiryElement>
                 {
                     new InquiryElement("a", "Confront them directly.", null, true,
@@ -315,7 +315,7 @@ namespace TheDarkestNight
                     {
                         case "a":
                             ShiftTrait(DefaultTraits.Honor, 1);
-                            Msg("You turn your horse and ride toward the shadow. They are gone before you reach the doorway — not fled, simply gone, the way the demon-cult go when they choose not to be found. The shadow is cold in a way that has nothing to do with the hour. They know you saw them. That may be enough.", AshenColor);
+                            Msg("You turn your horse and ride toward the shadow. They are gone before you reach the doorway — not fled, simply gone, the way the demons go when they choose not to be found. The shadow is cold in a way that has nothing to do with the hour. They know you saw them. That may be enough.", AshenColor);
                             break;
                         case "b":
                             Msg("You ride on. They follow at a distance you would not see if you didn't know what to look for. After a mile they stop. Their report will note your route, your party's strength, and that you did not react. The last detail is the one that will be read most carefully.", AshenColor);
@@ -327,7 +327,7 @@ namespace TheDarkestNight
                                 Msg("A rider carries the message back into the city. Nothing happens for an hour. Then, near the road's first bend, something small and cold is placed in your saddlebag. A piece of grey cloth. An acknowledgement. The cold's own currency.", AshenColor);
                             }
                             else
-                                Msg("The message goes in. Nothing comes back. Either it was not received, or received and set aside, or received and filed under 'noted.' The demon-cult are not hurried correspondents.", DimColor);
+                                Msg("The message goes in. Nothing comes back. Either it was not received, or received and set aside, or received and filed under 'noted.' the demons are not hurried correspondents.", DimColor);
                             break;
                     }
                 }, null, "", false), false, true);

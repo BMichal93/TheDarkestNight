@@ -1,6 +1,6 @@
 // =============================================================================
-// ASH AND EMBER — BattleEvents.Events.cs
-// The battle events (Cinder Rain, Rising, Dread, Last Light, cult Ground,
+// THE DARKEST NIGHT — BattleEvents.Events.cs
+// The battle events (Cinder Rain, Rising, Dread, Last Light, Dead Ground,
 // Frenzy, Kindling, Storm, Tremor, Deluge, Madness).
 // Partial of BattleEvents (shared state lives in BattleEvents.cs).
 // =============================================================================
@@ -55,7 +55,7 @@ namespace TheDarkestNight
         }
 
         // ── Event: The Rising ─────────────────────────────────────────────────
-        // Spawns RisingSpawnCount tier-1 units on the demon-cult side.
+        // Spawns RisingSpawnCount tier-1 units on the demon side.
         private static void FireTheRising()
         {
             if (Mission.Current == null || _ashenTeam == null) return;
@@ -77,11 +77,11 @@ namespace TheDarkestNight
             SpawnGroundFireField(anchor, 12f, 5, ColorSchool.Purple, TheRisingInterval * 0.75f);
             SpawnAerialGlow(anchor, 16f, 10f, 3, ColorSchool.Ashen, TheRisingInterval * 0.75f);
             MBInformationManager.AddQuickInformation(new TextObject(
-                $"The Rising — {spawned} more pour from the grey."));
+                $"The Rising — {spawned} more claw up out of the dark."));
         }
 
         // ── Event: Dread ──────────────────────────────────────────────────────
-        // All non-cult agents lose DreadMoralePenalty morale. Fires once.
+        // All living agents lose DreadMoralePenalty morale. Fires once.
         private static void FireDread()
         {
             if (Mission.Current == null) return;
@@ -115,7 +115,7 @@ namespace TheDarkestNight
         }
 
         // ── Event: Last Light ─────────────────────────────────────────────────
-        // The sun dies: non-cult morale drains, the demon-cult are lifted and lit like
+        // The sun dies: living morale drains, the demons are lifted and lit like
         // beacons. Fires once.
         // NOTE: the Scene.TimeOfDay setter is unreliable mid-mission (the skybox is
         //       baked, so it changed nothing) — the darkness is driven by dense
@@ -149,7 +149,7 @@ namespace TheDarkestNight
                 }
             }
 
-            // cult agents glow with fire-light in the sudden darkness — beacons in the black
+            // demon agents glow with fire-light in the sudden darkness — beacons in the black
             if (Mission.Current != null)
             {
                 foreach (var agent in Mission.Current.Agents.ToList())
@@ -168,17 +168,17 @@ namespace TheDarkestNight
             }
             // Atmospheric: deep, dense near-black fog swallows the field (this is
             // what actually darkens it), lit only by the scattered fires and the
-            // cult beacons; a low red aerial glow keeps the sky from going flat.
+            // demon beacons; a low red aerial glow keeps the sky from going flat.
             ApplyFog(new Vec3(0.05f, 0.05f, 0.09f), 0.020f, 1.6f); // drowning dark
             SpawnGroundFireField(centre, 40f, 10, ColorSchool.Orange, 60f);
             SpawnAerialGlow(centre, 40f, 18f, 6, ColorSchool.Red, 60f);
             MBInformationManager.AddQuickInformation(new TextObject(
-                $"Last Light — the sun dies. Darkness swallows the field." +
-                (blinded > 0   ? $" {blinded} fighters lose their footing in the dark." : "") +
-                (empowered > 0 ? $" The demon-cult rise." : "")));
+                $"Last Light — the sun goes out. The dark swallows the field whole." +
+                (blinded > 0   ? $" {blinded} fighters lose their footing in the black." : "") +
+                (empowered > 0 ? $" The demons stand taller. This is their hour." : "")));
         }
 
-        // ── Event: cult Ground ───────────────────────────────────────────────
+        // ── Event: Dead Ground ───────────────────────────────────────────────
         // All mounted agents (both sides) are dismounted via SpellEffects.ForceDismount.
         private static void FireAshenGround()
         {
@@ -206,7 +206,7 @@ namespace TheDarkestNight
             SpawnGroundFireField(centre, 30f, 5, ColorSchool.Ashen, AshenGroundInterval * 0.80f);
             if (count > 0)
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    $"cult Ground — {count} mount{(count != 1 ? "s" : "")} fall. No one rides today."));
+                    $"Dead Ground — the earth splits and drags them down. {count} mount{(count != 1 ? "s" : "")} fall screaming. Nobody rides today."));
         }
 
         // ── Event: Frenzy ─────────────────────────────────────────────────────
@@ -255,7 +255,7 @@ namespace TheDarkestNight
 
         // ── Spawn helper ──────────────────────────────────────────────────────
         // Spawns `count` demons agents (ashen_thrall, falling back to
-        // vanilla bandit troops) near the centroid of the demon-cult team. Returns
+        // vanilla bandit troops) near the centroid of the demon team. Returns
         // the number actually spawned so the caller can stay silent when
         // nothing appeared.
         // ── Event: The Kindling ───────────────────────────────────────────────
@@ -551,7 +551,7 @@ namespace TheDarkestNight
                             .InitialDirection(in dir);
 
                         var agent = Mission.Current.SpawnAgent(agentData, false);
-                        // Fallback bandit troops carry no cult marker, so the
+                        // Fallback bandit troops carry no demon marker, so the
                         // OnAgentBuild hook won't catch them — force the look.
                         try { AshenVisuals.ForceApply(agent); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         spawned++;

@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — SettlementEncounters.Events7.cs
+// THE DARKEST NIGHT — SettlementEncounters.Events7.cs
 // The Merchant of Endings — a mage-gated tavern wager.
 // Partial of SettlementEncounters (shared state lives in SettlementEncounters.cs).
 //

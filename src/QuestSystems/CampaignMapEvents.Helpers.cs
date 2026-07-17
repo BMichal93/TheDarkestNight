@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — CampaignMapEvents.Helpers.cs
+// THE DARKEST NIGHT — CampaignMapEvents.Helpers.cs
 // Throttle, elapsed-days, seasonal, and party-spawn helpers.
 // Partial of CampaignMapEvents (shared state lives in CampaignMapEvents.cs).
 // =============================================================================
@@ -34,7 +34,7 @@ namespace TheDarkestNight
         }
 
         // War-triggering events use their own slot so they never compete with
-        // cult / political / seasonal events for the main weekly slot.
+        // demon / political / seasonal events for the main weekly slot.
         private static bool TryClaimWarSlot()
         {
             if (_warSlotFilled) return false;
@@ -69,7 +69,7 @@ namespace TheDarkestNight
         }
 
         // ── Whisper network intel ─────────────────────────────────────────────
-        // At Whisper Tier 3, the player's cold-touched network occasionally surfaces
+        // At Whisper Tier 3, the player's Night-touched network occasionally surfaces
         // early warnings about conditions that precede major world events.
         // Fires at ~30% chance per weekly tick; does not claim the weekly event slot.
         private static void TryFireWhisperIntel()
@@ -89,7 +89,7 @@ namespace TheDarkestNight
                     "Your informants describe a great stillness in the north. Armies that have stopped moving. Not retreating — gathering.");
             if (_longNightDaysRemaining > 0)
                 candidates.Add(
-                    "The cold feeds the night. Your whispers say it is not weather — it has intention.");
+                    "Your whispers are plain about the dark that won't lift: this is no weather. It wants something.");
             if (_brokenWillFired < BrokenWillMaxFires && day >= BrokenWillEarliestDay)
                 candidates.Add(
                     "A court gone strange — your network sends that much. Lords who stare at maps without sleeping. Something turns them.");
@@ -99,7 +99,7 @@ namespace TheDarkestNight
                 string[] generic = {
                     "The whispers return with nothing new — only a shape you can't name, moving through your contacts.",
                     "Your informants are afraid. They won't say of what, which tells you more than words would.",
-                    "Something passed through the grey roads last night. No tracks. Your outriders found warm ash where a fire had been.",
+                    "Something walked the roads last night. No tracks either side of it. Your outriders found a campfire still warm and nobody left to sit at it.",
                 };
                 candidates.Add(generic[_rng.Next(generic.Length)]);
             }
@@ -110,7 +110,7 @@ namespace TheDarkestNight
         }
 
         // ── Public spawn entry point ──────────────────────────────────────────
-        // Allows SettlementEncounters to spawn a gate-ambush cult party near a
+        // Allows SettlementEncounters to spawn a gate-ambush demon party near a
         // settlement without duplicating the spawn logic.
         public static void SpawnAshenAmbushNear(Vec2 pos, int troops, float minStrength)
             => SpawnAshenSpawnParty(pos, troops, minStrength);
@@ -120,10 +120,10 @@ namespace TheDarkestNight
         // `troops` here is the EXACT number of soldiers added (no 10× scaling) —
         // encounter battles describe small groups, not warbands.
         //
-        // `ashen` selects the flavour of the foe: true → a renamed demons
-        // party of thralls and invokers (the Cold Embrace circle); false → an
+        // `ashen` selects the flavour of the foe: true → a renamed demon
+        // party of thralls and invokers (the circle that closes on you); false → an
         // ordinary bandit band (the drunk retainer at the gate), never marked as
-        // cult. Either way the roster is wiped to exactly `troops` so the looter
+        // demon. Either way the roster is wiped to exactly `troops` so the looter
         // bandit-clan's default template can't pad it with stray looters.
         public static MobileParty SpawnCombatPartyAt(Vec2 pos, int troops, bool ashen = false)
             => SpawnAshenSpawnParty(pos, troops, 0f, exactTroops: true, ashen: ashen);
@@ -188,7 +188,7 @@ namespace TheDarkestNight
                 if (exactTroops)
                     try { party.MemberRoster.Clear(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-                // cult parties march as their own thralls; ordinary bandit bands use
+                // demon parties march as their own thralls; ordinary bandit bands use
                 // looters. Each falls back through the vanilla bandit troops so the
                 // spawn still succeeds if a custom troop is missing.
                 CharacterObject troop = ashen

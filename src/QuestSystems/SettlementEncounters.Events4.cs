@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — SettlementEncounters.Events4.cs
+// THE DARKEST NIGHT — SettlementEncounters.Events4.cs
 // Wasting, frenzy, grimoire, night visitor, broken seal, deferred consequences.
 // Partial of SettlementEncounters (shared state lives in SettlementEncounters.cs).
 // =============================================================================
@@ -133,7 +133,7 @@ namespace TheDarkestNight
                                || DarkGiftSystem.HasAnyGift;
             // The living world answers the old attunement or the merged art (any
             // living mage now draws the living elements) — same repointing as sea
-            // travel. Not the demon-cult: the cold has its own answer below.
+            // travel. Not the demons: the cold has its own answer below.
             bool isNature      = NatureKnowledge.IsAttuned || (mage && !isAshen);
 
             string spouseName = spouse.Name?.ToString() ?? "your spouse";

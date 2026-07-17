@@ -1,66 +1,66 @@
 // =============================================================================
-// ASH AND EMBER — CampaignMapEvents.cs
+// THE DARKEST NIGHT — CampaignMapEvents.cs
 // Twelve rare world events themed around fire, ash, betrayal, and fading.
 // Each rolls independently on the weekly tick.
 //
 // ┌──────────────────────┬─────────────────────────────────────────────────────┐
 // │ Event                │ Effect                                              │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
-// │ cult Plague         │ Wounds garrison of a random city/castle; spawns     │
-// │                      │ several demons parties near the settlement.    │
+// │ Nightfever           │ Wounds garrison of a random city/castle; spawns     │
+// │                      │ several demon parties near the settlement.          │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
 // │ Great Withering      │ Destroys 80% of a random village hearth, OR halves  │
 // │                      │ the prosperity of a random city.                    │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
-// │ cult March          │ Spawns demons parties across a random non-Ashen│
+// │ The Horde Marches    │ Spawns demon parties across a random living         │
 // │                      │ kingdom.                                            │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
 // │ Long Night           │ Forces Dark light-level for 7 days; bleeds town     │
 // │                      │ prosperity daily.                                   │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
-// │ cult Tide           │ A random castle falls to a demon-cult lord instantly.   │
+// │ A Keep Falls         │ A random castle falls to a demon-touched lord.      │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
-// │ Fire Fades           │ 2–4 non-cult, non-leader lords die quietly.        │
+// │ The Night Takes Them │ 2–4 living, non-leader lords die quietly.           │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
-// │ Darkened Roads       │ All caravans in a random kingdom vanish; cult      │
+// │ Darkened Roads       │ All caravans in a random kingdom vanish; demon      │
 // │                      │ ambushers fill the roads.                           │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
 // │ Seeds of Betrayal    │ (Very rare) A faction leader is murdered by their   │
 // │                      │ own court. The responsible clan is expelled.        │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
-// │ Broken Will          │ (Once/twice, after day 60) A faction is drawn into  │
-// │                      │ the cold — declares war on all others.              │
+// │ Broken Will          │ (Once/twice, after day 60) A faction stares too     │
+// │                      │ long into the dark — declares war on all others.    │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
-// │ The Long March       │ (Rare) 4 massive cult warbands (100+ troops each)  │
+// │ The Long March       │ (Rare) 4 massive demon warbands (100+ troops each) │
 // │                      │ appear in one of Aserai/Khuzait/Sturgia. (Vlandia — │
 // │                      │ The Holy Temple — is never the target.)             │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
-// │ Whispers from the Ash│ (Very rare) 1–3 mage lords abandon their factions  │
-// │                      │ and join the demon-cult.                                 │
+// │ The Night Calls Them │ (Very rare) 1–3 mage lords abandon their factions  │
+// │                      │ and go over to the demons.                          │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
 // │ Tyranny              │ (Very rare) A faction leader executes their highest- │
 // │                      │ tier clan heads. Ruling clan loses all influence.   │
 // │                      │ One executed clan defects.                          │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
 // │ The First Green      │ (Spring only, rare) The world stirs back to life.   │
-// │                      │ All non-cult lord parties gain a small morale boost.│
+// │                      │ All living lord parties gain a small morale boost.  │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
 // │ The Amber Harvest    │ (Autumn only, rare) Crops gathered before the cold. │
-// │                      │ All non-cult villages gain hearth.                 │
+// │                      │ All living villages gain hearth.                    │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
-// │ The demon-cult Gambit     │ (Once per campaign, day 120+) cult assassins strike │
-// │                      │ every Imperial throne in a single night. Empire     │
-// │                      │ leaders die, lords suffer −30 morale, cities −30   │
-// │                      │ security. demons flood the heartlands and the  │
-// │                      │ cold armies march.                                  │
+// │ The Long Knife       │ (Once per campaign, day 120+) demon-sent killers    │
+// │                      │ strike every Imperial throne in a single night.     │
+// │                      │ Empire leaders die, lords suffer −30 morale, cities │
+// │                      │ −30 security. Demons flood the heartlands and the   │
+// │                      │ horde marches.                                      │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
-// │ The Dead March       │ (Day 50, then ~every 110 days) A necromantic rite   │
-// │                      │ raises the demon-cult fallen. Every cult garrison and   │
-// │                      │ lord party is reinforced with 40–80 troops spread   │
+// │ The Dead March       │ (Day 50, then ~every 110 days) The Night drags its  │
+// │                      │ own dead back up. Every demon garrison and lord     │
+// │                      │ party is reinforced with 40–80 troops spread        │
 // │                      │ across tiers 2, 3, and 4 (~⅓ each).               │
 // ├──────────────────────┼─────────────────────────────────────────────────────┤
 // │ The Undying Host     │ (Once per campaign, day 80+, growing chance after   │
-// │                      │ day 200) The demon-cult's greatest lord is chosen. 5 000 │
+// │                      │ day 200) The demons' greatest lord is chosen. 5 000 │
 // │                      │ troops are forged into their party. Their clan      │
 // │                      │ receives crushing influence. The host marches.      │
 // └──────────────────────┴─────────────────────────────────────────────────────┘
@@ -154,7 +154,7 @@ namespace TheDarkestNight
         public const int   UndyingHostNearCertainDay = 400;    // chance spikes to ChanceUndyingHostLatent after this day
         public const float ChanceUndyingHostLatent   = 0.60f;  // ~60% per week — fires within 1–2 weeks past day 400
         public const int   UndyingHostTroopCount     = 5000;   // troops added to the chosen cult lord's party
-        public const float UndyingHostInfluenceGrant = 50000f; // influence floored to this for the demon-cult ruling clan
+        public const float UndyingHostInfluenceGrant = 50000f; // influence floored to this for the demon ruling clan
 
         // cult Plague: parties spawned near the afflicted settlement
         public const int AshenPlagueSpawnCount  = 3;
@@ -172,7 +172,7 @@ namespace TheDarkestNight
         private const string TempleKingdomId = "vlandia";   // The Holy Temple
         private const string TribesKingdomId = "khuzait";   // Tribes of the East
 
-        // The Temple's faithful are oath-bound; the Tribes fear the God-King's fire — conspiracies are rare in both.
+        // The Temple's faithful are oath-bound; the Bloodbound answer to the Huntmaster without question — conspiracies are rare in both.
         // These factions are eligible for conspiracy events only ~15% of the time.
         private const float UnifiedConspireWeight = 0.15f;
 
@@ -193,7 +193,7 @@ namespace TheDarkestNight
         // Scorching Sun: desert kingdoms — Aserai and the Southern Empire bake in the heat.
         private static readonly string[] DesertKingdoms = { "aserai", "empire_s" };
 
-        // The demon-cult Gambit: all vanilla Empire splits plus base "empire" ID for safety.
+        // The Long Knife: all vanilla Empire splits plus base "empire" ID for safety.
         private static readonly string[] EmpireKingdomIds = { "empire_w", "empire_s", "empire_n", "empire" };
 
         // ── Runtime state ─────────────────────────────────────────────────────
@@ -258,7 +258,7 @@ namespace TheDarkestNight
             if (idx < 0 || _scarredDays[idx] <= 0) return null;
             return _scarredTypes[idx] switch
             {
-                1 => $"The grey sickness has not left {s.Name}. You see bandaged soldiers in doorways and shuttered stalls in the market.",
+                1 => $"The fever hasn't left {s.Name}. Bandaged men in the doorways, half the market stalls shuttered, and nobody meets your eye for long.",
                 2 => $"The Long Night marked {s.Name}. Torches burn in rooms that should be dark, and no one speaks of what they heard during the seven days.",
                 _ => $"Something cold passed through {s.Name} not long ago. The people are quieter than they should be.",
             };
@@ -402,7 +402,7 @@ namespace TheDarkestNight
                 catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
 
-            // The Holy Temple (Vlandia) is permanently at war with the demon-cult — re-declare if peace is made
+            // The Holy Temple (Vlandia) is permanently at war with the demons — re-declare if peace is made
             try
             {
                 var temple = Kingdom.All.FirstOrDefault(k =>

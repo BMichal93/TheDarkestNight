@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — SettlementEncounters.Helpers.cs
+// THE DARKEST NIGHT — SettlementEncounters.Helpers.cs
 // General encounter helpers.
 // Partial of SettlementEncounters (shared state lives in SettlementEncounters.cs).
 // =============================================================================

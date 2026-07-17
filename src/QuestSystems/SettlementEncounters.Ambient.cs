@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — SettlementEncounters.Ambient.cs
+// THE DARKEST NIGHT — SettlementEncounters.Ambient.cs
 // Ambient comments from NPCs who notice the player's accelerated aging.
 // Fires independently of the encounter pool — a brief quick-info line, never
 // a popup — so it doesn't compete with or clobber real encounter dialogs.

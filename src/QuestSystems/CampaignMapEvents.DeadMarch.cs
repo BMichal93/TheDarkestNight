@@ -1,5 +1,5 @@
 // =============================================================================
-// ASH AND EMBER — CampaignMapEvents.DeadMarch.cs
+// THE DARKEST NIGHT — CampaignMapEvents.DeadMarch.cs
 // The Dead March and the Undying Host.
 // Partial of CampaignMapEvents (shared state lives in CampaignMapEvents.cs).
 // =============================================================================
@@ -24,8 +24,8 @@ namespace TheDarkestNight
     public static partial class CampaignMapEvents
     {
         // ── Event: The Dead March ─────────────────────────────────────────────
-        // On campaign day 50 the demon-cult perform a cold necromantic rite — the
-        // fallen of old campaigns answer. Every cult garrison and lord party
+        // On campaign day 50 the Night drags its own dead back onto their feet — the
+        // fallen of old campaigns answer. Every demon garrison and lord party
         // is reinforced with 40–80 troops spread across tiers 2, 3, and 4
         // (~⅓ each) from that settlement or lord's culture. After the first
         // fire the event recurs roughly every 110 days (chance-based, minimum
@@ -66,7 +66,7 @@ namespace TheDarkestNight
                 int garrisonsBoosted = 0;
                 int armiesBoosted    = 0;
 
-                // Reinforce every cult garrison
+                // Reinforce every demon garrison
                 foreach (var s in Settlement.All)
                 {
                     try
@@ -82,7 +82,7 @@ namespace TheDarkestNight
                     catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
-                // Reinforce every cult lord's mobile party
+                // Reinforce every demon lord's mobile party
                 foreach (var party in MobileParty.All.ToList())
                 {
                     try
@@ -100,12 +100,12 @@ namespace TheDarkestNight
                 }
 
                 string flavour = isFirstFire
-                    ? "On the fiftieth day the ash stirs in the mountain passes. Shapes walk that do not breathe. " +
-                      "The demon-cult do not mourn their fallen — they call them back. " +
-                      "The dead answer because they were never truly released."
-                    : "A grey wind descends from the north carrying no warmth and no sound. " +
-                      "The demon-cult count their fallen, and find them present. " +
-                      "The dead march because the cold permits nothing else.";
+                    ? "On the fiftieth day something moves in the mountain passes — shapes that walk and don't breathe, wearing faces that should be in the ground. " +
+                      "The Night doesn't bury its dead. It sends them back out. " +
+                      "They come because they were never let go."
+                    : "A dead wind comes down out of the dark, carrying no warmth and no sound. " +
+                      "The demons that fell this season are on their feet again, every one of them. " +
+                      "The dead march because the Night won't let them lie still.";
 
                 MBInformationManager.AddQuickInformation(new TextObject(
                     $"The Dead March — {flavour} " +
@@ -116,12 +116,12 @@ namespace TheDarkestNight
         }
 
         // ── Event: The Undying Host ───────────────────────────────────────────
-        // Once per campaign, the demon-cult forge a conquest army of UndyingHostTroopCount
-        // elite troops. The strongest active cult lord is chosen as its vanguard;
+        // Once per campaign, the demons forge a conquest army of UndyingHostTroopCount
+        // elite troops. The strongest active demon lord is chosen as its vanguard;
         // their party roster is packed with high-tier troops and their clan receives
         // crushing influence so army cohesion is never a limiting factor. A massive
         // morale surge keeps the oversized party from bleeding troops to desertion.
-        // The demon-cult kingdom is guaranteed to be at war when the host marches.
+        // The demon kingdom is guaranteed to be at war when the host marches.
         //
         // Probability curve:
         //   Day < 80   : impossible
@@ -155,9 +155,9 @@ namespace TheDarkestNight
             if (_protectedDaysRemaining > 0)
             {
                 MBInformationManager.AddQuickInformation(new TextObject(
-                    "The Undying Host — Something vast stirs in the mountain passes. " +
-                    "The sanctuary's ward blazes white and holds. Tonight the wall stands. " +
-                    "But the cold does not tire. It will wait."));
+                    "The Undying Host — Something vast is moving in the mountain passes. " +
+                    "The sanctuary's wards blaze white and hold. Tonight the wall stands. " +
+                    "But the Night doesn't tire, and it doesn't forget. It will wait."));
                 return;
             }
 
@@ -169,7 +169,7 @@ namespace TheDarkestNight
                     k.StringId == AshenKingdomId && !k.IsEliminated);
 
                 // ── Choose the vanguard lord ──────────────────────────────────
-                // Prefer the highest-tier active cult lord with their own mobile party.
+                // Prefer the highest-tier active demon lord with their own mobile party.
                 var vanguard = Hero.AllAliveHeroes
                     .Where(h => h.IsLord && !h.IsChild && !h.IsPrisoner && !h.IsDisabled
                              && ElementLordRegistry.IsAshenLord(h)
@@ -222,7 +222,7 @@ namespace TheDarkestNight
                 }
                 catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-                // Also flood every other cult lord clan with generous influence so
+                // Also flood every other demon lord clan with generous influence so
                 // they can sustain secondary armies and reinforce the vanguard freely.
                 try
                 {
@@ -235,9 +235,9 @@ namespace TheDarkestNight
                 }
                 catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-                // ── Guarantee the demon-cult are at war ────────────────────────────
-                // If the demon-cult somehow have no active wars, declare on the strongest
-                // non-player, non-cult stronghold so the host immediately has a march target.
+                // ── Guarantee the demons are at war ────────────────────────────
+                // If the demons somehow have no active wars, declare on the strongest
+                // non-player, living stronghold so the host immediately has a march target.
                 try
                 {
                     if (ashenKingdom != null)
@@ -261,7 +261,7 @@ namespace TheDarkestNight
                 }
                 catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-                // ── Morale surge across all cult lord parties ────────────────
+                // ── Morale surge across all demon lord parties ────────────────
                 try
                 {
                     foreach (var party in MobileParty.All)
