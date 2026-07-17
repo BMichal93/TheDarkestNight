@@ -8,6 +8,11 @@ emotional read each line is meant to land:
 
 `{braces}` mark runtime variables.
 
+> **Revision note (this branch):** after review, all texts were revised to the settled
+> lore — magic is learned runes (no inner fire), the Ashen are gone, demons are a
+> force of nature that treats humans as meat, and demon worship is rare and desperate,
+> never an organized conspiracy. Quotes below reflect the final shipped wording.
+
 **Contents**
 1. [Six new settlement encounters](#part-1--six-new-settlement-encounters) — written from scratch
 2. [Re-themed settlement encounters](#part-2--re-themed-settlement-encounters)
@@ -85,7 +90,7 @@ unexpected payoff fired days or weeks later. File: `SettlementEncounters.NewEnco
 
 **Deferred**
 - **[GRIM]** *(Sold vials · ambush)* — The vials you sold fed a rite that slipped whatever circle was meant to hold it. Something carrying your scent finds your column at dusk — the broker's rite went wrong, or right in a way nobody warned you about, and either way the blood remembered where it came from.
-- **[GOOD]** *(Bled a prisoner · obligation)* — The broker's guild remembers a useful, uncomplaining partner. A courier leaves a case of Demon Blood at your camp with no note attached — and the standing, unspoken expectation that you will be just as useful the next time they ask.
+- **[GOOD]** *(Bled a prisoner · obligation)* — The Bloodbound brokers remember a useful, uncomplaining partner. A courier leaves a case of Demon Blood at your camp with no note attached — and the standing, unspoken expectation that you will be just as useful the next time they ask.
 
 ### 04 · Born at the Turning — `E_DuskbornChild`
 *Village · on enter · long deferral (60–90 days)*
@@ -162,24 +167,24 @@ fantasy is the Spellbook / the Night. These are the passages I changed; each is 
 moment inside a larger encounter. Files: `SettlementEncounters.*.cs`.
 
 **The healed girl — messenger's accusation** *(revised: was "your kind / follow the fire")*
-> A messenger reaches you on the road — rough-spoken, half-panicked, sent by the same village. The girl you healed is gone. Taken in the night by figures in grey cloaks. The mother sent word not as a plea but as an accusation: she knows what you are now — someone who can work the symbols — and she knows the demon-cult hunt for exactly that. She says you painted a target on her daughter's forehead the moment you drew the mark that healed her.
+> A messenger reaches you on the road — rough-spoken, half-panicked, sent by the same village. The girl you healed is gone. Taken in the night by figures in grey cloaks. The mother sent word not as a plea but as an accusation: she knows what you are now — someone who can work the symbols — and she knows the Night's servants take exactly such children, hoping the dark will count it in their favour. She says you painted a target on her daughter's forehead the moment you drew the mark that healed her.
 
 **The young mage — "does it have to end that way"**
 > He has heard what the demon-cult do to people like him. He wants to know if it has to end that way.
 
-- Resolutions: *"A week later, word reaches you from the north: a young mage was seen leading a small band of volunteers against a demon-cult raiding column…"* — or — *"A week later, the demon-cult gain a recruit."*
+- Resolutions: *"A week later, word reaches you from the north: a young mage was seen leading a small band of volunteers against a raiding pack of the Night's servants…"* — or — *"A week later, the dark gains another servant."*
 
 **The cold marker — object left in a captured keep**
-> In a room off the keep's great hall, placed on a shelf between two books as if it belonged there: a small object of grey stone that is cold in a way that has nothing to do with temperature. The demon-cult put this here before the siege began — possibly years before. It is a marker. It means: we were here. We will return for it.
+> In a room off the keep's great hall, placed on a shelf between two books as if it belonged there: a small object of grey stone that is cold in a way that has nothing to do with temperature. Someone the Night owns put this here before the siege began — possibly years before. It is a marker. It means: this place is counted. Something will come back for it.
 
-- Take it: *"You wrap it in cloth and keep it separate from everything else. It will be cold to the touch for as long as you carry it. The demon-cult use these to locate each other across distances. You now own a gap in their network…"*
+- Take it: *"You wrap it in cloth and keep it separate from everything else. It will be cold to the touch for as long as you carry it. Those the Night has broken are drawn to these — and found through them. You now carry a hole in the dark's map of the living…"*
 - Leave it: *"You leave it exactly where it is, touching nothing. When the demon-cult return — and they will return — they will find the keep changed but the marker undisturbed. They will conclude their absence was unnoticed. You will know they concluded that. That is a small and specific advantage."*
 
 **The mage who tracked the marker** *(revised: was "A fire-mage")*
-> A mage finds you on the road — young, precise, her hands still chalk-stained from a hundred practice-formulas, clearly following a thread she picked up some time ago. She was tracking a demon-cult marker that has gone silent. She knew what it was. She knows you destroyed it. She does not thank you with words. She tells you something about where she found the thread's other end: a direction, a name, a piece of the network you did not have before.
+> A mage finds you on the road — young, precise, her hands still chalk-stained from a hundred practice-formulas, clearly following a thread she picked up some time ago. She was tracking a demon-cult marker that has gone silent. She knew what it was. She knows you destroyed it. She does not thank you with words. She tells you something about where she found the thread's other end: a direction, a name, one more of the scattered few who serve the dark — something you did not have before.
 
 **The undisturbed marker holds — deception pays off**
-> Word reaches you: cult scouts entered {Settlement} two nights ago and departed before dawn. The garrison commander reports they went directly to one room and left without searching further — they found the marker undisturbed and concluded their absence went unnoticed. Your deception holds. The garrison commander, who trusted you with this intelligence, is now more inclined to trust you with others.
+> Word reaches you: two of the grey slipped into {Settlement} two nights ago and were gone before dawn. The garrison commander reports they went directly to one room and left without searching further — they found the marker undisturbed and concluded their absence went unnoticed. Your deception holds. The garrison commander, who trusted you with this intelligence, is now more inclined to trust you with others.
 
 **The man with something in his pocket**
 > His hands moved once — toward his left pocket when you said 'visitors', then caught themselves. He was given something to keep and told to say nothing. You do not confront him. You wait until he uses the privy and check the pocket: a folded note with a demon-cult symbol and a date three days from now. He was given a message to hold, not just a cover story. The date is a meeting.
@@ -188,16 +193,16 @@ moment inside a larger encounter. Files: `SettlementEncounters.*.cs`.
 > You use a shop window and a narrow passage to get a clear look without stopping. City watch — not uniformed, working plainclothes. This is a sanctioned surveillance, not a freelance tail. Someone in city administration has an official interest in your movements. That is a different kind of problem than a demon-cult watcher. You continue your route as if unaware and note everything they observe.
 
 **The forged permit — grey courier cloth**
-> The permit was forged. The wagon contained grey-dyed cloth that matches cult courier colours exactly — not contraband in any legal sense, but material with a specific use. It cleared your gate. The merchant was gone before the guard's follow-up instinct completed. You made a small decision at a gate and someone's supply run went through. Whether that matters depends on what the cloth is for.
+> The permit was forged. The wagon carried grey-dyed cloth of the kind the Night's servants wrap themselves in — not contraband in any legal sense, but material with one use. It cleared your gate. The merchant was gone before the guard's follow-up instinct completed. You made a small decision at a gate and someone's errand went through. Whether that matters depends on who sent them on it.
 
 **The lone tanner — one man laying markings**
 > Your questioning finds a thread. A tanner at the edge of {Village} — not frightened, not defiant, just quietly wrong. The wrong kind of calm for someone who has seen what he has seen. You put the pieces together: one man, acting alone, laying markings in the fields at the demon-cult's instruction. He does not know what they mean. He knows what he was paid and what he was threatened with.
 
-- Exile: *"You escort him to the village boundary and tell him what exile means in your jurisdiction… The demon-cult network loses this thread — but threads can be replaced."*
+- Exile: *"You escort him to the village boundary and tell him what exile means in your jurisdiction… The dark loses this thread — but the desperate are never in short supply."*
 - Turn him: *"…a frightened man with divided loyalties and a specific contact in the demon-cult's local network. That is worth something."*
 
-**The ring of demons closes — false priest**
-> A ring of demons — grey-cloaked, cold-eyed — has closed around you without a sound. … The demons lower their hands. You are one of them now.
+**The circle of cultists closes — false priest** *(revised: they were "demons")*
+> A ring of grey-cloaked cultists — cold-eyed, silent as falling ash — has closed around you. … The cultists lower their hands. You are one of them now.
 
 **The vial of ash-blood — the initiation offer**
 > He produces it from inside his coat: a small sealed vial, dark and faintly luminescent, the liquid inside not quite settling the way liquid should. He describes the contents — ash-blood drawn from a living cult donor, three additional reagents he declines to name, prepared over a fortnight at specific temperatures. He says it will unlock something in whoever drinks it. He says the process is irreversible. He says this as though it is a recommendation.
@@ -216,7 +221,7 @@ moment inside a larger encounter. Files: `SettlementEncounters.*.cs`.
 > A girl of perhaps six stops playing and stares at your hands — not at your horse, not at your armor, but at the way your fingers still hold the shape of the last formula you tapped. She copies the motion, clumsily, watching to see whether anything answers. Nothing does; not yet, not without someone to teach her which marks mean something and which are only air. Her mother pulls her back. The girl's eyes do not leave your hands.
 
 **The cult watcher in the shadow**
-> Leaving the city, you become aware — not by sight but by the particular absence of warmth — of someone in a building's shadow cataloguing your party. Grey cloak, pale still face, the patient posture of something that is not in a hurry because it has learned not to be. A demon-cult agent is noting your movements.
+> Leaving the city, you become aware — not by sight but by the particular absence of warmth — of someone in a building's shadow cataloguing your party. Grey cloak, pale still face, the patient posture of something that is not in a hurry because it has learned not to be. One of the Night's servants is noting your movements.
 
 - Confront: *"You turn your horse and ride toward the shadow. They are gone before you reach the doorway — not fled, simply gone, the way the demon-cult go when they choose not to be found…"*
 
@@ -236,8 +241,8 @@ The rest are baseline events re-skinned to the demon-cult.
 - Choice hint: *"You have felt the Night's pull on your own working. You know what this looks like, and you will not touch it."*
 
 **Iron Winter / Scorching Sun — cult altars warp the weather**
-> Iron Winter (cult Altar) — the cold called by the altar has descended on {kingdom}.
-> Scorching Sun (cult Altar) — the heat called by the altar burns {kingdom}.
+> Iron Winter (Dark Altar) — the cold called by the altar has descended on {kingdom}.
+> Scorching Sun (Dark Altar) — the heat called by the altar burns {kingdom}.
 
 **Embers of Hope — the cult reclaims its dead**
 > The demon-cult do not mourn their fallen — they call them back. / The demon-cult count their fallen, and find them present. Embers of Hope — the demon-cult hold {n} cities now.
@@ -247,16 +252,16 @@ The rest are baseline events re-skinned to the demon-cult.
 > Darkened Roads — {n} caravan(s) vanish on the roads of {kingdom}. Trade dies. Prosperity crumbles. *(general variant)*
 
 **The Long March — demon columns take the field**
-> The Long March — {n} great columns of demons set foot in {kingdom}.
+> The Long March — {n} great columns of the Hollow set foot in {kingdom}.
 
 **A Wolf in Sheep's Clothing — the tribunal names a traitor**
 - Temple framing: *"{victim} of {kingdom} was denounced before the tribunal as a demon-cult sympathiser. The Inquisitor's writ arrived before they could answer the charge. Their family maintains their faith. The tribunal did not ask."*
 - Bloodbound framing: *"…named before the God-King's war-council as having sold a blood-pact to the demon-cult. The God-King's word was sentence enough."*
 - If you vouch and are wrong: *"Three days later, {traitor} was found at the edge of the demon-cult lands — grey-eyed and cold. The accusation was true. {ruler} has not forgotten that you spoke for them."*
 
-**The demon-cult Gambit — the sanctuary ward & the strike at the thrones**
-> The demon-cult Gambit — The sanctuary's ward blazes bright. The assassins feel it like a wall of fire…
-> The demon-cult Gambit — In a single night of cold fire and silence, every Imperial throne was struck at once.
+**The Night's Gambit — the sanctuary ward & the strike at the thrones**
+> The Night's Gambit — The sanctuary's ward blazes bright. The assassins feel it like a wall of fire…
+> The Night's Gambit — In a single night of cold fire and silence, every Imperial throne was struck at once.
 
 ---
 
