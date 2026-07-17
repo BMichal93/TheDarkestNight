@@ -187,7 +187,7 @@ namespace TheDarkestNight
             {
                 Id = TalentId.Gift, IsSpell = false, IsEnchantment = false,
                 Category = TalentCategory.Passive, Name = "Gift",
-                Lore = "The fire ran in your blood before you understood what fire was. Not warmth — something older. The kind that burns without consuming, and holds the world together at its edges.",
+                Lore = "No one is born to this. Someone traced the first mark for you — on a slate, in the dust, in the air — and the world answered. Not warmth: something older. The kind of fire that burns without consuming, and holds the world together at its edges.",
                 MechanicDesc = "You carry the inner fire. In battle: form keys, Break, effect keys. W = Sear (burn), A = Force (push), D = Shred (armour) — all deal 25 damage. S = Restore (allies)."
             },
             new TalentDef

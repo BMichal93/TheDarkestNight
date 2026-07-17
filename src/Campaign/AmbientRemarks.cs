@@ -333,7 +333,7 @@ namespace TheDarkestNight
                     "A young soldier asks how long you have been campaigning. You give a number. He goes quiet.",
                     "The fire is warm. You notice things like that now — small warmths. They matter more than they used to.",
                     "You ache in the morning. Not from injury. Just time. The fire helps.",
-                    "One of your men was born after you first carried the fire. You are trying not to think about that.",
+                    "One of your men was born after you traced your first formula. You are trying not to think about that.",
                     "The fire you lit tonight took no effort. That ease is not reassurance. You know what it means.",
                     "A recruit half your age asks for advice. You give it. It sounds like something someone once told you, decades gone.",
                     "You count the years by scars now, not by seasons. There are more scars than there used to be.",

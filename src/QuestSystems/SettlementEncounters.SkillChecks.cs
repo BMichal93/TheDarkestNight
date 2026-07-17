@@ -280,10 +280,10 @@ namespace TheDarkestNight
                             break;
                         case "b":
                             ShiftTrait(DefaultTraits.Calculating, 1);
-                            Msg("The mother sees you see it. You nod once. She does not know what the nod means, but she will think about it later, and later still, and eventually she will start watching her daughter's hands near candles.", FireColor);
+                            Msg("The mother sees you see it. You nod once. She does not know what the nod means, but she will think about it later, and later still, and eventually she will start watching the shapes her daughter's hands make.", FireColor);
                             break;
                         case "c":
-                            Msg("You ride past. Behind you, the girl is still facing the direction you were. The fire in you turns back once, briefly, the way it does when it recognises its own.", FireColor);
+                            Msg("You ride past. Behind you, the girl is still facing the direction you were, her fingers repeating the half-shape they caught. Someone will teach her the rest, or no one will.", FireColor);
                             break;
                     }
                 }, null, "", false), false, true);

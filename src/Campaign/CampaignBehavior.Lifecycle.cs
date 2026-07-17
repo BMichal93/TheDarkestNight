@@ -136,9 +136,9 @@ namespace TheDarkestNight
                     ElementLordRegistry.AssignCompanionEnchantments(companion, enchants);
                     string[] joinLines =
                     {
-                        $"{companion.Name} carries the fire. You felt it before they spoke — the same warmth, the same weight behind the eyes.",
-                        $"There is something in {companion.Name} that answers when yours calls. The gift, shaped differently, but the same current.",
-                        $"{companion.Name} already knew. They saw it in you first. The fire recognises itself.",
+                        $"{companion.Name} knows the work. You saw it before they spoke — in the way their hands rest, fingers that have traced the same shapes yours have.",
+                        $"There is something in {companion.Name} that answers when yours calls. The same schooling, shaped by a different teacher.",
+                        $"{companion.Name} already knew. They recognised the marks of the work on you first.",
                     };
                     string joinMsg = joinLines[_rng.Next(joinLines.Length)];
                     InformationManager.DisplayMessage(new InformationMessage(

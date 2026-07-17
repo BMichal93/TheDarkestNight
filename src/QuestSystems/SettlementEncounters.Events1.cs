@@ -211,18 +211,18 @@ namespace TheDarkestNight
                     {
                         try { ElementLordRegistry.SetMage(child, true); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         ChangeRenown(15f);
-                        Msg($"{child.Name} joins your clan. She carries the fire with a steadiness that took her ten years to learn on her own. It shows.", FireColor);
+                        Msg($"{child.Name} joins your clan. She works the symbols with a steadiness that took her ten years to learn on her own. It shows.", FireColor);
                         return;
                     }
                 }
                 // Fallback — narrative only
                 ChangeRenown(15f);
-                Msg("She joins your clan. She carries the fire with a steadiness that took her ten years to learn on her own. It shows.", FireColor);
+                Msg("She joins your clan. She works the symbols with a steadiness that took her ten years to learn on her own. It shows.", FireColor);
             }
             catch
             {
                 ChangeRenown(15f);
-                Msg("She joins your clan. She carries the fire with a steadiness that took her ten years to learn on her own. It shows.", FireColor);
+                Msg("She joins your clan. She works the symbols with a steadiness that took her ten years to learn on her own. It shows.", FireColor);
             }
         }
 

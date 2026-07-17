@@ -378,7 +378,7 @@ namespace TheDarkestNight
                                 else
                                     try { Hero.MainHero.HeroDeveloper.UnspentAttributePoints += 1; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                                 KillHalfParty();
-                                Msg("The working is exactly what the book said it was — which is to say it is the worst thing you have done. Your soldiers fall between one breath and the next, not in pain, just gone. The fire in you surges in a way that makes the preceding days feel like ash. You are standing in a room full of people who trusted you, and half of them are not standing anymore. The book's author was correct. It works.", BadColor);
+                                Msg("The working is exactly what the book said it was — which is to say it is the worst thing you have done. Your soldiers fall between one breath and the next, not in pain, just gone. The power in you surges in a way that makes the preceding days feel like ash. You are standing in a room full of people who trusted you, and half of them are not standing anymore. The book's author was correct. It works.", BadColor);
                                 break;
                             case "c":
                                 if (!ChangeGold(-500)) return;

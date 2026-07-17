@@ -343,8 +343,8 @@ namespace TheDarkestNight
                             ShiftTrait(DefaultTraits.Mercy, 1);
                             Msg("She stands when you extend your hand. She follows without being led. Your men give her " +
                                 "a wide berth on the first day. By the second, they have stopped looking at her at all. " +
-                                "She watches the fire in you with the quiet attention of someone studying a language " +
-                                "they already half-know.", DimColor);
+                                "She watches your hands when you work the marks, with the quiet attention of someone " +
+                                "studying a language they already half-know.", DimColor);
                             _ashChildPhase    = 1;
                             _ashChildCountdown = 30;
                             break;
@@ -398,7 +398,7 @@ namespace TheDarkestNight
                             Msg("She stands before you finish reaching down. Your men say nothing this time. " +
                                 "They have seen enough to know that asking questions about her is not a good use " +
                                 "of the limited certainty anyone has left. She settles into the column and watches " +
-                                "the fire in you with the same patient attention as before.", DimColor);
+                                "your hands with the same patient attention as before.", DimColor);
                             _ashChildPhase    = 1;
                             _ashChildCountdown = 30;
                             break;
@@ -429,7 +429,7 @@ namespace TheDarkestNight
                     "◆  She Does Not Eat",
                     "Your soldiers wake with nightmares about cold fire — specific, quiet nightmares they do not " +
                     "describe to each other. The girl has been in camp for a month. She does not sleep. She does not " +
-                    "eat anything you have seen. She does not speak. She has been watching the fire in you when she " +
+                    "eat anything you have seen. She does not speak. She has been watching what you carry when she " +
                     "thinks you are not watching. Sometimes the frost-patterns spread from where she walks.",
                     new List<InquiryElement>
                     {
@@ -455,8 +455,8 @@ namespace TheDarkestNight
                                     else
                                     {
                                         ChangeRenown(10f);
-                                        Msg("She places her hand on your arm one morning. Something passes. The fire in you " +
-                                            "turns back once and finds something it already knew but had not named.", FireColor);
+                                        Msg("She places her hand on your arm one morning. Something passes. Something in you " +
+                                            "turns back once and finds a shape it already knew but had not named.", FireColor);
                                     }
                                 }
                                 else if (MageKnowledge.IsAshen)
@@ -471,7 +471,7 @@ namespace TheDarkestNight
                                 {
                                     AddMorale(3f);
                                     Msg("She places her hand on your arm one morning. Nothing passes — or nothing you can name. " +
-                                        "But your men's nightmares stop that same week. She continues to watch the fire in you, " +
+                                        "But your men's nightmares stop that same week. She continues to watch you work, " +
                                         "patient and unhurried, as though waiting for something to ripen.", GoodColor);
                                 }
                                 _ashChildPhase    = 2;

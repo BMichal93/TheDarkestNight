@@ -1,6 +1,6 @@
 ﻿// =============================================================================
 // LIFE & DEATH MAGIC — MageKnowledge.cs
-// Tracks whether the player carries the gift, manages the grimoire UI,
+// Tracks whether the player has learned the work, manages the grimoire UI,
 // and provides the talent learning menu.
 // ColourKnowledge is a legacy alias kept for backward-compatible call sites.
 // =============================================================================
@@ -57,7 +57,7 @@ namespace TheDarkestNight
         // ── Whisper System ────────────────────────────────────────────────────
         // Tracks how deeply the cold has seeped into the player's fire.
         // Incremented by dark acts; decremented slowly by virtuous ones.
-        // At 100+ the Cold Calls Your Name.
+        // At 100+ the Night Calls Your Name.
         private static int _whisperCount        = 0;
         private static int _coldCallCountdown   = 0;  // 0 = not pending
         private static int _daysSinceWhisperGain = 0; // quiet conduct lets the cold lose interest
@@ -92,9 +92,9 @@ namespace TheDarkestNight
         {
             string msg = tier switch
             {
-                1 => "Something at the edge of your fire has begun to listen. (The cold has noticed you.)",
-                2 => "The whispers no longer wait for the dark. The grey altars will open faster for you now — and the sanctuary flame leans away. (The cold favours you.)",
-                3 => "You catch yourself answering before they speak. The sanctuary flame gutters when you kneel. (The cold is very close.)",
+                1 => "Something at the edge of your workings has begun to listen. (The Night has noticed you.)",
+                2 => "The whispers no longer wait for nightfall. The grey altars will open faster for you now — and the sanctuary flame leans away. (The Night favours you.)",
+                3 => "You catch yourself answering before they speak. The sanctuary flame gutters when you kneel. (The Night is very close.)",
                 _ => null,
             };
             if (msg != null)

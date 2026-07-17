@@ -66,8 +66,8 @@ namespace TheDarkestNight
             };
 
             InformationManager.ShowInquiry(new InquiryData(
-                "A Latent Fire",
-                $"{flavor}\n\n{candidateName} carries the gift. Untrained, unguided — dangerous to themselves and others. You could take them on. The training would take weeks and cost you nothing but time. The risks are yours to carry.",
+                "An Untaught Hand",
+                $"{flavor}\n\n{candidateName} has been reaching for the work alone — half-guessed marks, no teacher, no one to say which shapes answer and which bite back. Dangerous to themselves and others. You could take them on. The training would take weeks and cost you nothing but time. The risks are yours to carry.",
                 true, true, "Take them on", "Not now",
                 () => BeginTraining(candidate, candidateName),
                 () => { }), true);
@@ -192,7 +192,7 @@ namespace TheDarkestNight
                 try { Hero.MainHero?.HeroDeveloper?.UnspentFocusPoints += 1; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 InformationManager.ShowInquiry(new InquiryData(
                     "Training Complete",
-                    $"{name} is not ready to carry the fire fully — but the weeks of work sharpened your own teaching instincts. +1 focus point.",
+                    $"{name} is not ready to work the symbols unwatched — but the weeks of teaching sharpened your own understanding. +1 focus point.",
                     true, false, "Release them", "", () => { }, null), true);
             }
             else

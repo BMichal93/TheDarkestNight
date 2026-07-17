@@ -265,15 +265,15 @@ namespace TheDarkestNight
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
-        // ── The Cold Calls Your Name ──────────────────────────────────────────
+        // ── The Night Calls Your Name ──────────────────────────────────────────
         // Fires when WhisperCount reaches 100. After Resist or Bargain, whispers
         // drop and the event can fire again once they climb back to 100.
         private static void ShowColdCallsEvent()
         {
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                "The Cold Calls Your Name",
+                "The Night Calls Your Name",
                 "Three pale figures stand at the crossroads. They wear no faces you recognise — but they know yours. " +
-                "The ash in your blood has been speaking to them for a long time, and tonight they have come to collect.\n\n" +
+                "Every mark you have drawn was a word in a long conversation, and tonight they have come to answer it.\n\n" +
                 "You can feel the fire straining against them. It always has. But it has never strained this hard.",
                 new List<InquiryElement>
                 {

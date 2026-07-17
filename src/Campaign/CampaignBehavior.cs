@@ -37,7 +37,7 @@ namespace TheDarkestNight
 
         private static readonly string[] _premonitions =
         {
-            "The fire in you whispers tonight — something distant is ending.",
+            "Something you carry pulls taut tonight — something distant is ending.",
             "On the road, you pass the ruins of a great pyre. The air still carries old smoke. Something in you recognises it.",
             "You wake with the taste of ash on your tongue. The inner fire is restless.",
             "Your shadow moves a half-step behind you. The fire inside is watching something you cannot see.",
