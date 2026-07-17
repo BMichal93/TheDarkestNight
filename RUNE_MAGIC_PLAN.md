@@ -23,7 +23,7 @@ speed — scriving in empty air.
 Mechanically:
 
 - A **rune is exactly 3 marks** of U/D/L/R (W/A/S/D → U/L/D/R, same mapping
-  as today). 64 possible triplets; **28 are real runes** — the space stays
+  as today). 64 possible triplets; **36 are real runes** — the space stays
   sparse enough that discovery is a hunt, and large enough that the hunt
   lasts (re-asserted by tests).
 - Each rune **means something** (Fire, Water, Reach, Wall, Summon…) and
@@ -64,7 +64,7 @@ Mechanically:
 
 ---
 
-## 2. The rune catalog (28 runes)
+## 2. The rune catalog (36 runes)
 
 New file: `src/Spellbook/RuneCatalog.cs` — pure data, no TaleWorlds types,
 mirroring `SpellbookCatalog`'s shape. Each rune: id, name, triplet, meaning,
@@ -103,12 +103,21 @@ Triplets are chosen so the five elements read as "pure strokes", modifiers as
 | 26 | **The Price** | `DUL` | SWA | Blood | Alone: you bleed for nothing (self-damage, no burn roll — a lesson). Bound: costs a cut of the caster's health, multiplies the working's power beyond what repetition reaches |
 | 27 | **The Snare** | `LDR` | ASD | Trap | Alone: a bare snare — trips the first foe who crosses (tiny root). Bound: element + Snare = the working is **buried ahead** and detonates when a foe steps in |
 | 28 | **The Chain** | `RLD` | DAS | Arc | Alone: a static snap at the nearest foe, trivial damage. Bound: the working **leaps** foe-to-nearest-foe, up to 3 leaps at ~65% decaying power (vs the Echo's full-power duplicate at a *random* target) |
+| 29 | **The Ring** | `RLL` | DAA | Nova | Form. Alone: a bare shockwave — a small stagger around the caster. Bound: the working breaks **radially outward** from the caster — Cinder+Ring = a fire nova; Wyrd+Ring = courage breaking over every ally nearby |
+| 30 | **The Rain** | `DUR` | SWD | Fall | Form. Alone: a brief, plain drizzle over the ground ahead (cosmetic, douses nothing much). Bound: the working **falls from above** across an area — Tide+Rain = a slowing rain (the Weeping Sky's pattern), Cinder+Rain = ember-fall |
+| 31 | **The Mirror** | `LUL` | AWA | Turn | Manner. Palindrome key — it reads the same both ways. Alone: a glint, nothing more. Bound: the working also arms a brief **counter** — the next hostile working or missile volley against the caster is turned back, weakened |
+| 32 | **The Still** | `LLU` | AAW | Quench | Manner. Alone: a held breath — a heartbeat of silence (no effect). Bound: the working also **dispels** — burning, slow, and roots stripped from allies it touches; enemy wards it crosses gutter out |
+| 33 | **The Sentry** | `RLU` | DAW | Dawn | Coda. Drawn `D-A-W` — the answer to the Night Mark's `S-A-D`. A standing watch-light that sears demons within its ring slowly for as long as it burns (the Lamp repels; the Sentry hurts) |
+| 34 | **The Hollow** | `DRR` | SDD | Decoy | Coda. A phantom of the caster steps out and draws nearby foes to it for a few seconds before folding into ash |
+| 35 | **The Anchor** | `LRR` | ADD | Hold fast | Coda. The caster stands rooted by choice: immune to knockback, pull, and stagger while it holds — the rune you write before the wave hits the wall |
+| 36 | **The Gift** | `ULR` | WAD | Bestow | Manner. Alone: an open, empty hand (no effect). Bound: every **self-working** in the binding (Mending, Circle, Husk…) lands on the **nearest ally** instead — the healer's rune |
 
-Tests assert: exactly-3-mark triplets, all-distinct, only U/D/L/R, count ≥ 25,
-and space sparseness (28/64 ≤ 45%).
+Tests assert: exactly-3-mark triplets, all-distinct, only U/D/L/R, count ≥ 30,
+and space sparseness (36/64 ≤ 60% — and this is the ceiling: at least 40% of
+the space stays permanently empty, or misdrawn bindings stop being dangerous).
 
-> The Night Mark is drawn `S-A-D` and the Vigil `W-A-S` — deliberate; the
-> keys spell the mood.
+> The Night Mark is drawn `S-A-D`, the Vigil `W-A-S`, the Sentry `D-A-W` —
+> deliberate; the keys spell the mood.
 
 > Naming note: rune names must stay climatic and mysterious per the project's
 > style — they are *marks*, not spells, so they read as nouns of the old
@@ -128,15 +137,22 @@ of rune ids drawn this focus. Output: a `ResolvedWorking` struct
 
 Every rune has one **grammatical role**, stored on its `RuneCatalog` entry:
 
-- **Matter** (5): Cinder, Tide, Stone, Gale, Wyrd — what the working is made of.
-- **Form** (5, mutually exclusive — at most ONE per binding): the Bar (wall),
+- **Matter** (5): Cinder, Tide, Stone, Gale, Wyrd — what the working is made
+  of. Deliberately never grows: a sixth element would square the fusion
+  table; new expressiveness comes from Forms and Manners instead.
+- **Form** (8, mutually exclusive — at most ONE per binding): the Bar (wall),
   the Calling (summon), the Long Mark (bolt), the Snare (trap), the Brand
-  (imbue). What the matter is poured into.
-- **Manner** (5, freely stackable): the Echo, the Chain, the Vigil, the
-  Price, the Night Mark. How the working behaves.
+  (imbue), the Husk (mantle — matter poured onto the caster's own skin), the
+  Ring (radial nova), the Rain (falls from above over an area). What the
+  matter is poured into.
+- **Manner** (8, freely stackable): the Echo, the Chain, the Vigil, the
+  Price, the Night Mark, the Mirror (arms a counter), the Still (adds
+  dispel), the Gift (self-workings land on the nearest ally instead). How
+  the working behaves.
 - **Coda** (the rest): Circle, Shroud, Mending, Lamp, Fetter, Hush, Stride,
-  Rot, Beacon, Maw, Grave Mark, Sundering — self-contained workings that
-  simply stack their solo effect onto the binding.
+  Rot, Beacon, Maw, Grave Mark, Sundering, Sentry, Hollow, Anchor —
+  self-contained workings that simply stack their solo effect onto the
+  binding.
 
 Resolution rules, applied in order (order of runes within the sequence does
 NOT matter — the resolver reads a multiset, which keeps it pure, testable,
@@ -191,6 +207,16 @@ and forgiving):
      the first foe to cross it; the Vigil extends how long it waits.
    - **The Brand (Imbue)** → the working is bound into the caster's wielded
      weapon for a time.
+   - **The Husk (Mantle)** → the working is worn: Cinder-husk burns those
+     who strike the caster, Stone-husk soaks blows, Tide-husk shrugs off
+     slow/burn, Gale-husk quickens the step (fusion mantles from the same
+     mapping, tuned later).
+   - **The Ring (Nova)** → the working breaks radially outward from the
+     caster — Cinder+Ring a fire nova, Wyrd+Ring courage over every nearby
+     ally.
+   - **The Rain (Fall)** → the working falls from above across an area ahead
+     — Tide+Rain the Weeping Sky's slowing rain, Cinder+Rain ember-fall
+     (reuses the ultimates' area patterns).
    - **Two or more Forms in one binding** → **malformed**.
 5. **Manner stacks:** the Echo adds `+1` random eligible target per echo
    (Req 10's multiply); the Chain makes the working leap foe-to-nearest-foe
@@ -198,7 +224,15 @@ and forgiving):
    the Price costs a cut of the caster's health for a large power multiplier;
    the Night Mark darkens the working (adds morale damage) and is the demon
    key for the Calling. Night Mark + the Lamp in one binding = contradiction
-   → **malformed** (a special fizzle line — "the lamp gutters").
+   → **malformed** (a special fizzle line — "the lamp gutters"). The Mirror
+   arms a short counter (next hostile working/volley turned back weakened);
+   the Still adds dispel (allies cleansed, enemy wards guttered); the Gift
+   redirects every self-working in the binding to the nearest ally.
+   Contradictory manners are malformed the same way the Lamp/Night Mark pair
+   is: **the Still + the Vigil** (a working cannot both quench and linger)
+   and **the Gift + the Husk** resolve normally (the mantle is simply worn
+   by the ally — the healer's craft), but **the Mirror + the Gift** is
+   malformed (a counter cannot be given away).
 6. **Codas compose additively**: Circle/Shroud/Mending/Lamp etc. stack their
    solo effect onto the working (e.g. `Cinder + Circle` = flame burst +
    self-ward). A sequence of only codas just performs each.
@@ -287,6 +321,14 @@ New small effects needed (all from proven primitives):
 - **Triads / the Unbound Weave**: each composes two (or more) existing
   element/fusion casts fired together + the backlash self-damage — no new
   engine surface.
+- **Ring/Rain forms**: radial = the existing nova/`SpiritPanic` area pattern
+  re-parameterised; falling = the Weeping Sky ultimate's area pattern.
+- **Mirror counters / Hollow decoys / Anchor stance**: small mission-scoped
+  token lists (the same shape as the mantle tokens above), ticked and
+  cleared with battle state.
+- **The Still's dispel**: walks the existing token lists (speed tokens,
+  burn/root state, wall wards) and removes matching entries — no new state,
+  only removal of existing kinds.
 
 Everything else is a call into existing `ElementSpellEffects` /
 `ElementUltimates` / `ElementalFactory` / `SpellEffects` code.
