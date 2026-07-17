@@ -75,8 +75,8 @@ namespace TheDarkestNight
                 "A woman in rough-spun wool steps into your path as you ride out. She carries a small child — you can see at a glance it is burning with fever. She has heard what you carry inside you. She weeps and offers nothing but her prayers.",
                 new List<InquiryElement>
                 {
-                    new InquiryElement("a", "Extend the inner fire to the child.", null, true,
-                        "The fire can be given. It is not without cost."),
+                    new InquiryElement("a", "Set a healing mark on the child.", null, true,
+                        "The work can be given. It is not without cost."),
                     new InquiryElement("b", "Refuse. The road pulls at you.", null, true,
                         "The road continues."),
                     new InquiryElement("c", "Press coins into her hands — see a healer.", null, true,

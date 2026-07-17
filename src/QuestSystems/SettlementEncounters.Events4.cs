@@ -140,7 +140,7 @@ namespace TheDarkestNight
             string childName  = child.Name?.ToString()  ?? "your child";
 
             string cHint = mage
-                ? $"The fire through both of them at once. Not a thing meant to be done like this."
+                ? $"The runes through both of them at once. Not a thing meant to be done like this."
                 : "Requires mage ability.";
             string dHint = hasDarkTalent
                 ? $"The ritual requires something living. It requires a lot of it."
@@ -161,7 +161,7 @@ namespace TheDarkestNight
                         $"You put everything into one of them. That is the shape of this decision."),
                     new InquiryElement("b", $"Save {childName}.", null, true,
                         $"You put everything into one of them. That is the shape of this decision."),
-                    new InquiryElement("c", "Channel the fire through both of them.", null, mage, cHint),
+                    new InquiryElement("c", "Work the runes through both of them.", null, mage, cHint),
                     new InquiryElement("n", "Let nature breathe through both of them.", null, isNature, nHint),
                     new InquiryElement("d", "Perform a dark ritual to sustain them.", null, hasDarkTalent, dHint),
                     new InquiryElement("cold_hold", "Hold them in the cold between living and dying.", null, isAshen, ashenHint),
@@ -186,13 +186,13 @@ namespace TheDarkestNight
                             AgePlayer(3650); // 10 years
                             try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, spouse, 10, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, child,  10, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                            Msg($"You put the fire through both of them at once — not a thing that is meant to be done like this, not a thing you will be able to explain. It costs ten years. They both wake. {spouseName} holds your face when you come back to yourself and does not ask what you gave. {childName} is already asking for food.", FireColor);
+                            Msg($"You work the marks through both of them at once — not a thing that is meant to be done like this, not a thing you will be able to explain. It costs ten years. They both wake. {spouseName} holds your face when you come back to yourself and does not ask what you gave. {childName} is already asking for food.", FireColor);
                             break;
                         case "n":
                             try { Hero.MainHero.HitPoints = Math.Max(1, Hero.MainHero.HitPoints - 40); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, spouse, 8, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             try { ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, child,  8, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                            Msg($"You sit between them and open yourself to the living world — not the fire, not the cold, but the quiet warmth that runs through roots and rivers and the palms of living hands. It moves through you and into them. The sickness does not burn away; it simply has no purchase in something the land has touched. They both wake, slowly, over the course of a night. {spouseName} watches your face the whole time, understanding nothing but the cost. {childName} does not understand either, but they take your hand when it is over.",
+                            Msg($"You sit between them and open yourself to the living world — not the drawn rune, not the cold, but the quiet warmth that runs through roots and rivers and the palms of living hands. It moves through you and into them. The sickness does not burn away; it simply has no purchase in something the land has touched. They both wake, slowly, over the course of a night. {spouseName} watches your face the whole time, understanding nothing but the cost. {childName} does not understand either, but they take your hand when it is over.",
                                 new TaleWorlds.Library.Color(0.35f, 0.75f, 0.35f));
                             break;
                         case "cold_hold":
@@ -294,7 +294,7 @@ namespace TheDarkestNight
             {
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                     "★  The First Hunger",
-                    "You wake before dawn and cannot say what woke you. The grey light from the window is wrong. The air is wrong. There is a sound beneath the silence — not a sound, a pressure — and the fire you used to carry has changed into something that does not distinguish between wood and flesh, between warmth given and warmth taken. It wants. It does not care what you want. The faces of the people closest to you move through your mind the way flame moves through dry straw: not as memory but as inventory.",
+                    "You wake before dawn and cannot say what woke you. The grey light from the window is wrong. The air is wrong. There is a sound beneath the silence — not a sound, a pressure — and the work you used to carry has changed into something that does not distinguish between wood and flesh, between warmth given and warmth taken. It wants. It does not care what you want. The faces of the people closest to you move through your mind the way flame moves through dry straw: not as memory but as inventory.",
                     new List<InquiryElement>
                     {
                         new InquiryElement("a", $"Fight it. ({(int)(leadChance * 100)}% Leadership)", null, true,
@@ -373,7 +373,7 @@ namespace TheDarkestNight
                                 if (!MageElementKnowledge.HasBlood)
                                 {
                                     MageElementKnowledge.LearnBlood();
-                                    Msg("The margin note stays with you, whether you want it or not. You know the BLOOD discipline now — a lord's death by your hand gives back the years the fire has burned.", BadColor);
+                                    Msg("The margin note stays with you, whether you want it or not. You know the BLOOD discipline now — a lord's death by your hand gives back the years the runes have taken.", BadColor);
                                 }
                                 else
                                     try { Hero.MainHero.HeroDeveloper.UnspentAttributePoints += 1; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
@@ -809,7 +809,7 @@ namespace TheDarkestNight
             {
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                     "◆  The End of the Hunger",
-                    "You wake before dawn and there is nothing left. Not the fire. Not the cold. Not the name you called yourself before either of them arrived. " +
+                    "You wake before dawn and there is nothing left. Not the work. Not the cold. Not the name you called yourself before either of them arrived. " +
                     "What is looking at the ceiling of your tent through your eyes is not you. " +
                     "It is not certain what it is. " +
                     "It is aware that this is the end of the person who made the choice that brought it here.",

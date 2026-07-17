@@ -272,7 +272,7 @@ namespace TheDarkestNight
                     try
                     {
                         InformationManager.DisplayMessage(new InformationMessage(
-                            "The fires at the Ashen ruins burn differently now. Something is being coaxed, not extinguished.",
+                            "The fires at the old ruins burn differently now. Something is being coaxed, not extinguished.",
                             new Color(0.6f, 0.35f, 0.35f)));
                     }
                     catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
@@ -295,7 +295,7 @@ namespace TheDarkestNight
                     try
                     {
                         InformationManager.DisplayMessage(new InformationMessage(
-                            "A mage lord has been seen at three different Ashen sites in a month. The Conclave has chosen its vessel.",
+                            "A mage lord has been seen at three different unhallowed sites in a month. The Conclave has chosen its vessel.",
                             new Color(0.6f, 0.35f, 0.35f)));
                     }
                     catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
@@ -569,11 +569,11 @@ namespace TheDarkestNight
 
         private static readonly string[] _corruptionWarnings =
         {
-            "{0} reports that his fire now burns with a quality he describes as 'directed cold'. He considers it a refinement. The Conclave agrees.",
+            "{0} reports that his workings now carry a quality he describes as 'directed cold'. He considers it a refinement. The Conclave agrees.",
             "Word arrives: {0} no longer requires sleep. He calls it clarity of purpose. The inner circle is calling it a breakthrough.",
-            "{0} writes that the Ashen no longer feel like opposition — more like a current he moves with. The Conclave is certain this is what control feels like.",
+            "{0} writes that the Night no longer feels like opposition — more like a current he moves with. The Conclave is certain this is what control feels like.",
             "The candidate sends an enthusiastic report. The rituals are accelerating faster than projected. He is eager to continue. More eager than before.",
-            "{0} notes that his fire and the cold now feel like the same thing. He assures them he remains in command. The Conclave takes him at his word.",
+            "{0} notes that his runes and the dark now move as the same hand. He assures them he remains in command. The Conclave takes him at his word.",
         };
 
         private static void FireCorruptionWarning()
@@ -613,7 +613,7 @@ namespace TheDarkestNight
                 $"The hall is cold. The candles do not gutter — they simply die, one by one, as you enter. " +
                 $"{puppetName} sits in the high seat. He does not rise. He does not blink.\n\n" +
                 $"The Conclave members stand in a ring around him, chanting the words they spent years learning. " +
-                $"They believe they are directing the cold. They believe the Ashen kneels to the fire inside a chosen vessel.\n\n" +
+                $"They believe they are directing the dark. They believe the Night kneels to a chosen vessel's will.\n\n" +
                 $"They are wrong.\n\n" +
                 $"{puppetName} turns to look at you. His eyes have no warmth left in them. They have not had warmth for some time. " +
                 $"Something behind them smiles — not with his face, but with the shape of his face.\n\n" +
@@ -639,10 +639,10 @@ namespace TheDarkestNight
                 "The candidate was found in his seat three days after the rite — cold to the touch, " +
                 "still moving. Still speaking. Those who heard him say the words were not his own.\n\n" +
                 "Of the Conclave members who attended the rite, none returned home.\n\n" +
-                "The Ember Conclave believed that the fire inside a mage was proof against the cold — " +
-                "that Inner Fire could not be hollowed, only directed.\n\n" +
-                "They were correct. The cold cannot extinguish the fire.\n\n" +
-                "They simply failed to understand that the cold can move into the fire and wear it like a coat.";
+                "The Ember Conclave believed that a trained hand was proof against the dark — " +
+                "that what is learned cannot be hollowed, only directed.\n\n" +
+                "They were correct. The dark cannot unlearn a rune.\n\n" +
+                "It simply never occurred to them that the dark can write with a borrowed hand.";
 
             InformationManager.ShowInquiry(new InquiryData(
                 "The Shape of Cold",
@@ -724,13 +724,13 @@ namespace TheDarkestNight
             const string body =
                 "A letter arrives with your provisions. No signature. The seal is an ember — " +
                 "a coal half-spent, pressed in dark wax.\n\n" +
-                "\"You carry the fire. So do we. Most mages see only the enemy in the cold — " +
-                "the thing that stills the flame and freezes the world. We have spent years learning to see otherwise.\n\n" +
-                "The Ashen are not an enemy. They are a force. Fire is a force. Neither cares about you " +
+                "\"You know the work. So do we. Most mages see only the enemy in the dark — " +
+                "the thing that unmakes the mark and freezes the world. We have spent years learning to see otherwise.\n\n" +
+                "The Night is not an enemy. It is a force. The runes are a force. Neither cares about you " +
                 "unless you reach into them. We have learned how to reach.\n\n" +
-                "The throne of Calradia will belong to whoever learns to stand between human will and Ashen power. " +
+                "What remains of Calradia will belong to whoever learns to stand between human will and the Night's power. " +
                 "We believe that is possible. We believe we are close.\n\n" +
-                "We have watched your fire for some time. Will you hear more?\"";
+                "We have watched your hand for some time. Will you hear more?\"";
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 "The Ember Seal",
@@ -739,7 +739,7 @@ namespace TheDarkestNight
                 {
                     new InquiryElement("ally", "Tell me more.", null, true,
                         "You will hear the Conclave's full design. They will offer you work. What you do with the knowledge is your own."),
-                    new InquiryElement("enemy", "The Ashen cannot be directed. You are fools or worse.", null, true,
+                    new InquiryElement("enemy", "The Night cannot be directed. You are fools or worse.", null, true,
                         "You close the letter. These people are dangerous in ways they do not understand."),
                     new InquiryElement("ignore", "This letter never reached me.", null, true,
                         "You burn the letter. The seal turns the same colour as the ashes in your campfire."),

@@ -193,7 +193,7 @@ namespace TheDarkestNight
                             if (!MageElementKnowledge.HasBlood)
                             {
                                 MageElementKnowledge.LearnBlood();
-                                Msg("Something in the taking stays with you. You know the BLOOD discipline now — a lord's death by your hand gives back the years the fire has burned.", BadColor);
+                                Msg("Something in the taking stays with you. You know the BLOOD discipline now — a lord's death by your hand gives back the years the runes have taken.", BadColor);
                             }
                             Msg($"You join them. There is a specific kind of ease that comes with it — no decision to make, no weight to carry afterward. When it is over, you feel the familiar warmth. Something given back. The soldiers give you a wide berth on the road home.", BadColor);
                             break;

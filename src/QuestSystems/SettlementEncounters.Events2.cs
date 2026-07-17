@@ -1024,7 +1024,7 @@ namespace TheDarkestNight
                 : "Requires Honourable and Merciful traits and party morale of 60 or above.";
 
             string mageHint = mage
-                ? "Push the fire outward — cold auras cannot hold against it. Costs a day."
+                ? "Set a warding rune against it — cold auras cannot hold against the mark. Costs a day."
                 : "Requires mage ability.";
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
@@ -1087,7 +1087,7 @@ namespace TheDarkestNight
                         case "c":
                             AgePlayer(1);
                             AddMorale(5f);
-                            Msg("You push the fire outward — not a spell, exactly, more a refusal: " +
+                            Msg("You trace the warding mark and push it outward — not a spell, exactly, more a refusal: " +
                                 "warmth moving against cold in the way warmth does when it remembers what it is. " +
                                 "The fog pulls back in sections, like cloth being peeled from something wet. " +
                                 "Gone before the sky lightens. Your men sleep through it entirely. " +

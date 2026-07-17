@@ -465,7 +465,7 @@ namespace TheDarkestNight
             AddLog(new TextObject("The rite is completed. The fire inside burned different for two days. It has not fully returned to where it was."));
 
         internal void LogBecameAshen() =>
-            AddLog(new TextObject("The fire in you goes cold. Something else answers instead. The rite has taken everything it was promised."));
+            AddLog(new TextObject("The runes go cold under your hand. Something else answers instead. The rite has taken everything it was promised."));
 
         internal void LogGivenAway(string recipient) =>
             AddLog(new TextObject($"The scrolls were handed over to {recipient}. You held them longer than you meant to. Whatever they were promising is someone else's problem now."));

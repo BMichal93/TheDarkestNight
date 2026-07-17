@@ -26,11 +26,11 @@ namespace TheDarkestNight
     {
         public static readonly List<AshenRecruitDef> All = new List<AshenRecruitDef>
         {
-            new AshenRecruitDef { TroopId = "ashen_thrall",   Name = "Ashen Thrall",   Rank = 1, RequiredPrisonerTier = 1, PrisonerCost = 3 },
-            new AshenRecruitDef { TroopId = "ashen_warrior",  Name = "Ashen Warrior",  Rank = 2, RequiredPrisonerTier = 2, PrisonerCost = 3 },
-            new AshenRecruitDef { TroopId = "ashen_invoker",  Name = "Ashen Invoker",  Rank = 3, RequiredPrisonerTier = 3, PrisonerCost = 2 },
-            new AshenRecruitDef { TroopId = "ashen_warden",   Name = "Ashen Warden",   Rank = 4, RequiredPrisonerTier = 4, PrisonerCost = 2 },
-            new AshenRecruitDef { TroopId = "ashen_revenant", Name = "Ashen Revenant", Rank = 5, RequiredPrisonerTier = 5, PrisonerCost = 1 },
+            new AshenRecruitDef { TroopId = "ashen_thrall",   Name = "Hollow Thrall",   Rank = 1, RequiredPrisonerTier = 1, PrisonerCost = 3 },
+            new AshenRecruitDef { TroopId = "ashen_warrior",  Name = "Hollow Warrior",  Rank = 2, RequiredPrisonerTier = 2, PrisonerCost = 3 },
+            new AshenRecruitDef { TroopId = "ashen_invoker",  Name = "Hollow Invoker",  Rank = 3, RequiredPrisonerTier = 3, PrisonerCost = 2 },
+            new AshenRecruitDef { TroopId = "ashen_warden",   Name = "Hollow Warden",   Rank = 4, RequiredPrisonerTier = 4, PrisonerCost = 2 },
+            new AshenRecruitDef { TroopId = "ashen_revenant", Name = "Hollow Revenant", Rank = 5, RequiredPrisonerTier = 5, PrisonerCost = 1 },
         };
     }
 }

@@ -49,7 +49,7 @@ namespace TheDarkestNight
 
                 if (hero == Hero.MainHero)
                     InformationManager.DisplayMessage(new InformationMessage(
-                        $"The fire burns its cost — {days} day{(days > 1 ? "s" : "")} older. Age: {(int)hero.Age}.",
+                        $"The runes take their toll — {days} day{(days > 1 ? "s" : "")} older. Age: {(int)hero.Age}.",
                         new Color(0.7f, 0.5f, 0.3f)));
 
                 CheckAgeLimit(hero);
@@ -143,7 +143,7 @@ namespace TheDarkestNight
 
                 if (hero == Hero.MainHero)
                     InformationManager.DisplayMessage(new InformationMessage(
-                        $"The fire gives back — {days} day{(days > 1 ? "s" : "")} younger. Age: {(int)hero.Age}.",
+                        $"The runes give back — {days} day{(days > 1 ? "s" : "")} younger. Age: {(int)hero.Age}.",
                         new Color(0.9f, 0.6f, 0.3f)));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
@@ -170,7 +170,7 @@ namespace TheDarkestNight
             {
                 _ledgerDaysSpent += days;
                 InformationManager.DisplayMessage(new InformationMessage(
-                    $"The fire flows from you — {days} day{(days > 1 ? "s" : "")}. {CastTollFeeling()}",
+                    $"The working draws on you — {days} day{(days > 1 ? "s" : "")}. {CastTollFeeling()}",
                     new Color(0.7f, 0.5f, 0.3f)));
                 CheckAgeLimit(hero);
             }
@@ -196,20 +196,20 @@ namespace TheDarkestNight
             new[] {  // 5–14 years — worn
                 "Something in you is thinner now. It does not grow back.",
                 "You feel worn through, like a coat at the elbows.",
-                "The fire takes from a purse you cannot open to count.",
+                "Every mark you draw is paid from a purse you cannot open to count.",
                 "Your own heartbeat sounds a little further away.",
             },
             new[] {  // 15–29 years — the cold moves in
-                "A cold sweeps through where the fire passed — and lingers.",
+                "A cold sweeps through where the working passed — and lingers.",
                 "The chill no longer waits for the casting to find you.",
                 "You are colder after than you were before. That is new.",
                 "Winter has found a room in you and begun to furnish it.",
             },
             new[] {  // 30+ years — hollowed
-                "You feel hollow, as if the fire is spending what was never yours to keep.",
-                "There is an emptiness where the fire drew from. It echoes.",
+                "You feel hollow, as if the runes are spending what was never yours to keep.",
+                "There is an emptiness where the working drew from. It echoes.",
                 "You give, and give, and something in you has stopped keeping count.",
-                "The fire burns bright. You are what it is burning.",
+                "The marks hold true. You are what they are written on, and the page is thinning.",
             },
         };
 
@@ -230,7 +230,7 @@ namespace TheDarkestNight
             {
                 _ledgerDaysReclaimed += days;
                 InformationManager.DisplayMessage(new InformationMessage(
-                    $"The fire relents — {days} day{(days > 1 ? "s" : "")} given back to a count only it keeps.",
+                    $"The ledger relents — {days} day{(days > 1 ? "s" : "")} given back to a count only it keeps.",
                     new Color(0.9f, 0.6f, 0.3f)));
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
@@ -267,13 +267,13 @@ namespace TheDarkestNight
                 {
                     ElementLordRegistry.SetAshen(hero, true);
                     InformationManager.DisplayMessage(new InformationMessage(
-                        $"{hero.Name} — the fire does not die. Something colder burns in its place.",
+                        $"{hero.Name} — the hand does not fall still. Something colder guides it now.",
                         new Color(0.3f, 0.35f, 0.7f)));
                     return;
                 }
 
                 InformationManager.DisplayMessage(new InformationMessage(
-                    $"{hero.Name} — a century spent. The fire burns to ash at last.",
+                    $"{hero.Name} — a century spent. The ledger closes at last.",
                     new Color(0.6f, 0.5f, 0.35f)));
                 KillCharacterAction.ApplyByOldAge(hero, true);
             }
@@ -340,17 +340,17 @@ namespace TheDarkestNight
                 {
                     case 50:
                         title  = "Fifty Years of Ash";
-                        body   = "You have outlived half your blood. The fire does not celebrate. It simply keeps burning, and so do you — a little less of what you were before, a little more of something else entirely.\n\nYou do not know if that is a fair trade.";
+                        body   = "You have outlived half your blood. The runes do not celebrate. They simply keep their count, and so do you — a little less of what you were before, a little more of something else entirely.\n\nYou do not know if that is a fair trade.";
                         button = "Time passes.";
                         break;
                     case 60:
                         title  = "Sixty Years";
-                        body   = "The faces around you change now. The lords you knew when you first learned the fire's name — some are ash, some are grey-haired, some you cannot place anymore.\n\nYou remember everything. That is its own weight.";
+                        body   = "The faces around you change now. The lords you knew when you first traced a mark — some are dust, some are grey-haired, some you cannot place anymore.\n\nYou remember everything. That is its own weight.";
                         button = "So it goes.";
                         break;
                     case 70:
                         title  = "Seventy Years";
-                        body   = "The fire is still there. That is not comfort — it is accounting. You have traded seventy years for what the fire gave you, and you cannot say anymore whether the ledger was worth keeping.\n\nThe flame does not answer when you ask.";
+                        body   = "The work is still there. That is not comfort — it is accounting. You have traded seventy years for what the runes gave you, and you cannot say anymore whether the ledger was worth keeping.\n\nThe marks do not answer when you ask.";
                         button = "The years mount.";
                         break;
                     case 80:
@@ -360,7 +360,7 @@ namespace TheDarkestNight
                         break;
                     case 90:
                         title  = "Ninety Years";
-                        body   = "A decade before the end — not the fire's end, which is your body failing or the cold claiming you. The world has moved in ways you remember as fresh and recent, and then moved on again, and a third time, and still you burn.\n\nThe weight of that is different from what you expected.";
+                        body   = "A decade before the end — not the work's end, which is your body failing or the dark claiming you. The world has moved in ways you remember as fresh and recent, and then moved on again, and a third time, and still your hand keeps writing.\n\nThe weight of that is different from what you expected.";
                         button = "A little more.";
                         break;
                     default:
@@ -414,14 +414,14 @@ namespace TheDarkestNight
                 }
                 else
                 {
-                    lines.Append($"  Age: {age} — the fire knows when it will burn out. You do not.\n");
+                    lines.Append($"  Age: {age} — the ledger knows when it will close. You do not.\n");
                 }
-                lines.Append($"  Days the fire has taken: {_ledgerDaysSpent}");
+                lines.Append($"  Days the runes have taken: {_ledgerDaysSpent}");
                 lines.Append($"   |   Days reclaimed: {_ledgerDaysReclaimed}\n");
                 lines.Append($"  Workings: {_ledgerBattleCasts} in battle, {_ledgerMapCasts} on the map\n");
                 int net = _ledgerDaysSpent - _ledgerDaysReclaimed;
                 if (net > 84)
-                    lines.Append($"  The fire holds {net / 84} year{(net / 84 != 1 ? "s" : "")} of your life. It does not give receipts.\n");
+                    lines.Append($"  The runes hold {net / 84} year{(net / 84 != 1 ? "s" : "")} of your life. They do not give receipts.\n");
                 if (!MageKnowledge.IsAshen)
                 {
                     string coldNote = MageKnowledge.WhisperTier switch

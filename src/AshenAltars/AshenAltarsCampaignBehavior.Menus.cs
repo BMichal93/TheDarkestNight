@@ -153,7 +153,7 @@ namespace TheDarkestNight
                                 ? $"{pCost} prisoners + {lCost} lord(s) + {fCost} focus"
                                 : $"{pCost} prisoners + {fCost} focus";
                             string lockNote    = !qualifies ? "  [Requires Merciless or Devious]" : "";
-                            string discountNote = discount > 0 ? $"  [−{discount} from the cold's favour]" : "";
+                            string discountNote = discount > 0 ? $"  [−{discount} from the Night's favour]" : "";
                             MBTextManager.SetTextVariable("DARK_ALTAR_BUY_TEXT",
                                 $"Offer blood for a Dark Gift  (costs {costStr}){lockNote}{discountNote}");
                             args.IsEnabled = qualifies;

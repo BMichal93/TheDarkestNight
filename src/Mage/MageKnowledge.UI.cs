@@ -47,13 +47,13 @@ namespace TheDarkestNight
             if (!_isMage)
             {
                 InformationManager.DisplayMessage(new InformationMessage(
-                    "The fire does not stir in you.",
+                    "The runes do not answer you. No one has taught you the marks.",
                     Color.FromUint(0xFFBBAA99)));
                 return;
             }
 
             string ashenNote = _isAshen
-                ? "\n[Ashen] Each cast raises criminal rating instead of aging you. After your first working each day, further casts risk possession.\n"
+                ? "\n[Nightbound] Each cast raises criminal rating instead of aging you. After your first working each day, further casts risk possession.\n"
                 : "";
 
             // The casting gestures (which keys to hold, break, release) live in the
@@ -82,7 +82,7 @@ namespace TheDarkestNight
                 "  further — and a DEEP draw of Fire sets its marks ALIGHT: they\n" +
                 "  keep burning (up to ~18/s for 5 s at full charge; a snap flick\n" +
                 "  ignites nothing).\n" +
-                "  The Ashen cold clings on as deep frost — the same toll.\n\n" +
+                "  The Nightbound's cold clings on as deep frost — the same toll.\n\n" +
                 "── WALLS WARD  (while they stand) ───────────────────\n" +
                 "  Fire   — devours any gale that crosses it; horses shy from flame.\n" +
                 "  Wind   — turns arrows and bolts aside, scatters flung stone.\n" +
@@ -103,7 +103,7 @@ namespace TheDarkestNight
                 "                    charging cavalry worst of all.\n" +
                 "  Fire on timber  — siege engines and castle GATES burn: a bursting\n" +
                 "                    bolt scorches them, a standing fire gnaws at them.\n" +
-                "                    (The Ashen cold splits the frozen grain.)\n" +
+                "                    (The Nightbound's cold splits the frozen grain.)\n" +
                 "  Horses and flame — no horse will hold a burning line.\n\n" +
                 "── BATTLE COST  (life expectancy — flat per cast) ────\n" +
                 "  Attack = 3 days of life   Wall = 4 days.\n" +
@@ -127,7 +127,7 @@ namespace TheDarkestNight
                 "  Open this book any time: Left Alt + X  (LB + RB on a controller).\n\n" +
                 "── DARK ALTARS ──────────────────────────────────────────\n" +
                 "  Dark Altars stand in Sanala, Askar, Iyakis, Hubyar,\n" +
-                "  and three random Ashen cities.\n" +
+                "  and three random cities the Night has marked.\n" +
                 "  The Merciless and Devious may purchase permanent Dark Gifts\n" +
                 "  by sacrificing prisoners and captured lords.\n" +
                 "  Dark Gifts are always active while you remain cruel or cunning.\n" +
@@ -137,7 +137,7 @@ namespace TheDarkestNight
                 BuildMurmursSection() +
                 (_isAshen ? AshenQuestSystem.GetGrimoireSummary() : DragonQuestSystem.GetGrimoireSummary());
 
-            string title = _isAshen ? "The Ashen Fire" : "The Inner Fire";
+            string title = _isAshen ? "A Grimoire Gone Cold" : "The Grimoire";
 
             if (!inMission)
             {
@@ -175,7 +175,7 @@ namespace TheDarkestNight
                 "Three disciplines answer a prepared hand. Learn their gestures here, "
                 + "while the candle is steady — the field gives no time to remember.\n\n"
                 + "Keys are for keyboard; the (controller) chord stands beside each.\n\n"
-                + "── THE INNER FIRE — spells (for the gifted) ─────────\n"
+                + "── THE RUNES — spells (for the taught) ──────────────\n"
                 + "  Open the grimoire    Left Alt + X        (LB + RB)\n"
                 + "  Work a spell         Hold Left Alt …      (hold X)\n"
                 + "    • shape it         W  A  D  S           (left stick)\n"
@@ -184,7 +184,7 @@ namespace TheDarkestNight
                 + "    • loose it         release Left Alt     (release X)\n"
                 + "  Sheathe your weapon first — the working needs free hands.\n\n"
                 + "── MIRACLES — Grace & Cold ──────────────────────────\n"
-                + "  First charge at a Sanctuary (Grace) or Ashen Altar (Cold).\n"
+                + "  First charge at a Sanctuary (Grace) or Dark Altar (Cold).\n"
                 + "  On the field         Shift + X            (L3 + R3)\n"
                 + "  In battle            Hold Left Ctrl …     (hold R3)\n"
                 + "    then type the six-mark sequence shown for the miracle, and release.\n\n"
@@ -194,14 +194,14 @@ namespace TheDarkestNight
                 + "  and 20:00 to charge for 2 s then unleash the effect. 10 % burndown\n"
                 + "  chance per use. Chambers in Revyl, Varcheg, Dunglanys, Car Banseth,\n"
                 + "  and Saneopa.\n\n"
-                + "── THE LIVING EMBER — the land's own fire ───────────\n"
-                + "  (For those attuned to the living world, not the inner fire.)\n"
+                + "── THE LIVING EMBER — the land's own current ────────\n"
+                + "  (For those attuned to the living world, not the drawn rune.)\n"
                 + "  Gather a charge     Hold Left Ctrl + stand still   (hold R3, stand still)\n"
                 + "  Cast attack         Hold Ctrl + Attack             (Right Trigger)\n"
                 + "  Cast support        Hold Ctrl + Block              (Left Trigger)\n"
                 + "  Both hands must be empty. Armour weight must not exceed 25.\n"
                 + "  The element is the land's: Wind, Earth, Water, or Storm.\n\n"
-                + "The grimoire holds the deeper craft of the Fire. "
+                + "The grimoire holds the deeper craft of the runes. "
                 + "The rest, you will learn by surviving.";
 
             InformationManager.ShowInquiry(new InquiryData(
@@ -239,7 +239,7 @@ namespace TheDarkestNight
             if (Hero.MainHero?.IsPrisoner == true)
             {
                 InformationManager.DisplayMessage(new InformationMessage(
-                    "You are bound. The fire cannot kindle.",
+                    "You are bound. No hand is free to draw.",
                     Color.FromUint(0xFFBBAA99)));
                 return;
             }
@@ -403,7 +403,7 @@ namespace TheDarkestNight
                 catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
                 if (lines.Count == 0) return "";
-                return "\n── MURMURS  (the cold speaks plainly now) ──────────\n" +
+                return "\n── MURMURS  (the Night speaks plainly now) ─────────\n" +
                        string.Join("\n", lines) + "\n";
             }
             catch { return ""; }

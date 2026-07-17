@@ -122,7 +122,7 @@ namespace TheDarkestNight
             try
             {
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                    $"The Codex of the Inner Fire   [Focus: {have}]",
+                    $"The Codex of the Runes   [Focus: {have}]",
                     $"Fire is yours from the first day. The rest is learned — the next costs {cost} focus point{(cost != 1 ? "s" : "")}, " +
                     "or one less from a teacher who carries it. Choose what to study.",
                     elements, true, 1, 1, "Study", "Close",
@@ -163,8 +163,8 @@ namespace TheDarkestNight
                 case MagePower.Earth:  return "Wield the Earth — a forward line of erupting stone that roots those it catches, and a stone wall raised from the ground.";
                 case MagePower.Water:  return "Wield Water — a slowing wave that drags at the foe, and a barrier of mist.";
                 case MagePower.Spirit: return "Wield Spirit — strike fear into men and horses and shout a stray order into their ranks, and raise a wall that heartens your own and mends them a little.";
-                case MagePower.Steel:  return "Steel — shape the fire with a weapon still in your hand, and bear twice the armour before the channel smothers.";
-                case MagePower.Blood:  return "Blood — when you take a lord's head, the years the fire has burned from you are given back, the more for the greater the lord.";
+                case MagePower.Steel:  return "Steel — draw the marks with a weapon still in your hand, and bear twice the armour before the channel smothers.";
+                case MagePower.Blood:  return "Blood — when you take a lord's head, the years the runes have taken from you are given back, the more for the greater the lord.";
                 default:               return "Nature — draw slowly, in tune with the living land, and a working costs you far fewer years.";
             }
         }

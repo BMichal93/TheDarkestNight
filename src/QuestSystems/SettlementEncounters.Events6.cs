@@ -959,7 +959,7 @@ namespace TheDarkestNight
                             "Expensive. Certain. −600 gold."),
                         new InquiryElement("ride",    "Ride through it. Your men are tougher than a fever.", null, true,
                             "Some of them are. The question is which some."),
-                        new InquiryElement("fire",    "Use the Inner Fire to purge it.",                  null, isMage && !isAshen,
+                        new InquiryElement("fire",    "Work the runes to purge it.",                      null, isMage && !isAshen,
                             "The fire can burn out fever. The cost is in your years."),
                         new InquiryElement("nature",  "Draw from the living world to clear the fever.",   null, isNature,
                             "The land's warmth knows sickness. You give of yourself — your own blood, not your years."),

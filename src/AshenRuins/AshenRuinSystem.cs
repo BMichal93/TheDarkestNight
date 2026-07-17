@@ -587,7 +587,7 @@ namespace TheDarkestNight
             {
                 ("I am counted by kings and bled by mages. I have no colour but am spent in every fire. What am I?",
                  new[]{"Days","Gold","Time","Blood"}, 0),
-                ("The cold carries it, the fire forgets it, the Ashen hoard it. What is it?",
+                ("The cold carries it, the living forget it, the dead hoard it. What is it?",
                  new[]{"Memory","Ash","Shadow","Silence"}, 0),
                 ("I am the price of the first spell and the shape of the last one. I grow without planting.",
                  new[]{"Aging","Power","Hunger","Grief"}, 0),
@@ -637,7 +637,7 @@ namespace TheDarkestNight
             if (MageKnowledge.IsAshen)
             {
                 InformationManager.ShowInquiry(new InquiryData(
-                    "Ashen Sentinel",
+                    "The Hollow Sentinel",
                     "The sentinel turns its hollow gaze on you. Then it steps aside. The cold recognises the cold.",
                     true, false, "Pass through", "",
                     () => NextRoom(def, isSolo, ri, sr), null), true);
@@ -647,17 +647,17 @@ namespace TheDarkestNight
             if (pass)
             {
                 InformationManager.ShowInquiry(new InquiryData(
-                    "Ashen Sentinel",
-                    "The guardian reads your fire and finds it... insufficient threat. It does not bother. You pass.",
+                    "The Hollow Sentinel",
+                    "The guardian reads the marks on you and finds them... insufficient threat. It does not bother. You pass.",
                     true, false, "Continue", "",
                     () => NextRoom(def, isSolo, ri, sr), null), true);
             }
             else
             {
                 InformationManager.ShowInquiry(new InquiryData(
-                    "Ashen Sentinel",
-                    "The guardian does not step aside for fire-bearers of your kind. You can fight your way through — 10 days aging — or lose 5 troops as a distraction.",
-                    true, true, "Spend fire (10 days aging)", "Spend troops (5 men)",
+                    "The Hollow Sentinel",
+                    "The guardian does not step aside for rune-writers of your kind. You can burn your way through — 10 days aging — or lose 5 troops as a distraction.",
+                    true, true, "Spend yourself (10 days aging)", "Spend troops (5 men)",
                     () => { AgePlayer(10); NextRoom(def, isSolo, ri, sr); },
                     () =>
                     {
@@ -682,7 +682,7 @@ namespace TheDarkestNight
 
             InformationManager.ShowInquiry(new InquiryData(
                 "Serpent Nest",
-                $"The passage is occupied. You can burn them out with your inner fire ({agingCost} days aging) or send men through first ({troopCost} troops lost).",
+                $"The passage is occupied. You can burn them out with a fire-rune ({agingCost} days aging) or send men through first ({troopCost} troops lost).",
                 true, true, $"Burn them ({agingCost} days aging)", $"Send men ({troopCost} troops)",
                 () => { AgePlayer(agingCost); NextRoom(def, isSolo, ri, sr); },
                 () =>
@@ -887,8 +887,8 @@ namespace TheDarkestNight
         {
             InformationManager.ShowInquiry(new InquiryData(
                 "Dragon's Egg",
-                "A black sphere, warm, the size of a man's head. It is not an egg — not exactly — but the fire inside you recognises the fire inside it. You can take it or leave it. Taking it will attract attention.",
-                true, true, "Take it (Ashen notice you)", "Leave it",
+                "A black sphere, warm, the size of a man's head. It is not an egg — not exactly — but something in your marks answers something inside it. You can take it or leave it. Taking it will attract attention.",
+                true, true, "Take it (the Night notices you)", "Leave it",
                 () =>
                 {
                     MageKnowledge.AddWhispers(12);
@@ -905,11 +905,11 @@ namespace TheDarkestNight
             int agingCost = isSolo ? 10 : 6;
             int troopCost = 10;
             string desc = isSolo
-                ? "The Ashen Flame fills the corridor. No troops to shield you. 10 days aging minimum to push through it."
-                : "The Ashen Flame fills the corridor. You can shield yourself with troops (10 lost) but the fire will still take 6 days from you.";
+                ? "Cold fire fills the corridor — flame with no warmth in it. No troops to shield you. 10 days aging minimum to push through it."
+                : "Cold fire fills the corridor — flame with no warmth in it. You can shield yourself with troops (10 lost) but it will still take 6 days from you.";
 
             InformationManager.ShowInquiry(new InquiryData(
-                "Ashen Flame",
+                "The Cold Fire",
                 desc,
                 true, true, "Push through", "Retreat",
                 () =>
@@ -1116,7 +1116,7 @@ namespace TheDarkestNight
             {
                 InformationManager.ShowInquiry(new InquiryData(
                     "Triune Reckoning",
-                    "The room asks which fire you carry. The living fire in you is quieter than the others, and older. The room eases, briefly, and gives back 3 days.",
+                    "The room asks whose hand wrote you. The marks you carry are quieter than the others, and older. The room eases, briefly, and gives back 3 days.",
                     true, false, "Continue", "",
                     () => { AgingSystem.RejuvenateHero(Hero.MainHero, 3); NextRoom(def, isSolo, ri, sr); }, null), true);
             }
@@ -1210,7 +1210,7 @@ namespace TheDarkestNight
                     _eyeFound = true;
                     InformationManager.ShowInquiry(new InquiryData(
                         "The Eye of Aenos",
-                        "A sphere of obsidian that never cools. The last thing the First Drake saw before the Ashen sealed it. You hold it and the fire inside you pulls toward it like a compass finding north.\n\nSomething about the old mage's request makes a different kind of sense now.",
+                        "A sphere of obsidian that never cools. The last thing the First Drake saw before the old order sealed it. You hold it and every rune you know pulls toward it like a compass finding north.\n\nSomething about the old mage's request makes a different kind of sense now.",
                         true, false, "Take it", "",
                         () => { }, null), true);
                     break;
@@ -1224,7 +1224,7 @@ namespace TheDarkestNight
                     {
                         try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints += AshenCrownFpBonus; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                         InformationManager.DisplayMessage(new InformationMessage(
-                            "The three fragments align. Something clicks in the fire. +3 focus points.",
+                            "The three fragments align. Something clicks into place in the work. +3 focus points.",
                             new Color(0.9f, 0.6f, 0.9f)));
                     }
                     break;
@@ -1232,7 +1232,7 @@ namespace TheDarkestNight
                 case RewardType.VoidCrystal:
                     InformationManager.ShowInquiry(new InquiryData(
                         "Void Crystal",
-                        "A dark glass shard, cold even when held. It hums at the same frequency as your inner fire. You could sell it — 5000 denars, to the right buyer — or let it dissolve into you, which costs the fire nothing and gives back 20 days.",
+                        "A dark glass shard, cold even when held. It hums at the same pitch as a rune half-drawn. You could sell it — 5000 denars, to the right buyer — or let it dissolve into you, which costs you nothing and gives back 20 days.",
                         true, true, "Dissolve it (20 days reclaimed)", "Sell it (5000 denars)",
                         () => AgingSystem.RejuvenateHero(Hero.MainHero, 20),
                         () => { try { Hero.MainHero.ChangeHeroGold(5000); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } }), true);
@@ -1300,7 +1300,7 @@ namespace TheDarkestNight
             int fp = Math.Max(1, points / 2);
             try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints += fp; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             InformationManager.DisplayMessage(new InformationMessage(
-                $"{header} Nothing claims the offering, so the fire simply sharpens. +{fp} focus point{(fp!=1?"s":"")}.",
+                $"{header} Nothing claims the offering, so the hand simply steadies. +{fp} focus point{(fp!=1?"s":"")}.",
                 new Color(0.7f, 0.9f, 0.7f)));
         }
 
@@ -1340,7 +1340,7 @@ namespace TheDarkestNight
             {
                 try { Hero.MainHero.HeroDeveloper.UnspentFocusPoints += 2; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 InformationManager.DisplayMessage(new InformationMessage(
-                    $"{header} The knowledge was already yours — but the fire sharpens anyway. +2 focus points.",
+                    $"{header} The knowledge was already yours — but the hand steadies anyway. +2 focus points.",
                     new Color(0.7f, 0.9f, 0.7f)));
             }
         }

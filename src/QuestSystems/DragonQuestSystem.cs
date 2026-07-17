@@ -490,7 +490,7 @@ namespace TheDarkestNight
         internal void LogColdConversion()
         {
             AddLog(new TextObject(
-                "Your fire has gone out. The presence of Aelisar Veth — " +
+                "Your hand has gone cold and still. The presence of Aelisar Veth — " +
                 "who sacrificed himself to hold the cycle — recedes. " +
                 "You are now the thing he spent himself to stop. The quest is closed."));
             CompleteQuestWithFail();

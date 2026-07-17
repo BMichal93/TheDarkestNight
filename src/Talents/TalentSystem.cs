@@ -144,28 +144,28 @@ namespace TheDarkestNight
             {
                 Id = TalentId.DarkMage, Category = TalentCategory.Class, FocusCost = 0,
                 Name = "Reaper",
-                Lore = "The fire has learned to feed on what dies. Each kill leaves a warmth behind — not theirs, not quite yours, but yours to take if you know how to hold a vessel for it. The raids and the executions are not cruelty. They are fuel.",
+                Lore = "There is a rune for taking, and you have learned it too well. Each kill leaves a residue behind — not theirs, not quite yours, but yours to gather if you know how to hold a vessel for it. The raids and the executions are not cruelty. They are ink.",
                 MechanicDesc = "Path (cost scales: 1 fp first, 2 fp second, etc.). The way of the life-eater. Grants four talents: Ember (each battlefield kill carries a 10% chance to restore a day of youth), Reap (raids and executions restore years of your life), Wither (drain the hearth from a nearby enemy village), and Extinguish (wound and break a distant enemy party). Walking this path darkens you."
             },
             new TalentDef
             {
                 Id = TalentId.Seer, Category = TalentCategory.Class, FocusCost = 0,
                 Name = "Seer",
-                Lore = "You read the fire the way a navigator reads stars — imperfectly, but well enough. The lines that bind every living thing are never quite still, and you have learned to look without flinching. What you see, you do not always share.",
-                MechanicDesc = "Path (cost scales: 1 fp first, 2 fp second, etc.). The way of foresight. Grants three talents: Tempered (battle casts cost 25% fewer days, deepening with age), Clairvoyance (read the threads — turn insight into influence or gold), and Fade (draw your fire inward — conceal your party from enemy scouts for a day)."
+                Lore = "You read the lines the way a navigator reads stars — imperfectly, but well enough. The marks that bind every living thing are never quite still, and you have learned to look without flinching. What you see, you do not always share.",
+                MechanicDesc = "Path (cost scales: 1 fp first, 2 fp second, etc.). The way of foresight. Grants three talents: Tempered (battle casts cost 25% fewer days, deepening with age), Clairvoyance (read the threads — turn insight into influence or gold), and Fade (draw your marks inward — conceal your party from enemy scouts for a day)."
             },
             new TalentDef
             {
                 Id = TalentId.WardKeeper, Category = TalentCategory.Class, FocusCost = 0,
                 Name = "Warden",
-                Lore = "The fire that keeps things out is harder to learn than the fire that burns. You have stopped moving toward what threatens you. You have learned to stand still inside the flame and hold your shape while everything else changes around you.",
+                Lore = "The rune that keeps things out is harder to learn than the rune that burns. You have stopped moving toward what threatens you. You have learned to stand still inside the ward and hold your shape while everything else changes around you.",
                 MechanicDesc = "Path (cost scales: 1 fp first, 2 fp second, etc.). The way of the shield. Grants four talents: Ashveil (Restore grants brief magic immunity), Cinder Shell (Restore hardens allies and shields overhealed ones), Reflect (Restore retaliates against melee attackers), and The Warden's Ring (barrier nodes ring the caster instead of forming a wall)."
             },
             new TalentDef
             {
                 Id = TalentId.Heartfire, Category = TalentCategory.Class, FocusCost = 0,
                 Name = "Heartfire",
-                Lore = "The fire that tends the living is rarer than the fire that takes. It does not announce itself with smoke. It simply reminds the dying that warmth was theirs all along. Those who carry fire recognise each other across a room — there is something almost like trust in that.",
+                Lore = "The mark that tends the living is rarer than the mark that takes. It does not announce itself. It simply reminds the dying that warmth was theirs all along. Those who know the work recognise each other across a room — there is something almost like trust in that.",
                 MechanicDesc = "Path (cost scales: 1 fp first, 2 fp second, etc.). The way of warmth. Grants four talents: Hearthlight (Restore lifts allied morale, +10 per input), Kinship (mage lords trust you; their presence in battle cuts your casting cost by 10% each, up to 50%), Kindle (a campaign working that heals wounded soldiers and rallies your party), and Dirge (burst sinks into the ground as a lingering fire patch)."
             },
             new TalentDef
@@ -187,56 +187,56 @@ namespace TheDarkestNight
             {
                 Id = TalentId.Gift, IsSpell = false, IsEnchantment = false,
                 Category = TalentCategory.Passive, Name = "Gift",
-                Lore = "No one is born to this. Someone traced the first mark for you — on a slate, in the dust, in the air — and the world answered. Not warmth: something older. The kind of fire that burns without consuming, and holds the world together at its edges.",
-                MechanicDesc = "You carry the inner fire. In battle: form keys, Break, effect keys. W = Sear (burn), A = Force (push), D = Shred (armour) — all deal 25 damage. S = Restore (allies)."
+                Lore = "No one is born to this. Someone traced the first mark for you — on a slate, in the dust, in the air — and the world answered. Not warmth: something older. Something that was waiting, on the far side of the lines, for someone to write to it.",
+                MechanicDesc = "You have been taught the runes. In battle: form keys, Break, effect keys. W = Sear (burn), A = Force (push), D = Shred (armour) — all deal 25 damage. S = Restore (allies)."
             },
             new TalentDef
             {
                 Id = TalentId.BattleMage, IsSpell = false, IsEnchantment = false,
                 Category = TalentCategory.Passive, Name = "Tempered",
-                Lore = "The forge teaches patience. A slow hand draws more from less; a careful reach into the fire takes without burning.",
+                Lore = "The scribe learns patience before power. A slow hand draws more from less; a careful stroke takes without tearing the page.",
                 MechanicDesc = "Passive. Battle casts cost 25% fewer days (minimum 1 — never free). Beyond age 40, each year further reduces cast cost by 0.5%, up to 30% total."
             },
             new TalentDef
             {
                 Id = TalentId.Sorcerer, IsSpell = false, IsEnchantment = false,
                 Category = TalentCategory.Passive, Name = "Resonance",
-                Lore = "Some days the fire gives back what it takes. You cannot predict it — only listen for it.",
+                Lore = "Some days the runes give back what they take. You cannot predict it — only listen for it.",
                 MechanicDesc = "Passive. Your first campaign map cast each day costs no days. Subsequent casts have a 25% chance to be free."
             },
             new TalentDef
             {
                 Id = TalentId.Camaraderie, IsSpell = false, IsEnchantment = false,
                 Category = TalentCategory.Passive, Name = "Kinship",
-                Lore = "Those who carry the fire recognise each other from across a room. There is something almost like trust in that. Almost.",
+                Lore = "Those who know the work recognise each other from across a room — an ink stain, a habit of the hands. There is something almost like trust in that. Almost.",
                 MechanicDesc = "Passive. +10 relations with mage lords, floor of 0. In battle alongside allied mage lords: −10% battle spell aging cost per allied mage (max −50%)."
             },
             new TalentDef
             {
                 Id = TalentId.Reap, IsSpell = false, IsEnchantment = false,
                 Category = TalentCategory.Passive, Name = "Reap",
-                Lore = "Every life spent in your shadow leaves something behind — a warmth, a residue, the last gasp of a flame that burned for your purpose. You have learned to hold a vessel for it.",
+                Lore = "Every life spent in your shadow leaves something behind — a residue, a half-finished word, the last stroke of a working that served your purpose. You have learned to hold a vessel for it.",
                 MechanicDesc = "Passive. Raiding a village restores 5 days of youth (7-day cooldown). Each prisoner discarded has a 5% chance to restore 1 day. Executing a captured lord restores 20 days of youth plus 10 per tier of their clan (max 80). Learning this marks you."
             },
             new TalentDef
             {
                 Id = TalentId.Ember, IsSpell = false, IsEnchantment = false,
                 Category = TalentCategory.Passive, Name = "Ember",
-                Lore = "In the moment of killing, when fire passes from one vessel to another, some scatters. Sometimes a spark finds you. You have learned, not to seek it, but to cup your hands.",
+                Lore = "In the moment of killing, when what a body held passes out of it, some scatters. Sometimes a stray line finds you. You have learned, not to seek it, but to cup your hands.",
                 MechanicDesc = "Passive. Each kill on the battlefield has a 10% chance to restore 1 day of youth."
             },
             new TalentDef
             {
                 Id = TalentId.Flashfire, IsSpell = false, IsEnchantment = false,
                 Category = TalentCategory.Passive, Name = "Flashfire",
-                Lore = "Sometimes the fire does not wait to be asked twice. It finds the shape again on its own — the same working, the same reach, the same burn. You do not question it. You simply let it.",
+                Lore = "Sometimes the rune does not wait to be drawn twice. It finds its shape again on its own — the same working, the same reach, the same cost. You do not question it. You simply let it.",
                 MechanicDesc = "Passive. Each battle spell has a 10% chance to echo — firing again instantly at no aging cost."
             },
             new TalentDef
             {
                 Id = TalentId.ArmedCasting, IsSpell = false, IsEnchantment = false,
                 Category = TalentCategory.Passive, Name = "Warcast",
-                Lore = "Most who carry the fire release it through open hands — shape first, reach second. You discovered, not by learning but by surviving, that the flame does not ask what you are holding. Only whether you are willing.",
+                Lore = "Most who work the runes release them through open hands — shape first, reach second. You discovered, not from a teacher but by surviving, that the mark does not ask what you are holding. Only whether you are willing.",
                 MechanicDesc = "Passive. You may cast battle spells without sheathing your weapons. The fire flows through you, not only from you."
             },
             // ── Enchantments (Damage) ─────────────────────────────────────────
@@ -287,14 +287,14 @@ namespace TheDarkestNight
             {
                 Id = TalentId.Hearthlight, IsSpell = false, IsEnchantment = true,
                 Category = TalentCategory.Enchantment, Name = "Hearthlight",
-                Lore = "The fire in them has not gone out — it has only dimmed. You reach in and remind it what it is for. They remember, for a moment, that the fire is their friend.",
+                Lore = "The strength in them has not gone out — it has only dimmed. You set a small mark over it and remind it what it is for. They remember, for a moment, why they are still standing.",
                 MechanicDesc = "Enchantment. Restore lifts allied morale. Morale boost = 10 per Restore input. Without this talent, Restore gives a weak +4-per-input lift."
             },
             new TalentDef
             {
                 Id = TalentId.Reflect, IsSpell = false, IsEnchantment = true,
                 Category = TalentCategory.Enchantment, Name = "Reflect",
-                Lore = "The fire you give is not passive. It waits in the body like an ember under ash, and when something cold strikes — it answers.",
+                Lore = "The mark you set is not passive. It waits in the body like a word held behind the teeth, and when something cold strikes — it answers.",
                 MechanicDesc = "Enchantment. Restore wraps allies in a retaliating flame. Melee hits against them reflect 5% of damage per Restore input back at the attacker, max 25%. Duration scales with diminishing returns: 7s at 1 input, ~10s at 3, ~16s at 10."
             },
             // ── Campaign map spells ──────────────────────────────────────────
@@ -302,35 +302,35 @@ namespace TheDarkestNight
             {
                 Id = TalentId.BreakWills, IsSpell = true, IsEnchantment = false,
                 Category = TalentCategory.Spell, Name = "Unsettle",
-                Lore = "You let them feel how thin their fire is. Most men have never faced that knowledge directly. Courage is easier when you cannot see the dark.",
+                Lore = "You let them feel how thin the wall between them and the dark is. Most men have never faced that knowledge directly. Courage is easier when you cannot see through the crack.",
                 MechanicDesc = "The nearest enemy party within 75m loses 40 morale. Costs 1 day."
             },
             new TalentDef
             {
                 Id = TalentId.Inspire, IsSpell = true, IsEnchantment = false,
                 Category = TalentCategory.Spell, Name = "Kindle",
-                Lore = "You let them feel it briefly — the warmth that says the world cares whether they live. It may be a lie. The fire does not ask.",
+                Lore = "You let them feel it briefly — the warmth that says the world cares whether they live. It may be a lie. The rune does not ask.",
                 MechanicDesc = "Your party gains 40 morale. Up to 8 wounded soldiers of each troop type recover. Costs 1 day."
             },
             new TalentDef
             {
                 Id = TalentId.Plague, IsSpell = true, IsEnchantment = false,
                 Category = TalentCategory.Spell, Name = "Wither",
-                Lore = "Fire leaves places slowly, or quickly, depending on who tends it. You remove the tender.",
+                Lore = "Life leaves places slowly, or quickly, depending on who tends it. You remove the tender.",
                 MechanicDesc = "The nearest enemy village loses a fifth of its hearth. Costs 1 day."
             },
             new TalentDef
             {
                 Id = TalentId.Clairvoyance, IsSpell = true, IsEnchantment = false,
                 Category = TalentCategory.Spell, Name = "Clairvoyance",
-                Lore = "The lines of fire connect every living thing to every other. You read them the way a navigator reads stars — imperfectly, but well enough.",
+                Lore = "Unseen lines connect every living thing to every other. You read them the way a navigator reads stars — imperfectly, but well enough.",
                 MechanicDesc = "Gain 25 influence. Without a kingdom, the insight becomes gold instead. Costs 1 day."
             },
             new TalentDef
             {
                 Id = TalentId.Extinguish, IsSpell = true, IsEnchantment = false,
                 Category = TalentCategory.Spell, Name = "Extinguish",
-                Lore = "You reach into the fire burning in an enemy and close your hand. Not slowly — like snuffing a candle. The body does not understand at first. Then it does.",
+                Lore = "You find the line that keeps an enemy standing and close your hand around it. Not slowly — like snuffing a candle. The body does not understand at first. Then it does.",
                 MechanicDesc = "5–12 soldiers in the nearest enemy party within 60m are wounded or killed, and their courage breaks. −30 morale. Costs 1 day."
             },
             // ── Campaign spells (continued) ────────────────────────────────────
@@ -338,7 +338,7 @@ namespace TheDarkestNight
             {
                 Id = TalentId.Fade, IsSpell = true, IsEnchantment = false,
                 Category = TalentCategory.Spell, Name = "Fade",
-                Lore = "You draw your fire inward — not out, not away, but down into the marrow, down past what can be seen or felt. For a time you are still there. You simply stop being visible to those looking for you.",
+                Lore = "You draw every mark you carry inward — not out, not away, but down into the marrow, down past what can be seen or felt. For a time you are still there. You simply stop being visible to those looking for you.",
                 MechanicDesc = "Your party is concealed from enemy scouts for 1 day. Enemy parties will not pursue you. Costs 1 day."
             },
             new TalentDef
@@ -361,15 +361,15 @@ namespace TheDarkestNight
             {
                 Id = TalentId.AshenGift, IsSpell = false, IsEnchantment = false, IsInfo = true,
                 Category = TalentCategory.Info, Name = "The Cold Within",
-                Lore = "The fire is gone. What remains is older, colder, and far more patient. It is not warmth you carry now — it is the memory of warmth and the hollow that followed.",
-                MechanicDesc = "You are Ashen. You do not age. Each casting costs criminal rating instead of years. After your first working each day, each further cast risks the cold stirring against you — a possession that may claim your life."
+                Lore = "Your hand still knows every rune — but something else moves it now. What remains is older, colder, and far more patient. It is not your own writing you carry any more; it is the memory of it, and the hollow that followed.",
+                MechanicDesc = "You are Nightbound. You do not age. Each casting costs criminal rating instead of years. After your first working each day, each further cast risks the dark stirring against you — a possession that may claim your life."
             },
             // ── Lost Forms ─────────────────────────────────────────────────────
             new TalentDef
             {
                 Id = TalentId.LostBlast, IsSpell = false, IsEnchantment = false,
                 Category = TalentCategory.LostForm, FocusCost = 1, Name = "Widened Blast",
-                Lore = "The fire does not ask how wide your arms can reach. It asks how wide your will can hold. You found a slightly different angle of release — not taught, not passed down, only survived. The cone opens. More earth scorched, fewer who dodge the edges.",
+                Lore = "The rune does not ask how wide your arms can reach. It asks how wide your will can hold. You found a slightly different angle of the stroke — not taught, not passed down, only survived. The cone opens. More earth scorched, fewer who dodge the edges.",
                 MechanicDesc = "Lost Form. Blast cone widens from ~49° to ~60°. More enemies caught at the edge; the forward reach is unchanged."
             },
             new TalentDef
@@ -383,14 +383,14 @@ namespace TheDarkestNight
             {
                 Id = TalentId.Dirge, IsSpell = false, IsEnchantment = false,
                 Category = TalentCategory.LostForm, FocusCost = 1, Name = "Dirge",
-                Lore = "Most who carry the fire scatter it outward. The old form collapses it inward — downward, into the earth beneath the feet. It does not explode. It seeps. The ground smokes for a long time after. Anything that walks through it, walks through a working that has not finished yet.",
+                Lore = "Most workings scatter their force outward. The old form collapses it inward — downward, into the earth beneath the feet. It does not explode. It seeps. The ground smokes for a long time after. Anything that walks through it, walks through a rune that has not finished being written.",
                 MechanicDesc = "Lost Form. Burst drives fire into the ground rather than outward. A smouldering patch lingers for 12 seconds, burning enemies who walk through it."
             },
             new TalentDef
             {
                 Id = TalentId.PaleComet, IsSpell = false, IsEnchantment = false,
                 Category = TalentCategory.LostForm, FocusCost = 1, Name = "Pale Comet",
-                Lore = "A bolt that does not stop at the first thing it finds. The fire passes through — not weakened, only saved for later. It finishes what it started at the far end of its reach. You do not see what it does until it is done.",
+                Lore = "A bolt that does not stop at the first thing it finds. It passes through — not weakened, only saved for later. It finishes what it started at the far end of its reach. You do not see what it does until it is done.",
                 MechanicDesc = "Lost Form. The missile passes through enemies rather than detonating on first contact. Each enemy it crosses is struck by the full cast. The bolt detonates only when its full range is spent."
             },
             // ── Discipline classes (rite packs — learned at their own sites) ──────
@@ -416,14 +416,14 @@ namespace TheDarkestNight
             new TalentDef
             {
                 Id = TalentId.KeepingFlame, Category = TalentCategory.Rite, FocusCost = 0, Name = "The Keeping Flame",
-                Lore = "To open yourself as a vessel is to open a channel wider than your own body. What the fire pours through you reaches the ones beside you — the wounded, the afraid, the ones whose fire was dimming. You cannot direct it; you can only stay open and trust the warmth to find what needs it most.",
+                Lore = "To open yourself as a vessel is to open a channel wider than your own body. What pours through you reaches the ones beside you — the wounded, the afraid, the ones whose strength was dimming. You cannot direct it; you can only stay open and trust the warmth to find what needs it most.",
                 MechanicDesc = "Rite. Each prayer heals 25% of wounded troops and grants your column +20 morale from shared warmth. Daily, your party's morale cannot fall below 30 — the Keeping Flame holds a floor of courage in the ones who march beside you."
             },
             new TalentDef
             {
                 Id = TalentId.UnbrokenWard, Category = TalentCategory.Rite, FocusCost = 0, Name = "Unbroken Ward",
                 Lore = "The fuller form of the warding sinks deeper into the earth and the air, leaves less of a seam at the edges. The grey things find the seal and do not try the same approach twice. Meanwhile those who march beneath it feel a warmth they cannot name, and their courage does not drain as fast.",
-                MechanicDesc = "Rite. The Warding Seal lasts 21 days instead of 14. While the ward holds: your party gains +10 morale each day, and each battle spell costs 2 fewer aging days (minimum 1). The ward makes the fire cheaper to spend while it burns."
+                MechanicDesc = "Rite. The Warding Seal lasts 21 days instead of 14. While the ward holds: your party gains +10 morale each day, and each battle spell costs 2 fewer aging days (minimum 1). The ward makes the runes cheaper to spend while it holds."
             },
             new TalentDef
             {

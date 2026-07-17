@@ -309,7 +309,7 @@ namespace TheDarkestNight
 
                 "Aelisar again. More present now. More whole.\n\n" +
                 "\"The ruins hold my pact — the places where I made the original bargain, " +
-                "where I gave myself to the fire in exchange for the cycle holding. " +
+                "where I gave myself to the Fire in exchange for the cycle holding. " +
                 "Three sites. Old. Scarred. They will remember you when you come.\n\n" +
                 "\"The Heart of Winter holds my purpose. The thing I fought hardest to protect — " +
                 "what I could not let the cold have. Go to Tyal. " +
@@ -394,7 +394,7 @@ namespace TheDarkestNight
                     "You would still be yourself. But you would also be the thing I was. That does not go away.\"\n\n" +
                     "[The Last Binding] — You spend him. All of him — everything gathered — " +
                     "to shatter the mechanism at its root. The cycle breaks. The grey does not return. " +
-                    "\"I am destroyed in the spending. And you give your fire as part of the fuel. " +
+                    "\"I am destroyed in the spending. And you give everything you have learned as part of the fuel. " +
                     "Both of us. It is permanent. It is complete. It costs everything.\"\n\n" +
                     "He looks at you with eyes that have seen the grey tide recede and return across more " +
                     "generations than your family's memory extends.\n\n" +
@@ -418,7 +418,7 @@ namespace TheDarkestNight
                         new InquiryElement("sacrifice",
                             "The Last Binding — we end it.",
                             null, true,
-                            "Spend Aelisar and your fire to break the demon-cult cycle forever. " +
+                            "Spend Aelisar and every rune you know to break the demon-cult cycle forever. " +
                             "Your hero dies. The demon-cult are broken. This ends your campaign."),
                     },
                     true, 1, 1,

@@ -350,7 +350,7 @@ namespace TheDarkestNight
                     _agentNameField = field;
             }
             if (_agentNameField == null) return;
-            try { _agentNameField.SetValue(agent, new TextObject("Ashen Warrior")); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { _agentNameField.SetValue(agent, new TextObject("Hollow Warrior")); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static bool ShouldRenameAshenAgent(Agent agent)
