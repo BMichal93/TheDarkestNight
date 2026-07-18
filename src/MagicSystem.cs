@@ -107,8 +107,13 @@ namespace TheDarkestNight
                 campaignStarter.AddModel(new UnitsRecruitModel());
                 campaignStarter.AddBehavior(new MagicCampaignBehavior());
                 campaignStarter.AddBehavior(new SchemeCampaignBehavior());
-                campaignStarter.AddBehavior(new SanctuaryCampaignBehavior());
-                campaignStarter.AddBehavior(new AshenAltarsCampaignBehavior());
+                // Sanctuaries (Grace-charging rites) and Dark Altars (buy Dark Gifts)
+                // are retired Ash and Ember player-facing map stations — the player's
+                // only casting path is now the Spellbook, so neither behaviour is
+                // registered. Their classes stay (PriestTroops gating, GreatAwakening's
+                // altar-city pick, and the NPC Grace/Dark-Gift effect code all still
+                // reference them), but no town menus or map announcements are placed.
+                // (Establishment is likewise skipped in CampaignBehavior.Events.cs.)
                 campaignStarter.AddBehavior(new SeaCampaignBehavior());
                 campaignStarter.AddBehavior(new CrystallinesCampaignBehavior());
                 campaignStarter.AddBehavior(new ExchangeCampaignBehavior());

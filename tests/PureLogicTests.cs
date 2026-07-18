@@ -6303,5 +6303,246 @@ namespace TheDarkestNight.Tests
             Assert.IsTrue(MortalLawMath.IsSafeFromNightFear(100, VeilMath.NightSafeSizeMultiplier(VeilPhase.Warding)));
             Assert.IsFalse(MortalLawMath.IsSafeFromNightFear(100, VeilMath.NightSafeSizeMultiplier(VeilPhase.Steady)));
         }
+
+        // ── Rune magic — catalog invariants (RUNE_MAGIC_PLAN.md §2) ───────────
+
+        [Test]
+        public void RuneCatalog_Triplets_AreThreeMarks_OnlyUDLR_AllDistinct()
+        {
+            var seen = new HashSet<string>();
+            foreach (var r in RuneCatalog.All)
+            {
+                Assert.AreEqual(RuneCatalog.RuneLength, r.Triplet.Length, $"{r.Name} triplet length");
+                foreach (char c in r.Triplet)
+                    Assert.IsTrue(c == 'U' || c == 'D' || c == 'L' || c == 'R', $"{r.Name} has non-UDLR mark");
+                Assert.IsTrue(seen.Add(r.Triplet), $"{r.Name} triplet {r.Triplet} is a duplicate");
+            }
+        }
+
+        [Test]
+        public void RuneCatalog_Count_IsThirtySix_AndSpaceStaysSparse()
+        {
+            Assert.AreEqual(36, RuneCatalog.All.Length);
+            // 36 of the 64 possible triplets are real — at least 40% of the space
+            // stays permanently empty so misdrawn bindings stay dangerous.
+            Assert.LessOrEqual(RuneCatalog.All.Length / 64.0, 0.60);
+        }
+
+        [Test]
+        public void RuneCatalog_RoleCensus_FormsCappedAtEight_EffectsOutnumberForms()
+        {
+            int matter  = RuneCatalog.All.Count(r => r.Role == RuneRole.Matter);
+            int forms   = RuneCatalog.All.Count(r => r.Role == RuneRole.Form);
+            int manners = RuneCatalog.All.Count(r => r.Role == RuneRole.Manner);
+            int codas   = RuneCatalog.All.Count(r => r.Role == RuneRole.Coda);
+            Assert.AreEqual(5, matter);
+            Assert.AreEqual(RuneCatalog.FormCount, forms);   // 8, capped forever
+            Assert.AreEqual(8, manners);
+            Assert.AreEqual(15, codas);
+            // Effect-side (matter + codas) must outnumber forms 2:1.
+            Assert.Greater(matter + codas, 2 * forms);
+        }
+
+        [Test]
+        public void RuneCatalog_EveryFormRuneHasADistinctForm()
+        {
+            var forms = RuneCatalog.All.Where(r => r.Role == RuneRole.Form).Select(r => r.Form).ToList();
+            Assert.IsFalse(forms.Contains(RuneForm.None));
+            Assert.AreEqual(forms.Count, forms.Distinct().Count());
+        }
+
+        // ── Rune magic — resolver (RUNE_MAGIC_PLAN.md §3) ─────────────────────
+
+        [Test]
+        public void RuneSequence_AmplifyScale_MatchesCurve()
+        {
+            Assert.AreEqual(1.0f, RuneSequenceMath.AmplifyScale(1));
+            Assert.AreEqual(1.75f, RuneSequenceMath.AmplifyScale(2));
+            Assert.AreEqual(2.4f, RuneSequenceMath.AmplifyScale(3));
+            Assert.AreEqual(3.0f, RuneSequenceMath.AmplifyScale(4));
+            Assert.AreEqual(3.0f, RuneSequenceMath.AmplifyScale(9)); // capped
+        }
+
+        [Test]
+        public void RuneSequence_Strain_ZeroUnderFourRunes_ThenGrows()
+        {
+            Assert.AreEqual(0f, RuneSequenceMath.StrainChance(1));
+            Assert.AreEqual(0f, RuneSequenceMath.StrainChance(3));
+            Assert.AreEqual(0.04f, RuneSequenceMath.StrainChance(4), 1e-5);
+            Assert.AreEqual(0.16f, RuneSequenceMath.StrainChance(7), 1e-5);
+        }
+
+        [Test]
+        public void RuneSequence_Chunk_ValidTriplets_Split_TrailingMarks_Malformed()
+        {
+            Assert.IsTrue(RuneSequenceMath.TryChunk("DDD", out var one, out _));
+            Assert.AreEqual(1, one.Count);
+            Assert.AreEqual(RuneId.Cinder, one[0]);
+
+            Assert.IsTrue(RuneSequenceMath.TryChunk("DDDLLL", out var two, out _));
+            Assert.AreEqual(2, two.Count);
+
+            Assert.IsFalse(RuneSequenceMath.TryChunk("DDDD", out _, out _));   // trailing mark
+            Assert.IsFalse(RuneSequenceMath.TryChunk("UUL", out _, out _));    // not a real rune
+            Assert.IsFalse(RuneSequenceMath.TryChunk("", out _, out _));       // empty
+        }
+
+        [Test]
+        public void RuneSequence_SingleElement_Resolves()
+        {
+            var r = RuneSequenceMath.Resolve(new[] { RuneId.Cinder });
+            Assert.IsFalse(r.Malformed);
+            Assert.AreEqual(MatterKind.Single, r.Matter);
+            Assert.AreEqual(MagicElement.Fire, r.Element);
+        }
+
+        [Test]
+        public void RuneSequence_TwoElements_Fuse()
+        {
+            var r = RuneSequenceMath.Resolve(new[] { RuneId.Cinder, RuneId.Tide }); // Fire+Water
+            Assert.IsFalse(r.Malformed);
+            Assert.AreEqual(MatterKind.Fusion, r.Matter);
+            Assert.AreEqual(MagicElement.Fog, r.Element);
+        }
+
+        [Test]
+        public void RuneSequence_WyrdPlusElement_IsCommand()
+        {
+            var r = RuneSequenceMath.Resolve(new[] { RuneId.Wyrd, RuneId.Cinder });
+            Assert.IsFalse(r.Malformed);
+            Assert.AreEqual(MatterKind.Command, r.Matter);
+        }
+
+        [Test]
+        public void RuneSequence_ThreeElements_AreATriad()
+        {
+            var r = RuneSequenceMath.Resolve(new[] { RuneId.Cinder, RuneId.Gale, RuneId.Tide });
+            Assert.IsFalse(r.Malformed);
+            Assert.AreEqual(MatterKind.Triad, r.Matter);
+            Assert.AreEqual("the Tempest", r.TriadName);
+        }
+
+        [Test]
+        public void RuneSequence_FourElements_AreTheUnboundWeave()
+        {
+            var r = RuneSequenceMath.Resolve(new[] { RuneId.Cinder, RuneId.Gale, RuneId.Stone, RuneId.Tide });
+            Assert.IsFalse(r.Malformed);
+            Assert.AreEqual(MatterKind.Unbound, r.Matter);
+        }
+
+        [Test]
+        public void RuneSequence_WyrdWithTwoOtherElements_IsMalformed()
+        {
+            var r = RuneSequenceMath.Resolve(new[] { RuneId.Wyrd, RuneId.Cinder, RuneId.Tide });
+            Assert.IsTrue(r.Malformed);
+        }
+
+        [Test]
+        public void RuneSequence_TwoForms_IsMalformed()
+        {
+            var r = RuneSequenceMath.Resolve(new[] { RuneId.LongMark, RuneId.Bar });
+            Assert.IsTrue(r.Malformed);
+        }
+
+        [Test]
+        public void RuneSequence_DeclaredContradictions_AreMalformed()
+        {
+            Assert.IsTrue(RuneSequenceMath.Resolve(new[] { RuneId.NightMark, RuneId.Lamp }).Malformed);
+            Assert.IsTrue(RuneSequenceMath.Resolve(new[] { RuneId.Mirror, RuneId.Gift }).Malformed);
+            Assert.IsTrue(RuneSequenceMath.Resolve(new[] { RuneId.Still, RuneId.Vigil }).Malformed);
+        }
+
+        [Test]
+        public void RuneSequence_CommandOrUnbound_TakeNoForm()
+        {
+            // command (Wyrd+Cinder) + Bar
+            Assert.IsTrue(RuneSequenceMath.Resolve(new[] { RuneId.Wyrd, RuneId.Cinder, RuneId.Bar }).Malformed);
+            // unbound (all four) + Bar
+            Assert.IsTrue(RuneSequenceMath.Resolve(
+                new[] { RuneId.Cinder, RuneId.Gale, RuneId.Stone, RuneId.Tide, RuneId.Bar }).Malformed);
+        }
+
+        [Test]
+        public void RuneSequence_ElementPlusForm_Resolves_AndAmplifies()
+        {
+            var fireball = RuneSequenceMath.Resolve(new[] { RuneId.Cinder, RuneId.LongMark });
+            Assert.IsFalse(fireball.Malformed);
+            Assert.AreEqual(RuneForm.LongMark, fireball.Form);
+            StringAssert.Contains("Fire", fireball.Name);
+
+            var twiceFire = RuneSequenceMath.Resolve(new[] { RuneId.Cinder, RuneId.Cinder });
+            Assert.IsFalse(twiceFire.Malformed);
+            Assert.AreEqual(1.75f, twiceFire.Power, 1e-5);
+        }
+
+        [Test]
+        public void RuneSequence_PureManners_AreHarmlessFizzle_NotABurn()
+        {
+            var r = RuneSequenceMath.Resolve(new[] { RuneId.Echo });
+            Assert.IsTrue(r.Malformed);
+            Assert.IsTrue(r.Harmless);   // a real rune that composes nothing — no burn
+        }
+
+        [Test]
+        public void RuneSequence_GenuineMisbindings_AreNotHarmless()
+        {
+            // contradictions and weave-tears MUST still carry a burn risk
+            Assert.IsFalse(RuneSequenceMath.Resolve(new[] { RuneId.NightMark, RuneId.Lamp }).Harmless);
+            Assert.IsFalse(RuneSequenceMath.Resolve(new[] { RuneId.Wyrd, RuneId.Cinder, RuneId.Tide }).Harmless);
+            Assert.IsFalse(RuneSequenceMath.Resolve(new[] { RuneId.LongMark, RuneId.Bar }).Harmless);
+        }
+
+        // ── Rune magic — starter pair + migration (RUNE_MAGIC_PLAN.md §7) ─────
+
+        [Test]
+        public void RuneCatalog_PickStarterPair_FirstIsElement_SecondEligible_Distinct()
+        {
+            var rng = new Random(12345);
+            for (int i = 0; i < 200; i++)
+            {
+                var (first, second) = RuneCatalog.PickStarterPair(rng);
+                Assert.Contains(first, RuneCatalog.ElementRunes);
+                Assert.Contains(second, RuneCatalog.StarterEligibleSecond);
+                Assert.AreNotEqual(first, second);
+                // Both castable day one: element alone works; element+element fuses;
+                // element+form shapes — so the pair never resolves malformed together.
+                var r = RuneSequenceMath.Resolve(new[] { first, second });
+                Assert.IsFalse(r.Malformed, $"starter pair {first}+{second} was malformed");
+            }
+        }
+
+        [Test]
+        public void SpellbookMath_StrainAfterIntellect_ReducesAndFloorsAtZero()
+        {
+            Assert.AreEqual(0.16f, SpellbookMath.StrainAfterIntellect(0.16f, 0), 1e-5);
+            Assert.AreEqual(0.13f, SpellbookMath.StrainAfterIntellect(0.16f, 2), 1e-5); // -0.015*2
+            Assert.AreEqual(0f, SpellbookMath.StrainAfterIntellect(0.04f, 20));         // floored
+        }
+
+        [Test]
+        public void SpellbookMath_NpcSpellburn_TemperamentAndFloor()
+        {
+            // base 12% at Int 0
+            Assert.AreEqual(0.12f, SpellbookMath.NpcSpellburnChance(0, false, false), 1e-5);
+            // calculating halves, impulsive raises
+            Assert.Less(SpellbookMath.NpcSpellburnChance(0, true, false), 0.12f);
+            Assert.Greater(SpellbookMath.NpcSpellburnChance(0, false, true), 0.12f);
+            // floored at 2% even for a towering intellect
+            Assert.AreEqual(0.02f, SpellbookMath.NpcSpellburnChance(50, true, false), 1e-5);
+        }
+
+        [Test]
+        public void RuneCatalog_EveryLegacySpell_MapsToKnownRunes()
+        {
+            var valid = new HashSet<RuneId>(RuneCatalog.All.Select(r => r.Id));
+            foreach (SpellId id in Enum.GetValues(typeof(SpellId)))
+            {
+                var runes = RuneCatalog.RunesForLegacySpell(id);
+                Assert.IsNotNull(runes);
+                Assert.IsNotEmpty(runes, $"{id} maps to no runes");
+                foreach (var rune in runes)
+                    Assert.IsTrue(valid.Contains(rune), $"{id} maps to unknown rune {rune}");
+            }
+        }
     }
 }

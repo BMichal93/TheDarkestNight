@@ -372,15 +372,17 @@ namespace TheDarkestNight
 
         // Rewrites the card's bound feat descriptions: positives in order, then the
         // single negative. feats is { positive, …, negative } in display order.
+        // When feats is empty, clears all existing feat descriptions so no stale
+        // vanilla bonuses leak through (e.g. the Empire "I am a survivor" card).
         private static void RewriteFeats(object vm, Type type, string[] feats)
         {
-            if (feats == null || feats.Length == 0) return;
+            if (feats == null) return;
             try
             {
                 if (!(type.GetProperty("Feats", F)?.GetValue(vm) is IEnumerable list)) return;
 
                 int lastPositive = feats.Length - 1;   // entries [0..lastPositive) are positive
-                string negative  = feats[feats.Length - 1];
+                string negative  = feats.Length > 0 ? feats[feats.Length - 1] : "";
                 int posIdx = 0;
 
                 foreach (var feat in list)
@@ -388,9 +390,19 @@ namespace TheDarkestNight
                     if (feat == null) continue;
                     var ft = feat.GetType();
                     bool isPositive = (bool)(ft.GetProperty("IsPositive", F)?.GetValue(feat) ?? true);
-                    string desc = isPositive
-                        ? (posIdx < lastPositive ? feats[posIdx++] : feats[Math.Max(0, lastPositive - 1)])
-                        : negative;
+                    string desc;
+                    if (feats.Length == 0)
+                    {
+                        // No feats defined — clear the description so no stale vanilla
+                        // bonus text leaks through to the player.
+                        desc = "";
+                    }
+                    else
+                    {
+                        desc = isPositive
+                            ? (posIdx < lastPositive ? feats[posIdx++] : feats[Math.Max(0, lastPositive - 1)])
+                            : negative;
+                    }
                     try { ft.GetProperty("Description", F)?.SetValue(feat, desc); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
             }

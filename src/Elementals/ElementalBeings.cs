@@ -265,7 +265,7 @@ namespace TheDarkestNight
                 foreach (Agent a in Mission.Current.Agents)
                 {
                     if (a == null || !a.IsActive() || a.IsMount || a.Team == null) continue;
-                    if (!agent.Team.IsEnemyOf(a.Team)) continue;
+                    if (!agent.Team.IsEnemyOfSafe(a.Team)) continue;
                     float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                     float d2 = dx * dx + dy * dy;
                     if (d2 <= bestD2) { bestD2 = d2; nearest = a; }

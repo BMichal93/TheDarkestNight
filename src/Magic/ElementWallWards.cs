@@ -103,7 +103,7 @@ namespace TheDarkestNight
             {
                 try
                 {
-                    if (_recent[i].Team != null && _recent[i].Team.IsEnemyOf(myTeam))
+                    if (_recent[i].Team != null && _recent[i].Team.IsEnemyOfSafe(myTeam))
                         return _recent[i].El;
                 }
                 catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }

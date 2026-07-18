@@ -68,7 +68,11 @@ namespace TheDarkestNight
                 float newAcc = acc + dt;
                 if (newT <= 0f)
                 {
-                    PulseFocusVisual(a, school, newAcc);
+                    // The player's held-focus channel shows only the soft light + contour
+                    // glow — no dancing fire particles around the caster (mod-author
+                    // directive: "just pale lights, nothing specific"). NPC wind-up
+                    // flashes still spawn their fire particle via FlashFocusAura below.
+                    PulseFocusVisual(a, school, newAcc, spawnFireParticles: false);
                     _focusVisuals[i] = (a, school, FocusVisualInterval, newAcc);
                 }
                 else
@@ -105,7 +109,8 @@ namespace TheDarkestNight
         // ── Internal ───────────────────────────────────────────────────────────
 
         // accumulated: seconds the focus has been held — light radius grows 9→15m over 4.5 s.
-        private static void PulseFocusVisual(Agent agent, ColorSchool school, float accumulated = 0f)
+        private static void PulseFocusVisual(Agent agent, ColorSchool school, float accumulated = 0f,
+            bool spawnFireParticles = true)
         {
             Vec3 pos  = agent.Position;
             Vec3 posM = pos + new Vec3(0f, 0f, 0.8f);
@@ -116,7 +121,11 @@ namespace TheDarkestNight
             BeginAgentGlow(agent, school, FocusGlowDuration);
             SpawnTempLight(posM, school, lightRadius, FocusGlowDuration);
 
-            // Fire schools: add live flame particles at the caster's feet.
+            // Fire schools: add live flame particles at the caster's feet — but only
+            // when the caller allows it. The player's held-focus channel passes false
+            // (a bare light, no fire dancing round the caster); NPC wind-up flashes
+            // keep the particle for battlefield readability.
+            if (!spawnFireParticles) return;
             bool isFire = school == ColorSchool.Red
                        || school == ColorSchool.Orange
                        || school == ColorSchool.Purple;

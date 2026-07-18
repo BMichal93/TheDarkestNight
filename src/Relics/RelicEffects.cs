@@ -149,7 +149,7 @@ namespace TheDarkestNight
                 foreach (Agent a in Mission.Current.Agents.ToList())
                 {
                     if (a == null || !a.IsActive() || a.IsMount || a.Health <= 0f) continue;
-                    if (player.Team != null && !player.Team.IsEnemyOf(a.Team)) continue;
+                    if (player.Team != null && !player.Team.IsEnemyOfSafe(a.Team)) continue;
                     Vec3 ap; try { ap = a.Position; } catch { continue; }
                     if ((ap - pos).LengthSquared > DuskwardRange2) continue;
                     try

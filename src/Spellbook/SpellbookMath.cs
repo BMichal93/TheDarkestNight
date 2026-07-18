@@ -40,6 +40,35 @@ namespace TheDarkestNight
         public static bool RollSpellburn(double roll01, int intellect)
             => roll01 < SpellburnChance(intellect);
 
+        // ── Strain (RUNE_MAGIC_PLAN.md §3 rule 7) ────────────────────────────
+        // Every rune past the third adds inherent burn risk even to a perfect
+        // binding (RuneSequenceMath.StrainChance). Intellect shaves it by the same
+        // per-point rate as the fizzle curve, floored at 0 — a short binding is
+        // safe craft, a six-rune Triad is a gamble.
+        public static float StrainAfterIntellect(float baseStrain, int intellect)
+        {
+            if (intellect < 0) intellect = 0;
+            float chance = baseStrain - intellect * ChancePerIntellect;
+            return chance < 0f ? 0f : chance;
+        }
+
+        // ── NPC caster spellburn (RUNE_MAGIC_PLAN.md §6) ─────────────────────
+        // A caster lord/companion who misfires turns their own working on
+        // themselves. Base 12%, −1% per Intellect point, ×0.5 for the calculating,
+        // ×1.5 for the impulsive, floored at 2%.
+        public const float NpcBaseSpellburnChance = 0.12f;
+        public const float NpcChancePerIntellect  = 0.01f;
+        public const float NpcMinSpellburnChance   = 0.02f;
+
+        public static float NpcSpellburnChance(int intellect, bool isCalculating, bool isImpulsive)
+        {
+            if (intellect < 0) intellect = 0;
+            float chance = NpcBaseSpellburnChance - intellect * NpcChancePerIntellect;
+            if (isCalculating) chance *= 0.5f;
+            if (isImpulsive)   chance *= 1.5f;
+            return chance < NpcMinSpellburnChance ? NpcMinSpellburnChance : chance;
+        }
+
         // ── The spellburn table ──────────────────────────────────────────────
         // Five listed by Requirement 18 plus three invented in the same spirit.
         public enum SpellburnKind

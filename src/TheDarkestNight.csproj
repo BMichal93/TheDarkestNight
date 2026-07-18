@@ -4,9 +4,9 @@
     <TargetFramework>net472</TargetFramework>
     <AssemblyName>TheDarkestNight</AssemblyName>
     <RootNamespace>TheDarkestNight</RootNamespace>
-    <Version>0.9.0.0</Version>
-    <AssemblyVersion>0.9.0.0</AssemblyVersion>
-    <FileVersion>0.9.0.0</FileVersion>
+    <Version>0.10.0.0</Version>
+    <AssemblyVersion>0.10.0.0</AssemblyVersion>
+    <FileVersion>0.10.0.0</FileVersion>
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
     <Optimize>true</Optimize>
@@ -92,6 +92,7 @@
 
   <ItemGroup>
     <Compile Include="ModLog.cs"/>
+    <Compile Include="TeamSafety.cs"/>
     <Compile Include="ClanRenown.cs"/>
     <Compile Include="Elementals\ElementalMath.cs"/>
     <Compile Include="Elementals\ElementalBeings.cs"/>
@@ -114,6 +115,9 @@
     <Compile Include="Demons\DemonBattleBehavior.cs"/>
     <Compile Include="Demons\DemonSpawnCampaignBehavior.cs"/>
     <Compile Include="Spellbook\SpellbookCatalog.cs"/>
+    <Compile Include="Spellbook\RuneCatalog.cs"/>
+    <Compile Include="Spellbook\RuneSequenceMath.cs"/>
+    <Compile Include="Spellbook\RuneEffects.cs"/>
     <Compile Include="Spellbook\SpellbookMath.cs"/>
     <Compile Include="Spellbook\SpellbookEffects.cs"/>
     <Compile Include="Spellbook\SpellburnEffects.cs"/>

@@ -277,7 +277,7 @@ namespace TheDarkestNight
                         if (t == null) continue;
                         bool hasBodies = Mission.Current.Agents.Any(a => a.IsActive() && !a.IsMount && a.Team == t);
                         if (!hasBodies) continue;
-                        if (pt != null && t.IsEnemyOf(pt)) { target = t; break; }
+                        if (pt != null && t.IsEnemyOfSafe(pt)) { target = t; break; }
                         if (pt == null && target == null) target = t;
                     }
                     if (target == null && pt != null)
@@ -466,7 +466,7 @@ namespace TheDarkestNight
                 {
                     if (t == team) continue;
                     bool foe = false;
-                    try { foe = t.IsEnemyOf(team); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    try { foe = t.IsEnemyOfSafe(team); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     if (foe) enemies.Add(t);
                 }
                 if (enemies.Count == 0) continue;
