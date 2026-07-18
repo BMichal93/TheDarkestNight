@@ -132,10 +132,12 @@ namespace TheDarkestNight
                 // Clear the previous campaign's static state BEFORE re-establishing,
                 // or a new game started in the same session inherits the old game's
                 // sanctuaries/altars and cooldowns (static-leak bug class).
+                // Sanctuaries and Dark Altars are retired as player-facing map
+                // stations (see MagicSystem's behaviour-registration note). The static
+                // resets stay — they clear any prior campaign's leaked site lists — but
+                // establishment is skipped, so none are placed or announced on the map.
                 SanctuaryCampaignBehavior.ResetForNewGame();
-                try { SanctuaryCampaignBehavior.EstablishForNewCampaign();   } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 AshenAltarsCampaignBehavior.ResetForNewGame();
-                try { AshenAltarsCampaignBehavior.EstablishForNewCampaign(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 TribalKingdomBehavior.ResetForNewGame();
                 // Each establishment is individually guarded: a failure in one world
                 // system (e.g. crystal items missing from ModuleData) must never abort
@@ -194,6 +196,11 @@ namespace TheDarkestNight
             // for CityStateMath.SettleDelayDays to elapse on the daily tick. The daily
             // tick keeps running afterward as the ongoing repair pass.
             try { FactionScoping.ScopeAllFactionsNow(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            // Issue 5: a seat-holding clan keeps its EXTRA towns, so a short-list
+            // faction ends up larger than its named seats. Hand those extras to
+            // landless free clans (between the scoping and the conversion) so the
+            // convert pass below turns each into its own city-state.
+            try { FactionScoping.StripExtraFactionTowns(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try { CityStateSystem.ConvertOwnerlessTownsNow(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Greet every new ruler with a brief pointer to the journal — the full
             // controls manual lives there ("Notes for the Adventurer"), so this is the

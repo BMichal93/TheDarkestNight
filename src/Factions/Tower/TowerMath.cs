@@ -50,6 +50,27 @@ namespace TheDarkestNight
             return (int)Math.Round(TeachInfluenceBase + len * TeachInfluencePerFormulaMark, MidpointRounding.AwayFromZero);
         }
 
+        // Rune teaching price (RUNE_MAGIC_PLAN.md §7): elements are the cheap
+        // first lessons; Forms cost more; the Calling and the Sundering (summoning
+        // and banishing) are the dearest marks the Tower will part with.
+        public const int RuneCostElement = 40;
+        public const int RuneCostCoda    = 55;
+        public const int RuneCostManner  = 70;
+        public const int RuneCostForm    = 90;
+        public const int RuneCostRare    = 130; // the Calling, the Sundering
+
+        public static int RuneInfluenceCost(RuneRole role, RuneId id)
+        {
+            if (id == RuneId.Calling || id == RuneId.Sundering || id == RuneId.NightMark) return RuneCostRare;
+            switch (role)
+            {
+                case RuneRole.Matter: return RuneCostElement;
+                case RuneRole.Form:   return RuneCostForm;
+                case RuneRole.Manner: return RuneCostManner;
+                default:              return RuneCostCoda;
+            }
+        }
+
         // Deterministic weekly refresh: the same day-bucket always yields the
         // same offer, but it changes from week to week (mirrors how a market
         // restocks rather than rerolling on every visit).

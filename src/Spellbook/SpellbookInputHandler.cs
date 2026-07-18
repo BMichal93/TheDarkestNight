@@ -21,6 +21,7 @@
 // INCORRECT completed formula fizzles and rolls spellburn (Requirement 18).
 // =============================================================================
 
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
@@ -58,6 +59,12 @@ namespace TheDarkestNight
                 if (!_wasHolding)
                 {
                     _wasHolding = true;
+                    // Restore the AshAndEmber hold-to-channel behaviour: while focus is
+                    // held the caster stands and plays the looping cast stance (BeginCastLoop),
+                    // stopping the instant focus is released (EndCastLoop below). The old
+                    // ElementMagicInput player path did exactly this; the Spellbook handler
+                    // had only the aura, not the animation.
+                    try { if (Agent.Main != null) SpellEffects.BeginCastLoop(Agent.Main); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     try { if (Agent.Main != null) SpellEffects.BeginFocusVisual(Agent.Main, ColorSchool.Purple); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
@@ -80,7 +87,7 @@ namespace TheDarkestNight
                     ReadPad();
                 }
 
-                string display = _buffer + new string('_', System.Math.Max(0, SpellbookCatalog.MinFormulaLength - _buffer.Length));
+                string display = _buffer + new string('_', System.Math.Max(0, RuneCatalog.RuneLength - _buffer.Length));
                 if (display != _lastDisplay)
                 {
                     _lastDisplay = display;
@@ -92,6 +99,7 @@ namespace TheDarkestNight
             {
                 _wasHolding = false;
                 _lastDisplay = "";
+                try { if (Agent.Main != null) SpellEffects.EndCastLoop(Agent.Main); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { if (Agent.Main != null) SpellEffects.EndFocusVisual(Agent.Main); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 TryResolve();
                 _buffer = "";
@@ -114,8 +122,10 @@ namespace TheDarkestNight
 
         private static void Append(string dir)
         {
-            if (_buffer.Length < SpellbookCatalog.MaxFormulaLength) _buffer += dir;
+            if (_buffer.Length < RuneCatalog.MaxSequenceRunes * RuneCatalog.RuneLength) _buffer += dir;
         }
+
+        private static readonly Color RuneColor = new Color(0.75f, 0.4f, 0.85f);
 
         private static void TryResolve()
         {
@@ -126,37 +136,82 @@ namespace TheDarkestNight
 
             if (!SpellEffects.HasFreeHand(caster))
             {
-                Fizzle("Your hands are full of steel. Sheathe your weapon to speak a formula.");
+                Fizzle("Your hands are full of steel. Sheathe your weapon to draw a binding.");
                 return;
             }
 
-            if (SpellbookCatalog.TryGetByFormula(_buffer, out SpellDef def))
+            // 1) Chunk the marks into runes. Trailing marks or a non-rune triplet
+            //    is malformed → fizzle + spellburn (nothing was even a real rune).
+            if (!RuneSequenceMath.TryChunk(_buffer, out var runes, out string chunkReason))
             {
-                // Requirement 16: casts AND is recorded — even the first time.
-                SpellbookCampaignBehavior.LearnSpell(def.Id);
-                SpellbookEffects.Cast(def.Id, caster);
-                InformationManager.DisplayMessage(new InformationMessage(
-                    $"{def.Name} answers.", new Color(0.75f, 0.4f, 0.85f)));
+                FizzleAndBurn(caster, "The binding falters — " + chunkReason);
                 return;
             }
 
-            // A completed but wrong formula — fizzle, then roll spellburn.
-            Fizzle("The formula does not answer — it dies unspoken.");
-            int intellect = 0;
-            try { intellect = Hero.MainHero?.GetAttributeValue(DefaultCharacterAttributes.Intelligence) ?? 0; }
-            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-            float chance = SpellbookMath.SpellburnChance(intellect);
-            // Talisman of the Unburnt Tongue (mod-author-directed addition):
-            // shaves flat percentage points off the roll, still respecting
-            // SpellbookMath.MinSpellburnChance's floor.
+            // 2) Discovery (RUNE_MAGIC_PLAN.md §9): every real rune drawn that is not
+            //    yet known is learned now — even inside a binding that later resolves
+            //    malformed, the mark was real.
+            foreach (var rid in runes.Distinct())
+            {
+                if (!SpellbookCampaignBehavior.KnowsRune(rid))
+                {
+                    SpellbookCampaignBehavior.LearnRune(rid);
+                    InformationManager.DisplayMessage(new InformationMessage(
+                        $"A new mark answers your hand: {RuneCatalog.Get(rid).Name}.", RuneColor));
+                }
+            }
+
+            // 3) Resolve the binding as a sentence.
+            ResolvedWorking working = RuneSequenceMath.Resolve(runes);
+            if (working.Malformed)
+            {
+                // Real runes that simply compose nothing (a lone Echo, an inert
+                // manner) fizzle without a burn — only a genuine misbinding burns.
+                if (working.Harmless) Fizzle("The marks find nothing to work upon.");
+                else                  FizzleAndBurn(caster, "The binding will not hold — " + working.Reason);
+                return;
+            }
+
+            // 4) A valid working fires — then STRAIN (rule 7) rolls on top: a long
+            //    binding can still burn its caster even when it lands.
+            RuneEffects.Cast(working, caster);
+            InformationManager.DisplayMessage(new InformationMessage(
+                $"{working.Name} answers.", RuneColor));
+
+            int intellect = Intellect();
+            float strain = SpellbookMath.StrainAfterIntellect(working.StrainChance, intellect);
+            strain = ApplyTalisman(caster, strain);
+            if (strain > 0f && _rng.NextDouble() < strain)
+                SpellburnEffects.Trigger(caster);
+        }
+
+        // A malformed binding fizzles, then rolls the fizzle-spellburn chance.
+        private static void FizzleAndBurn(Agent caster, string msg)
+        {
+            Fizzle(msg);
+            float chance = SpellbookMath.SpellburnChance(Intellect());
+            chance = ApplyTalisman(caster, chance);
+            if (_rng.NextDouble() < chance)
+                SpellburnEffects.Trigger(caster);
+        }
+
+        private static int Intellect()
+        {
+            try { return Hero.MainHero?.GetAttributeValue(DefaultCharacterAttributes.Intelligence) ?? 0; }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return 0; }
+        }
+
+        // Talisman of the Unburnt Tongue shaves flat points off any burn roll,
+        // still respecting SpellbookMath's floor.
+        private static float ApplyTalisman(Agent caster, float chance)
+        {
             try
             {
                 if (TalismanEffects.CarriesTalisman(caster, TalismanId.UnburntTongue))
-                    chance = TalismansMath.ReducedSpellburnChance(chance);
+                    return TalismansMath.ReducedSpellburnChance(chance);
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-            if (_rng.NextDouble() < chance)
-                SpellburnEffects.Trigger(caster);
+            return chance;
         }
 
         private static readonly System.Random _rng = new System.Random();

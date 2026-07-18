@@ -96,17 +96,18 @@ namespace TheDarkestNight
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
-        // ── The six offered formulas ──────────────────────────────────────────
-        // Weekly-stable, deterministic subset of the whole SpellbookCatalog,
-        // filtered down to formulas the player does not already know.
-        private static List<SpellDef> CurrentOffer()
+        // ── The six offered runes ─────────────────────────────────────────────
+        // Weekly-stable, deterministic subset of the rune catalog, filtered down
+        // to marks the player does not already know. (The Tower now teaches RUNES —
+        // the player's casting path is runes, not bound formulas.)
+        private static List<RuneDef> CurrentOffer()
         {
             int day = 0;
             try { day = (int)CampaignTime.Now.ToDays; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             int seed = TowerMath.OfferSeedForDay(day);
 
-            var unknown = SpellbookCatalog.All
-                .Where(d => !SpellbookCampaignBehavior.KnowsSpell(d.Id))
+            var unknown = RuneCatalog.All
+                .Where(d => !SpellbookCampaignBehavior.KnowsRune(d.Id))
                 .ToList();
             var picked = TowerMath.PickRandomSubset(unknown, TowerMath.SpellOffersPerVisit, seed);
             return picked;
@@ -133,9 +134,9 @@ namespace TheDarkestNight
                                 }
 
                                 var def = offer[captured];
-                                int cost = TowerMath.SpellInfluenceCost(def.Length);
+                                int cost = TowerMath.RuneInfluenceCost(def.Role, def.Id);
                                 MBTextManager.SetTextVariable($"TOWER_TEACHING_SPELL_{captured}_TEXT",
-                                    $"Learn {def.Name}  [{cost} influence]");
+                                    $"Learn {def.Name} ({def.Meaning})  [{cost} influence]");
                                 args.IsEnabled = (Hero.MainHero?.Clan?.Influence ?? 0f) >= cost;
                                 try { args.optionLeaveType = GameMenuOption.LeaveType.Default; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                             }
@@ -159,7 +160,7 @@ namespace TheDarkestNight
             }
 
             var def = offer[slot];
-            int cost = TowerMath.SpellInfluenceCost(def.Length);
+            int cost = TowerMath.RuneInfluenceCost(def.Role, def.Id);
             var clan = Hero.MainHero?.Clan;
             if (clan == null || clan.Influence < cost)
             {
@@ -169,9 +170,9 @@ namespace TheDarkestNight
             }
 
             try { clan.Influence -= cost; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-            try { SpellbookCampaignBehavior.LearnSpellFromTower(def.Id); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellbookCampaignBehavior.LearnRuneFromTower(def.Id); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-            ShowDialog("Taught", $"The Tower teaches you {def.Name}. (-{cost} influence)",
+            ShowDialog("Taught", $"The Tower scrives the mark {def.Name} into your book. (-{cost} influence)",
                 () => { try { GameMenu.SwitchToMenu("tower_teaching_main"); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); } });
         }
 

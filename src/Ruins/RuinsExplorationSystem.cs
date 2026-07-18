@@ -307,14 +307,16 @@ namespace TheDarkestNight
         {
             try
             {
-                var unknown = SpellbookCatalog.All
-                    .Where(d => !SpellbookCampaignBehavior.KnowsSpell(d.Id))
+                // Ruins now yield RUNES — the old craft scribed into the ruined
+                // walls (the player's casting path is runes, not bound formulas).
+                var unknown = RuneCatalog.All
+                    .Where(d => !SpellbookCampaignBehavior.KnowsRune(d.Id))
                     .ToList();
                 if (unknown.Count == 0) return null;
 
                 var def = unknown[_rng.Next(unknown.Count)];
-                SpellbookCampaignBehavior.LearnSpellFromRuin(def.Id);
-                return $"A formula, half-legible, still readable: {def.Name} [{def.Formula}]. You will not forget it now.";
+                SpellbookCampaignBehavior.LearnRuneFromRuin(def.Id);
+                return $"A rune, half-worn but still legible, cut into the old stone: {def.Name} ({def.Meaning}). You will not forget its shape now.";
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }

@@ -154,7 +154,7 @@ namespace TheDarkestNight
                 + "coin — five marks in an old, patient hand, and directions for saying them with your body "
                 + "instead of your voice. You learned two of them badly, by the second week. They have not "
                 + "badly failed you since.\n\n"
-                + "(You will begin with the Spellbook unlocked and two spoken formulas already known.)",
+                + "(You will begin with the Spellbook unlocked and two runes already written in a stranger's hand.)",
                 new GetNarrativeMenuOptionArgsDelegate(BookArgs));
 
             Edit(m, KeepsakeMenuId, "adulthood_caravan_leader_option",
@@ -285,7 +285,7 @@ namespace TheDarkestNight
             switch (keepsake)
             {
                 case KeepsakeId.Blade:    return "The keepsake rides with you: a good one-handed sword.";
-                case KeepsakeId.Book:     return "The keepsake rides with you: the Spellbook, unlocked, with two formulas already known.";
+                case KeepsakeId.Book:     return "The keepsake rides with you: the Spellbook, unlocked, with two runes already written in a stranger's hand.";
                 case KeepsakeId.Mount:    return "The keepsake rides with you: a war-capable horse and salted fish in its stores.";
                 case KeepsakeId.Goods:    return "The keepsake rides with you: cheese, butter, fish, and a mule.";
                 case KeepsakeId.Heirloom: return "The keepsake rides with you: clan renown, and a wand whose working you don't understand.";
@@ -309,10 +309,13 @@ namespace TheDarkestNight
                 case KeepsakeId.Book:
                     try
                     {
-                        var pool = SpellbookCatalog.QualifyingForArcaneStart.ToList();
-                        var picks = SpellbookMath.PickDistinctIndices(pool.Count, 2, rng);
-                        foreach (int i in picks)
-                            SpellbookCampaignBehavior.GrantStartingSpell(pool[i].Id);
+                        // The stranger's book opens the Spellbook and grants two RUNES
+                        // with a guaranteed castable shape (RUNE_MAGIC_PLAN.md §7): the
+                        // first is always an element, the second an element or a simple
+                        // safe first lesson — never the dark or blood marks.
+                        var (first, second) = RuneCatalog.PickStarterPair(rng);
+                        SpellbookCampaignBehavior.GrantStartingRune(first);
+                        SpellbookCampaignBehavior.GrantStartingRune(second);
                     }
                     catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     break;

@@ -191,7 +191,7 @@ namespace TheDarkestNight
                 {
                     if (a == null || !a.IsActive() || a.Health <= 0f) continue;
                     if (a.IsMount) continue;
-                    if (playerTeam != null && !playerTeam.IsEnemyOf(a.Team)) continue;
+                    if (playerTeam != null && !playerTeam.IsEnemyOfSafe(a.Team)) continue;
                     Vec3 ap;
                     try { ap = a.Position; } catch { continue; }
                     float d2 = (ap - from).LengthSquared;
@@ -250,7 +250,7 @@ namespace TheDarkestNight
                 foreach (Agent a in mission.AllAgents.ToList())
                 {
                     if (a == null || !a.IsActive() || a.IsMount || a.Health <= 0f) continue;
-                    if (player.Team != null && !player.Team.IsEnemyOf(a.Team)) continue;
+                    if (player.Team != null && !player.Team.IsEnemyOfSafe(a.Team)) continue;
                     Vec3 ap;
                     try { ap = a.Position; } catch { continue; }
                     if ((ap - pos).LengthSquared > DreadPresenceRange2) continue;

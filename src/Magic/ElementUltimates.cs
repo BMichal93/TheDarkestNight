@@ -750,7 +750,7 @@ namespace TheDarkestNight
                     if (r.Ashen)
                         try
                         {
-                            if (r.CasterTeam != null && a.Team != null && a.Team.IsEnemyOf(r.CasterTeam))
+                            if (r.CasterTeam != null && a.Team != null && a.Team.IsEnemyOfSafe(r.CasterTeam))
                                 a.SetMorale(a.GetMorale() - ElementUltimateMath.RainAshenMoraleDrainPerTick);
                         }
                         catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }

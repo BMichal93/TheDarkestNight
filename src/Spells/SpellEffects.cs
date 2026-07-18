@@ -83,7 +83,7 @@ namespace TheDarkestNight
                 {
                     if (!a.IsActive() || a.IsMount || a.Team == null || a.Team == pt) continue;
                     bool isEnemy = false;
-                    try { isEnemy = pt.IsEnemyOf(a.Team); } catch { continue; }
+                    try { isEnemy = pt.IsEnemyOfSafe(a.Team); } catch { continue; }
                     if (isEnemy) return true;
                 }
             }

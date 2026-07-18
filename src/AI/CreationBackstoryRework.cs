@@ -155,13 +155,15 @@ namespace TheDarkestNight
                 RewriteKeepsakeMenu(m);             // "The Keepsake" — see .Keepsakes.cs
                 RewriteMenus(m);
                 ApplyGatedRenames();   // set initial state for the current (or no) selection
-                // The Keepsake stage is the ONLY source of starting flavour (bonuses,
-                // items, spells) — every earlier narrative stage (Family, Childhood,
-                // Adolescence, Youth) now grants nothing, so "I am a survivor" really
-                // is a background with no hidden bonus or penalty attached to it.
-                NeutralizeMenu(m, "narrative_parent_menu");
-                NeutralizeMenu(m, "narrative_education_menu");
-                NeutralizeMenu(m, "narrative_youth_menu");
+                // The Family/Adolescence/Youth stages now grant their normal
+                // vanilla skill/focus/attribute bonuses again (mod-author directive:
+                // backgrounds should reward the player as in the base game). Only the
+                // FLAVOUR of each option is rewritten (RewriteMenus / RewriteYouthMenu
+                // above); the option's own args getter — and thus its bonuses — is left
+                // untouched. The Keepsake stage still adds its magic boon on top, exactly
+                // as the base game's Young-Adulthood stage would have granted its own.
+                // (NeutralizeMenu / NeutralArgs remain defined but unused, in case the
+                // no-bonus behaviour is ever wanted again.)
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }

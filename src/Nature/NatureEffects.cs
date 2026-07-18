@@ -958,7 +958,7 @@ namespace TheDarkestNight
                 {
                     if (!a.IsActive() || a.IsMount || a == caster || a.Health <= 0f) continue;
                     bool enemy = false;
-                    try { enemy = team != null && team.IsEnemyOf(a.Team); } catch { continue; }
+                    try { enemy = team != null && team.IsEnemyOfSafe(a.Team); } catch { continue; }
                     if (!enemy) continue;
                     float d = (a.Position - pos).LengthSquared;
                     if (d < bestDist) { bestDist = d; nearest = a; }
@@ -977,7 +977,7 @@ namespace TheDarkestNight
                 {
                     if (!a.IsActive() || a.IsMount || a.Health <= 0f) continue;
                     bool enemy = false;
-                    try { enemy = team != null && team.IsEnemyOf(a.Team); } catch { continue; }
+                    try { enemy = team != null && team.IsEnemyOfSafe(a.Team); } catch { continue; }
                     if (!enemy) continue;
                     if ((a.Position - pos).LengthSquared <= r2) try { action(a); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }

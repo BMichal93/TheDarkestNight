@@ -2,6 +2,43 @@
 
 ---
 
+## v0.10.0
+
+### The Scrived Word — casting is runes now, not fixed formulas
+The player's magic is no longer a lookup against a table of fixed 5–20-mark
+strings. Mages **draw runes in the air and bind them into sentences**. Same
+input — hold Left Alt (or Controller-RLeft), tap directions, release — but each
+**rune is exactly three marks** of U/D/L/R, and 36 of the 64 triplets are real.
+
+- **Every rune means something and does something alone.** Release after one rune
+  for its bare working (Cinder = a burst of flame, the Bar = a wall, the Calling =
+  a summoned elemental, the Mending = a heal…).
+- **Repetition amplifies** — write Cinder twice for a longer, harder burn.
+- **Runes combine into a language.** Two elements marry into a fusion (Fire+Water =
+  Fog); three become a **Triad** (Fire+Wind+Water = *the Tempest*); all four, the
+  **Unbound Weave** — the mightiest working, and it always bites its caster back.
+  A Form reshapes the whole binding: the **Long Mark** throws it, the **Bar** raises
+  a wall, the **Calling** gives it a body.
+- **Discovery** — draw a real rune you've never used and it writes itself into your
+  book on the spot. A malformed or senseless binding fizzles and risks a *spellburn*.
+- **Strain** — the longer the binding, the greater the risk it burns you even when
+  it lands. Short bindings are safe craft; a six-rune Triad is a master's gamble.
+- **Composed names** — every successful binding names itself ("Fireball", "Fog Wall",
+  "Twice-Written Cinder", "The Tempest").
+- **The book** now shows *The Marks* (every rune you know, with its shape and
+  meaning) and *The Craft* (a primer on the grammar).
+
+Learning sources all grant runes now: the **"a stranger's book"** background starts
+you with two (an element plus a safe first lesson), the **Tower** teaches them for
+influence, and **ruins** yield them cut into the old stone. Old v0.9 saves migrate
+automatically — your known formulas resolve into the runes that compose them.
+
+Wands, the Chosen's Rod, and NPC caster lords/troops keep their bound workings
+unchanged; demons and the Bloodbound's blood-attunement still loose raw element
+cones, by design.
+
+---
+
 ## v0.9.0
 
 ### The Veil turns — a season-long tide of magic and dark

@@ -66,7 +66,7 @@ namespace TheDarkestNight
                 {
                     if (a == source || a.IsMount || !a.IsActive() || a.Team == null) continue;
                     bool isEnemy = false;
-                    try { isEnemy = source.Team.IsEnemyOf(a.Team); } catch { continue; }
+                    try { isEnemy = source.Team.IsEnemyOfSafe(a.Team); } catch { continue; }
                     if (isEnemy) result.Add(a);
                 }
             }

@@ -1,9 +1,23 @@
 # RUNE_MAGIC_PLAN.md — The Scrived Word (rune-drawn casting)
 
-> Status: **PLAN — not yet implemented.** Target release: v0.9.0.
-> This document is the working plan for replacing the Spellbook's fixed
-> 5–20-mark spoken formulas with a compositional **rune** system. It follows
-> the same phase-checklist shape as `REFACTOR_NAMING.md`.
+> Status: **IMPLEMENTED in v0.10.0** (Phases 1–5). This document is the design
+> of record for the rune system that replaced the Spellbook's fixed 5–20-mark
+> spoken formulas. Deliberate deviations from the original plan, made for safety
+> in a build that cannot be play-tested from the toolchain:
+> - **Effects (Phase 2):** `RuneEffects.cs` is self-contained and calls only the
+>   PUBLIC effect API (plus its own target-finders) rather than lifting a shared
+>   `SpellbookEffectPrimitives` out of `SpellbookEffects` — this leaves the
+>   load-bearing `SpellbookEffects` (wands, the Rod, NPC workings) 100% untouched.
+>   The exotic Manners (Mirror counter, Still dispel, Vigil persistence, Gift
+>   redirection) resolve in the grammar but degrade to inert no-ops in the effect
+>   layer; the composed working still fires. Snare/Brand/Husk forms are
+>   approximated with existing primitives, not bespoke mission-tick token lists.
+> - **NPC casters (Phase 4 / §6):** caster lords/troops keep their proven
+>   `SpellId` bound-workings path (which §8 already preserves) rather than being
+>   re-routed through `RuneSequenceMath`. `SpellbookMath.NpcSpellburnChance`
+>   exists for a future wiring pass.
+> These are the only material departures; the pure core (Phase 1) matches the
+> plan exactly and is fully unit-tested.
 
 ---
 
