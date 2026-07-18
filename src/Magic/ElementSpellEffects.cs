@@ -256,6 +256,7 @@ namespace TheDarkestNight
             if (el == MagicElement.Fire)
                 try { power *= ElementUltimates.FireDampAt(caster.Position); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             power *= CasterMasteryScale(caster);   // inborn gift deepens with the caster
+            power *= VeilMagicScale();             // the Veil's turn lifts or lowers ALL fire
             switch (el)
             {
                 case MagicElement.Fire:   FireMissile(caster, power);  break;
@@ -303,6 +304,7 @@ namespace TheDarkestNight
             if (el == MagicElement.Fire)
                 try { power *= ElementUltimates.FireDampAt(caster.Position); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             power *= CasterMasteryScale(caster);   // inborn gift deepens with the caster
+            power *= VeilMagicScale();             // the Veil's turn lifts or lowers ALL fire
             switch (el)
             {
                 case MagicElement.Fire:   FireWall(caster, power);  break;
@@ -1015,6 +1017,18 @@ namespace TheDarkestNight
                 var hero = (caster?.Character as TaleWorlds.CampaignSystem.CharacterObject)?.HeroObject;
                 return hero == null ? 1f : ElementMagicMath.MasteryScale(hero.Level);
             }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return 1f; }
+        }
+
+        // The Veil's current turn scales every working's direct damage — bright
+        // while the Veil thins, guttering while it holds thick. Folded into the
+        // same power the mastery scale rides, so it reaches the player's Spellbook
+        // casts, NPC mage lords, the Awakened, and demon hellfire alike. Because
+        // ChargeFraction clamps at 1, a >1 turn lifts only the direct damage,
+        // never the tuned cone reach / wall depth / ignite. See VeilMath.
+        private static float VeilMagicScale()
+        {
+            try { return VeilMath.MagicMultiplier(VeilCampaignBehavior.CurrentPhase()); }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return 1f; }
         }
 

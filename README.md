@@ -1,4 +1,4 @@
-# The Darkest Night — v0.8.0
+# The Darkest Night — v0.9.0
 
 A total-conversion of Mount & Blade II: Bannerlord. The world shattered overnight: demons crawl out from the underworld every dusk and hunt the living, humanity survives behind walls and wards, gold has stopped mattering, and magic is no longer a noble's birthright but a formula anyone can tap out with their own two hands — if they're brave (or reckless) enough to try an untested one in battle.
 

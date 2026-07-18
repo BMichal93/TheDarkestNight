@@ -120,6 +120,7 @@ namespace TheDarkestNight
                 campaignStarter.AddBehavior(new SoldierServiceCampaignBehavior());
                 campaignStarter.AddBehavior(new ElementalWildsBehavior());
                 campaignStarter.AddBehavior(new DemonSpawnCampaignBehavior());
+                try { campaignStarter.AddBehavior(new VeilCampaignBehavior()); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 campaignStarter.AddBehavior(new MarketScarcityCampaignBehavior());
                 campaignStarter.AddBehavior(new PromotionCampaignBehavior());
                 campaignStarter.AddBehavior(new SacredSitesCampaignBehavior());
@@ -270,6 +271,7 @@ namespace TheDarkestNight
                 try { SoldierServiceCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { ElementalWildsBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { DemonSpawnCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { VeilCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { BattleEvents.ResetForNewGame();           } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { GreatAwakeningCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { NorthmenStonesCampaignBehavior.ResetForNewGame(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }

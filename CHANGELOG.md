@@ -2,7 +2,20 @@
 
 ---
 
-## Unreleased
+## v0.9.0
+
+### The Veil turns — a season-long tide of magic and dark
+A new membrane hangs between the living world and the underworld below, and it **thins and thickens on a fixed rhythm — one full turn each season** (21 days), split into three seven-day windows. The turn is deliberately **predictable**, so you *and* the NPC world can plan around it. Every season plays out the same: **the Warding → the Steady → the Thinning**, then the Veil snaps shut and it begins again. A short passage in the message log announces each turn and how long it holds.
+
+- **The Thinning** *(veil thin)* — the fire in all things runs high and the cracks between worlds widen: **magic ×1.5**, and the Night crosses in **greater numbers (demon spawns ×1.2)**.
+- **The Steady** *(veil even)* — the ordinary balance: magic ×1.0, demons ×1.0.
+- **The Warding** *(veil thick)* — the inner fire gutters low, but far fewer of the dark can force a crossing: **magic ×0.7**, **demon spawns ×0.6**. The season to march.
+
+The tide moves the whole world, not just the player:
+
+- **The magic scaling reaches every working** — your Spellbook casts, NPC mage lords, the Awakened, and demon hellfire all strike harder in the Thinning and weaker in the Warding (folded into the shared cast choke, so it stays NPC-parity-correct).
+- **Mage lords come out to play when the Veil is thin** — they cast markedly more often during the Thinning and hold their fire during the Warding.
+- **Campaigning lords favour the Warding to move their armies** — while the Veil thins, even large hosts shelter from the swollen Night; while it holds thick, true armies march the quiet roads freely.
 
 ### The mod stops answering to Ash and Ember — ⚠️ delete your old folder
 The mod now installs as **`Modules\TheDarkestNight\`** and ships **`TheDarkestNight.dll`**. Until now it deployed into `Modules\AshAndEmber\` and listed itself in the launcher as "Ash and Ember".

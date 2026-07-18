@@ -157,6 +157,14 @@ namespace TheDarkestNight
         private void SpawnNightTide()
         {
             int count = DemonMath.NightSpawnPartyCount(_rng, _partyOriginalSize.Count);
+            // The Veil's turn swells or thins the tide: more demons cross while the
+            // Veil is thin (the Thinning), far fewer while it holds thick (the
+            // Warding). See VeilMath. Re-clamped to the living-party budget so a
+            // 1.2× surge can never blow past MaxLivingDemonParties.
+            VeilPhase phase = VeilCampaignBehavior.CurrentPhase();
+            count = VeilMath.ApplySpawnMultiplier(count, phase);
+            int room = Math.Max(0, DemonMath.MaxLivingDemonParties - _partyOriginalSize.Count);
+            if (count > room) count = room;
             for (int i = 0; i < count; i++)
                 SpawnParty(DemonMath.RollSpawnLocation(_rng));
         }

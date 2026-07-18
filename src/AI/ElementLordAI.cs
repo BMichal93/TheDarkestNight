@@ -528,10 +528,16 @@ namespace TheDarkestNight
         {
             try
             {
+                // Mage lords "come out to play" when the Veil is thin: they cast
+                // more often during the Thinning and hold back during the Warding.
+                // Applied to every mage lord (the Ashen too — the cold pays no life,
+                // but the fire still runs with the Veil's turn). See VeilMath.
+                float veilMult = VeilMath.MageLordCooldownMultiplier(VeilCampaignBehavior.CurrentPhase());
+
                 if (ElementLordRegistry.IsAshenLord(hero))
                 {
                     bool isFE = BurningLabQuestSystem.IsArenicosHero(hero) && !BurningLabQuestSystem.ArenicosIsTrue;
-                    _cooldowns[hero.StringId] = isFE ? FalseEmperorCooldown : AshenCooldown;
+                    _cooldowns[hero.StringId] = (isFE ? FalseEmperorCooldown : AshenCooldown) * veilMult;
                     return;
                 }
                 float cd = DefaultCooldown;
@@ -543,6 +549,7 @@ namespace TheDarkestNight
                 CasterTemper temper = ElementLordRegistry.TemperOf(hero);
                 float lifeFrac = NpcCastPlanner.LifeFrac(ElementLordRegistry.LifeBudgetYears(hero));
                 cd *= NpcCastPlanner.CooldownMult(lifeFrac, temper);
+                cd *= veilMult;
                 _cooldowns[hero.StringId] = cd;
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }

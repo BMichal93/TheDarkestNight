@@ -40,6 +40,12 @@ namespace TheDarkestNight
             float hour = CurrentHourOfDay();
             if (!DemonMath.IsNightHour(hour)) return;
 
+            // The Veil's turn moves the caution bar: hosts shelter more readily
+            // while it thins (the Night swelling), and true armies march freely
+            // while it holds thick — so campaigning lords favour the "non-magical"
+            // Warding season to move. See VeilMath.
+            float veilThreshold = VeilMath.NightSafeSizeMultiplier(VeilCampaignBehavior.CurrentPhase());
+
             foreach (var party in MobileParty.All.ToList())
             {
                 try
@@ -59,7 +65,7 @@ namespace TheDarkestNight
                     int effectiveManCount = party.Army != null
                         ? party.Army.TotalManCount
                         : (party.MemberRoster?.TotalManCount ?? 0);
-                    if (MortalLawMath.IsSafeFromNightFear(effectiveManCount)) continue;
+                    if (MortalLawMath.IsSafeFromNightFear(effectiveManCount, veilThreshold)) continue;
 
                     if (party.TargetSettlement != null) continue; // already homing on shelter
 

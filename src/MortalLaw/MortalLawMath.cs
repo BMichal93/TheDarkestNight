@@ -59,6 +59,19 @@ namespace TheDarkestNight
         public static bool IsSafeFromNightFear(int effectiveManCount)
             => effectiveManCount >= NightSafeArmySize;
 
+        // The Veil's turn moves the bar: while it thins (the Night swelling) even a
+        // large host feels unsafe and shelters (a higher threshold); while it holds
+        // thick (quiet roads) true armies march freely (a lower one). The caller
+        // passes VeilMath.NightSafeSizeMultiplier for the current phase — kept as a
+        // parameter so this stays pure and testable (no VeilCampaignBehavior read
+        // leaking into the math). Floored at 1 so the bar never degenerates to 0.
+        public static bool IsSafeFromNightFear(int effectiveManCount, float thresholdMultiplier)
+        {
+            int threshold = (int)Math.Round(NightSafeArmySize * thresholdMultiplier, MidpointRounding.AwayFromZero);
+            if (threshold < 1) threshold = 1;
+            return effectiveManCount >= threshold;
+        }
+
         // ── c) Fight for food ───────────────────────────────────────────────────
         // MobileParty.Food is vanilla's own running food balance (negative once
         // a party is eating into debt/starving). A party at or below this line
