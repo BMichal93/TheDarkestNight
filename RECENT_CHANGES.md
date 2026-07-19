@@ -125,6 +125,40 @@ because survivor-only mode removes every non-Empire card before it's shown and
 the walk stops once the Empire card is corrected — so only the Empire card (which
 WANTS clearing) is ever reached. No change needed.
 
+## 2026-07-19 — Rune effect visuals (evocative, effect-matched)
+
+**Gap:** the element runes/fusions/walls looked good (they route through
+`ElementSpellEffects.CastAttack`/`CastWall`, which carry fire bolts, gale/torrent
+cones, ignite, element flashes), but the rune-ONLY effects in `RuneEffects.cs`
+applied their mechanical effect with little or no distinctive visual — the Long
+Mark bolt, Fear/Grave Mark, the Rot curse, the Maw, the Beacon rally, Wyrd's
+heartening, the Night Mark, roots, wraithstep, and the Mirror manner all fired
+"blind."
+
+**Fix:** wired each into the existing visual toolkit (`SpawnExplosionEffect`,
+`SpawnBurstExplosion`, `SpawnTrailParticle`, `BeginAgentGlow`, `SpawnNpcMoraleAura`,
+`SpawnTempSmoke/SnowParticle`, `SpawnTempLightRgb`):
+- **Long Mark bolt / the Maw** — a light-trail streak between caster and foe plus
+  an impact burst; the Maw draws a dark burst off the foe and a red life-glow back
+  into the caster.
+- **The Rot** — a green nature burst and a lingering green glow on the cursed foe.
+- **Fear / Grave Mark / Hush** — a dark purple dread-wave breaks outward, foes
+  briefly limned purple; the **Night Mark** adds its own smoke-black false-night
+  pulse first.
+- **Wyrd hearten / Beacon rally** — a warm hearth-light and morale aura, allies lit
+  gold.
+- **Roots / Fetter / Snare** — cold snow + a blue burst locking the foe's feet.
+- **Wraithstep** — smoke where the caster was and reappears.
+- **The Mirror** — a silver, glass-still shimmer stands up around the caster (the
+  "mirror-like entity" cue), even though the counter mechanic itself is a later
+  refinement. **The Price** briefly lights the caster red as blood is paid.
+- **Summons / Banish / Light / Husk** — a colour-matched burst at the summon point
+  (ember-red + smoke for a demon), a white sear-burst on banished demons, a golden
+  flare for the Lamp, and a matter-coloured mantle glow for the Husk.
+
+New local helpers in `RuneEffects`: `BeginGlow`, `MirrorShimmer`, `StreakBetween`,
+`ElementSchool`. Build green; 660 tests pass. Files: `src/Spellbook/RuneEffects.cs`.
+
 ---
 
 ## 2026-07-18 — Fixed Empire feats leaking on character-creation card

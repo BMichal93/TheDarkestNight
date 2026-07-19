@@ -95,6 +95,11 @@ namespace TheDarkestNight
 
             // ── Manners that add on top ────────────────────────────────────────
             if (r.NightMark) DarkenNearbyFoes(caster);
+            // The Mirror arms a counter (the mechanic itself is a later refinement)
+            // — but it shows: a silver, glass-still shimmer stands up around the
+            // caster for a breath, the turned surface waiting to throw a blow back.
+            if (r.Mirror) MirrorShimmer(caster);
+            if (r.Price)  BeginGlow(caster, ColorSchool.Red, 1.2f); // blood paid, briefly lit
         }
 
         // Matter poured into a Form. Element/fusion/command all resolve through
@@ -127,10 +132,12 @@ namespace TheDarkestNight
                     break;
 
                 case RuneForm.Husk:
-                    // Mantle — worn: a self-ward plus a small mending, tinted by
-                    // the matter. (Per-element on-hit mantles are a later refinement.)
+                    // Mantle — worn: a self-ward plus a small mending, and the
+                    // matter is drawn over the skin as a coloured glow. (Per-element
+                    // on-hit mantles are a later refinement.)
                     try { SpellEffects.ExecuteWardFromAgent(caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     try { SpellEffects.HealAgent(caster, 12f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    BeginGlow(caster, ElementSchool(el), 4f);
                     break;
 
                 case RuneForm.Brand:
@@ -226,12 +233,17 @@ namespace TheDarkestNight
         {
             var ally = NearestAlly(caster, 14f) ?? caster;
             try { ally.SetMorale(Math.Min(100f, ally.GetMorale() + 20f * power)); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-            FlashSelf(ally, MagicElement.Spirit);
+            // A steady, heartening light stands up over the one heartened.
+            try { SpellEffects.SpawnNpcMoraleAura(ally.Position, caster.Team); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            BeginGlow(ally, ColorSchool.Yellow, 1.6f);
         }
 
         private static void RallyNearbyAllies(Agent caster)
         {
             Vec3 pos; try { pos = caster.Position; } catch { return; }
+            // A hearth-glow breaks over the whole knot of allies.
+            try { SpellEffects.SpawnNpcMoraleAura(pos, caster.Team); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempLightRgb(pos + new Vec3(0f, 0f, 1.4f), new Vec3(1.0f, 0.85f, 0.5f), 14f, 1.2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             List<Agent> agents; try { agents = Mission.Current.Agents.ToList(); } catch { return; }
             float r2 = 16f * 16f;
             foreach (Agent a in agents)
@@ -241,6 +253,7 @@ namespace TheDarkestNight
                 float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                 if (dx * dx + dy * dy > r2) continue;
                 try { a.SetMorale(Math.Min(100f, a.GetMorale() + 10f)); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                BeginGlow(a, ColorSchool.Yellow, 1.1f);
             }
         }
 
@@ -250,12 +263,21 @@ namespace TheDarkestNight
             if (t == null) return;
             try { t.SetMaximumSpeedLimit(0f, false); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try { NatureEffects.ApplySpeedToken(t, 0f, seconds); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            // The ground closes cold about the foe's feet.
+            try { SpellEffects.SpawnTempSnowParticle(t.Position + new Vec3(0f, 0f, 0.4f), 1.8f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnExplosionEffect(t.Position + new Vec3(0f, 0f, 0.4f), ColorSchool.Blue, 1.2f, 0.6f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            BeginGlow(t, ColorSchool.Blue, seconds);
         }
 
         private static void BoltNearest(Agent caster)
         {
             var t = NearestEnemy(caster, 25f);
             if (t == null) return;
+            // A pale arrow of force — a light-trail streak from hand to foe, and a
+            // white spark where it lands.
+            StreakBetween(caster.Position + new Vec3(0f, 0f, 1.3f), t.Position + new Vec3(0f, 0f, 1.0f), 6);
+            try { SpellEffects.SpawnExplosionEffect(t.Position + new Vec3(0f, 0f, 1.0f), ColorSchool.White, 1.4f, 0.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            BeginGlow(t, ColorSchool.White, 0.8f);
             try { SpellEffects.DamageAgent(t, 14f, ColorSchool.White, caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
@@ -263,6 +285,9 @@ namespace TheDarkestNight
         {
             var t = NearestEnemy(caster, 12f);
             if (t == null) return;
+            // A gnawing green rot crawls over the foe.
+            try { SpellEffects.SpawnExplosionEffect(t.Position + new Vec3(0f, 0f, 1.0f), ColorSchool.Nature, 1.8f, 1.2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            BeginGlow(t, ColorSchool.Nature, 2.5f);
             try { SpellEffects.DamageAgent(t, 24f, ColorSchool.Nature, caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
@@ -270,6 +295,11 @@ namespace TheDarkestNight
         {
             var t = NearestEnemy(caster, 10f);
             if (t == null) return;
+            // The dark draw — life is torn from the foe (a dark burst) and drawn
+            // back into the caster (a red glow as it lands in them).
+            try { SpellEffects.SpawnExplosionEffect(t.Position + new Vec3(0f, 0f, 1.0f), ColorSchool.Purple, 1.6f, 0.9f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            StreakBetween(t.Position + new Vec3(0f, 0f, 1.0f), caster.Position + new Vec3(0f, 0f, 1.2f), 5);
+            BeginGlow(caster, ColorSchool.Red, 1.4f);
             try { SpellEffects.DamageAgent(t, 20f, ColorSchool.Nature, caster); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try { SpellEffects.HealAgent(caster, 10f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
@@ -277,6 +307,8 @@ namespace TheDarkestNight
         private static void Fear(Agent caster, float radius, float moraleHit)
         {
             Vec3 pos; try { pos = caster.Position; } catch { return; }
+            // A dark wave of dread breaks outward from the caster.
+            try { SpellEffects.SpawnBurstExplosion(pos + new Vec3(0f, 0f, 0.8f), ColorSchool.Purple, radius * 0.6f, 0.9f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             float r2 = radius * radius;
             List<Agent> agents; try { agents = Mission.Current.Agents.ToList(); } catch { return; }
             foreach (Agent a in agents)
@@ -286,16 +318,57 @@ namespace TheDarkestNight
                 float dx = a.Position.x - pos.x, dy = a.Position.y - pos.y;
                 if (dx * dx + dy * dy > r2) continue;
                 try { a.SetMorale(a.GetMorale() - moraleHit); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                BeginGlow(a, ColorSchool.Purple, 1.0f);
             }
         }
 
-        private static void DarkenNearbyFoes(Agent caster) => Fear(caster, 10f, 8f);
+        // The Night Mark's own darkening — a low, smoke-black pulse of false night
+        // before the dread lands, distinct from a plain Fear.
+        private static void DarkenNearbyFoes(Agent caster)
+        {
+            try { SpellEffects.SpawnTempSmokeParticle(caster.Position + new Vec3(0f, 0f, 0.8f), 1.6f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempLightRgb(caster.Position + new Vec3(0f, 0f, 1.2f), new Vec3(0.25f, 0.05f, 0.35f), 12f, 1.0f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            Fear(caster, 10f, 8f);
+        }
 
         private static void Wraithstep(Agent caster)
         {
             Vec3 fwd; try { fwd = caster.LookDirection; fwd.z = 0f; if (fwd.Length < 0.01f) return; fwd.Normalize(); }
             catch { return; }
-            try { caster.TeleportToPosition(caster.Position + fwd * 6f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            Vec3 from = caster.Position;
+            // A pull of smoke where the caster was, and where they reappear.
+            try { SpellEffects.SpawnTempSmokeParticle(from + new Vec3(0f, 0f, 0.9f), 1.4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { caster.TeleportToPosition(from + fwd * 6f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempSmokeParticle(caster.Position + new Vec3(0f, 0f, 0.9f), 1.4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+        }
+
+        // ── Visual helpers ──────────────────────────────────────────────────────
+        private static void BeginGlow(Agent a, ColorSchool school, float seconds)
+        {
+            if (a == null) return;
+            try { SpellEffects.BeginAgentGlow(a, school, seconds); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+        }
+
+        // The Mirror manner — a silver, glass-still shimmer that stands up around
+        // the caster for a breath: the turned surface waiting to throw a blow back.
+        private static void MirrorShimmer(Agent caster)
+        {
+            try { SpellEffects.BeginAgentGlow(caster, ColorSchool.White, 1.5f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnTempLightRgb(caster.Position + new Vec3(0f, 0f, 1.2f), new Vec3(0.8f, 0.85f, 1.0f), 9f, 1.2f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnExplosionEffect(caster.Position + new Vec3(0f, 0f, 1.0f), ColorSchool.White, 1.2f, 1.0f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+        }
+
+        // A short streak of light between two points — a poor man's projectile
+        // trail, for the Long Mark's force bolt and the Maw's drawn life.
+        private static void StreakBetween(Vec3 from, Vec3 to, int steps)
+        {
+            if (steps < 2) steps = 2;
+            for (int i = 0; i <= steps; i++)
+            {
+                float f = i / (float)steps;
+                Vec3 p = from * (1f - f) + to * f;
+                try { SpellEffects.SpawnTrailParticle(p, 0.4f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            }
         }
 
         private static void VeilSelf(Agent caster)
@@ -308,6 +381,7 @@ namespace TheDarkestNight
         {
             Vec3 pos; try { pos = caster.Position + new Vec3(0f, 0f, 1.6f); } catch { return; }
             try { SpellEffects.SpawnTempLightRgb(pos, new Vec3(1.0f, 0.92f, 0.65f), 20f, 6f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnExplosionEffect(pos, ColorSchool.Yellow, 1.5f, 0.6f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             float r2 = 12f * 12f;
             foreach (var d in DemonBattleBehavior.GetActiveDemons())
             {
@@ -332,12 +406,15 @@ namespace TheDarkestNight
                 {
                     float dx = d.Position.x - pos.x, dy = d.Position.y - pos.y;
                     if (dx * dx + dy * dy > r2) continue;
+                    SpellEffects.SpawnExplosionEffect(d.Position + new Vec3(0f, 0f, 1.0f), ColorSchool.White, 1.6f, 0.7f);
+                    BeginGlow(d, ColorSchool.White, 1.0f);
                     SpellEffects.DamageAgent(d, 55f, ColorSchool.White, caster);
                     struck++;
                 }
                 catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             try { SpellEffects.SpawnTempLightWhite(pos + new Vec3(0f, 0f, 1.5f), 24f, 0.6f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnBurstExplosion(pos + new Vec3(0f, 0f, 1.0f), ColorSchool.White, 12f, 0.6f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             if (struck > 0)
                 InformationManager.DisplayMessage(new InformationMessage(
                     $"A pale light sears the field — {struck} of the Night's creatures reel from it.", DemonColor));
@@ -347,6 +424,9 @@ namespace TheDarkestNight
         {
             if (Mission.Current == null || caster.Team == null) return;
             Vec3 pos = InFront(caster, 3f);
+            // The ground answers the Calling — a burst of the matter's own colour
+            // where the elemental is torn into being (its own visuals bind after).
+            try { SpellEffects.SpawnExplosionEffect(pos + new Vec3(0f, 0f, 1.0f), ElementSchool(el), 2.2f, 0.9f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try { ElementalFactory.SpawnElemental(KindFor(el), caster.Team, pos, charge: true); }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
@@ -358,7 +438,11 @@ namespace TheDarkestNight
             // The Night's own — a rogue chance it fights for no one but itself.
             Team team = caster.Team;
             bool rogue = _rng.Next(100) < 25;
-            var demon = DemonFactory.SpawnDemon(tier, team, InFront(caster, 3f), charge: true);
+            Vec3 pos = InFront(caster, 3f);
+            // A tear of smoke-black and ember-red as the Night's own claws free.
+            try { SpellEffects.SpawnTempSmokeParticle(pos + new Vec3(0f, 0f, 1.0f), 2.0f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { SpellEffects.SpawnExplosionEffect(pos + new Vec3(0f, 0f, 1.0f), ColorSchool.Red, 2.4f, 0.9f); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            var demon = DemonFactory.SpawnDemon(tier, team, pos, charge: true);
             if (demon != null)
                 InformationManager.DisplayMessage(new InformationMessage(
                     rogue ? "The Night answers — but the thing that claws free owes you nothing."
@@ -381,6 +465,22 @@ namespace TheDarkestNight
                 SpellEffects.SpawnTempLightRgb(caster.Position + new Vec3(0f, 0f, 1f), ElementSpellEffects.ElementLightRgb(el, ashen), 8f, 0.8f);
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+        }
+
+        // The ColorSchool that best reads for a matter element (for bursts/glows).
+        private static ColorSchool ElementSchool(MagicElement el)
+        {
+            switch (el)
+            {
+                case MagicElement.Fire: case MagicElement.Magma: return ColorSchool.Red;
+                case MagicElement.Lightning:                     return ColorSchool.Yellow;
+                case MagicElement.Water: case MagicElement.Ice: case MagicElement.Fog: case MagicElement.Mire:
+                    return ColorSchool.Blue;
+                case MagicElement.Earth: case MagicElement.Sandstorm: return ColorSchool.Green;
+                case MagicElement.Wind:   return ColorSchool.White;
+                case MagicElement.Spirit: return ColorSchool.Purple;
+                default:                  return ColorSchool.White;
+            }
         }
 
         private static ElementalKind KindFor(MagicElement el)
