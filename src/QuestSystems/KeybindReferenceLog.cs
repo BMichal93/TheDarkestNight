@@ -144,16 +144,16 @@ namespace TheDarkestNight
                 "is no third ending written into this war."), true);
 
             AddLog(new TextObject(
-                "THE SPELLBOOK — Magic is not taught in these towns anymore; it is found, spoken, or misspoken. " +
-                "Spend one focus point to open your spellbook — once, forever — and the old formulas will answer " +
-                "your hands. Hold Left Alt (gamepad: hold X) with BOTH hands empty and tap the marks — W/A/S/D " +
-                "(gamepad: flick the left stick) for Up/Left/Down/Right — then release Alt to speak the shape " +
-                "you have drawn. Every formula is five to twenty marks long; the short ones are common workings, " +
-                "the long ones are things that used to be gods' business. Speak a shape you already know and it " +
-                "answers as it should. Speak a shape you have never learned, but get it EXACTLY right, and it " +
-                "still answers — the working teaches itself to a hand steady enough to cast it true. Tap X " +
-                "(gamepad: click the left stick) with an empty formula buffered to open the book itself and read " +
-                "what you have learned."), true);
+                "THE SPELLBOOK — Magic is not taught in these towns anymore; it is scrived, drawn, or misdrawn. " +
+                "Spend one focus point to open your spellbook — once, forever — and the old runes will answer " +
+                "your hands. Hold Left Alt (gamepad: hold X) with BOTH hands empty and draw RUNES: each rune is " +
+                "exactly three marks — W/A/S/D (gamepad: flick the left stick) for Up/Left/Down/Right — and you " +
+                "may bind several runes in a row before you release Alt to loose the binding. A rune drawn alone " +
+                "does its own working; drawn together, runes make a language — write one twice to deepen it, marry " +
+                "two elements into a greater working, let one shaping rune throw it far or raise it into a wall. " +
+                "Draw a true rune you have never used and it writes itself into your book on the spot. Tap X " +
+                "(gamepad: click the left stick) with an empty binding to open the book itself — on the map, hold " +
+                "Left Alt and tap X (gamepad: hold X, tap Y) — and read the marks you have learned."), true);
 
             AddLog(new TextObject(
                 "SPELLBURN — Speak the marks wrong and the working still tries to answer — it simply answers " +
@@ -228,7 +228,7 @@ namespace TheDarkestNight
                 "you his thanks."), true);
 
             AddLog(new TextObject(
-                "READING THE SIGNS — The Codex of the Runes (Left Alt + L on the map) still teaches the " +
+                "READING THE SIGNS — The Codex of the Runes (Left Alt + X on the map) still teaches the " +
                 "old element-craft to any mage who has not yet opened a spellbook of their own; once the book is " +
                 "open, the same keys show you the book instead. Whatever else this world has taken from you, it " +
                 "has not taken the ability to learn. Use it."), true);

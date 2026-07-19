@@ -415,22 +415,20 @@ namespace TheDarkestNight
                 try { NatureInputHandler.Tick(inMission: false);  } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { ActiveEffectManager.MapTick(dt); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 
-                // The spell-list keybind — Left Alt + L. Requirement 17: this now
-                // opens the new Spellbook (a read-only list of every formula known)
-                // once the player has unlocked it; the old element-learning Codex
-                // still answers here too, alongside it, for a mage who has not yet
-                // spent the focus point to open the book.
+                // The spell-list keybind — Left Alt + X (matches the Spellbook's own
+                // in-battle open key, so it is the same gesture everywhere). Opens the
+                // Spellbook (the marks known) once unlocked; the old element-learning
+                // Codex still answers here too for a mage who has not yet opened the book.
                 try
                 {
                     // Controller: X (ControllerRLeft, the Spellbook's own hold key) + Y
-                    // (ControllerRUp) opens the same book on the map — Alt+L has no
-                    // keyboard-only equivalent on a pad (issue 9). Formula taps use the
+                    // (ControllerRUp) opens the same book on the map. Formula taps use the
                     // left stick/D-pad, so the right face-button cluster is free.
                     bool padOpen = TaleWorlds.InputSystem.Input.IsKeyDown(TaleWorlds.InputSystem.InputKey.ControllerRLeft)
                         && TaleWorlds.InputSystem.Input.IsKeyPressed(TaleWorlds.InputSystem.InputKey.ControllerRUp);
 
                     if ((TaleWorlds.InputSystem.Input.IsKeyDown(TaleWorlds.InputSystem.InputKey.LeftAlt)
-                            && TaleWorlds.InputSystem.Input.IsKeyPressed(TaleWorlds.InputSystem.InputKey.L)
+                            && TaleWorlds.InputSystem.Input.IsKeyPressed(TaleWorlds.InputSystem.InputKey.X)
                          || padOpen)
                         && MageKnowledge._deferredInquiry == null)
                     {

@@ -77,7 +77,11 @@ namespace TheDarkestNight
                 if (_hedgeWitchCooldown == 0 && HasHedgeWitchCondition()) pool.Add(E_NightVisitor);
                 if (ren >= 250f && _merchantLedgerCountdown == 0) pool.Add(EC8_MerchantLedger);
                 if (ren >= 300f) pool.Add(EC8_ReluctantOfficial);
-                if (!ashen && _priestBeatCountdown == 0) pool.Add(EC_LocalPriest);
+                // EC_LocalPriest (donate to build a Sanctuary) is retired with the
+                // Sanctuary system — Sanctuaries are no longer placed or given a menu
+                // (see MagicSystem's behaviour-registration note), so the encounter
+                // would take the player's coin for a station that never opens.
+                // if (!ashen && _priestBeatCountdown == 0) pool.Add(EC_LocalPriest);
                 if (_babyEventCountdown == 0 && _pregnancyCountdown == 0 && _tavernRobberyCountdown == 0)
                     pool.Add(EC_TavernStranger);
                 if (_brokenSealCountdown == 0 && _brokenSealPlotType == 0) pool.Add(EC_BrokenSeal);

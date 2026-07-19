@@ -6475,6 +6475,84 @@ namespace TheDarkestNight.Tests
             Assert.AreEqual(1.75f, twiceFire.Power, 1e-5);
         }
 
+        // The 20 matter-states (5 elements + 6 fusions + 4 commands + 4 Triads +
+        // the Unbound Weave), each as the runes that produce it. Command and Unbound
+        // reject any Form (declared contradictions); the rest accept every Form.
+        private static readonly (string name, RuneId[] runes, bool formRejected)[] _matterStates =
+        {
+            ("Fire",  new[]{RuneId.Cinder}, false), ("Water", new[]{RuneId.Tide}, false),
+            ("Earth", new[]{RuneId.Stone},  false), ("Wind",  new[]{RuneId.Gale}, false),
+            ("Wyrd",  new[]{RuneId.Wyrd},   false),
+            ("Fire+Wind",  new[]{RuneId.Cinder,RuneId.Gale},  false),
+            ("Fire+Water", new[]{RuneId.Cinder,RuneId.Tide},  false),
+            ("Fire+Earth", new[]{RuneId.Cinder,RuneId.Stone}, false),
+            ("Wind+Water", new[]{RuneId.Gale,RuneId.Tide},    false),
+            ("Wind+Earth", new[]{RuneId.Gale,RuneId.Stone},   false),
+            ("Earth+Water",new[]{RuneId.Stone,RuneId.Tide},   false),
+            ("Cmd Fire",  new[]{RuneId.Wyrd,RuneId.Cinder}, true),
+            ("Cmd Wind",  new[]{RuneId.Wyrd,RuneId.Gale},   true),
+            ("Cmd Earth", new[]{RuneId.Wyrd,RuneId.Stone},  true),
+            ("Cmd Water", new[]{RuneId.Wyrd,RuneId.Tide},   true),
+            ("Tempest",   new[]{RuneId.Cinder,RuneId.Gale,RuneId.Tide},  false),
+            ("Eruption",  new[]{RuneId.Cinder,RuneId.Gale,RuneId.Stone}, false),
+            ("Seething",  new[]{RuneId.Cinder,RuneId.Tide,RuneId.Stone}, false),
+            ("Avalanche", new[]{RuneId.Gale,RuneId.Tide,RuneId.Stone},   false),
+            ("Unbound",   new[]{RuneId.Cinder,RuneId.Gale,RuneId.Stone,RuneId.Tide}, true),
+        };
+
+        private static readonly RuneId[] _formRunes =
+        {
+            RuneId.LongMark, RuneId.Bar, RuneId.Calling, RuneId.Snare,
+            RuneId.Brand, RuneId.Husk, RuneId.Ring, RuneId.Rain,
+        };
+
+        [Test]
+        public void RuneSequence_CompletenessMatrix_EveryMatterByForm_NoSilentHole()
+        {
+            Assert.AreEqual(20, _matterStates.Length, "there must be exactly 20 matter-states");
+            Assert.AreEqual(RuneCatalog.FormCount, _formRunes.Length);
+
+            foreach (var (name, matter, formRejected) in _matterStates)
+            {
+                // formless
+                var bare = RuneSequenceMath.Resolve(matter);
+                Assert.IsFalse(bare.Malformed, $"{name} (formless) should resolve");
+                Assert.IsNotEmpty(bare.Name ?? "", $"{name} (formless) has no composed name");
+
+                foreach (var form in _formRunes)
+                {
+                    var seq = matter.Concat(new[] { form }).ToList();
+                    var r = RuneSequenceMath.Resolve(seq);
+                    if (formRejected)
+                        Assert.IsTrue(r.Malformed && !string.IsNullOrEmpty(r.Reason),
+                            $"{name} + {form} must be a DECLARED contradiction");
+                    else
+                    {
+                        Assert.IsFalse(r.Malformed, $"{name} + {form} should resolve, not fizzle");
+                        Assert.IsNotEmpty(r.Name ?? "", $"{name} + {form} has no composed name");
+                    }
+                }
+            }
+        }
+
+        [Test]
+        public void RuneSequence_CompletenessMatrix_EveryMannerByForm_NoSilentHole()
+        {
+            // A single manner laid on a valid element+form binding must never be a
+            // silent hole: it either applies or is inert, but the working still fires.
+            RuneId[] manners = { RuneId.Echo, RuneId.Chain, RuneId.Vigil, RuneId.Price,
+                                 RuneId.NightMark, RuneId.Mirror, RuneId.Still, RuneId.Gift };
+            foreach (var manner in manners)
+                foreach (var form in _formRunes)
+                {
+                    var seq = new List<RuneId> { RuneId.Cinder, form, manner };
+                    var r = RuneSequenceMath.Resolve(seq);
+                    // Fire + form + one manner is a legal binding (no declared
+                    // manner-manner contradiction present), so it must resolve.
+                    Assert.IsFalse(r.Malformed, $"Fire + {form} + {manner} should resolve");
+                }
+        }
+
         [Test]
         public void RuneSequence_PureManners_AreHarmlessFizzle_NotABurn()
         {

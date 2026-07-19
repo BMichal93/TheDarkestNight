@@ -23,10 +23,12 @@ namespace TheDarkestNight
     public static class TempleMath
     {
         // ── Starting holdings (town-scoping) ────────────────────────────────────
-        // The Temple keeps exactly two seats: Ocs Hall (town_V2) and Pravend
-        // (town_V3) — verified against the shipped SandBox/ModuleData/settlements.xml
-        // ("{=Settlements.Settlement.name.town_V2}Ocs Hall" /
-        // "{=Settlements.Settlement.name.town_V3}Pravend").
+        // The Temple keeps Ocs Hall (town_V2) and Pravend (town_V3). These are
+        // protected from the legacy Empire land-grab (ReassignImperialSettlements)
+        // by the faction-seat guard in CampaignBehavior.Events — without that guard
+        // the Empire took both and the Temple was eliminated at new-game. Verified
+        // against the shipped SandBox/ModuleData/settlements.xml
+        // ("{=Settlements.Settlement.name.town_V2}Ocs Hall" / "...town_V3}Pravend").
         public static readonly string[] StartingTownIds = { "town_V2", "town_V3" }; // Ocs Hall, Pravend
 
         public static bool IsStartingTownId(string stringId)

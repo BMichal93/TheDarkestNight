@@ -125,6 +125,66 @@ because survivor-only mode removes every non-Empire card before it's shown and
 the walk stops once the Empire card is corrected — so only the Empire card (which
 WANTS clearing) is ever reached. No change needed.
 
+## 2026-07-19 — Campaign-map crash fix, Alt+X map key, ward wording, gap-closing pass
+
+**CRASH (new-game campaign map, ~17:28) — fixed.** A native hard crash (no
+managed stack) right after a NEW game loaded the map. Root cause: v0.10.0's
+`FactionScoping.StripExtraFactionTowns` (#5) drew recipient clans from ALL
+kingdomless clans — including **bandit / minor / outlaw factions** — and
+`CityStateSystem.ConvertOwnerlessTowns` then minted a KINGDOM ruled by a bandit
+clan, a corrupt map state the native campaign code crashes on.
+- `FactionScoping.IsUsableRecipient` now requires a proper NOBLE clan
+  (`!IsNoble || IsBanditFaction || IsMinorFaction || IsOutlaw || IsNomad ||
+  IsClanTypeMercenary` → rejected).
+- `CityStateSystem.ConvertOwnerlessTowns` defensively refuses to ever convert a
+  bandit/minor/outlaw clan into a city-state (belt-and-suspenders).
+
+**Map Spellbook key: Alt+L → Alt+X** (matches the in-battle open key). Updated
+`MagicSystem` map hotkey, the in-game controls manual (`KeybindReferenceLog`, also
+rune-ified — it still described the retired formula system), and `CLAUDE.md`.
+
+**Ward wording (player-facing): protective FIRE → protective RUNES.** "Ember Ward"
+("a private warmth wrapped around you") → "Warding Rune" ("a protective rune
+scrived close about you"); the Circle rune reads "a protective rune scrived about
+the caster". (The Grace/Temple warmth-warding is a separate, intentional faith
+lore and was left as-is.)
+
+**Gap fixes (from the self-review list):**
+- **#4b MarketScarcity roster underflow** (the recurring caught `MBUnderFlowException`):
+  `AdjustRoster` read a stack's amount via `GetItemAtIndex` but wrote via
+  `AddToCounts(ItemObject, delta)`, which targets the UNMODIFIED element — a
+  different (or empty) slot for modifier-bearing stacks → underflow. Now snapshots
+  and writes the exact `EquipmentElement`, with a clamp that can never remove more
+  than was counted.
+- **#5 rune grammar completeness matrix:** added the plan's exhaustive tests —
+  all 20 matter-states × 9 form-states resolve to a working or a DECLARED
+  contradiction (no silent holes), and every manner × form-state on a valid
+  binding resolves. 662 tests pass.
+- **#6 Sanctuary/Altar loose threads:** retired the `EC_LocalPriest` encounter
+  (it took up to 10,000 denars to "build a sanctuary" that now has no menu), and
+  re-gated Flame Priest garrison troops from the removed Sanctuaries onto the
+  surviving Temple faction's towns (`TempleSettlements.IsTempleSettlement`) so the
+  priest mechanic stays alive.
+- **#1 faction seat/reassignment contradiction — FACTIONS WERE BEING ELIMINATED.**
+  The legacy `ReassignImperialSettlements` gave the Empire other factions' declared
+  capitals — the Temple's Ocs Hall (town_V2) + Pravend (town_V3) and the Forest
+  Widows' Marunath (town_B1) + Car Banseth (town_B3) — so those factions lost ALL
+  their seats and were eliminated at new-game (Bloodbound lost Akkalat but kept
+  Chaikand, so it survived). Added a seat-protection guard: the Empire land-grab
+  now skips any settlement that is another faction's declared seat
+  (`CityStateSystem.IsCoreFactionTown`), so every faction keeps its capital and the
+  Empire keeps only genuinely-unclaimed border cities. (Verified town ids/names
+  against the shipped settlements.xml.)
+- **#3 save-migration semantics — verified, no change.** Confirmed (by the
+  codebase's own precedent: Demon/Veil/Wands add save keys every version and old
+  saves load) that `SyncData` tolerates a missing key. The v0.9→rune migration
+  starts from a fresh empty list on load, so an absent `SPELLBOOK_KnownRuneIds`
+  correctly triggers migration.
+
+Build green; 662 tests pass.
+
+---
+
 ## 2026-07-19 — Rune effect visuals (evocative, effect-matched)
 
 **Gap:** the element runes/fusions/walls looked good (they route through

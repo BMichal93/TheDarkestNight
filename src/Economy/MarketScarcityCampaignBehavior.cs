@@ -111,16 +111,26 @@ namespace TheDarkestNight
                 bool isForestMarket = !isVillage && CityStateSystem.IsForestSettlement(settlement);
 
                 // Snapshot first: mutating an ItemRoster mid-enumeration is unsafe.
-                var snapshot = new List<(ItemObject item, int amount)>();
+                // Capture the exact EquipmentElement (item + modifier), not the bare
+                // ItemObject — a roster stack can carry an ItemModifier, and
+                // AddToCounts(ItemObject, delta) targets the UNMODIFIED element, which
+                // may be a different (or empty) slot than the one whose amount we read.
+                // Subtracting that stack's delta from the wrong slot underflows
+                // (MBUnderFlowException). Operating on the copied EquipmentElement keeps
+                // the read and the write on the same slot.
+                var snapshot = new List<(EquipmentElement element, int amount)>();
                 for (int i = 0; i < roster.Count; i++)
                 {
-                    ItemObject item = roster.GetItemAtIndex(i);
-                    int amount = roster.GetElementNumber(i);
-                    if (item != null && amount > 0) snapshot.Add((item, amount));
+                    ItemRosterElement rel = roster.GetElementCopyAtIndex(i);
+                    if (rel.IsEmpty) continue;
+                    ItemObject item = rel.EquipmentElement.Item;
+                    int amount = rel.Amount;
+                    if (item != null && amount > 0) snapshot.Add((rel.EquipmentElement, amount));
                 }
 
-                foreach (var (item, amount) in snapshot)
+                foreach (var (element, amount) in snapshot)
                 {
+                    ItemObject item = element.Item;
                     int target = amount;
                     if (item.HasFoodComponent || item.IsFood)
                         target = isVillage
@@ -138,7 +148,8 @@ namespace TheDarkestNight
                         continue;
 
                     int delta = target - amount;
-                    if (delta != 0) roster.AddToCounts(item, delta);
+                    if (delta < 0) delta = Math.Max(delta, -amount); // never remove more than we counted
+                    if (delta != 0) roster.AddToCounts(element, delta);
                 }
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
