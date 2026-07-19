@@ -20,17 +20,20 @@
 // ScopeToStartingTowns only EJECTS a clan that holds none of its faction's
 // seats — a clan that holds a seat AND extra towns keeps all of them, so the
 // faction ends up with more cities than its named seat list. This pass strips
-// those extras: every town a short-list faction holds beyond its
-// StartingTownIds is handed to a landless free clan so the existing
-// city-state conversion turns it into its own "wretched free town".
+// those extras: every town a faction holds beyond its StartingTownIds is
+// handed to a landless free clan so the existing city-state conversion turns
+// it into its own "wretched free town".
 //
-// Only the FIVE non-Empire factions are stripped. The three Empire kingdoms
-// (empire / empire_w / empire_s) are DELIBERATELY expanded with border cities
-// by CampaignBehavior.Events.cs' legacy ReassignImperialSettlements pass (by
-// id, by name, and by radius sweep), so their "extra" towns are by design and
-// have no single clean id list to check against — stripping them here would
-// undo that intentional map. If the Empire trio's size is ever itself the
-// problem, that belongs with ReassignImperialSettlements, not here.
+// ALL EIGHT factions are stripped (2026-07-19: the three Empire kingdoms were
+// previously excluded here on the theory that ReassignImperialSettlements'
+// border grab had "no single clean id list" — that grab is now a fixed named
+// list folded straight into EmpireMath/LegionMath/ChosenMath.StartingTownIds
+// (its old "nearby castle" radius sweep, the actual source of an un-curated
+// list, was removed). A clan that also still holds a native Northern/Western/
+// Southern Empire town beyond that curated seat list (e.g. Myzea/town_EN5) is
+// stripped exactly like the other five factions' extras — the pitch is
+// "eight desperate factions," not five remnants plus three untouched vanilla
+// imperial blocs.
 // =============================================================================
 
 using System;
@@ -56,7 +59,7 @@ namespace TheDarkestNight
             try { ChosenSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
-        // The five factions whose intended holdings are exactly their named seats.
+        // All eight factions — their intended holdings are exactly their named seats.
         private static (string kingdomId, string[] seats)[] ShortListFactions() => new[]
         {
             ("sturgia",  WolfBrothersMath.StartingTownIds),
@@ -64,6 +67,9 @@ namespace TheDarkestNight
             ("battania", ForestWidowsMath.StartingTownIds),
             ("khuzait",  BloodboundMath.StartingTownIds),
             ("vlandia",  TempleMath.StartingTownIds),
+            ("empire",   EmpireMath.StartingTownIds),
+            ("empire_w", LegionMath.StartingTownIds),
+            ("empire_s", ChosenMath.StartingTownIds),
         };
 
         // Strips every town a short-list faction holds beyond its named seats.
@@ -143,7 +149,10 @@ namespace TheDarkestNight
                 if (csId != null && Kingdom.All.Any(k => k.StringId == csId)) return false;
                 return true;
             }
-            catch { return true; }
+            // Fail CLOSED: an exception here must never silently let a
+            // bandit/minor/outlaw clan through the guard above — that is the exact
+            // corrupt-map-state crash this method exists to prevent.
+            catch { return false; }
         }
 
         // Loyalty/security top-up after a forced transfer — mirrors

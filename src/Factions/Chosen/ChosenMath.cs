@@ -18,12 +18,30 @@ namespace TheDarkestNight
     public static class ChosenMath
     {
         // ── Starting holdings (town-scoping) ────────────────────────────────────
-        // The Chosen keep the SAME two seats the (deleted) Pale Widows held:
-        // Phycaon (town_ES6) and Lycaron (town_ES4) — verified against the
-        // shipped SandBox/ModuleData/settlements.xml
-        // ("{=Settlements.Settlement.name.town_ES6}Phycaon" /
-        // "town_ES4}Lycaron").
-        public static readonly string[] StartingTownIds = { "town_ES4", "town_ES6" };
+        // The Chosen keep the SAME two seats the (deleted) Pale Widows held —
+        // Phycaon (town_ES6) and Lycaron (town_ES4) — plus the border ground
+        // ReassignImperialSettlements deliberately hands it at new-game: Razih
+        // (town_A4) and Qasira (town_A8) from the Tower's Aserai border. Every
+        // other native Southern Empire holding now falls out of scope like the
+        // five remnant factions' own — the Chosen are one of Requirement 10's
+        // "eight desperate factions," not the untouched vanilla imperial
+        // bloc. Verified against the shipped SandBox/ModuleData/settlements.xml.
+        //
+        // NOT Akkalat (town_K2), despite ReassignImperialSettlements' comment
+        // block listing it as a Southern Empire border grab: town_K2 is one of
+        // BloodboundMath.StartingTownIds' own two protected seats ("Akkalat,
+        // Chaikand"), and the seat-protection guard correctly refuses to hand
+        // one faction's own declared capital to another — so that particular
+        // grab has always been a silent no-op. Pre-existing content
+        // contradiction between the two factions' seat lists (same class as
+        // the Temple/Empire Ocs Hall-Pravend conflict noted in TempleMath.cs);
+        // left for the mod author to resolve which faction actually keeps it.
+        public static readonly string[] StartingTownIds =
+        {
+            "town_ES4", "town_ES6",   // Lycaron, Phycaon
+            "town_A4",                // Razih
+            "town_A8",                // Qasira
+        };
 
         public static bool IsStartingTownId(string stringId)
         {

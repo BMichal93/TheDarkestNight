@@ -55,9 +55,10 @@
 // brief explicitly wants two-thirds of ALL cities, not a modest chunk — but
 // it is still an honestly reachable number across a long, sustained
 // campaign, not a number only the base game's best AI kingdoms ever touch:
-// the Empire starts with 3 of the 53 (EmpireMath.StartingTownIds), so 35 is
-// "conquer 32 more towns," a fraction over half the entire town map, which
-// is exactly the scale of "reunify Calradia" the brief calls for.
+// the Empire starts with 5 of the 53 towns (EmpireMath.StartingTownIds also
+// holds 2 border castles, which don't count toward this "cities" total), so
+// 35 is "conquer 30 more towns," a fraction over half the entire town map,
+// which is exactly the scale of "reunify Calradia" the brief calls for.
 // =============================================================================
 
 using System;

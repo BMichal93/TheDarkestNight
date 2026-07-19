@@ -374,6 +374,27 @@ namespace TheDarkestNight
             },
             new TalentDef
             {
+                Id = TalentId.LostMissile, IsSpell = false, IsEnchantment = false,
+                Category = TalentCategory.LostForm, IsConsumable = true, FocusCost = 1, Name = "Twin Bolts",
+                Lore = "The old stroke splits before it leaves the hand. Two bolts where one was asked for, each carrying less than the whole — but a miss with one hand is not always a miss with the other.",
+                MechanicDesc = "Lost Form. Found only in the Ashen Ruins. The missile fires as twin bolts, each at 60% power."
+            },
+            new TalentDef
+            {
+                Id = TalentId.LostBarrier, IsSpell = false, IsEnchantment = false,
+                Category = TalentCategory.LostForm, IsConsumable = true, FocusCost = 1, Name = "Lingering Ward",
+                Lore = "Most wards fade with the breath that raised them. This older form was cut deeper, and forgets to let go — the wall stands long after the hand that drew it has moved on.",
+                MechanicDesc = "Lost Form. Found only in the Ashen Ruins. The barrier wall lasts 60 seconds instead of 50."
+            },
+            new TalentDef
+            {
+                Id = TalentId.LostBurst, IsSpell = false, IsEnchantment = false,
+                Category = TalentCategory.LostForm, IsConsumable = true, FocusCost = 1, Name = "Asymmetric Burst",
+                Lore = "The old form never meant to strike evenly. It answers to the front in full and lets only a whisper of itself reach behind — the caster's back was always meant to be the safer ground.",
+                MechanicDesc = "Lost Form. Found only in the Ashen Ruins. Burst deals full damage forward and 40% to the rear arc."
+            },
+            new TalentDef
+            {
                 Id = TalentId.WardenRing, IsSpell = false, IsEnchantment = false,
                 Category = TalentCategory.LostForm, FocusCost = 1, Name = "The Warden's Ring",
                 Lore = "The old form of the barrier was always a wall — a line you drew between yourself and what was coming. But a wall has two ends. The older working was a ring: fire surrounding, not dividing. The form was nearly lost because the warding requires standing inside the fire.",
@@ -493,8 +514,11 @@ namespace TheDarkestNight
         // Each class bundles the older single talents it replaces. Owning the class
         // satisfies Has() for every member (see TalentSystem.Player.cs). Only live
         // talents (those with a TalentDef) are bundled — the consolidated-out forms
-        // (Scorch, Chain Ignite, Ashmark, Anchor Ward, Twin Bolts, Lost Burst, Lost
-        // Barrier) are deliberately left out, not silently revived.
+        // (Scorch, Chain Ignite, Ashmark, Anchor Ward) are deliberately left out, not
+        // silently revived. Twin Bolts / Lost Burst / Lingering Ward (LostMissile /
+        // LostBurst / LostBarrier) are NOT consolidated-out — they are live, found-only
+        // Lost Forms handed out by AshenRuinSystem.Rewards.GrantGrimoireFragment, so
+        // they keep their own TalentDef above but are bundled into no class.
         public static readonly IReadOnlyDictionary<TalentId, TalentId[]> ClassMembers =
             new Dictionary<TalentId, TalentId[]>
             {

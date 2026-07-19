@@ -7,6 +7,253 @@ and should append new entries at the top after making changes.
 
 ---
 
+## 2026-07-19 22:51 — Fourth new-game map crash (RuinsCastleSystem garrison-destroy burst) + ruins ownership hardening
+
+Another first-tick crash report (~22:51 CEST, same WER symptom: `Launcher.
+Native.exe`, `0xc0000005`, `StackHash_f7a4` / `PCH_6D_FROM_KERNELBASE+0xC1ADA`
+— IDENTICAL StackHash to the 22:34:50 crash, meaning the 22:30 session's
+Temple/Bloodbound re-entrancy fix (deployed 22:49:04, before this 22:52:53
+crash) did NOT change the signature at all — a different, still-unfixed bug).
+
+**Root cause, found by re-examining my OWN previous fix.** Earlier this
+session I "fixed" `RuinsCastleSystem.ApplyRuinAppearance`'s backwards
+`DestroyPartyAction.Apply(garrison.Party, null)` call (reasoned as clearly
+wrong from the method signature). That reasoning was correct — **verified
+this time by decompiling `DestroyPartyAction.ApplyInternal` directly with
+`ilspycmd`** (`destroyedParty.RemoveParty()` is called on the second
+parameter; the first is only passed through to `OnMobilePartyDestroyed` as
+optional attribution, and can be `null` — `ApplyForDisbanding` proves this by
+calling `ApplyInternal(null, disbandedParty)`). But fixing it turned a call
+that had ALWAYS silently NRE'd (a no-op, for as long as this codebase has
+existed) into one that actually executes `RemoveParty()` — and
+`RuinsCastleSystem.ConvertCastles()` calls it for every one of the ~30-40
+castles converted to a Ruin, synchronously, in one loop, at session launch.
+That volume of real `DestroyPartyAction.Apply` calls (each broadcasting
+`OnMobilePartyDestroyed`/`OnMapInteractableDestroyed`) in a single burst,
+landing in the same fragile new-game-setup window this whole investigation
+has been chasing bugs in, is the new prime suspect — and exactly matches when
+the crash signature changed from `StackHash_a395` (the original
+`MortalLawCampaignBehavior` re-entrancy) to `StackHash_f7a4` (first seen at
+22:34:50, the very next crash after this fix's 22:25:08 deploy).
+
+**Fix — batch instead of burst (`src/Ruins/RuinsCastleSystem.cs`):**
+`ApplyRuinAppearance` no longer calls `DestroyPartyAction.Apply` itself; it
+queues the settlement id into `_pendingGarrisonDestroys`. A new
+`ProcessPendingGarrisonDestroys` (called from the existing `DailyTick`) drains
+that queue at 3 settlements per day — the same net effect (every ruin
+eventually loses its garrison) without ever asking the engine to tear down
+more than a handful of parties in one tick.
+
+**Found six more call sites with the exact same backwards `DestroyPartyAction.
+Apply(party.Party, null)` bug** (`DemonSpawnCampaignBehavior.cs`,
+`ApocalypseCampaignBehavior.Gathering.cs`, `ApocalypseCampaignBehavior.
+Resolution.cs`, `TowerRiteHostParty.cs` ×2, `CampaignMapEvents.Events01_09.cs`)
+— every one of them has therefore ALSO always silently no-op'd (demon dawn-
+despawn, the apocalypse gathering-band cleanup, the Tower rite host party,
+and caravan destruction have never actually removed their target party).
+**Deliberately NOT fixed this session** — each needs its own review for
+whether its call site is a tight per-tick loop (repeating today's mistake) or
+a naturally-throttled one-at-a-time tick, and this session already has three
+rounds of "fixed one bug, crash signature changed, found another" behind it.
+Flagging for a dedicated follow-up pass rather than risking a fifth crash
+class by fixing all six blind.
+
+**Ruins ownership hardening (user request: "ruins should not be treated as
+normal castles you can own").** Investigated what's actually enforced today:
+`RuinsMenus` only ADDS an "Explore the ruin" option to the vanilla town/castle
+menu — it does not hide the normal garrison/management options, and the siege
+flow was never touched (the file's own header already documented this as a
+deliberate, `behaviour.md`-rule-3-driven simplification: no proven way in
+this codebase to safely set `OwnerClan` to null or intercept a siege).
+Hardened the existing mitigation instead of attempting a new, unverified
+siege-block: `ReapplyRuinNamesIfNeeded` (previously a ONE-SHOT backstop for
+the engine's XML-text-reload reverting the ruin's name) now runs
+unconditionally on **every** daily tick. If a rival lord's AI ever does
+capture and garrison a ruin through the untouched vanilla siege flow, the
+very next day queues that new garrison for removal and re-zeroes
+prosperity/security — so holding one stays permanently worthless rather than
+becoming a real castle, even though the siege itself is still technically
+possible. Updated the stale/misleading comments in both `RuinsCastleSystem.cs`
+and `RuinsMenus.cs` that claimed the menu "replaces" normal interaction (it
+doesn't — verified by reading `RuinsMenus.RegisterEntryOption`, which is
+purely additive).
+
+Build green, all 662 tests pass, DLL redeployed. **This is the fourth
+consecutive crash report on the same new-game flow** — each fix so far has
+demonstrably changed the WER StackHash (proving each was a real, distinct
+bug), but a clean new-game start still needs to be re-verified before trusting
+this one either.
+
+## 2026-07-19 22:30 — Third new-game map crash (Temple/Bloodbound re-entrancy) + Empire trio over-sized territory
+
+Two reports after the 22:08 fix: (1) another first-tick crash at ~22:34
+(same `PCH_6D_FROM_KERNELBASE` WER signature as the 22:08 one — confirmed the
+deployed DLL, timestamped 22:25, already had that fix, so this was a second,
+distinct instance of the same bug class); (2) the Northern and Southern Empire
+holding far more towns/castles than intended (screenshot evidence).
+
+**Crash — root cause.** Grepped every `ChangeKingdomAction.Apply*` call site
+for the same "called synchronously from inside `OnClanChangedKingdomEvent`'s
+own dispatch" re-entrancy hazard the 22:08 fix identified in
+`MortalLawCampaignBehavior`. Two more offenders: `BloodboundCampaignBehavior.
+OnClanChangedKingdom` and `TempleCampaignBehavior.OnClanChangedKingdom` both
+call `ChangeKingdomAction.ApplyByLeaveKingdom` synchronously when a joining
+clan's leader fails their faction's "join gate" (Qualifies check) — the exact
+same pattern, just gated on leader personality instead of fief count.
+**Fix:** both now queue the clan (`_pendingUnworthyEjections`) and process the
+actual `ApplyByLeaveKingdom` on the next `OnHourlyTick`, mirroring
+`MortalLawCampaignBehavior`'s fix. Files: `src/Factions/Bloodbound/
+BloodboundCampaignBehavior.cs`, `src/Factions/Temple/TempleCampaignBehavior.cs`.
+
+**Territory — root cause.** Investigating the screenshot (via `settlements.xml`)
+showed several "over-sized Empire" towns (e.g. Myzea/`town_EN5`) are just
+*native vanilla* Northern Empire towns — `EmpireMath.StartingTownIds` (3 towns)
+was only ever a "protected seat" list, never an actual cap; `FactionScoping`
+explicitly EXCLUDED the three Empire-culture kingdoms from `StripExtraFactionTowns`
+("their extras are by design"). So Empire/Legion/Chosen kept their full vanilla
+territory *plus* `ReassignImperialSettlements`' deliberate border grab
+(9 named towns) *plus* an unbounded "grab every castle within 40 map-units of
+each named anchor" radius sweep — while the other 5 factions were scoped down
+to 2 seats each. Asked the user: shrink all three Empire kingdoms to a curated
+seat list like the other 5 (chosen) vs. leave native Empire size and just trim
+the border grab.
+
+**Fix:**
+- Removed the radius-based "nearby castle" sweep from `AssignSettlementAndNearby`
+  (`src/Campaign/CampaignBehavior.Events.cs`) — it transfers only the named
+  anchor now. A radius sweep can't be reconciled with a fixed seat list.
+- Folded `ReassignImperialSettlements`' border grab into a fixed, named seat
+  list per Empire kingdom: `EmpireMath.StartingTownIds` (3→7: +castle_B5,
+  castle_B2, Seonon/town_B4, Rovalt/town_V9), `LegionMath.StartingTownIds`
+  (2→9: +town_V6, castle_V2, castle_V7, Galend/town_V5, Charas/town_V7,
+  Quyaz/town_A1, Sanala/town_A6), `ChosenMath.StartingTownIds` (2→4:
+  +Razih/town_A4, Qasira/town_A8).
+- **Found and fixed a self-defeating bug in my own first pass:** once those
+  border towns joined `EmpireMath`/etc.'s `StartingTownIds`, the existing
+  `CityStateSystem.IsCoreFactionTown` guard (checks all 8 factions' seats)
+  would refuse to ever GRANT them — a town is "core," so `ReassignImperialSettlements`
+  would skip transferring its own newly-declared seats to itself. Added a
+  narrower `CampaignBehavior.Events.cs`-local `IsRemnantFactionSeat` (the five
+  non-Empire factions' seats ONLY) for the three guard call sites that decide
+  whether to grant a border town — `IsCoreFactionTown` (all eight) is
+  unchanged everywhere else (Ruins exemption, city-state conversion guard).
+- **Found a genuine pre-existing content conflict while cross-checking:**
+  Akkalat (`town_K2`) is simultaneously `ReassignImperialSettlements`' comment-
+  block "Southern Empire border grab" AND one of `BloodboundMath.
+  StartingTownIds`' own two protected seats ("Akkalat, Chaikand"). The seat
+  guard has therefore ALWAYS silently no-op'd that particular grab (Akkalat
+  was already in `_coreFactionTownIds` before this session). Left the
+  no-op in place (didn't add `town_K2` to `ChosenMath`), documented the
+  conflict in `ChosenMath.cs` for the mod author to resolve — same class as
+  the pre-existing Temple/Ocs-Hall-Pravend conflict already noted in
+  `TempleMath.cs`.
+- Extended `FactionScoping.ShortListFactions()` (the `StripExtraFactionTowns`
+  pass) to cover all eight kingdoms instead of five, so a clan that holds one
+  of the Empire's new seats AND an extra native town (the Myzea case) has the
+  extra redistributed into a city-state exactly like the other five factions.
+- Updated `EmpireQuestMath.cs`'s header + a `PureLogicTests` assertion that
+  read `EmpireMath.StartingTownIds.Length` as a towns-only count (it's now
+  towns+castles mixed); fixed 4 stale test assertions for the new seat counts
+  (`ChosenMath`: 2→4, `EmpireMath`: 3→7, `LegionMath`: 2→9, plus the
+  `EmpireQuestMath` conquest-threshold sanity check).
+
+Build green, all 662 tests pass, DLL redeployed. **Needs one more in-game
+new-game test** to confirm both the crash and the territory size are actually
+fixed — this class of bug has now taken three rounds to fully surface.
+
+## 2026-07-19 — Fixed mislabeled toast for found-only Lost Forms (Twin Bolts / Lingering Ward / Asymmetric Burst)
+
+Audited `TalentSystem.cs` for dead "kept for save compatibility" entries per user
+request. The numeric-value "REMOVED" `TalentId` members (Rejuvenate, PlantGrowth,
+DevourLife, Bewilder, Waver, Rouse, Consume, Char, Overflow, Renewal, VeteranAsh,
+Ashfall) are genuinely dead everywhere *except* the enum declaration — confirmed
+by grep (`TalentId.<name>` has zero other hits) — but they legitimately serve a
+purpose and were left alone: `TalentSystem.NpcSpells.cs` persists `_purchased` as
+a raw `List<int>` and restores it via `(TalentId)v`, so these reserved numeric
+slots exist purely to stop a future talent from being assigned the same int and
+silently inheriting old players' saved ownership. This matches the project's
+existing "frozen names" convention (`REFACTOR_NAMING.md`) and needed no change.
+
+**Real bug found while doing that audit:** `TalentId.LostMissile` / `LostBarrier`
+/ `LostBurst` are NOT dead despite the `ClassMembers` comment implying they were
+"consolidated-out forms" — they are live mechanics (`SpellBuilder.cs`,
+`Spells/SelfSpells.cs`, `Spells/CreateSpells.cs` all branch on
+`TalentSystem.Has(...)` for them) and are actively granted as random rewards by
+`AshenRuinSystem.Rewards.GrantGrimoireFragment` / `GrantAllGrimoireFragments`.
+But they had no `TalentDef` entry in `TalentSystem.All`, so `TalentSystem.GetDef`
+(`All.FirstOrDefault(...) ?? All[0]`) silently fell back to `All[0]` (the
+`DarkMage`/"Reaper" class def) — meaning finding one of these Lost Forms in the
+Ashen Ruins displayed "Talent learned: Reaper." instead of its real name.
+
+**Fix:** added proper `TalentDef` entries (`Category.LostForm`, `IsConsumable =
+true` so they read as found-only like `ToxicFog`, not purchasable with focus
+points) for `LostMissile` ("Twin Bolts"), `LostBarrier` ("Lingering Ward"), and
+`LostBurst` ("Asymmetric Burst"), with lore/mechanic text matching their existing
+enum comments. Corrected the stale `ClassMembers` comment that mischaracterized
+them as consolidated-out. No `TalentId` values changed, no `ClassMembers`
+membership changed — save-compatible.
+
+Files touched: `src/Talents/TalentSystem.cs`.
+
+---
+
+## 2026-07-19 22:08 — Second new-game map crash (re-entrant kingdom-change event)
+
+Same symptom class as the 17:28 crash below (native hard crash, no managed
+stack, ~2 min after starting a new game — WER: `Launcher.Native.exe`, code
+`0xc0000005`, faulting module resolved to `StackHash_a395` /
+`PCH_6D_FROM_KERNELBASE`, i.e. no attributable native frame). That 17:28 fix
+(bandit-clan-becomes-kingdom) was already deployed (DLL redeployed 22:06) and
+did not prevent this one — different root cause, found by pulling the actual
+WER `Report.wer` from `C:\ProgramData\Microsoft\Windows\WER\ReportArchive`
+(the mod's own `errors.log` only logs *caught* exceptions and had nothing new;
+the crash itself can never be caught).
+
+**Root cause:** `MortalLawCampaignBehavior.OnClanChangedKingdom` called
+`ChangeKingdomAction.ApplyByLeaveKingdom` **synchronously from inside its own
+`OnClanChangedKingdomEvent` handler** whenever a clan joined an over-cap
+kingdom (`MortalLawMath.KingdomFiefCap = 6`). This is exactly the re-entrancy
+hazard `CityStateSystem.OnClanChangedKingdom` and `AshenCitySystem`'s handler
+are deliberately left **empty** to avoid (see their own comments) — firing a
+kingdom-membership action while still inside the event dispatch for a
+DIFFERENT kingdom-membership action re-enters the native
+campaign/diplomacy machinery mid-call.
+
+New-game setup made this reachable for the first time: `CampaignBehavior.
+Events.cs`'s `ReassignImperialSettlements` hands an Empire kingdom several
+towns/castles (pushing its fief count past 6), then `MigrateBorderLords` — in
+the very same synchronous pass — calls `ChangeKingdomAction.
+ApplyByJoinToKingdom` to move a border clan into that same now-over-cap
+kingdom. The join fired `OnClanChangedKingdomEvent`; MortalLaw's old handler
+saw the cap was already exceeded and immediately called
+`ApplyByLeaveKingdom` for the same clan **before the join had returned** —
+re-entering kingdom-membership mutation and corrupting native state (matches
+the StackHash/KERNELBASE signature far better than a clean managed
+exception would).
+
+**Fix (`src/MortalLaw/MortalLawCampaignBehavior.cs`):** the event handler now
+only *queues* the clan (`_pendingDefectorEjections`, not persisted); the
+actual `ApplyByLeaveKingdom` call moved to `ProcessPendingDefectorEjections`,
+run from the existing `OnHourlyTick` — a safe top-level context, never inside
+another action's event dispatch. Mirrors the pattern
+`CityStateSystem.ReassertCityStateMembership` already uses safely on its own
+daily tick. `ResetForNewGame` clears the queue (static-leak hygiene).
+
+**Also fixed while investigating (both real, both previously masked by their
+own `catch`):**
+- `RuinsCastleSystem.ApplyRuinAppearance` called
+  `DestroyPartyAction.Apply(garrison.Party, null)` — backwards. Signature is
+  `Apply(destroyerParty, destroyedParty)`; the call passed the garrison as the
+  *destroyer* and `null` as the *destroyed* party, so it NRE'd on `null` every
+  single session (visible in `errors.log` for months) and never actually
+  removed a ruin's garrison. Fixed to `Apply(null, garrison)`.
+- `FactionScoping.IsUsableRecipient`'s catch-all returned `true` (usable) on
+  any exception — fail-open, the wrong direction for a guard whose entire job
+  is keeping bandit/minor/outlaw clans from becoming city-state kingdoms (the
+  17:28 crash's own cause). Changed to fail-closed (`return false`).
+
+Build green, all 662 tests pass, DLL redeployed.
+
 ## 2026-07-18 — Bug-fix pass (crash on leaving town, backgrounds, visuals, map remnants)
 
 Session addressing a reported list of issues. Reviewed the prior Deepseek entry

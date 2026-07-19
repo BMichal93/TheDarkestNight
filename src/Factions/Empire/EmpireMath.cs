@@ -14,11 +14,23 @@ namespace TheDarkestNight
     public static class EmpireMath
     {
         // ── Starting holdings (town-scoping) ────────────────────────────────────
-        // The Empire keeps exactly three seats: Saneopa (town_EN3), Diathma
-        // (town_EN2) and Argoron (town_EN4) — verified against the shipped
-        // SandBox/ModuleData/settlements.xml ("{=Settlements.Settlement.name.
-        // town_EN3}Saneopa" / "town_EN2}Diathma" / "town_EN4}Argoron").
-        public static readonly string[] StartingTownIds = { "town_EN2", "town_EN3", "town_EN4" };
+        // The Empire keeps its three home seats — Saneopa (town_EN3), Diathma
+        // (town_EN2) and Argoron (town_EN4) — plus the border ground
+        // CampaignBehavior.Events.cs' ReassignImperialSettlements deliberately
+        // hands it at new-game: castles B5/B2, Seonon (town_B4, Battania
+        // border) and Rovalt (town_V9, Vlandia border). Every OTHER native
+        // Northern Empire town (Myzea/EN5 and the rest) now falls out of scope
+        // exactly like the five remnant factions' own holdings — the Empire is
+        // one of Requirement 10's "eight desperate factions," not the
+        // untouched vanilla imperial bloc. Verified against the shipped
+        // SandBox/ModuleData/settlements.xml.
+        public static readonly string[] StartingTownIds =
+        {
+            "town_EN2", "town_EN3", "town_EN4",   // Diathma, Saneopa, Argoron
+            "castle_B5", "castle_B2",              // border castles (explicit grab)
+            "town_B4",                             // Seonon
+            "town_V9",                             // Rovalt
+        };
 
         public static bool IsStartingTownId(string stringId)
         {

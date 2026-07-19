@@ -44,10 +44,17 @@ namespace TheDarkestNight
         private static List<string> _prayerHeroIds = new List<string>();
         private static List<float>  _prayerLastDay  = new List<float>();
 
+        // Clans queued by OnClanChangedKingdom for the join-gate bounce, processed
+        // on the next hourly tick instead of synchronously — see the note on
+        // OnClanChangedKingdom below. Not persisted (harmless if a reload drops one
+        // in-flight bounce).
+        private static readonly List<Clan> _pendingUnworthyEjections = new List<Clan>();
+
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
+            CampaignEvents.HourlyTickEvent.AddNonSerializedListener(this, OnHourlyTick);
             CampaignEvents.OnClanChangedKingdomEvent.AddNonSerializedListener(this, OnClanChangedKingdom);
         }
 
@@ -64,6 +71,7 @@ namespace TheDarkestNight
         {
             _prayerHeroIds = new List<string>();
             _prayerLastDay = new List<float>();
+            _pendingUnworthyEjections.Clear();
         }
 
         private static void OnSessionLaunched(CampaignGameStarter starter)
@@ -75,6 +83,31 @@ namespace TheDarkestNight
         {
             try { TempleSettlements.ScopeToStartingTowns(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             try { TickLordPrayers(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+        }
+
+        private void OnHourlyTick()
+        {
+            try { ProcessPendingUnworthyEjections(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+        }
+
+        // Runs from the safe top-level hourly-tick context — never from inside
+        // OnClanChangedKingdomEvent's own dispatch (see that handler's note).
+        private void ProcessPendingUnworthyEjections()
+        {
+            if (_pendingUnworthyEjections.Count == 0) return;
+            var batch = _pendingUnworthyEjections.ToList();
+            _pendingUnworthyEjections.Clear();
+
+            foreach (Clan clan in batch)
+            {
+                try
+                {
+                    if (clan == null || clan.IsEliminated) continue;
+                    if (clan.Kingdom == null || clan.Kingdom.StringId != "vlandia") continue;
+                    ChangeKingdomAction.ApplyByLeaveKingdom(clan, clan == Clan.PlayerClan);
+                }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            }
         }
 
         // Temple bonuses apply to Temple lords too: a small daily chance a
@@ -105,6 +138,12 @@ namespace TheDarkestNight
         // exactly: a leader who does not qualify is turned right back out with
         // an in-fiction refusal instead of a silent bounce. A qualifying player
         // additionally receives a Holy Sigil on the spot.
+        //
+        // The ejection itself is QUEUED (ProcessPendingUnworthyEjections, next
+        // hourly tick), never called synchronously from in here — see
+        // MortalLawCampaignBehavior's header for why calling a kingdom-changing
+        // action from inside this event's own dispatch is a re-entrancy hazard
+        // (the confirmed root cause of the 2026-07-19 new-game map crashes).
         private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom,
             ChangeKingdomAction.ChangeKingdomActionDetail detail, bool showNotification)
         {
@@ -119,8 +158,7 @@ namespace TheDarkestNight
 
                 if (leader != null && !Qualifies(leader))
                 {
-                    try { ChangeKingdomAction.ApplyByLeaveKingdom(clan, isPlayerClan); }
-                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    if (!_pendingUnworthyEjections.Contains(clan)) _pendingUnworthyEjections.Add(clan);
 
                     if (isPlayerClan)
                     {

@@ -14,11 +14,25 @@ namespace TheDarkestNight
     public static class LegionMath
     {
         // ── Starting holdings (town-scoping) ────────────────────────────────────
-        // The Legion keeps exactly two seats: Lageta (town_EW1) and Ortysia
-        // (town_EW4) — verified against the shipped SandBox/ModuleData/
-        // settlements.xml ("{=Settlements.Settlement.name.town_EW1}Lageta" /
-        // "town_EW4}Ortysia").
-        public static readonly string[] StartingTownIds = { "town_EW1", "town_EW4" };
+        // The Legion keeps its two home seats — Lageta (town_EW1) and Ortysia
+        // (town_EW4) — plus the border ground ReassignImperialSettlements
+        // deliberately hands it at new-game: Jaculan (town_V6) and castles
+        // V2/V7, plus the Vlandia/Aserai border towns Charas (town_V7 — note
+        // this is a TOWN id, distinct from castle_V7 above), Galend (town_V5),
+        // Quyaz (town_A1) and Sanala (town_A6). Every other native Western
+        // Empire holding now falls out of scope like the five remnant
+        // factions' own — Legion is one of Requirement 10's "eight desperate
+        // factions," not the untouched vanilla imperial bloc. Verified against
+        // the shipped SandBox/ModuleData/settlements.xml.
+        public static readonly string[] StartingTownIds =
+        {
+            "town_EW1", "town_EW4",                // Lageta, Ortysia
+            "town_V6", "castle_V2", "castle_V7",    // Jaculan + border castles (explicit grab)
+            "town_V5",                              // Galend
+            "town_V7",                              // Charas (town id — not castle_V7 above)
+            "town_A1",                              // Quyaz
+            "town_A6",                              // Sanala
+        };
 
         public static bool IsStartingTownId(string stringId)
         {

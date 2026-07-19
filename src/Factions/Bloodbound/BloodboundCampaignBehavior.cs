@@ -71,10 +71,17 @@ namespace TheDarkestNight
         // BloodAttunement.cs) persists its own four parallel lists, synced
         // below alongside this behavior's other Demon Blood spending trackers.
 
+        // Clans queued by OnClanChangedKingdom for the join-gate bounce, processed
+        // on the next hourly tick instead of synchronously — see the note on
+        // OnClanChangedKingdom below. Not persisted (harmless if a reload drops one
+        // in-flight bounce).
+        private static readonly List<Clan> _pendingUnworthyEjections = new List<Clan>();
+
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
+            CampaignEvents.HourlyTickEvent.AddNonSerializedListener(this, OnHourlyTick);
             CampaignEvents.OnClanChangedKingdomEvent.AddNonSerializedListener(this, OnClanChangedKingdom);
         }
 
@@ -107,6 +114,7 @@ namespace TheDarkestNight
             _hpBuffGrantDay = new List<float>();
             BloodAttunement.ResetForNewGame();
             BloodAttunementLordAI.ResetForNewGame();
+            _pendingUnworthyEjections.Clear();
         }
 
         // The kingdom-name rename itself runs from the SAME hook every other
@@ -128,6 +136,31 @@ namespace TheDarkestNight
             try { BloodAttunement.TickDaytimeMoralePenalty(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
+        private void OnHourlyTick()
+        {
+            try { ProcessPendingUnworthyEjections(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+        }
+
+        // Runs from the safe top-level hourly-tick context — never from inside
+        // OnClanChangedKingdomEvent's own dispatch (see that handler's note).
+        private void ProcessPendingUnworthyEjections()
+        {
+            if (_pendingUnworthyEjections.Count == 0) return;
+            var batch = _pendingUnworthyEjections.ToList();
+            _pendingUnworthyEjections.Clear();
+
+            foreach (Clan clan in batch)
+            {
+                try
+                {
+                    if (clan == null || clan.IsEliminated) continue;
+                    if (clan.Kingdom == null || clan.Kingdom.StringId != BloodboundCulture.CultureId) continue;
+                    ChangeKingdomAction.ApplyByLeaveKingdom(clan, clan == Clan.PlayerClan);
+                }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            }
+        }
+
         // ── The join gate — refuses the soft and the untested ───────────────────
         // Fires for every clan that genuinely joins the Bloodbound (was not
         // already Khuzait/Bloodbound before). Covers a defecting lord exactly as
@@ -135,8 +168,13 @@ namespace TheDarkestNight
         // both call the same ChangeKingdomAction.ApplyByJoinToKingdom internally,
         // triggering this event. A clan whose leader does not qualify is turned
         // right back out the same way HiveSettlements evicts a landless clan:
-        // ChangeKingdomAction.ApplyByLeaveKingdom, immediately, with an
-        // in-fiction refusal instead of a silent bounce.
+        // ChangeKingdomAction.ApplyByLeaveKingdom — queued for the next hourly
+        // tick, NOT called synchronously here. Calling a kingdom-changing action
+        // from inside this event's own dispatch re-enters the native campaign/
+        // diplomacy machinery mid-call — the same re-entrancy hazard
+        // CityStateSystem.OnClanChangedKingdom and AshenCitySystem's handler are
+        // deliberately left empty to avoid, and the confirmed root cause of the
+        // 2026-07-19 new-game map crashes (see MortalLawCampaignBehavior's header).
         private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom,
             ChangeKingdomAction.ChangeKingdomActionDetail detail, bool showNotification)
         {
@@ -150,8 +188,7 @@ namespace TheDarkestNight
                 if (leader == null || Qualifies(leader)) return; // no leader to judge, or judged worthy
 
                 bool isPlayerClan = clan == Clan.PlayerClan;
-                try { ChangeKingdomAction.ApplyByLeaveKingdom(clan, isPlayerClan); }
-                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                if (!_pendingUnworthyEjections.Contains(clan)) _pendingUnworthyEjections.Add(clan);
 
                 if (isPlayerClan)
                 {

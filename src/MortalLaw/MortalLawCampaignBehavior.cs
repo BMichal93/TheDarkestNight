@@ -24,9 +24,18 @@
 // So, like LegionCampaignBehavior's raid nudge and DemonSpawnCampaignBehavior's
 // nightly settlement assaults, over-cap kingdoms are policed directly:
 //   - OnClanChangedKingdomEvent: a non-player clan joining (or defecting into)
-//     a kingdom that is already over MortalLawMath.KingdomFiefCap is turned
-//     straight back out via ChangeKingdomAction.ApplyByLeaveKingdom — the same
-//     tick, so it never even shows in the clan list as a member.
+//     a kingdom that is already over MortalLawMath.KingdomFiefCap is queued and
+//     turned back out via ChangeKingdomAction.ApplyByLeaveKingdom on the very
+//     next hourly tick — NOT synchronously from inside the event handler. Firing
+//     a kingdom-changing action while still inside OnClanChangedKingdomEvent's
+//     own dispatch re-enters the native campaign/diplomacy machinery mid-call
+//     (exactly the re-entrancy CityStateSystem.OnClanChangedKingdom and
+//     AshenCitySystem's own handler are deliberately left EMPTY to avoid — see
+//     their comments) and was the root cause of the 2026-07-19 22:08 new-game
+//     map crash: ReassignImperialSettlements' MigrateBorderLords joins a clan
+//     into an Empire kingdom that new-game setup just pushed over the fief cap
+//     in the same synchronous pass, and the old same-tick ApplyByLeaveKingdom
+//     call re-entered kingdom-membership mutation before the join had returned.
 //   - WarDeclared: if either side of a freshly declared war is an over-cap
 //     kingdom (and the player is in neither), the war is immediately reversed
 //     to peace via MakePeaceAction — an overextended realm cannot sustain
@@ -37,6 +46,7 @@
 // =============================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -75,7 +85,15 @@ namespace TheDarkestNight
 
         public override void SyncData(IDataStore store) { /* no persisted state — every sub-rule re-derives from live campaign state each tick */ }
 
-        public static void ResetForNewGame() { /* stateless */ }
+        // Clans queued by OnClanChangedKingdom for ejection on the next hourly
+        // tick — never mutated from inside the OnClanChangedKingdomEvent dispatch
+        // itself (see the re-entrancy note in the file header). Not persisted:
+        // a defection queued the instant a save is written is a harmless corner
+        // case (worst case, one extra clan sits a save-reload longer than the
+        // cap intends before being turned away).
+        private static readonly List<Clan> _pendingDefectorEjections = new List<Clan>();
+
+        public static void ResetForNewGame() { _pendingDefectorEjections.Clear(); }
 
         private void OnDailyTick()
         {
@@ -85,6 +103,30 @@ namespace TheDarkestNight
         private void OnHourlyTick()
         {
             try { TickNightFear(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            try { ProcessPendingDefectorEjections(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+        }
+
+        // Runs from the safe top-level hourly-tick context (never from inside a
+        // kingdom-change event dispatch) — the only place this system actually
+        // calls ChangeKingdomAction for a defector turn-away.
+        private void ProcessPendingDefectorEjections()
+        {
+            if (_pendingDefectorEjections.Count == 0) return;
+            var batch = _pendingDefectorEjections.ToList();
+            _pendingDefectorEjections.Clear();
+
+            foreach (Clan clan in batch)
+            {
+                try
+                {
+                    if (clan == null || clan.IsEliminated || clan == Clan.PlayerClan) continue;
+                    if (!IsOneOfOurKingdoms(clan.Kingdom)) continue; // already left, or moved on, by other means
+                    if (!MortalLawMath.ShouldTurnAwayDefector(FiefCount(clan.Kingdom))) continue; // cap eased since queued
+
+                    ChangeKingdomAction.ApplyByLeaveKingdom(clan, showNotification: false);
+                }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            }
         }
 
         private void OnWeeklyTick()
@@ -118,8 +160,11 @@ namespace TheDarkestNight
 
                 if (!MortalLawMath.ShouldTurnAwayDefector(FiefCount(newKingdom))) return;
 
-                try { ChangeKingdomAction.ApplyByLeaveKingdom(clan, showNotification: false); }
-                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                // Queue, don't act: calling ChangeKingdomAction from inside this
+                // event's own dispatch is the re-entrancy hazard described in the
+                // file header. ProcessPendingDefectorEjections (hourly tick) does
+                // the actual ApplyByLeaveKingdom from a safe top-level context.
+                if (!_pendingDefectorEjections.Contains(clan)) _pendingDefectorEjections.Add(clan);
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }

@@ -22,20 +22,27 @@
 //   • renamed "Ruined <Something> of <original name>" (RuinsMath.RuinNameFor),
 //     using the exact reflection technique AshenCitySystem.Renaming.cs already
 //     proved safe for settlement names;
-//   • its garrison party destroyed (DestroyPartyAction, the same proven call
-//     DemonSpawnCampaignBehavior already uses to despawn a party cleanly);
+//   • its garrison party queued for destruction (DestroyPartyAction — batched
+//     a few per day via ProcessPendingGarrisonDestroys, not fired synchronously
+//     for every ruin at once: see that method's note on the 2026-07-19
+//     new-game crashes that a synchronous version of this call caused);
 //   • Prosperity/Security driven to 0 (both plain settable Town properties)
 //     so it reads as abandoned in every vanilla UI that shows those numbers;
-//   • our own menu (RuinsMenus) replaces the normal town/castle interaction
-//     with the ruin-crawl entry point for any settlement RuinsCastleSystem
-//     marks as a ruin, so the player never sees a functioning fief screen
-//     there regardless of who nominally owns it.
-// A rival lord could in principle still besiege and "capture" a ruin through
-// the untouched vanilla siege flow — but with zero garrison, zero prosperity,
-// and no lord ever headquartered there, it holds no strategic value to fight
-// over, so this is an acceptable, low-risk simplification rather than a
-// half-built "true ownerless fief" feature that was never verified against
-// the live game.
+//   • our own menu (RuinsMenus) ADDS a ruin-crawl entry point alongside
+//     whatever vanilla castle options the engine already shows for any
+//     settlement RuinsCastleSystem marks as a ruin — it does NOT hide or
+//     replace them (see that file's own note).
+// A rival lord (or the player) can still besiege and "capture" a ruin through
+// the completely untouched vanilla siege flow — deliberately not blocked,
+// per the same behaviour.md rule cited above (no proven, verified way to
+// intercept a siege in this codebase). Instead, ReapplyRuinNamesIfNeeded now
+// runs every daily tick (not just once at session launch): if a ruin is ever
+// captured and garrisoned, the very next day queues that new garrison for
+// removal and zeroes prosperity/security again — so holding one is a
+// permanently self-defeating, worthless act, not a true "no siege is
+// possible" guarantee. This is an acceptable, low-risk simplification rather
+// than a half-built "true ownerless/unsiegeable fief" feature that was never
+// verified against the live game.
 //
 // ── Interaction with Phase 7 / Phase 8 (documented per the Phase 9 prompt)
 // Phase 7's eight factions each keep only a short list of starting TOWNS
@@ -78,32 +85,30 @@ namespace TheDarkestNight
         private static readonly HashSet<string> _cleared = new HashSet<string>();
         private static readonly Dictionary<string, int> _cooldownDays = new Dictionary<string, int>();
 
-        // v0.8.0 fix (issue 6): the reflection-set settlement name can be reverted
-        // by the engine reloading its own XML texts after OnSessionLaunchedEvent
-        // fires — the exact same "names revert to XML on load" behaviour
-        // AshenCitySystem.Renaming.cs already documents, which is why THAT system
-        // re-applies its own renames from the first daily tick as a backstop, not
-        // just once at session launch. Mirrors that pattern here: cleared on every
-        // session launch, consumed by the first daily tick after it.
-        private static bool _reappliedThisSession;
-
         public static void ResetForNewGame()
         {
             _ruinIds.Clear();
             _chamberSequence.Clear();
             _cleared.Clear();
             _cooldownDays.Clear();
-            _reappliedThisSession = false;
+            _pendingGarrisonDestroys.Clear();
         }
 
-        // Re-applies ONLY the ruin appearance (name/garrison/prosperity) for every
-        // settlement ConvertCastles already selected this session — called once
-        // from the first daily tick after OnSessionLaunched, in case the engine's
-        // own text reload reverted the name in between. Idempotent.
+        // Re-applies the ruin appearance (name/garrison-queue/prosperity) for
+        // every settlement ConvertCastles selected this session. Originally a
+        // one-shot backstop (v0.8.0 issue 6: the engine's own XML text reload
+        // can revert the reflection-set name after OnSessionLaunchedEvent —
+        // mirrors AshenCitySystem.Renaming.cs's own re-apply-from-daily-tick
+        // pattern for the same reason). Now called EVERY daily tick, unconditionally,
+        // because idempotent field writes are cheap and this is also the
+        // mechanism that keeps a ruin a ruin: if the untouched vanilla siege
+        // flow ever lets a rival lord capture and garrison one (Requirement 12
+        // deliberately never blocks the siege itself — see the ownership note
+        // at the top of this file), the very next daily tick queues the new
+        // garrison for removal and zeroes prosperity/security again, so
+        // holding a ruin never yields a working castle for more than a day.
         public static void ReapplyRuinNamesIfNeeded()
         {
-            if (_reappliedThisSession) return;
-            _reappliedThisSession = true;
             foreach (string id in _ruinIds.ToList())
             {
                 try
@@ -146,10 +151,47 @@ namespace TheDarkestNight
         }
 
         // ── Daily tick ───────────────────────────────────────────────────────
+        // Garrison destruction is queued here (see ApplyRuinAppearance) rather
+        // than run synchronously for every ruin at session launch: a new game
+        // converts ~30-40 castles in one pass, and firing that many
+        // DestroyPartyAction.Apply calls (each broadcasting
+        // OnMobilePartyDestroyed/OnMapInteractableDestroyed to every listener)
+        // back-to-back in the same synchronous burst as FactionScoping's own
+        // kingdom-creation avalanche is the prime suspect for the 2026-07-19
+        // ~22:35-22:53 new-game crashes (WER StackHash_f7a4) that began the
+        // session this call was first made to actually fire (it silently
+        // NRE'd — a no-op — before that fix). A small per-day batch keeps the
+        // net effect (every ruin eventually loses its garrison) while never
+        // asking the engine to tear down more than a handful of parties in a
+        // single tick.
+        private static readonly List<string> _pendingGarrisonDestroys = new List<string>();
+        private const int GarrisonDestroysPerDay = 3;
+
         public static void DailyTick()
         {
             foreach (var key in _cooldownDays.Keys.ToList())
                 if (_cooldownDays[key] > 0) _cooldownDays[key]--;
+
+            try { ProcessPendingGarrisonDestroys(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+        }
+
+        private static void ProcessPendingGarrisonDestroys()
+        {
+            if (_pendingGarrisonDestroys.Count == 0) return;
+            int take = Math.Min(GarrisonDestroysPerDay, _pendingGarrisonDestroys.Count);
+            var batch = _pendingGarrisonDestroys.GetRange(0, take);
+            _pendingGarrisonDestroys.RemoveRange(0, take);
+
+            foreach (string id in batch)
+            {
+                try
+                {
+                    var s = Settlement.Find(id);
+                    var garrison = s?.Town?.GarrisonParty;
+                    if (garrison != null) DestroyPartyAction.Apply(null, garrison);
+                }
+                catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            }
         }
 
         // ── Persistence ──────────────────────────────────────────────────────
@@ -196,7 +238,6 @@ namespace TheDarkestNight
         {
             _ruinIds.Clear();
             _chamberSequence.Clear();
-            _reappliedThisSession = false;
             if (Campaign.Current == null) return;
 
             foreach (Settlement s in Settlement.All)
@@ -258,8 +299,12 @@ namespace TheDarkestNight
 
             try
             {
-                var garrison = s.Town?.GarrisonParty;
-                if (garrison != null) DestroyPartyAction.Apply(garrison.Party, null);
+                // Queued (see ProcessPendingGarrisonDestroys), not called here —
+                // calling DestroyPartyAction.Apply for every ruin synchronously in
+                // this same session-launch pass is the prime suspect for the
+                // 2026-07-19 new-game crashes; see DailyTick's comment.
+                if (s.Town?.GarrisonParty != null && !_pendingGarrisonDestroys.Contains(s.StringId))
+                    _pendingGarrisonDestroys.Add(s.StringId);
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
 

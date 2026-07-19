@@ -208,6 +208,26 @@ namespace TheDarkestNight
             MageKnowledge._deferredInquiry = MageKnowledge.ShowControlsPointer;
         }
 
+        // The five remnant factions' own seats — the ONLY settlements
+        // ReassignImperialSettlements must refuse to take. Deliberately
+        // NARROWER than CityStateSystem.IsCoreFactionTown, which also covers
+        // the Empire trio's own seats: EmpireMath/LegionMath/ChosenMath.
+        // StartingTownIds now folds in exactly the border towns this method
+        // grants (Seonon, Rovalt, Charas, Galend, Quyaz, Sanala, Razih, Qasira,
+        // Akkalat, the V6/V2/V7/B5/B2 ids), so checking against all eight here
+        // would make the Empire's own newly-designated seats block themselves
+        // the moment they landed in that list.
+        private static readonly HashSet<string> _remnantFactionSeatIds = new HashSet<string>(
+            WolfBrothersMath.StartingTownIds
+                .Concat(TowerMath.StartingTownIds)
+                .Concat(ForestWidowsMath.StartingTownIds)
+                .Concat(BloodboundMath.StartingTownIds)
+                .Concat(TempleMath.StartingTownIds),
+            StringComparer.OrdinalIgnoreCase);
+
+        private static bool IsRemnantFactionSeat(string settlementStringId) =>
+            settlementStringId != null && _remnantFactionSeatIds.Contains(settlementStringId);
+
         private static void ReassignImperialSettlements()
         {
             // ── Northern Empire ───────────────────────────────────────────────
@@ -269,7 +289,7 @@ namespace TheDarkestNight
                 foreach (string id in new[] { "town_B1", "castle_B5", "castle_B2" })
                     try
                     {
-                        if (CityStateSystem.IsCoreFactionTown(id)) continue; // never take another faction's own seat
+                        if (IsRemnantFactionSeat(id)) continue; // never take another faction's own seat
                         var s = Settlement.Find(id);
                         if (s != null && !AshenCitySystem.IsAshenSettlement(s))
                         {
@@ -286,7 +306,7 @@ namespace TheDarkestNight
                 foreach (string id in new[] { "town_V6", "castle_V2", "castle_V7" })
                     try
                     {
-                        if (CityStateSystem.IsCoreFactionTown(id)) continue; // never take another faction's own seat
+                        if (IsRemnantFactionSeat(id)) continue; // never take another faction's own seat
                         var s = Settlement.Find(id);
                         if (s != null)
                         {
@@ -365,11 +385,21 @@ namespace TheDarkestNight
             try { AshenCitySystem.RenameHolyTempleKingdom(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
-        // Finds a settlement by exact display name, transfers it and all non-town
-        // settlements (castles/villages) within `radius` map-units to `newOwner`.
-        // Silently skips anything that can't be found or transferred. When
-        // `capturedClans` is supplied, each settlement's owning clan is recorded
-        // to it BEFORE the transfer, for MigrateBorderLords to draw from afterward.
+        // Finds a settlement by exact display name and transfers ONLY that
+        // settlement to `newOwner`. Silently skips anything that can't be found
+        // or transferred. When `capturedClans` is supplied, the settlement's
+        // owning clan is recorded to it BEFORE the transfer, for
+        // MigrateBorderLords to draw from afterward.
+        //
+        // Used to sweep in an unbounded radius of "nearby castles" around each
+        // named anchor — removed (2026-07-19): a radius sweep can't be reconciled
+        // with a fixed, named seat list (EmpireMath/LegionMath/ChosenMath.
+        // StartingTownIds), which is what keeps the three Empire-culture
+        // kingdoms as a curated handful of seats like the other five factions
+        // rather than swallowing whatever castles happen to sit within range —
+        // see the "way too many cities" report the un-curated sweep produced.
+        // `radius` is kept as a parameter (now unused) rather than touching every
+        // call site's signature.
         private static void AssignSettlementAndNearby(string settlementName, Hero newOwner, float radius,
             List<Clan> capturedClans = null)
         {
@@ -386,33 +416,10 @@ namespace TheDarkestNight
             // Bloodbound's Akkalat all sit on the Empire's by-name grab list).
             if (CityStateSystem.IsCoreFactionTown(anchor.StringId)) return;
 
-            // Transfer the anchor itself
             try
             {
                 if (capturedClans != null && anchor.OwnerClan != null) capturedClans.Add(anchor.OwnerClan);
                 ChangeOwnerOfSettlementAction.ApplyByDefault(newOwner, anchor); StabiliseSettlement(anchor);
-            }
-            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-
-            // Transfer nearby castles within radius (skip villages — they belong to their
-            // bound town; skip Ashen castles so the radius sweep cannot bleed the cold realm,
-            // e.g. the castles around The Ashen Crown that sit near the Northern border).
-            try
-            {
-                Vec2 anchorPos = anchor.GetPosition2D;
-                foreach (Settlement nearby in Settlement.All
-                    .Where(s => s != anchor && s.IsCastle && !s.IsUnderSiege
-                             && !AshenCitySystem.IsAshenSettlement(s)
-                             && (s.GetPosition2D - anchorPos).Length <= radius)
-                    .ToList())
-                {
-                    try
-                    {
-                        if (capturedClans != null && nearby.OwnerClan != null) capturedClans.Add(nearby.OwnerClan);
-                        ChangeOwnerOfSettlementAction.ApplyByDefault(newOwner, nearby); StabiliseSettlement(nearby);
-                    }
-                    catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
-                }
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }

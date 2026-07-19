@@ -9,6 +9,13 @@
 // files, confirming castles share the "town" menu id in this game version.
 // Ruins follow the identical pattern, gated additionally on
 // RuinsCastleSystem.IsRuin.
+//
+// NOTE this is ADDITIVE, not a replacement: it adds "Explore the ruin"
+// alongside whatever vanilla castle options the engine already shows (manage
+// garrison, etc.) — it does NOT hide them, and does not touch the siege flow.
+// A ruin staying worthless to actually hold is instead enforced continuously
+// by RuinsCastleSystem.ReapplyRuinNamesIfNeeded (every daily tick, not just
+// once) — see that file's ownership note.
 // =============================================================================
 
 using System;

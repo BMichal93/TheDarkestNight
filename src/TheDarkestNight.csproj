@@ -489,6 +489,10 @@
     <Compile Include="AshenRuins\AshenRuinDefs.cs"/>
     <Compile Include="AshenRuins\AshenRuinMath.cs"/>
     <Compile Include="AshenRuins\AshenRuinSystem.cs"/>
+    <Compile Include="AshenRuins\AshenRuinSystem.Exploration.cs"/>
+    <Compile Include="AshenRuins\AshenRuinSystem.Challenges1.cs"/>
+    <Compile Include="AshenRuins\AshenRuinSystem.Challenges2.cs"/>
+    <Compile Include="AshenRuins\AshenRuinSystem.Rewards.cs"/>
     <Compile Include="AshenRuins\AshenRuinMenus.cs"/>
     <Compile Include="AshenRuins\AshenRuinCampaignBehavior.cs"/>
     <Compile Include="Expeditions\ExpeditionMath.cs"/>

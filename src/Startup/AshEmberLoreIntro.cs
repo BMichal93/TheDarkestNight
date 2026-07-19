@@ -67,13 +67,15 @@ namespace TheDarkestNight
         // each, holding to the new canon (see FIX_PLAN.md Phase L / CLAUDE.md).
         private static readonly string[] Paragraphs =
         {
-            "An Empire ruled all Calradia.",
+            "For centuries, the Empire ruled all Calradia. Until the Long Night came, and the world was broken.",
 
-            "The underworld tore open; demons rose with every dusk and broke the world.",
+            "The underworld tore open; demons rose with every dusk and flooded the land. The Empire armies were helpless against the overwhelming force.",
 
-            "The Empire fell. The frightened learned to cut symbols that turn the dark — the first spells.",
+            "The Empire fell overnight. Many fell victim to claws and teeth. The survivors learned to cut symbols that turn the dark — the first spells.",
 
-            "Now remnants huddle behind walls and wards, and fight each other for what is left.",
+            "Now remnants huddle behind walls and wards, and fight each other to be the king of the ashes.",
+
+            "You are one of them",
         };
 
         // Per-paragraph timing (seconds).
