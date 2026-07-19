@@ -126,6 +126,15 @@ namespace TheDarkestNight
         {
             try
             {
+                // CRITICAL: only a proper NOBLE clan may receive a town. Handing a
+                // real town to a bandit / minor / outlaw / nomad / mercenary clan
+                // makes CityStateSystem.ConvertOwnerlessTowns mint a KINGDOM ruled by
+                // that clan — a corrupt map state the native campaign code hard-crashes
+                // on (the 2026-07-19 new-game map crash). Noble, kingdom-capable clans
+                // are exactly the ejected-vassal case the city-state path already
+                // handles safely.
+                if (!c.IsNoble || c.IsBanditFaction || c.IsMinorFaction || c.IsOutlaw
+                    || c.IsNomad || c.IsClanTypeMercenary) return false;
                 if (AshenCitySystem.IsAshenClanMember(c.Leader)) return false;
                 // A clan that is (or is destined to become) a city-state ruler is a poor
                 // recipient — CityStateMath keys the city-state kingdom off the clan's id,

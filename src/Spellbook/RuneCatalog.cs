@@ -113,7 +113,7 @@ namespace TheDarkestNight
             Mn(RuneId.Gift,      "the Gift",       "ULR", "Bestow",   "An open, empty hand — alone. Bound, it gives the working away."),
 
             // ── Codas (15) — self-contained workings ──────────────────────────
-            C(RuneId.Circle,    "the Circle",     "ULU", "Ward",    "A small ward drawn about the caster."),
+            C(RuneId.Circle,    "the Circle",     "ULU", "Ward",    "A protective rune scrived about the caster — a small ward."),
             C(RuneId.Fetter,    "the Fetter",     "DLD", "Bind",    "Roots the nearest foe a short while."),
             C(RuneId.Shroud,    "the Shroud",     "LDL", "Veil",    "A thin ash-veil settles around the caster."),
             C(RuneId.Sundering, "the Sundering",  "DUU", "Banish",  "A pale flash that stings every demon close by."),

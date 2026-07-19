@@ -76,7 +76,11 @@ namespace TheDarkestNight
                 .Concat(ChosenMath.StartingTownIds),
             StringComparer.OrdinalIgnoreCase);
 
-        private static bool IsCoreFactionTown(string settlementStringId) =>
+        // Public so CampaignBehavior.Events' ReassignImperialSettlements can protect
+        // every faction's declared seat from the legacy Empire land-grab (otherwise
+        // the Empire took other factions' capitals — e.g. the Temple's Ocs Hall/Pravend
+        // and the Forest Widows' Marunath/Car Banseth — and eliminated them at new-game).
+        public static bool IsCoreFactionTown(string settlementStringId) =>
             settlementStringId != null && _coreFactionTownIds.Contains(settlementStringId);
 
         // ── Daily tick ───────────────────────────────────────────────────────────
@@ -289,6 +293,11 @@ namespace TheDarkestNight
                     if (clan == null || clan.IsEliminated) continue;
                     if (clan == Clan.PlayerClan) continue; // never auto-annex the player's own holdings
                     if (clan.Kingdom != null) continue;    // still belongs to a living kingdom — not orphaned
+                    // Defensive: NEVER mint a city-state kingdom for a bandit / minor /
+                    // outlaw clan. A kingdom ruled by such a clan is a corrupt map state
+                    // the native code hard-crashes on. (Belt-and-suspenders alongside
+                    // FactionScoping's noble-only recipient filter.)
+                    if (clan.IsBanditFaction || clan.IsMinorFaction || clan.IsOutlaw) continue;
 
                     string kingdomId = CityStateMath.CityStateKingdomId(clan.StringId);
                     if (kingdomId == null) continue;

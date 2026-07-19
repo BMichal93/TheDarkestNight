@@ -269,6 +269,7 @@ namespace TheDarkestNight
                 foreach (string id in new[] { "town_B1", "castle_B5", "castle_B2" })
                     try
                     {
+                        if (CityStateSystem.IsCoreFactionTown(id)) continue; // never take another faction's own seat
                         var s = Settlement.Find(id);
                         if (s != null && !AshenCitySystem.IsAshenSettlement(s))
                         {
@@ -285,6 +286,7 @@ namespace TheDarkestNight
                 foreach (string id in new[] { "town_V6", "castle_V2", "castle_V7" })
                     try
                     {
+                        if (CityStateSystem.IsCoreFactionTown(id)) continue; // never take another faction's own seat
                         var s = Settlement.Find(id);
                         if (s != null)
                         {
@@ -378,6 +380,11 @@ namespace TheDarkestNight
             // Never strip an Ashen holding for an Empire — the cold realm keeps its
             // own. (Matched by StringId, so it holds after the display rename too.)
             if (AshenCitySystem.IsAshenSettlement(anchor)) return;
+            // Never take another Phase-7 faction's OWN declared seat — doing so
+            // ejected every clan of that faction and eliminated it at new-game (the
+            // Temple's Ocs Hall/Pravend, the Forest Widows' Car Banseth, the
+            // Bloodbound's Akkalat all sit on the Empire's by-name grab list).
+            if (CityStateSystem.IsCoreFactionTown(anchor.StringId)) return;
 
             // Transfer the anchor itself
             try

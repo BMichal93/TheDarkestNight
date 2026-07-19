@@ -60,7 +60,7 @@ dotnet test tests/TheDarkestNight.Tests.csproj --filter "PureLogicTests.<TestMet
 - Registers the dialogue systems (`AshenDialogue`, `ArenicosDialogue`, `TempleDialogue`, `TribesDialogue`, `NorthmenDialogue`, `DunebornDialogue`, plus each faction's own `*Dialogue.cs`) and calls per-system reset/init (`SchemeSystem.Initialize`, `ExchangeCampaignBehavior.ResetState`, `SeaCampaignBehavior.ResetForNewGame`, `ClanOrdersCampaignBehavior.ResetForNewGame`).
 
 `OnGameInitializationFinished` re-applies the culture-text overrides after the engine reloads its XML texts — both the legacy Ash and Ember overrides (Vlandia→Temple, Khuzait→Bloodbound, Sturgia→Wolf Brothers, Aserai→Tower, Battania→Forest Widows) and the Darkest Night faction renames for the three Empire cultures (Northern→The Empire, Western→Legion, Southern→The Chosen), plus lord equipment de-blinging (Requirement 29) and city-state naming (Requirement 11). `OnApplicationTick` skips intro videos, drives the splash/loading screens, polls the map-magic input handlers, and handles map hotkeys:
-- **Alt+L** — Spellbook (once unlocked) or the legacy element Codex
+- **Alt+X** — Spellbook (once unlocked) or the legacy element Codex (matches the in-battle open key)
 - **Shift+L** — Grace litany (non-mages only)
 - **Ctrl+Shift+F10 / F11 / F12** — scheme debug toggle, spawn debug combat, grant-all (unlocks the Spellbook with every formula, all Dark Gifts, max Grace, all Nature talents, 100 focus points, one of every crystal, and one relic/wand/talisman — `MainSubModule.DebugGrantAll`)
 - **Alt/Controller-RLeft + WASD/left stick** — Spellbook formula input (see `src/Spellbook/SpellbookInputHandler.cs`); **Alt+X** opens the Spellbook mid-formula

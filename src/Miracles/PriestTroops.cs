@@ -44,10 +44,14 @@ namespace TheDarkestNight
                 var garrison = s.Town?.GarrisonParty;
                 if (garrison?.MemberRoster == null) continue;
 
-                bool isSanctuary = SafeHasSanctuary(s);
-                bool isAshen     = SafeHasAltar(s) || s.MapFaction?.StringId == AshenKingdomId;
+                // Sanctuaries are retired (no longer placed), so Flame Priests now
+                // garrison the surviving faith faction's own towns — the Temple
+                // (vlandia) — instead of sanctuary towns. This keeps the priest-troop
+                // mechanic alive where it belongs rather than leaving it dead.
+                bool isTempleTown = TempleSettlements.IsTempleSettlement(s);
+                bool isAshen      = SafeHasAltar(s) || s.MapFaction?.StringId == AshenKingdomId;
 
-                if (flame != null && isSanctuary) TopUp(garrison, flame);
+                if (flame != null && isTempleTown) TopUp(garrison, flame);
                 // A town that is both (rare) leans to its faction; Ashen wins.
                 if (ashen != null && isAshen)     TopUp(garrison, ashen);
             }
