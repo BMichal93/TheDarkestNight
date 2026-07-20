@@ -129,6 +129,7 @@ namespace TheDarkestNight
                 try { SpellEffects.ClearGlows(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { SpellEffects.ClearMoves(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { AgingSystem.FlushPendingMilestone(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                try { WandEffects.RefillAllPlayerCharges(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }

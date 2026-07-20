@@ -28,11 +28,12 @@
 //     adding to it — a "fresh" wand entering the party effectively replaces
 //     a spent one for bookkeeping purposes.
 //
-//   • NPCs (lords, Hollow Choir troops) — no persisted per-instance state at
-//     all. Every cast rolls NpcBreakChancePerUse; on a break the wand goes
-//     inert for the rest of that mission (and, for a hero wielder, one copy
-//     is struck from their party's roster) — simpler than tracking charge
-//     state for however many hundreds of AI agents might carry one.
+//   • NPCs (lords, Hollow Choir troops) — no per-instance state at all, and no
+//     breaking: an NPC wand-wielder simply casts every time CastCooldownSeconds
+//     allows. Wands never break for anyone (arrows-in-the-base-game model,
+//     not a one-shot trinket) — only the player's shared charge pool can run
+//     dry mid-battle, and WandEffects.RefillAllPlayerCharges tops it back up
+//     once the mission ends.
 // =============================================================================
 
 using System;
@@ -62,14 +63,6 @@ namespace TheDarkestNight
         // 6s NPC-cast cadence (ElementLordAI), since a wand is meant to feel
         // like a real but bounded battlefield tool, not a proc-on-every-hit trinket.
         public const float CastCooldownSeconds = 6f;
-
-        // ── NPC break-instead-of-charges ─────────────────────────────────────
-        // Roughly 1-in-8 uses shatters an NPC's wand — simpler than tracking
-        // charge state per AI agent, and naturally caps how much value any one
-        // NPC wand-holder extracts from it over a long campaign.
-        public const float NpcBreakChancePerUse = 0.12f;
-
-        public static bool NpcWandBreaks(double roll01) => roll01 < NpcBreakChancePerUse;
 
         // ── Ruin loot ─────────────────────────────────────────────────────────
         // Rarer than a relic drop (RelicMath.RuinBaseRelicChance = 0.15) or a

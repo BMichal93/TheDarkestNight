@@ -35,22 +35,6 @@ namespace TheDarkestNight.Tests
 
 
         [Test]
-        public void WandsMath_NpcWandBreaks_RespectsChanceBoundary()
-        {
-            Assert.IsTrue(WandsMath.NpcWandBreaks(WandsMath.NpcBreakChancePerUse - 0.0001));
-            Assert.IsFalse(WandsMath.NpcWandBreaks(WandsMath.NpcBreakChancePerUse + 0.0001));
-        }
-
-
-        [Test]
-        public void WandsMath_NpcBreakChance_IsModestNotGuaranteed()
-        {
-            Assert.Greater(WandsMath.NpcBreakChancePerUse, 0f);
-            Assert.Less(WandsMath.NpcBreakChancePerUse, 0.5f);
-        }
-
-
-        [Test]
         public void WandsMath_RollRuinWandLoot_RespectsChanceBoundary()
         {
             Assert.IsTrue(WandsMath.RollRuinWandLoot(WandsMath.RuinWandChance - 0.0001));

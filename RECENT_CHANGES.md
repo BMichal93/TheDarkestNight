@@ -7,6 +7,67 @@ and should append new entries at the top after making changes.
 
 ---
 
+## 2026-07-20 — Wand mesh fix, ruins-ownership self-heal, wands never break, new crash lead (StackHash_a395, unresolved)
+
+Four user-reported issues, worked via `/translate-ai`.
+
+**#1 Wand/Sigil textures.** All 16 `aae_wand_*` items (and nothing else) in
+`ModuleData/items.xml` had `mesh="throwing_stone"` despite header comments
+claiming a "horse_whip" template — verified against the real vanilla item
+(`SandBoxCore/ModuleData/items/weapons.xml`, id `horse_whip`) that every other
+field (body_name, weapon_class, physics_material, item_usage) already matched
+exactly; only `mesh` was wrong. Swapped all 16 to `mesh="horse_whip"`. Holy
+Sigil already used `throwing_stone` — left as-is (that was the correct ask).
+
+**#2 "Ruins of..." castles starting as faction territory (esp. Empire trio).**
+`RuinsCastleSystem`'s own header comment documents a deliberate decision to
+never set `Settlement.OwnerClan = null` (untested engine territory, cited
+past crash risk) — so ownership was left alone when a castle converts to a
+cosmetic ruin, which let `ReassignImperialSettlements` (or vanilla map gen)
+leave a "ruin" still painted as real kingdom territory. Fix extends the
+file's existing self-healing daily-reapply pattern (already used for
+garrison/prosperity) to ownership: `ApplyRuinAppearance` now detects
+kingdom-owned ruins (`IsFactionOwned`, mirroring `IsExempt`'s own city-state
+carve-out) and reassigns them to a cached kingdomless clan's hero
+(`GetCustodianHero`) via the same proven `ChangeOwnerOfSettlementAction.
+ApplyByDefault` call `FactionScoping.cs` already uses elsewhere — never
+touches `OwnerClan = null`, never touches a player-held ruin, runs every
+daily tick so it self-corrects regardless of what granted ownership or
+whether a rival lord recaptures one.
+
+**#3 First-tick crash, ~2026-07-20 17:08 CEST (CRITICAL — NOT FIXED).**
+`errors.log` shows the session launching at 17:07:59, the usual harmless
+`AshenRuinMenus.ResolveVillages` warnings through 17:08:08, then nothing —
+the crash was never caught by any try/catch. The real event, found in the
+Windows Application/WER event log: `Launcher.Native.exe` died at 17:19:06 to
+`0xc0000005` (access violation), `StackHash_a395`, in an unsymbolized native
+module — a different signature than the 2026-07-19 `StackHash_f7a4` new-game
+crashes (already fixed), so a related-area regression, not a repeat. No
+managed stack trace exists to act on. Flagged to the user for a repro/
+debugger session; noted that the #2 fix above runs in the same session-launch
+cluster (`RuinsCastleSystem`) as a "watch this on next playtest" risk, though
+660/660 tests and a clean build don't show anything obviously wrong.
+
+**#4 Wands should use charges, never break.** `WandEffects.cs` already had a
+correct player-side charge pool (`TryConsumePlayerCharge`), but NPC wielders
+used a separate `NpcWandBreaks` roll that made the wand inert for the mission
+AND struck one copy from the wielder's roster — real item destruction,
+contrary to the ask. Removed the NPC break mechanic entirely (also deleted
+`WandsMath.NpcBreakChancePerUse`/`NpcWandBreaks` and their two now-obsolete
+tests in `PureLogicTests.Wands.cs`) — NPCs now just cast on cooldown like a
+Rod/Sigil, no charge tracking, no breaking. Added `WandEffects.
+RefillAllPlayerCharges()`, called from `CampaignBehavior.Ticks.cs`'s existing
+`OnMissionEnded`, so the player's wand charges top back up after every battle
+(previously only refilled when a wand was first granted) — mirrors vanilla
+arrows.
+
+Files: `ModuleData/items.xml`, `src/Ruins/RuinsCastleSystem.cs`,
+`src/Wands/WandEffects.cs`, `src/Wands/WandsMath.cs`,
+`src/Campaign/CampaignBehavior.Ticks.cs`, `tests/PureLogicTests.Wands.cs`.
+Build green; 660 tests pass.
+
+---
+
 ## 2026-07-19 22:51 — Fourth new-game map crash (RuinsCastleSystem garrison-destroy burst) + ruins ownership hardening
 
 Another first-tick crash report (~22:51 CEST, same WER symptom: `Launcher.

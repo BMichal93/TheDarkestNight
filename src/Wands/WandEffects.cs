@@ -18,34 +18,27 @@
 //     item id in _playerCharges — see WandsMath.cs's header for why this is
 //     per-item-id rather than per-physical-instance, and WandsCampaignBehavior
 //     for how the dictionary is persisted.
-//   • NON-PLAYER: no charge tracking at all — WandsMath.NpcBreakChancePerUse
-//     is rolled on every cast; a break marks the wielding agent's wand inert
-//     for the rest of THIS mission (_brokenAgents) and, if the wielder is a
-//     hero, strikes one copy from their party's item roster too (so the loss
-//     is real outside the mission as well as in it).
+//   • NON-PLAYER: no per-agent charge tracking, and no breaking either — an
+//     NPC wand-wielder casts every time its cooldown allows, same as a Rod
+//     or Sigil. Wands never break for anyone; only the player's shared
+//     per-item-id charge pool can run dry mid-battle, and it refills after
+//     the mission ends (RefillAllPlayerCharges), mirroring vanilla arrows.
 //
 // All TaleWorlds access is null-guarded and wrapped in individual try/catch.
 // =============================================================================
 
-using System;
 using System.Collections.Generic;
-using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.ObjectSystem;
 
 namespace TheDarkestNight
 {
     public static class WandEffects
     {
-        private static readonly Random _rng = new Random();
 
         // Battle-scoped only — cleared every mission (ClearBattleState).
         private static readonly Dictionary<int, float> _cooldowns = new Dictionary<int, float>();
-        private static readonly HashSet<int> _brokenAgents = new HashSet<int>();
 
         // Persists across the whole campaign (player only) — see
         // WandsCampaignBehavior.SyncData for the parallel-list save wiring.
@@ -54,7 +47,15 @@ namespace TheDarkestNight
         public static void ClearBattleState()
         {
             _cooldowns.Clear();
-            _brokenAgents.Clear();
+        }
+
+        // Wands never break (arrows-in-the-base-game model): charges deplete on
+        // cast and top back up after the fight, rather than the item being
+        // destroyed. Called from CampaignBehavior.Ticks.cs's OnMissionEnded.
+        public static void RefillAllPlayerCharges()
+        {
+            foreach (var key in new List<string>(_playerCharges.Keys))
+                _playerCharges[key] = WandsMath.PlayerMaxCharges;
         }
 
         // ── Persistence accessors (called from WandsCampaignBehavior) ───────
@@ -121,26 +122,15 @@ namespace TheDarkestNight
                 if (!WandsCatalog.TryGetByItemId(itemId, out var def)) return;
 
                 int agentIndex = affectorAgent.Index;
-                if (_brokenAgents.Contains(agentIndex)) return;
                 if (_cooldowns.ContainsKey(agentIndex)) return; // still on cooldown
 
                 bool isPlayer = affectorAgent == Agent.Main;
-                if (isPlayer)
+                if (isPlayer && !TryConsumePlayerCharge(def.ItemId))
                 {
-                    if (!TryConsumePlayerCharge(def.ItemId))
-                    {
-                        // Same cooldown as a real cast — otherwise every landed
-                        // hit with a dry wand re-prints the message.
-                        _cooldowns[agentIndex] = WandsMath.CastCooldownSeconds;
-                        Announce(affectorAgent, $"{def.Name} is spent — nothing answers this time.");
-                        return;
-                    }
-                }
-                else if (WandsMath.NpcWandBreaks(_rng.NextDouble()))
-                {
-                    _brokenAgents.Add(agentIndex);
-                    TryRemoveOneFromWielderRoster(affectorAgent, def.ItemId);
-                    Announce(affectorAgent, $"{def.Name} shatters in its wielder's hand.");
+                    // Same cooldown as a real cast — otherwise every landed
+                    // hit with a dry wand re-prints the message.
+                    _cooldowns[agentIndex] = WandsMath.CastCooldownSeconds;
+                    Announce(affectorAgent, $"{def.Name} is spent — nothing answers this time.");
                     return;
                 }
 
@@ -155,21 +145,6 @@ namespace TheDarkestNight
             if (!_playerCharges.TryGetValue(wandItemId, out int charges) || charges <= 0) return false;
             _playerCharges[wandItemId] = charges - 1;
             return true;
-        }
-
-        private static void TryRemoveOneFromWielderRoster(Agent wielder, string wandItemId)
-        {
-            try
-            {
-                Hero hero = (wielder.Character as CharacterObject)?.HeroObject;
-                if (hero == null) return; // template-equipped troop — nothing to strike from a roster
-                ItemRoster roster = hero.PartyBelongedTo?.ItemRoster;
-                if (roster == null) return;
-                var item = MBObjectManager.Instance?.GetObject<ItemObject>(wandItemId);
-                if (item == null) return;
-                roster.AddToCounts(item, -1);
-            }
-            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         private static void Announce(Agent caster, string msg)

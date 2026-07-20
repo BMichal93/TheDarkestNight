@@ -317,6 +317,61 @@ namespace TheDarkestNight
                 }
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+
+            try
+            {
+                // Ruins must never read as one of the eight core factions' territory
+                // (per behaviour.md rule 3, still never OwnerClan = null — reassign to
+                // a real kingdomless clan via the same ChangeOwnerOfSettlementAction
+                // call FactionScoping.cs already uses). Runs every time ApplyRuinAppearance
+                // does (session launch AND every daily ReapplyRuinNamesIfNeeded tick), so
+                // if ReassignImperialSettlements (or any other system, or a rival lord's
+                // siege) hands a ruin back to a kingdom, the very next daily tick strips
+                // it again — the same self-healing pattern this file already uses for
+                // garrison/prosperity. Never touches a player-held ruin.
+                if (IsFactionOwned(s))
+                {
+                    Hero custodian = GetCustodianHero();
+                    if (custodian != null && custodian.Clan != s.OwnerClan)
+                        ChangeOwnerOfSettlementAction.ApplyByDefault(custodian, s);
+                }
+            }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+        }
+
+        // True if the settlement is currently held by one of the eight core-faction
+        // kingdoms (or any other real kingdom) rather than the player or a
+        // kingdomless/city-state clan. Mirrors IsExempt's own city-state carve-out.
+        private static bool IsFactionOwned(Settlement s)
+        {
+            if (s.OwnerClan == null || s.OwnerClan == Clan.PlayerClan) return false;
+            if (s.OwnerClan.Kingdom == null) return false;
+            string cityStateId = CityStateMath.CityStateKingdomId(s.OwnerClan.StringId);
+            if (cityStateId != null && Kingdom.All.Any(k => k.StringId == cityStateId)) return false;
+            return true;
+        }
+
+        // A single reusable kingdomless clan that "holds" every stripped ruin —
+        // cached but re-validated, since the pool this is drawn from can shrink as
+        // other clans join kingdoms or die out over a long campaign.
+        private static Hero _custodianHero;
+
+        private static Hero GetCustodianHero()
+        {
+            try
+            {
+                if (_custodianHero != null && _custodianHero.IsAlive
+                    && _custodianHero.Clan != null && _custodianHero.Clan.Kingdom == null)
+                    return _custodianHero;
+
+                _custodianHero = Clan.All.FirstOrDefault(c =>
+                        c != null && !c.IsEliminated && c != Clan.PlayerClan
+                        && c.Kingdom == null && c.Leader != null && c.Leader.IsAlive
+                        && !c.IsBanditFaction && !c.IsMinorFaction && !c.IsOutlaw)
+                    ?.Leader;
+                return _custodianHero;
+            }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); return null; }
         }
     }
 }
