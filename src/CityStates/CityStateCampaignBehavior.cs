@@ -31,7 +31,9 @@ namespace TheDarkestNight
 
         private void OnDailyTick()
         {
+            CrashDiagnostics.MarkTick("CityState.OnDailyTick enter");
             CityStateSystem.OnDailyTick();
+            CrashDiagnostics.MarkTick("CityState.OnDailyTick exit");
         }
 
         private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom,

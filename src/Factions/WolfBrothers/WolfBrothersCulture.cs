@@ -163,7 +163,12 @@ namespace TheDarkestNight
                 if (existing != null && existing.ToString() == value) return; // already applied
                 GameText gt = mgr.GetGameText(textId);
                 if (gt == null) return;
-                gt.SetVariationWithId(variation, new TextObject(value), null);
+                // choiceTags must be a real (empty) list, never null: GameText.
+                // SetVariationWithId dereferences it internally, so passing null
+                // throws the NullReferenceException seen across every *Culture.cs
+                // in the 2026-07-20 18:41 errors.log. Empty = "no choice tags",
+                // which is exactly this unconditional variation.
+                gt.SetVariationWithId(variation, new TextObject(value), new System.Collections.Generic.List<GameTextManager.ChoiceTag>());
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }

@@ -163,6 +163,11 @@ namespace TheDarkestNight
         {
             MageKnowledge.SetMage(false);
             _selectionDone = true;
+            // Snapshot every town's ORIGINAL culture BEFORE any pass below rewrites
+            // it — SettlementCultureNormalizer.NormalizeAll (end of this method) maps
+            // each free town's bandit culture off this native geography, not off the
+            // culture a mid-setup conversion may already have overwritten.
+            try { SettlementCultureNormalizer.SnapshotNativeCultures(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Issue 15 — vanilla hands every new character 1000 gold, which reads
             // as untouched by the barter economy's ~10x scarcity everywhere else
             // (EconomyMath.GoldScarcityFactor). Clamp down to the scarcity-scaled
@@ -189,19 +194,40 @@ namespace TheDarkestNight
                 try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { AshenCitySystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             }
+            CrashDiagnostics.MarkPhase("Setup.ReassignImperialSettlements enter");
             try { ReassignImperialSettlements(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Eager first city-state pass (issue 4): scope every faction down to its
             // starting towns FIRST (orphaning any clan outside them), then convert the
             // newly-ownerless towns into city-states immediately, rather than waiting
             // for CityStateMath.SettleDelayDays to elapse on the daily tick. The daily
             // tick keeps running afterward as the ongoing repair pass.
+            CrashDiagnostics.MarkPhase("Setup.ScopeAllFactionsNow enter");
             try { FactionScoping.ScopeAllFactionsNow(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Issue 5: a seat-holding clan keeps its EXTRA towns, so a short-list
             // faction ends up larger than its named seats. Hand those extras to
             // landless free clans (between the scoping and the conversion) so the
             // convert pass below turns each into its own city-state.
+            CrashDiagnostics.MarkPhase("Setup.StripExtraFactionTowns enter");
             try { FactionScoping.StripExtraFactionTowns(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            CrashDiagnostics.MarkPhase("Setup.ConvertOwnerlessTownsNow enter");
             try { CityStateSystem.ConvertOwnerlessTownsNow(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            // Ruins must be neutral from day one. RuinsCastleSystem.OnSessionLaunched
+            // strips ruin ownership at session launch, but ReassignImperialSettlements
+            // (above) runs LATER — on OnCharacterCreationIsOver — and re-hands some of
+            // those same castle ids (castle_B5/B2/V2/V7 and the Razih/Qasira name-matches)
+            // to the Empire trio. Without this, the self-heal only fires on the next
+            // daily tick, so a fresh save shows e.g. "Ruins of Chanopsis" owned by the
+            // Chosen. Re-running the (idempotent) ruin-appearance pass here strips them
+            // immediately, before the player ever sees the map.
+            try { RuinsCastleSystem.ReapplyRuinNamesIfNeeded(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            // Authoritative final culture pass: pin every faction SEAT to its own
+            // culture (fixing the Empire-trio border towns that read as "Templar"),
+            // and give every other free town a geography-split bandit culture (with
+            // two flavour exceptions). Runs LAST so it wins over the conversion
+            // passes' own ApplyBanditCulture writes above. See SettlementCultureNormalizer.
+            CrashDiagnostics.MarkPhase("Setup.NormalizeAll enter");
+            try { SettlementCultureNormalizer.NormalizeAll(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            CrashDiagnostics.MarkPhase("Setup.FinishNewGameWorldSetup exit");
             // Greet every new ruler with a brief pointer to the journal — the full
             // controls manual lives there ("Notes for the Adventurer"), so this is the
             // only popup queued at new-game start.

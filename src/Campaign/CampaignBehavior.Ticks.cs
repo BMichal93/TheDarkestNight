@@ -59,13 +59,16 @@ namespace TheDarkestNight
                     // border sweeps and the Ashen swap fight over the same fiefs.
                     if (ashenLive)
                         try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    CrashDiagnostics.MarkTick("Magic.ReassignImperialSettlements (first-tick) enter");
                     try { ReassignImperialSettlements(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    CrashDiagnostics.MarkTick("Magic.ReassignImperialSettlements (first-tick) exit");
                 }
                 if (ashenLive)
                 {
                     try { AshenCitySystem.Initialize(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                     try { AshenCitySystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
+                CrashDiagnostics.MarkTick("Magic.OnDailyTick main pipeline enter");
                 try { ElementLordRegistry.DailyMapCast(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { TalentSystem.ResetDailyCastCount(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 try { TalentSystem.EnforceKinship(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }

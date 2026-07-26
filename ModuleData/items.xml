@@ -6,656 +6,305 @@
   when the player attacks with them. Physical damage is intentionally minimal
   (cancelled in code); the real effect fires after a 2-second charge phase.
 
-  Each item is modelled on the vanilla "horse_whip" — a known-good, simple
-  one-handed weapon: a valid collision body (bo_mace_a), a real weapon mesh,
-  a standard one-handed item_usage and physics_material, and the MeleeWeapon
-  flag. A bare Weapon block without item_usage / physics_material / a valid
-  weapon mesh crashes the game the moment the item is equipped (no wield
-  animation set / no collision body) — that was the old definition's bug.
+  Crystals and Relics are <CraftedItem> clones of the vanilla reward sword
+  "winds_fury_sword_t3" (crafting_template="OneHandedSword", khuzait blade/
+  guard/grip/pommel pieces). They were <Item> clones of "horse_whip" until
+  2026-07-20; that route is a dead end for anything that must LOOK like a
+  sword. Bannerlord ships NO sword mesh usable from a mesh="" attribute —
+  every real sword in SandBoxCore/items/weapons.xml is a <CraftedItem> built
+  from crafting pieces, and "horse_whip" is the only stock non-crafted item
+  of weapon_class OneHandedSword. So mesh="throwing_stone" rendered a boulder
+  in the hand and mesh="horse_whip" a whip; neither reads as a blade. Verify
+  before "simplifying" this back to an <Item>: grep weapons.xml for mesh=".
 
-  Mesh: vanilla "throwing_stone" — a rough held mineral, the closest stock mesh
-  to a raw crystal (Bannerlord has no gem/crystal weapon mesh). A custom crystal
-  mesh can replace it via the mesh="" attribute without touching any code. The
-  weapon structure (body / item_usage / physics / flags) is modelled on a vanilla
-  one-handed weapon so it equips and swings without faulting.
-
-  Prices are intentionally high (1100–2000) — these are rare mineral formations,
-  available for purchase only in Crystalline Chamber towns, restocked weekly
-  with one of each type. The formation craft route offers them at material cost.
+  Consequences of the CraftedItem route, all accepted deliberately:
+    • value/weight are DERIVED from the pieces — the old hand-set prices
+      (crystals 1100-2000, relics 3000) are gone. No C# reads either by id;
+      this is a shop-price change only. Crystals stay merchandise (the
+      is_merchandise attribute is omitted, i.e. vanilla-default true) so the
+      Crystalline Chamber restock still works.
+    • has_modifier="false" keeps vanilla off these — no "Rugged Sunstone",
+      and nothing for LordGearWeathering's ItemModifier check to trip on.
+    • the pieces carry real sword damage; crystal/relic physical damage is
+      cancelled in code as before, so the effect path is unchanged.
 -->
 <Items>
 
   <!-- Sunstone — warmth pulse: heals self and nearby allies -->
-  <Item id="aae_sunstone"
+  <CraftedItem id="aae_sunstone"
         name="Sunstone — Warmth Pulse"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="1500"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
   <!-- Embershard — shard burst: AoE fire damage to nearby enemies -->
-  <Item id="aae_embershard"
+  <CraftedItem id="aae_embershard"
         name="Embershard — Shard Burst"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="1800"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
   <!-- Rimeshard — frost pulse: slows nearby enemies -->
-  <Item id="aae_rimeshard"
+  <CraftedItem id="aae_rimeshard"
         name="Rimeshard — Frost Pulse"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="1500"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
   <!-- Veilstone — veil grasp: strikes one random enemy at range -->
-  <Item id="aae_veilstone"
+  <CraftedItem id="aae_veilstone"
         name="Veilstone — Veil Grasp"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="1700"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
   <!-- Stormcrystal — thunder clap: AoE damage + morale drain -->
-  <Item id="aae_stormcrystal"
+  <CraftedItem id="aae_stormcrystal"
         name="Stormcrystal — Thunderclap"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="2000"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
   <!-- Duskstone — despair wave: morale drain + slow -->
-  <Item id="aae_duskstone"
+  <CraftedItem id="aae_duskstone"
         name="Duskstone — Despair Wave"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="1600"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
   <!-- Thornveil — root grasp: immobilises one random enemy at range + damage -->
-  <Item id="aae_thornveil"
+  <CraftedItem id="aae_thornveil"
         name="Thornveil — Root Grasp"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="1700"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
   <!-- Aegisstone — bulwark pulse: self heal + knocks back nearby enemies -->
-  <Item id="aae_aegisstone"
+  <CraftedItem id="aae_aegisstone"
         name="Aegisstone — Bulwark Pulse"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="1800"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
   <!-- Willowisp — dread whisper: shatters the morale of one random enemy at range -->
-  <Item id="aae_willowisp"
+  <CraftedItem id="aae_willowisp"
         name="Willowisp — Dread Whisper"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="1600"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
   <!-- Bloodstone — vampiric burst: AoE damage, heals caster on the blood spilled -->
-  <Item id="aae_bloodstone"
+  <CraftedItem id="aae_bloodstone"
         name="Bloodstone — Vampiric Burst"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="1900"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
   <!-- Zephyrglass — quickening light: AoE haste for caster and nearby allies -->
-  <Item id="aae_zephyrglass"
+  <CraftedItem id="aae_zephyrglass"
         name="Zephyrglass — Quickening Light"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="1500"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
   <!-- ======================================================================
        THE DARKEST NIGHT — Relics (Phase 6, Requirements 19/20).
 
-       Every relic below is a byte-for-byte clone of the Crystal item template
-       above it (same body_name/mesh/Weapon block, proven not to fault on
-       equip — see the file header). A relic never breaks, unlike a Crystal,
+       Every relic below is a clone of the same vanilla crafted sword the
+       Crystals above use — see the file header for why a <CraftedItem> is
+       the only way to make an item actually LOOK like a blade. A relic
+       never breaks, unlike a Crystal,
        so it stays in the loadout as a permanent weapon-slot trinket; its
        actual effect (which Crystal or Dark Gift power it carries, rebalanced
        weaker) is data in src/Relics/RelicCatalog.cs, not anything encoded
        here. See that file for the name/lore/effect of each id.
        ====================================================================== -->
 
-  <Item id="aae_relic_cinderfang"
+  <CraftedItem id="aae_relic_cinderfang"
         name="Cinderfang"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="3000"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
-  <Item id="aae_relic_widows_patience"
+  <CraftedItem id="aae_relic_widows_patience"
         name="The Widow's Patience"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="3000"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
-  <Item id="aae_relic_wardens_bulwark"
+  <CraftedItem id="aae_relic_wardens_bulwark"
         name="Warden's Bulwark"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="3000"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
-  <Item id="aae_relic_the_last_draught"
+  <CraftedItem id="aae_relic_the_last_draught"
         name="The Last Draught"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="3000"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
-  <Item id="aae_relic_galebound_charm"
+  <CraftedItem id="aae_relic_galebound_charm"
         name="Galebound Charm"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="3000"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
-  <Item id="aae_relic_gravebite_brand"
+  <CraftedItem id="aae_relic_gravebite_brand"
         name="Gravebite Brand"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="3000"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
-  <Item id="aae_relic_hollows_mercy"
+  <CraftedItem id="aae_relic_hollows_mercy"
         name="Hollow's Mercy"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="3000"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
-  <Item id="aae_relic_wraithkiss_sigil"
+  <CraftedItem id="aae_relic_wraithkiss_sigil"
         name="Wraithkiss Sigil"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="3000"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
-  <Item id="aae_relic_martyrs_refusal"
+  <CraftedItem id="aae_relic_martyrs_refusal"
         name="Martyr's Refusal"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="3000"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
-  <Item id="aae_relic_duskward_bell"
+  <CraftedItem id="aae_relic_duskward_bell"
         name="Duskward Bell"
-        body_name="bo_mace_a"
-        recalculate_body="true"
-        mesh="throwing_stone"
-        Type="OneHandedWeapon"
-        weight="0.3"
-        value="3000"
-        item_holsters="sword_left_hip"
-        using_tableau_cache_system="false">
-    <ItemComponent>
-      <Weapon weapon_class="OneHandedSword"
-              weapon_balance="100"
-              thrust_speed="79"
-              speed_rating="99"
-              physics_material="wood_weapon"
-              missile_speed="0"
-              weapon_length="95"
-              thrust_damage="3"
-              thrust_damage_type="Blunt"
-              swing_damage="3"
-              swing_damage_type="Blunt"
-              item_usage="onehanded_block_shield_swing">
-        <WeaponFlags MeleeWeapon="true" />
-      </Weapon>
-    </ItemComponent>
-    <Flags />
-  </Item>
+        crafting_template="OneHandedSword"
+        has_modifier="false">
+    <Pieces>
+      <Piece id="khuzait_blade_8"  Type="Blade"  scale_factor="100" />
+      <Piece id="khuzait_guard_6"  Type="Guard"  scale_factor="100" />
+      <Piece id="khuzait_grip_6"   Type="Handle" scale_factor="100" />
+      <Piece id="khuzait_pommel_5" Type="Pommel" scale_factor="100" />
+    </Pieces>
+  </CraftedItem>
 
   <!-- ======================================================================
        THE DARKEST NIGHT — Demon Blood (Phase 7, Faction D, "The Bloodbound").

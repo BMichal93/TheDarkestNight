@@ -55,8 +55,37 @@ namespace TheDarkestNight
             return RuinPrefixes[h % RuinPrefixes.Length];
         }
 
+        // Strips any number of leading "<RuinPrefix> of " segments off a name.
+        // ApplyRuinAppearance re-derives the "original" name from the settlement's
+        // CURRENT name, and it now runs several times per session (session launch,
+        // end of FinishNewGameWorldSetup, OnGameLoaded, and every daily tick), so
+        // without this each pass stacked another prefix — "Ruined City of Ruined
+        // City of Odrysa Castle". Loops because saves made before this fix already
+        // carry two or more. Names are re-derived, never persisted, so an affected
+        // save heals itself on the next pass.
+        public static string StripRuinPrefix(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return name;
+            bool stripped = true;
+            while (stripped)
+            {
+                stripped = false;
+                foreach (string prefix in RuinPrefixes)
+                {
+                    string lead = prefix + " of ";
+                    if (name.StartsWith(lead, StringComparison.Ordinal))
+                    {
+                        name = name.Substring(lead.Length);
+                        stripped = true;
+                        break;
+                    }
+                }
+            }
+            return name;
+        }
+
         public static string RuinNameFor(string settlementStringId, string originalName)
-            => $"{RuinPrefixFor(settlementStringId)} of {originalName}";
+            => $"{RuinPrefixFor(settlementStringId)} of {StripRuinPrefix(originalName)}";
 
         // ── Chamber sequence ─────────────────────────────────────────────────
         // Every ruin gets 3-5 chambers, ending on the Throne of Dust (the pool's

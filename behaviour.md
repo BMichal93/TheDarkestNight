@@ -50,7 +50,7 @@ certain about, confirm it against the actual DLLs rather than assuming.
 - Build: `dotnet build src/TheDarkestNight.csproj` (auto-deploys the DLL into the Modules folder).
 - **The post-build copies the DLL and *nothing else*.** If you change `SubModule.xml`
   (or `ModuleData/*.xml`), the installed copy under
-  `$BannerlordPath\Modules\AshAndEmber\` goes stale while the DLL updates — and a
+  `$BannerlordPath\Modules\TheDarkestNight\` goes stale while the DLL updates — and a
   `SubModuleClassType` / `DLLName` mismatch means the mod **silently fails to load**,
   with a green build and green tests telling you nothing is wrong. After touching
   `SubModule.xml`, re-run `.\install.ps1` or copy it across by hand.

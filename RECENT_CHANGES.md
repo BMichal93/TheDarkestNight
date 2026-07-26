@@ -7,6 +7,282 @@ and should append new entries at the top after making changes.
 
 ---
 
+## 2026-07-26 — Pre-release sweep: compile/crash safety, old-title cleanup, CLAUDE.md slimmed to a roadmap
+
+A three-part safety-and-consistency pass over the current working tree, via `/translate-ai`.
+
+**A — Compile + early-tick crash safety.** `dotnet build` clean (0 errors), all
+665 tests green. Reviewed the two new untracked files — `src/CrashDiagnostics.cs`
+(a breadcrumb/first-chance-exception net for the recurring first-tick *native*
+AV that managed `catch`es can't trap) and `src/CityStates/SettlementCultureNormalizer.cs`
+(deterministic new-game culture pass) — plus the modified first-tick pipeline
+(`CampaignBehavior.Events.cs`/`Ticks.cs`, `CityStateCampaignBehavior.cs`,
+`DemonSpawnCampaignBehavior.cs`, etc.). All paths are null-guarded, try/caught
+with `ModLog.Error`, and breadcrumbed; no bare catches. The 8 build warnings are
+pre-existing CS0162 (deliberate `const false` feature gates, e.g.
+`LegacyContent.LegacyNpcCastersEnabled`) / CS9191 — not regressions. Note: a
+native AV cannot be ruled out statically, which is precisely why CrashDiagnostics
+exists; managed safety is verified, live 5-tick behaviour is not (can't launch
+the game from here).
+
+**B — Dead old-title self-references.** Root cause: the log folder was already
+moved to `Documents\...\TheDarkestNight\`, but several surfaces still named the
+mod "Ash and Ember" / pointed at the old `AshAndEmber` folder. Fixed only genuine
+*self*-references (not the correct upstream-attribution mentions, and not any
+frozen `aae_`/`Ashen*`/save-key identifier): `ModLog.cs` session banner + folder
+doc-comment → "The Darkest Night" / `TheDarkestNight\errors.log`;
+`behaviour.md` install-folder path → `Modules\TheDarkestNight\`; the stale
+`AshAndEmber.ModLog.Error` example (won't compile — `ModLog` is in namespace
+`TheDarkestNight`) corrected in the moved conventions doc. "Withering"/"Colour"
+hits were left alone: they are live in-world content (Great Withering event, the
+`ColourKnowledge` back-compat alias), not old titles.
+
+**C — CLAUDE.md as a roadmap, not a monolith.** Moved the two heavy reference
+blocks out to new `docs/conventions.md` (code conventions) and `docs/gotchas.md`
+(frozen-names table + corrections/gotchas), leaving pointers + the one
+load-bearing "blanket AshAndEmber replace corrupts saves" safety line. CLAUDE.md
+went 111→85 lines. Mirrored the identical slimming into `AGENTS.md` (the Codex
+parallel copy) to prevent drift.
+
+**Files:** `src/ModLog.cs`, `behaviour.md`, `CLAUDE.md`, `AGENTS.md`,
+`docs/conventions.md` (new), `docs/gotchas.md` (new), `RECENT_CHANGES.md`.
+
+---
+
+## 2026-07-20 (latest+1) — Crystals/Relics become real crafted swords; deferred-popup flush hardened
+
+Two user-reported issues plus a requested tick-code audit, via `/translate-ai`.
+
+**#1 "The sword is a giant boulder."** The boulder was a CRYSTAL, not a relic —
+last session's `horse_whip` swap covered relics only, on purpose. Investigating
+the "use the game's own sword code" instruction turned up the load-bearing fact
+this file should have recorded long ago: **Bannerlord ships no sword mesh usable
+from a `mesh=""` attribute.** Every real sword in
+`SandBoxCore/ModuleData/items/weapons.xml` is a `<CraftedItem>` assembled from
+crafting pieces; `horse_whip` is the ONLY stock non-crafted item of
+weapon_class `OneHandedSword`, which is why the original author cloned it. So
+`throwing_stone` renders a boulder in the hand, `horse_whip` a whip, and no
+`<Item>` clone can ever look like a blade.
+
+Fix: the 11 Crystals and 10 Relics are now `<CraftedItem
+crafting_template="OneHandedSword">` clones of the vanilla reward sword
+`winds_fury_sword_t3` (khuzait blade_8/guard_6/grip_6/pommel_5, all four piece
+ids verified present in `Native/ModuleData/crafting_pieces.xml`). **Item ids and
+names are unchanged → save-safe.** Wands stay `horse_whip` (a whip already reads
+as a rod). Accepted consequences, documented in the file header: value/weight are
+now derived from the pieces so the hand-set prices (crystals 1100-2000, relics
+3000) are gone — no C# reads either by id, so this is a shop-price change only;
+`is_merchandise` is omitted (vanilla default true) so the Crystalline Chamber
+restock still works; `has_modifier="false"` keeps vanilla from producing a
+"Rugged Sunstone" and keeps `LordGearWeathering`'s ItemModifier check clean.
+
+**#2 First-tick crash — narrowed hard, and one real defect fixed.** The 20:53
+log ran the FULL breadcrumb trail (`Init.*` + all six `Setup.*`, ending
+`Setup.FinishNewGameWorldSetup exit`) and then stopped with **no `tick:` line at
+all** — so the process dies after world setup and before any daily handler.
+The audit found the likely reason, and it is ours:
+
+`MageKnowledge.FlushDeferredInquiry` is called from `MagicInputHandler.Tick`,
+i.e. **every frame** — the hottest path in the mod — and had no try/catch (against
+this project's own never-swallow-but-never-crash rule) and no check that a map
+screen existed. On a new game the first queued popup is
+`FinishNewGameWorldSetup`'s controls pointer, so the first frame after character
+creation opened a blocking `InquiryData` while the map's Gauntlet layer was still
+being built — the exact mid-layer-transition case `behaviour.md` warns about, and
+an AV in engine UI code never reaches a managed catch, which explains the clean
+errors.log. Now gated on `MapState.IsReady` (the engine's own "map is up and
+idle" flag, verified by reflection against `TaleWorlds.CampaignSystem.dll`) and
+wrapped in try/catch. Popups are queued, never dropped — an early call returns
+and the next frame retries.
+
+Also added `CrashDiagnostics.MarkHourly` (self-limiting at 120 marks so hourly
+handlers cannot burn ModLog's 600-breadcrumb budget) and wired it into the
+hourly path — MortalLaw, Temple, TempleQuest, Bloodbound, Demons
+(`PruneDead`/`DirectDemonParties`). Nature and Soldier hourly handlers were left
+alone: both early-return when not attuned / not in service, so they are no-ops
+on day one.
+
+**Tick audit (requested).** Swept all 62 tick registrations. Every mutation of
+game state inside a `foreach` runs over a materialized `ToList()`/local batch —
+no live-collection mutation found (checked `DestroyPartyAction`,
+`ChangeOwnerOfSettlementAction`, `ChangeKingdomAction`, `KillCharacterAction`
+call sites, plus every direct `foreach` over `Settlement.All` / `MobileParty.All`
+/ `Clan.All` / `Kingdom.All` / `Hero.AllAliveHeroes`). `RuinsCastleSystem`'s
+garrison destroys are already batched at 3/day and, per the breadcrumbs, are not
+even reached before the crash. The unguarded per-frame flush above was the one
+genuine defect the sweep turned up.
+
+Files: `ModuleData/items.xml`, `src/Mage/MageKnowledge.cs`,
+`src/CrashDiagnostics.cs`, `src/MortalLaw/MortalLawCampaignBehavior.cs`,
+`src/Factions/Temple/TempleCampaignBehavior.cs`,
+`src/Factions/Bloodbound/BloodboundCampaignBehavior.cs`,
+`src/FactionQuests/Temple/TempleQuestCampaignBehavior.cs`,
+`src/Demons/DemonSpawnCampaignBehavior.cs`. Build green, 665 tests green.
+items.xml hand-copied to the module folder again (install.ps1 still broken —
+see the entry below).
+
+## 2026-07-20 (latest) — Relic mesh, stacked ruin-name prefixes, pre-tick breadcrumbs
+
+Three user-reported issues, worked via `/translate-ai`.
+
+**#1 "Sword with stone texture".** The ten `aae_relic_*` items in
+`ModuleData/items.xml` were byte-for-byte clones of the Crystal template,
+including `mesh="throwing_stone"` — but unlike a Crystal (which IS a held
+mineral) a relic is a named blade/charm with `weapon_class="OneHandedSword"`
+and `item_holsters="sword_left_hip"`, so "Cinderfang"/"Gravebite Brand"
+rendered as a rock in the sword slot. Fix: `mesh="horse_whip"` on the ten
+relics only — the same verified-safe vanilla mesh the wands took last session.
+The eleven Crystals keep `throwing_stone` on purpose. **Item ids untouched, so
+save-safe.** Note `install.ps1` is currently unrunnable on this box (it uses
+PowerShell 7 `?.` syntax; the shell here is Windows PowerShell 5.1 — separate,
+untouched issue), so items.xml was copied into
+`$BannerlordPath\Modules\TheDarkestNight\ModuleData\` by hand. Any future
+ModuleData change needs the same manual copy until that script is fixed.
+
+**#2 "Ruined City of Ruined City of Odrysa Castle".** Non-idempotent rename.
+`RuinsCastleSystem.ApplyRuinAppearance` derives the "original" name from the
+settlement's CURRENT name, and it now runs several times per session (session
+launch, end of `FinishNewGameWorldSetup`, `OnGameInitializationFinished`, and
+every daily tick) — each pass stacked another prefix. Fix: new pure
+`RuinsMath.StripRuinPrefix` (loops, so saves already carrying two or more
+prefixes heal on the next pass) called from `RuinNameFor`. Names are re-derived
+and never persisted, so no save migration is needed. +2 tests (665 green).
+
+**#3 First-tick crash — diagnostics widened, still not fixable blind.** The
+20:21 errors.log showed `[trace] CrashDiagnostics installed` and then **no
+`tick:` breadcrumb at all**, i.e. the process dies BEFORE the first daily tick,
+in a window last session's instrumentation did not cover. Added
+`CrashDiagnostics.MarkPhase` (writes `phase: …`) and breadcrumbed
+`OnGameInitializationFinished` (troop-tree/lord gear weathering, ruin renames)
+and `FinishNewGameWorldSetup` (imperial reassignment, faction scoping, town
+conversion, culture normalization), plus per-step `MarkTick`s inside
+`DemonSpawnCampaignBehavior`'s nightfall block — map party creation being the
+likeliest native-AV site in the first hours. Still pure instrumentation, no
+game state changed. Next crash should name the phase.
+
+Files: `ModuleData/items.xml`, `src/Ruins/RuinsMath.cs`,
+`src/CrashDiagnostics.cs`, `src/MagicSystem.cs`,
+`src/Campaign/CampaignBehavior.Events.cs`,
+`src/Demons/DemonSpawnCampaignBehavior.cs`, `tests/PureLogicTests.Ruins.cs`.
+Build green, 665 tests green.
+
+## 2026-07-20 (later) — Wand-in-sword-pool fix + first-tick native-crash diagnostics
+
+Two user-reported issues, worked via `/translate-ai`.
+
+**#1 Blade keepsake handed a WAND instead of a sword.** Confirmed root cause:
+`aae_wand_*` items are defined in `ModuleData/items.xml` with
+`weapon_class="OneHandedSword"` and Tier3-5 value (12000), so they matched
+`FindOneHandedSwordPool`'s `WeaponClass.OneHandedSword` + tier filter and could
+be rolled as the "good one-handed sword". `LordGearWeathering` already dodges
+this via `WandsCatalog.IsWandItemId`; the keepsake pool did not. Fix: folded a
+`!WandsCatalog.IsWandItemId(it.StringId)` guard into the pool's `NotCrafted`
+predicate so it applies at ALL three fallback tiers. `src/AI/CreationBackstoryRework.Keepsakes.cs`.
+
+**#2 First-tick native crash — diagnostic instrument added (NOT a blind fix).**
+Pulled the real crash record this session (the log lives at
+`OneDrive\Dokumenty\Mount and Blade II Bannerlord\TheDarkestNight\errors.log`;
+Windows Event Log `Application`): WER `Launcher.Native.exe`, exception
+**`0xc0000005` access violation, `StackHash_f7a4`, faulting module "unknown"**
+(= JIT'd managed code, no symbols). This is a **pre-existing** signature (repo
+history logs `StackHash_f7a4` first-tick crashes on 2026-07-19, before ANY of
+this week's changes) and an access violation is a corrupted-state exception that
+.NET Framework does NOT deliver to ordinary `try/catch`, so the fully-wrapped
+tick pipeline steps right past it and ModLog never sees it. The managed log again
+showed only CAUGHT errors (LordGearWeathering NRE, RelabelCulturalFeats ambiguous
+reflection match, AshenRuins ResolveVillages) — none fatal. A 16.5 MB minidump
+exists (`…\CrashDumps\Launcher.Native.exe.26004.dmp`) but no cdb/WinDbg is
+installed to symbolise it. Screenshot showed the crash coinciding with a vanilla
+kingdom fief-grant decision ("Monchug of the Bloodbound takes Kaysar Castle")
+on the first tick — i.e. engine code tripping on some settlement/kingdom state.
+
+Since a native AV with no stack cannot be responsibly fixed blind, added
+`src/CrashDiagnostics.cs` (+ `ModLog.Breadcrumb`, a bounded/non-dedup/flush-each
+trace writer capped at 600 lines): installed from `MainSubModule.OnGameStart`,
+it (a) drops breadcrumbs through the first-tick settlement/kingdom pipeline
+(`Ruins.ReapplyRuinNames`/`Ruins.DailyTick` garrison-destroys,
+`CityState.OnDailyTick`, `Magic.ReassignImperialSettlements`) so the LAST
+breadcrumb in errors.log names the phase that ran immediately before the
+process dies, and (b) hooks `FirstChanceException` (filtered to exceptions
+passing through our namespace, plus severe types) and `UnhandledException` to
+capture any managed stack that precedes the AV. Pure instrumentation — no game
+state changed. User to reproduce; the next crash will localise the faulting
+phase. Files: `src/CrashDiagnostics.cs` (new), `src/ModLog.cs`,
+`src/MagicSystem.cs`, `src/TheDarkestNight.csproj`,
+`src/Ruins/RuinsCampaignBehavior.cs`, `src/CityStates/CityStateCampaignBehavior.cs`,
+`src/Campaign/CampaignBehavior.Ticks.cs`. Build green, 663 tests green.
+
+## 2026-07-20 — Ruins-neutral ordering, culture normalization, keepsake grant hardening, session-launch NRE cascade
+
+Four user-reported issues, worked via `/translate-ai`. The crash log this time
+survived: `Documents` is redirected to OneDrive, so the real error log is
+`C:\Users\mbudz\OneDrive\Dokumenty\Mount and Blade II Bannerlord\TheDarkestNight\errors.log`
+(not the non-existent `~\Documents\...` path). Its 18:41 session showed a
+cascade of **caught** NREs at launch; the fatal crash itself was native/unlogged.
+
+**#1 "Ruins of…" castles still faction-owned at day 1 (e.g. Chosen).** Pure
+ordering bug. `RuinsCastleSystem.OnSessionLaunched` strips ruin ownership at
+session launch, but `ReassignImperialSettlements` runs LATER (on
+`OnCharacterCreationIsOver`, inside `FinishNewGameWorldSetup`) and re-hands some
+of those same castle ids (castle_B5/B2/V2/V7 + Razih/Qasira matches) to the
+Empire trio. The existing self-heal only re-ran on the next daily tick, so a
+fresh save showed ruins owned by the Chosen. Fix: call the idempotent
+`RuinsCastleSystem.ReapplyRuinNamesIfNeeded()` once more at the END of
+`FinishNewGameWorldSetup`, after all reassignment/conversion passes — strips
+re-owned ruins before the player ever sees the map. No new logic; reuses the
+file's own strip path.
+
+**#2 Culture spread wrong (Sea-Riders monopoly; "Templar" on non-Temple cities).**
+Root cause: `ReassignImperialSettlements` folds NON-Empire-culture border towns
+(e.g. Rovalt/Ocs Hall = Vlandia) into the Empire trio's seat lists; because they
+then belong to a living kingdom, `ConvertOwnerlessTowns` skips them
+(`clan.Kingdom != null`) and their culture is never touched — so an Empire city
+kept reading as "Templar" (Vlandia). Converted towns, meanwhile, map their
+bandit culture off their original culture, and central Calradia is mostly
+Empire-culture → most became sea_raiders. New authoritative pass
+`SettlementCultureNormalizer` (new file `src/CityStates/SettlementCultureNormalizer.cs`):
+snapshot every town's ORIGINAL culture before conversions rewrite it, then at the
+end of setup pin every faction SEAT to its own faction culture (Empire trio →
+empire, fixing the "Templar" leak; Temple → vlandia/"Templar", which it legit is;
+Wolf Brothers → sturgia; etc.) and give every other free town a geography-split
+bandit culture; two deterministically-chosen neutral towns instead wear a full
+base culture for variety. Sanctuaries (Camp/Children of the Forest), Ashen, and
+player holdings are skipped. Only rewrites the runtime `Settlement.Culture` field
+at new-game setup — no persisted id renamed, fully save-compatible. Pure helpers
+`StableHash`/`OtherCultureIdFor`/`BaseCultureIds`/`OtherCultureTownCount` added to
+`CityStateMath` (+ 3 new PureLogicTests).
+
+**#3 "Trusted blade" starting gift never received.** No item literally named
+"Trusted blade" exists — user confirmed this is the character-creation **Blade
+keepsake** ("your blade" → one good one-handed sword). It failed SILENTLY:
+`GrantRandomItemToRoster` returned on an empty pool with no log, while the
+keepsake confirmation message still promised a sword. Fix: `FindOneHandedSwordPool`
+now widens progressively (Tier3-5 swords → any sword → any one-hander) so it
+never returns empty on item-registry drift; `FindWarHorsePool` gets the same
+tier-drop fallback; and every silent early-return in `GrantRandomItemToRoster` /
+`GrantRandomWand` / `GrantTradeGood` / both pool finders now logs via `ModLog`.
+
+**#4 Session-launch NRE cascade (the managed lead near the native crash).**
+`LordGearWeathering.ApplyToAllLords` read `Hero.MainHero` inside a LINQ predicate
+before the main hero existed on a new game — `Hero.MainHero` THROWS (not returns
+null), NRE'ing per hero. Resolved once up front (null = exclude nobody).
+`SetCultureVariation` across all six `*Culture.cs` + `AshenCitySystem.Renaming.cs`
+passed `null` as `GameText.SetVariationWithId`'s `choiceTags` arg, which the
+engine dereferences internally → the NRE seen for every culture in the log.
+Fixed to pass an empty `List<GameTextManager.ChoiceTag>` (verified only one
+overload exists, taking that list). `RelabelCulturalFeats`' caught reflection
+error left as-is (already degrades gracefully; cosmetic; sensitive AshenCitySystem
+territory). The fatal crash was native/unlogged — user to retest with these
+guards in place.
+
+Files: `src/Campaign/CampaignBehavior.Events.cs`,
+`src/CityStates/SettlementCultureNormalizer.cs` (new),
+`src/CityStates/CityStateMath.cs`, `src/TheDarkestNight.csproj`,
+`src/AI/CreationBackstoryRework.Keepsakes.cs`, `src/Units/LordGearWeathering.cs`,
+`src/Factions/{WolfBrothers,Tower,ForestWidows,Bloodbound,Empire}/*Culture.cs`,
+`src/AI/AshenCitySystem.Renaming.cs`, `tests/PureLogicTests.CityStates.cs`.
+Build green, 663 tests green.
+
 ## 2026-07-20 — Wand mesh fix, ruins-ownership self-heal, wands never break, new crash lead (StackHash_a395, unresolved)
 
 Four user-reported issues, worked via `/translate-ai`.

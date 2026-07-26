@@ -87,6 +87,7 @@ namespace TheDarkestNight
 
         private void OnHourlyTick()
         {
+            CrashDiagnostics.MarkHourly("Temple.ProcessPendingUnworthyEjections enter");
             try { ProcessPendingUnworthyEjections(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 

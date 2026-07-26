@@ -138,6 +138,7 @@ namespace TheDarkestNight
 
         private void OnHourlyTick()
         {
+            CrashDiagnostics.MarkHourly("Bloodbound.ProcessPendingUnworthyEjections enter");
             try { ProcessPendingUnworthyEjections(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 

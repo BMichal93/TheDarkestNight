@@ -183,6 +183,7 @@ namespace TheDarkestNight
 
         private void OnHourlyTick()
         {
+            CrashDiagnostics.MarkHourly("TempleQuest.ReassertPermanentArmyHourly enter");
             try { ReassertPermanentArmyHourly(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
     }

@@ -28,8 +28,11 @@ namespace TheDarkestNight
 
         private void OnDailyTick()
         {
+            CrashDiagnostics.MarkTick("Ruins.ReapplyRuinNames enter");
             try { RuinsCastleSystem.ReapplyRuinNamesIfNeeded(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            CrashDiagnostics.MarkTick("Ruins.DailyTick (garrison destroys) enter");
             try { RuinsCastleSystem.DailyTick(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            CrashDiagnostics.MarkTick("Ruins.DailyTick exit");
         }
 
         public override void SyncData(IDataStore dataStore)

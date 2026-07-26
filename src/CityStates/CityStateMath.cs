@@ -66,6 +66,40 @@ namespace TheDarkestNight
             }
         }
 
+        // ── Culture normalization (playtest fix: culture spread) ────────────────
+        // The base (non-bandit) kingdom cultures a settlement can wear. Used two
+        // ways by SettlementCultureNormalizer: as the "other culture" flavour pool
+        // for the two random free towns that are NOT turned into bandit ground, and
+        // as the identity set the eight factions' own seats are pinned to.
+        public static readonly string[] BaseCultureIds =
+            { "empire", "sturgia", "aserai", "vlandia", "battania", "khuzait" };
+
+        // How many neutral free towns get a full base culture (a "real" kingdom
+        // culture, stronger garrison) instead of a bandit culture — a little
+        // variety so the map is not wall-to-wall bandit banners.
+        public const int OtherCultureTownCount = 2;
+
+        // Deterministic, process-STABLE hash (FNV-1a). String.GetHashCode is
+        // randomized per process in .NET Framework, so it cannot be used anywhere
+        // the same input must sort/select identically across sessions and in unit
+        // tests — which the two helpers below both require.
+        public static int StableHash(string s)
+        {
+            unchecked
+            {
+                uint h = 2166136261u;
+                if (s != null)
+                    foreach (char c in s) { h ^= c; h *= 16777619u; }
+                return (int)(h & 0x7fffffff);
+            }
+        }
+
+        // Deterministic base-culture pick for one of the two "other culture" free
+        // towns, keyed off the settlement's own id so the choice is stable across
+        // reloads and varies town to town.
+        public static string OtherCultureIdFor(string settlementStringId) =>
+            BaseCultureIds[StableHash(settlementStringId) % BaseCultureIds.Length];
+
         // ── The Camp (Requirement: Revyl special-case) ──────────────────────────
         // Wolf Brothers scopes Sturgia down to Tyal + Sibir only (see
         // WolfBrothersSettlements.ScopeToStartingTowns), so Revyl's clan is

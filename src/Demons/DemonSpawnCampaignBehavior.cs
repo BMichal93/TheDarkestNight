@@ -115,6 +115,7 @@ namespace TheDarkestNight
             try
             {
                 if (Campaign.Current == null) return;
+                CrashDiagnostics.MarkHourly("Demons.PruneDead enter");
                 PruneDead();
 
                 float hour = CurrentHourOfDay();
@@ -124,9 +125,16 @@ namespace TheDarkestNight
                 if (night && _lastNightfallDay != day)
                 {
                     _lastNightfallDay = day;
+                    // Party creation on the campaign map is the likeliest native-AV
+                    // site in the first-hours window, so nightfall is breadcrumbed
+                    // step by step — see CrashDiagnostics.
+                    CrashDiagnostics.MarkTick("Demons.ReplenishSurvivors enter");
                     try { ReplenishSurvivors(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    CrashDiagnostics.MarkTick("Demons.SpawnNightTide enter");
                     try { SpawnNightTide();     } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    CrashDiagnostics.MarkTick("Demons.RollSettlementAssaults enter");
                     try { RollSettlementAssaults(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                    CrashDiagnostics.MarkTick("Demons.nightfall exit");
                 }
                 else if (!night && _lastDawnDay != day)
                 {
@@ -134,7 +142,11 @@ namespace TheDarkestNight
                     try { DespawnNightTide(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
                 }
 
-                if (night) try { DirectDemonParties(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                if (night)
+                {
+                    CrashDiagnostics.MarkHourly("Demons.DirectDemonParties enter");
+                    try { DirectDemonParties(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+                }
 
                 // Requirement 7f/7g: no negotiation, no release, no survivors of
                 // captivity — checked every hour so it is genuinely "on the spot."

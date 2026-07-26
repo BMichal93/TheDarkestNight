@@ -10,7 +10,7 @@ namespace TheDarkestNight
     /// A crash-proof error journal for the mod. Every otherwise-silent
     /// <c>catch</c> in the codebase funnels its exception here so that a failure
     /// leaves a trace on disk instead of vanishing. The log is written to
-    /// <c>Documents\Mount and Blade II Bannerlord\AshAndEmber\errors.log</c>.
+    /// <c>Documents\Mount and Blade II Bannerlord\TheDarkestNight\errors.log</c>.
     ///
     /// Design constraints (this must be as unbreakable as the empty catches it
     /// replaces):
@@ -128,6 +128,45 @@ namespace TheDarkestNight
             }
         }
 
+        // How many breadcrumbs we will ever write in a session. A breadcrumb is a
+        // NON-deduplicated progress marker (unlike Error/Warn) used to localise a
+        // NATIVE crash (0xc0000005) that no managed catch can trap: the last
+        // breadcrumb flushed to disk names the last phase that ran before the
+        // process died. Bounded so it can never grow the file without end — the
+        // crash window we care about is the first few ticks, well inside this cap.
+        private const int MaxBreadcrumbs = 600;
+        private static int _breadcrumbCount;
+
+        /// <summary>
+        /// Append an un-deduplicated, timestamped progress marker and flush it to
+        /// disk immediately. Used only by CrashDiagnostics to trace the first-tick
+        /// pipeline; bounded by <see cref="MaxBreadcrumbs"/>. Never throws.
+        /// </summary>
+        public static void Breadcrumb(string note)
+        {
+            try
+            {
+                if (_disabled) return;
+
+                lock (_gate)
+                {
+                    if (_breadcrumbCount >= MaxBreadcrumbs) return;
+                    _breadcrumbCount++;
+
+                    if (!EnsureInitialized()) return;
+
+                    File.AppendAllText(
+                        _path,
+                        Stamp() + "  [trace] " + note + Environment.NewLine,
+                        Encoding.UTF8);
+                }
+            }
+            catch
+            {
+                _disabled = true;
+            }
+        }
+
         // Must be called under _gate.
         private static bool EnsureInitialized()
         {
@@ -152,7 +191,7 @@ namespace TheDarkestNight
                 File.AppendAllText(
                     path,
                     Environment.NewLine +
-                    "==== Ash and Ember session started " + Stamp() + " ====" + Environment.NewLine,
+                    "==== The Darkest Night session started " + Stamp() + " ====" + Environment.NewLine,
                     Encoding.UTF8);
 
                 _path = path;

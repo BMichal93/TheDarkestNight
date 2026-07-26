@@ -39,7 +39,16 @@ namespace TheDarkestNight
         {
             try
             {
-                foreach (Hero h in Hero.AllAliveHeroes.Where(h => h.IsLord && h != Hero.MainHero).ToList())
+                // Hero.MainHero throws (not returns null) when read before the main
+                // hero exists — on a new game this pass can run in the same session-
+                // launch slot as culture-text re-application, before creation is
+                // finalized. Resolve it ONCE up front so a null just means "exclude
+                // nobody" instead of throwing inside the LINQ predicate for every
+                // hero (the 2026-07-20 18:41 errors.log NRE cascade).
+                Hero mainHero = null;
+                try { mainHero = Hero.MainHero; } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+
+                foreach (Hero h in Hero.AllAliveHeroes.Where(h => h.IsLord && h != mainHero).ToList())
                 {
                     try { WeatherHeroEquipment(h); }
                     catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }

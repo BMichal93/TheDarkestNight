@@ -23,6 +23,11 @@ namespace TheDarkestNight
     {
         protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
         {
+            // Install crash diagnostics first (idempotent): the recurring first-tick
+            // native access violation (StackHash_f7a4) leaves no managed stack in
+            // WER or ModLog, so this arms breadcrumb + first-chance capture to name
+            // the faulting phase on the next occurrence. Pure instrumentation.
+            try { CrashDiagnostics.Install(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Reset all in-mission static state that may be stale from a previous
             // game session running in the same process (save load without restart).
             // ClearAreaEffects / ClearSelfEffects are internally try/catch'd.
@@ -342,12 +347,16 @@ namespace TheDarkestNight
             // Phase 3 — Requirement 30a: tier 3-4 troop trees (every culture) are
             // re-equipped with the cheapest real armour of the same slot type;
             // Requirement 29: lords are stripped of gold/ornate/rich gear.
+            CrashDiagnostics.MarkPhase("Init.GearWeathering.TroopTrees enter");
             try { GearWeathering.ApplyShabbyGearToTroopTrees(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            CrashDiagnostics.MarkPhase("Init.LordGearWeathering enter");
             try { LordGearWeathering.ApplyToAllLords();         } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
             // Issue 6: a reload can revert the ruin castles' reflection-set names
             // the same way kingdom/culture names revert above — re-apply here too,
             // on top of the daily-tick backstop (RuinsCampaignBehavior.OnDailyTick).
+            CrashDiagnostics.MarkPhase("Init.ReapplyRuinNames enter");
             try { RuinsCastleSystem.ReapplyRuinNamesIfNeeded(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            CrashDiagnostics.MarkPhase("Init.OnGameInitializationFinished exit");
         }
 
         // Re-applies the Templar culture text while still in the menu / intro-video /

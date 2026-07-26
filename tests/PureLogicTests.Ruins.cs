@@ -81,6 +81,26 @@ namespace TheDarkestNight.Tests
 
 
         [Test]
+        public void RuinsMath_RuinNameFor_IsIdempotent_NoStackedPrefixes()
+        {
+            string once  = RuinsMath.RuinNameFor("castle_odrysa", "Odrysa Castle");
+            string twice = RuinsMath.RuinNameFor("castle_odrysa", once);
+            Assert.AreEqual(once, twice, "Re-applying the ruin name must not stack another prefix.");
+        }
+
+
+        [Test]
+        public void RuinsMath_StripRuinPrefix_RemovesEveryStackedPrefixFromLegacySaves()
+        {
+            Assert.AreEqual("Odrysa Castle",
+                RuinsMath.StripRuinPrefix("Ruined City of Ruined City of Odrysa Castle"));
+            Assert.AreEqual("Odrysa Castle",
+                RuinsMath.StripRuinPrefix("Ruined Tower of Ruined Keep of Odrysa Castle"));
+            Assert.AreEqual("Odrysa Castle", RuinsMath.StripRuinPrefix("Odrysa Castle"));
+        }
+
+
+        [Test]
         public void RuinsMath_ChamberSequence_AlwaysEndsOnTheThroneIndexAndHasNoDuplicates()
         {
             const int poolSize = 10;

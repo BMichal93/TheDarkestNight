@@ -92,6 +92,7 @@
 
   <ItemGroup>
     <Compile Include="ModLog.cs"/>
+    <Compile Include="CrashDiagnostics.cs"/>
     <Compile Include="TeamSafety.cs"/>
     <Compile Include="ClanRenown.cs"/>
     <Compile Include="Elementals\ElementalMath.cs"/>
@@ -204,6 +205,7 @@
     <Compile Include="CityStates\CityStateSystem.cs"/>
     <Compile Include="CityStates\CityStateCampaignBehavior.cs"/>
     <Compile Include="CityStates\FactionScoping.cs"/>
+    <Compile Include="CityStates\SettlementCultureNormalizer.cs"/>
     <Compile Include="Ruins\RuinsCatalog.cs"/>
     <Compile Include="Ruins\RuinsMath.cs"/>
     <Compile Include="Ruins\RuinsCastleSystem.cs"/>

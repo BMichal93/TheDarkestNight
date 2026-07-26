@@ -165,7 +165,8 @@ namespace TheDarkestNight
                 if (existing != null && existing.ToString() == value) return; // already applied
                 GameText gt = mgr.GetGameText(textId);
                 if (gt == null) return;
-                gt.SetVariationWithId(variation, new TextObject(value), null);
+                // Empty list, never null — see WolfBrothersCulture.SetCultureVariation.
+                gt.SetVariationWithId(variation, new TextObject(value), new System.Collections.Generic.List<GameTextManager.ChoiceTag>());
             }
             catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }

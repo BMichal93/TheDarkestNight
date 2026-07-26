@@ -70,6 +70,36 @@ namespace TheDarkestNight.Tests
         }
 
 
+        // ── CityStateMath tests — culture normalization helpers ─────────────────
+
+        [Test]
+        public void CityStateMath_StableHash_IsDeterministicAndNonNegative()
+        {
+            Assert.AreEqual(CityStateMath.StableHash("town_V2"), CityStateMath.StableHash("town_V2"));
+            Assert.AreNotEqual(CityStateMath.StableHash("town_V2"), CityStateMath.StableHash("town_A4"));
+            Assert.GreaterOrEqual(CityStateMath.StableHash("town_V2"), 0);
+            Assert.GreaterOrEqual(CityStateMath.StableHash(null), 0);
+        }
+
+
+        [Test]
+        public void CityStateMath_OtherCultureIdFor_ReturnsABaseCultureDeterministically()
+        {
+            string first = CityStateMath.OtherCultureIdFor("town_V2");
+            Assert.AreEqual(first, CityStateMath.OtherCultureIdFor("town_V2")); // stable
+            CollectionAssert.Contains(CityStateMath.BaseCultureIds, first);     // always a base culture
+        }
+
+
+        [Test]
+        public void CityStateMath_BaseCultureIds_AreTheSixVanillaKingdomCultures()
+        {
+            CollectionAssert.AreEquivalent(
+                new[] { "empire", "sturgia", "aserai", "vlandia", "battania", "khuzait" },
+                CityStateMath.BaseCultureIds);
+        }
+
+
         // ── CityStateMath tests — The Camp (Revyl special-case) ─────────────────
 
         [Test]

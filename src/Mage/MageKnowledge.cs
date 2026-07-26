@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.GameState;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -242,14 +243,41 @@ namespace TheDarkestNight
         public static bool IsChildGifted(string id) => _giftedChildIds.Contains(id);
         public static void AddGiftedChild(string id) => _giftedChildIds.Add(id);
 
+        // Drains ONE queued popup per call. Called from MagicInputHandler.Tick,
+        // i.e. every frame — so this is the single hottest path in the mod, and
+        // until 2026-07-20 it was also the least guarded: no try/catch (against
+        // the project's own never-swallow-but-never-crash rule) and, worse, no
+        // check that the map screen was actually up. On a NEW GAME the very
+        // first queued popup is FinishNewGameWorldSetup's controls pointer, so
+        // the first frame after character creation would open a blocking
+        // InquiryData while the map's Gauntlet layer was still being built —
+        // exactly the mid-layer-transition case behaviour.md warns about, and a
+        // prime suspect for the first-tick native crash (an AV in engine UI code
+        // never reaches a managed catch, which is why errors.log stayed clean).
+        //
+        // MapState.IsReady is the engine's own "the map is up and idle" flag
+        // (verified by reflection against TaleWorlds.CampaignSystem.dll), so
+        // gating on it holds every popup until there is a screen to show it on.
+        // A popup is queued, never dropped: an early call simply returns and the
+        // next frame tries again.
         public static void FlushDeferredInquiry()
         {
-            Action pending = _deferredInquiry;
-            _deferredInquiry = null;
-            if (pending == null) return;
-            if (Campaign.Current != null)
+            try
+            {
+                if (Campaign.Current == null) return;
+                if (_inquiryQueue.Count == 0) return;
+
+                var mapState = Game.Current?.GameStateManager?.ActiveState as MapState;
+                if (mapState == null || !mapState.IsReady) return;
+
+                Action pending = _deferredInquiry;
+                _deferredInquiry = null;
+                if (pending == null) return;
+
                 Campaign.Current.TimeControlMode = CampaignTimeControlMode.Stop;
-            pending.Invoke();
+                pending.Invoke();
+            }
+            catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
         // Legacy no-op kept for CampaignBehavior references

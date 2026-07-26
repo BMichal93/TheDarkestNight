@@ -354,12 +354,33 @@ namespace TheDarkestNight
             var items = MBObjectManager.Instance?.GetObjectTypeList<ItemObject>();
             if (items == null) return new List<ItemObject>();
 
-            var swords = items.Where(it => it != null
-                && it.ItemType == ItemObject.ItemTypeEnum.OneHandedWeapon
-                && it.PrimaryWeapon != null && it.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedSword
-                && !it.IsCraftedByPlayer && !it.IsCraftedWeapon
-                && it.Tier >= ItemObject.ItemTiers.Tier3 && it.Tier <= ItemObject.ItemTiers.Tier5)
-                .ToList();
+            // Progressive widening so the Blade keepsake NEVER silently grants
+            // nothing: a build whose Tier3-5 one-handed-sword set is empty (item
+            // registry drift between game versions) falls back to any real sword,
+            // then any one-handed weapon at all — a promised weapon in hand beats
+            // an empty roster and a confirmation message that lied.
+            // Wands (aae_wand_*) ship with weapon_class="OneHandedSword" (they swing
+            // like one) and Tier3-5 value, so they land in the sword filters below and
+            // could be handed out as the "good one-handed sword" — the exact bug the
+            // Blade keepsake showed. Exclude them at EVERY tier, the same guard
+            // LordGearWeathering.WeatherHeroEquipment already uses.
+            bool NotWand(ItemObject it) => !WandsCatalog.IsWandItemId(it.StringId);
+            bool NotCrafted(ItemObject it) => !it.IsCraftedByPlayer && !it.IsCraftedWeapon && NotWand(it);
+            bool IsOneHander(ItemObject it) => it.ItemType == ItemObject.ItemTypeEnum.OneHandedWeapon;
+            bool IsSword(ItemObject it) =>
+                it.PrimaryWeapon != null && it.PrimaryWeapon.WeaponClass == WeaponClass.OneHandedSword;
+            bool InTier(ItemObject it) =>
+                it.Tier >= ItemObject.ItemTiers.Tier3 && it.Tier <= ItemObject.ItemTiers.Tier5;
+
+            var swords = items.Where(it => it != null && IsOneHander(it) && IsSword(it) && NotCrafted(it) && InTier(it)).ToList();
+            if (swords.Count == 0)
+                swords = items.Where(it => it != null && IsOneHander(it) && IsSword(it) && NotCrafted(it)).ToList();
+            if (swords.Count == 0)
+                swords = items.Where(it => it != null && IsOneHander(it) && NotCrafted(it)).ToList();
+
+            if (swords.Count == 0)
+                TheDarkestNight.ModLog.Error(new System.Exception(
+                    "Keepsake 'Blade': no one-handed weapon found in the item registry — nothing granted."));
 
             return PreferHeroCulture(swords);
         }
@@ -369,10 +390,17 @@ namespace TheDarkestNight
             var items = MBObjectManager.Instance?.GetObjectTypeList<ItemObject>();
             if (items == null) return new List<ItemObject>();
 
-            var horses = items.Where(it => it != null && it.HasHorseComponent
-                && it.HorseComponent.IsRideable && !it.HorseComponent.IsPackAnimal && !it.HorseComponent.IsLiveStock
-                && it.Tier >= ItemObject.ItemTiers.Tier3 && it.Tier <= ItemObject.ItemTiers.Tier5)
-                .ToList();
+            bool IsWarHorse(ItemObject it) => it.HasHorseComponent
+                && it.HorseComponent.IsRideable && !it.HorseComponent.IsPackAnimal && !it.HorseComponent.IsLiveStock;
+
+            var horses = items.Where(it => it != null && IsWarHorse(it)
+                && it.Tier >= ItemObject.ItemTiers.Tier3 && it.Tier <= ItemObject.ItemTiers.Tier5).ToList();
+            if (horses.Count == 0)
+                horses = items.Where(it => it != null && IsWarHorse(it)).ToList();
+
+            if (horses.Count == 0)
+                TheDarkestNight.ModLog.Error(new System.Exception(
+                    "Keepsake 'Mount': no rideable war-horse found in the item registry — nothing granted."));
 
             return PreferHeroCulture(horses);
         }
@@ -391,11 +419,25 @@ namespace TheDarkestNight
 
         private static void GrantRandomItemToRoster(List<ItemObject> pool, Random rng)
         {
+            // Never fail silently: an empty pool or a missing main party is the exact
+            // way the Blade keepsake handed the player nothing while its confirmation
+            // message still promised a sword. Each early-out is now logged (the pool
+            // helpers above already log their own empty-registry case).
             if (pool == null || pool.Count == 0) return;
             var picks = SpellbookMath.PickDistinctIndices(pool.Count, 1, rng);
-            if (picks.Count == 0) return;
+            if (picks.Count == 0)
+            {
+                TheDarkestNight.ModLog.Error(new System.Exception(
+                    "Keepsake item grant: pick returned no index from a non-empty pool — nothing granted."));
+                return;
+            }
             var roster = MobileParty.MainParty?.ItemRoster;
-            if (roster == null) return;
+            if (roster == null)
+            {
+                TheDarkestNight.ModLog.Error(new System.Exception(
+                    "Keepsake item grant: MobileParty.MainParty.ItemRoster was null — nothing granted."));
+                return;
+            }
             roster.AddToCounts(pool[picks[0]], 1);
         }
 
@@ -407,7 +449,12 @@ namespace TheDarkestNight
             if (picks.Count == 0) return;
             var item = MBObjectManager.Instance?.GetObject<ItemObject>(pool[picks[0]].ItemId);
             var roster = MobileParty.MainParty?.ItemRoster;
-            if (item == null || roster == null) return;
+            if (item == null || roster == null)
+            {
+                TheDarkestNight.ModLog.Error(new System.Exception(
+                    "Keepsake 'Heirloom': wand item '" + pool[picks[0]].ItemId + "' or main-party roster missing — nothing granted."));
+                return;
+            }
             roster.AddToCounts(item, 1);
         }
 
@@ -415,7 +462,12 @@ namespace TheDarkestNight
         {
             var item = MBObjectManager.Instance?.GetObject<ItemObject>(itemId);
             var roster = MobileParty.MainParty?.ItemRoster;
-            if (item == null || roster == null) return;
+            if (item == null || roster == null)
+            {
+                TheDarkestNight.ModLog.Error(new System.Exception(
+                    "Keepsake trade good '" + itemId + "': item or main-party roster missing — nothing granted."));
+                return;
+            }
             roster.AddToCounts(item, count);
         }
     }

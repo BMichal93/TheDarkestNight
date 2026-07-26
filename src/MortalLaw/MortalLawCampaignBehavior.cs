@@ -102,7 +102,9 @@ namespace TheDarkestNight
 
         private void OnHourlyTick()
         {
+            CrashDiagnostics.MarkHourly("MortalLaw.TickNightFear enter");
             try { TickNightFear(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
+            CrashDiagnostics.MarkHourly("MortalLaw.ProcessPendingDefectorEjections enter");
             try { ProcessPendingDefectorEjections(); } catch (System.Exception logEx) { TheDarkestNight.ModLog.Error(logEx); }
         }
 
